@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".MainActivity">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"></ImageView>
+
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="35dp"
+                        android:src="@mipmap/home_header_logo"></ImageView>
+
+
+                    <LinearLayout
+                        android:id="@+id/top_search_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/home_search_shape"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:layout_weight="1"
+                            android:text="合同法126条"
+                            android:textColor="@color/color_a0a0a0"
+                            android:textSize="16sp"></TextView>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="15dp"
+                            android:src="@mipmap/home_top_search">
+
+                        </ImageView>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="160dp"
+                        android:background="@drawable/home_module_shape"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="22dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="80dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_weight="1"
+                                android:background="#abc123" />
+
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="80dp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_weight="1"
+                                android:background="#ff00ab" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="80dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_weight="1"
+                                android:background="#f12345" />
+
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="80dp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_weight="1"
+                                android:background="#a234ab" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="80dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_weight="1"
+                                android:background="#f12345" />
+
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="80dp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_weight="1"
+                                android:background="#a234ab" />
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </FrameLayout>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+
+            <LinearLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_collapseMode="pin">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:background="@color/color_ffffff"></View>
+
+                <View
+                    android:id="@+id/tab_top_spacing"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/color_f5f5f5"></View>
+
+                <com.flyco.tablayout.SlidingTabLayout
+                    android:id="@+id/tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/color_ffffff"
+                    app:tl_indicator_color="@color/color_ed4040"
+                    app:tl_indicator_height="2dp"
+                    app:tl_indicator_margin_bottom="5dp"
+                    app:tl_indicator_width="15dp"
+                    app:tl_textBold="BOTH"
+                    app:tl_textSelectColor="@color/color_333333"
+                    app:tl_textUnselectColor="@color/color_d2d2d2"
+                    app:tl_textsize="16sp">
+
+                </com.flyco.tablayout.SlidingTabLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/color_e5e5e5"></View>
+
+            </LinearLayout>
+
+
+        </android.support.design.widget.AppBarLayout>
+
+        <com.fy.fayou.view.HomeViewpager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        </com.fy.fayou.view.HomeViewpager>
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <ImageView
+        android:id="@+id/iv_float_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="25dp"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:src="@mipmap/home_float_search"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"></ImageView>
+
+
+</android.support.constraint.ConstraintLayout>

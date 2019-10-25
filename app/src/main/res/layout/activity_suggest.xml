@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/color_ffffff"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:text="问题及建议"
+            android:textColor="@color/color_333333"
+            android:textSize="14sp"></TextView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_e5e5e5">
+
+        </View>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:paddingBottom="15dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="15dp"
+                android:background="@null"
+                android:gravity="top|left"
+                android:hint="请输入您的问题及建议"
+                android:textColor="@color/color_333333"
+                android:textColorHint="@color/color_d2d2d2"
+                android:textSize="14sp">
+
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:layout_marginRight="15dp"
+                android:text="0/200"
+                android:textColor="@color/color_d2d2d2"
+                android:textSize="12sp"></TextView>
+
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/color_ffffff"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:text="问题及建议"
+            android:textColor="@color/color_333333"
+            android:textSize="14sp"></TextView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_e5e5e5">
+
+        </View>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:overScrollMode="never" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/color_ffffff"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:text="问题及建议"
+            android:textColor="@color/color_333333"
+            android:textSize="14sp"></TextView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_e5e5e5">
+
+        </View>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginRight="15dp"
+            android:background="@null"
+            android:gravity="top|left"
+            android:hint="请留下您的邮箱/手机号码/QQ号"
+            android:paddingLeft="15dp"
+            android:paddingTop="20dp"
+            android:textColor="@color/color_333333"
+            android:textColorHint="@color/color_d2d2d2"
+            android:textSize="14sp">
+
+        </EditText>
+
+    </LinearLayout>
+
+</LinearLayout>

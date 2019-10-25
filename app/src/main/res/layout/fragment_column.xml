@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_f5f5f5"
+        android:orientation="horizontal">
+
+        <com.flyco.tablayout.SlidingTabLayout
+            android:id="@+id/tab"
+            android:layout_width="0dp"
+            android:layout_height="37dp"
+            android:layout_weight="1"
+            app:tl_indicator_width="0dp"
+            app:tl_textBold="BOTH"
+            app:tl_textSelectColor="@color/color_333333"
+            app:tl_textUnselectColor="@color/color_d2d2d2"
+            app:tl_textsize="16sp">
+
+        </com.flyco.tablayout.SlidingTabLayout>
+
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/home_column_add"></ImageView>
+
+    </LinearLayout>
+
+    <com.fy.fayou.view.HomeViewpager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.fy.fayou.view.HomeViewpager>
+
+</LinearLayout>

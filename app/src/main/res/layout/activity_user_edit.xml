@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/line_top"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></View>
+
+    <View
+        android:id="@+id/header_bg"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="@color/color_ffffff"
+        app:layout_constraintTop_toBottomOf="@+id/line_top"></View>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_header"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="15dp"
+        android:src="@mipmap/personal_header_bg"
+        app:civ_border_color="@color/color_d2d2d2"
+        app:civ_border_width="3dp"
+        app:layout_constraintBottom_toBottomOf="@+id/header_bg"
+        app:layout_constraintLeft_toLeftOf="@+id/header_bg"
+        app:layout_constraintRight_toRightOf="@+id/header_bg"
+        app:layout_constraintTop_toTopOf="@+id/header_bg">
+
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@mipmap/person_edit_small_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_header"
+        app:layout_constraintRight_toRightOf="@+id/iv_header"></ImageView>
+
+    <View
+        android:id="@+id/line_center"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/header_bg"></View>
+
+    <View
+        android:id="@+id/name_view"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/color_ffffff"
+        app:layout_constraintTop_toBottomOf="@+id/line_center"></View>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:text="昵称"
+        android:textColor="@color/color_d2d2d2"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/name_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/name_view"></TextView>
+
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:background="@null"
+        android:lines="1"
+        android:minWidth="16dp"
+        android:maxLength="16"
+        android:textColor="@color/color_333333"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/name_view"
+        app:layout_constraintLeft_toRightOf="@+id/tv_name"
+        app:layout_constraintTop_toTopOf="@+id/name_view"
+        tools:text="取我五十米大刀"></EditText>
+
+
+</android.support.constraint.ConstraintLayout>

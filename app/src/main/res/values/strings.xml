@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name" translatable="false">FaYouPro</string>
+
+    <string name="bottom_home_name" translatable="false">主页</string>
+    <string name="bottom_learning_name" translatable="false">学法</string>
+    <string name="bottom_forum_name" translatable="false">论坛</string>
+    <string name="bottom_personal_name" translatable="false">个人</string>
+
+</resources>

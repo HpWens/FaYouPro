@@ -1,0 +1,2 @@
+include ':app', ':base_library', ':picture_library', ':ucrop'
+rootProject.name='FaYouPro'

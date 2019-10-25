@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"></View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="115dp"
+        android:background="@color/color_ffffff"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/recommend_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@mipmap/setting_recommend_ic"></ImageView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="推荐给好友"
+                android:textColor="@color/color_333333"
+                android:textSize="14sp"></TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/suggest_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@mipmap/setting_suggest_ic"></ImageView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="意见反馈"
+                android:textColor="@color/color_333333"
+                android:textSize="14sp"></TextView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"></View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/color_ffffff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="1"
+            android:text="夜间模式"
+            android:textColor="@color/color_333333"
+            android:textSize="14sp"></TextView>
+
+        <com.kyleduo.switchbutton.SwitchButton
+            android:id="@+id/skin_btn"
+            style="@style/SwitchButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </com.kyleduo.switchbutton.SwitchButton>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_e5e5e5"></View>
+
+    <TextView
+        android:id="@+id/tv_cache"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/color_ffffff"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:text="清除缓存"
+        android:textColor="@color/color_333333"
+        android:textSize="14sp"></TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_e5e5e5"></View>
+
+    <TextView
+        android:id="@+id/tv_service"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/color_ffffff"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:text="联系客服"
+        android:textColor="@color/color_333333"
+        android:textSize="14sp"></TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_e5e5e5"></View>
+
+    <TextView
+        android:id="@+id/tv_praise"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/color_ffffff"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:text="给个好评"
+        android:textColor="@color/color_333333"
+        android:textSize="14sp"></TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_e5e5e5"></View>
+
+    <LinearLayout
+        android:id="@+id/about_layout"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/color_ffffff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="1"
+            android:text="关于我们"
+            android:textColor="@color/color_333333"
+            android:textSize="14sp"></TextView>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/personal_column_arrow"></ImageView>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"></View>
+
+
+    <TextView
+        android:id="@+id/tv_exit"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/color_ffffff"
+        android:gravity="center"
+        android:text="退出登录"
+        android:textColor="@color/color_ed4040"
+        android:textSize="14sp"></TextView>
+
+</LinearLayout>
