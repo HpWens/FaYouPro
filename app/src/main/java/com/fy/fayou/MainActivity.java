@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        ARouter.getInstance().build(Constant.PERSON_SUGGEST)
+        ARouter.getInstance().build(Constant.LOGIN)
                 .withString("name", "ni")
                 .withInt("age", 18)
                 .navigation();

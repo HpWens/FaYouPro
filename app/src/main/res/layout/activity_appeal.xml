@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/top_line"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_f5f5f5" />
+
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="50dp"
+        android:text="申诉前请仔细阅读以下说明"
+        android:textColor="@color/color_333333"
+        android:textSize="16sp"
+        android:textStyle="bold">
+
+    </TextView>
+
+
+    <TextView
+        android:id="@+id/tv_content_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_desc"
+        android:layout_marginLeft="31dp"
+        android:layout_marginTop="28dp"
+        android:text="申述条件"
+        android:textColor="@color/color_a0a0a0"
+        android:textSize="14sp"></TextView>
+
+
+    <ImageView
+        android:id="@+id/iv_small_circle_one"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_alignTop="@+id/tv_content_one"
+        android:layout_alignBottom="@+id/tv_content_one"
+        android:layout_marginLeft="17dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/red_circle_shape"></ImageView>
+
+
+    <TextView
+        android:id="@+id/tv_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_content_one"
+        android:layout_alignLeft="@+id/tv_content_one"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:text="原手机号已停用，无法收到验证码"
+        android:textColor="@color/color_333333"
+        android:textSize="12sp">
+
+    </TextView>
+
+
+    <TextView
+        android:id="@+id/tv_content_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_one"
+        android:layout_marginLeft="31dp"
+        android:layout_marginTop="18dp"
+        android:text="绑定新手机"
+        android:textColor="@color/color_a0a0a0"
+        android:textSize="14sp"></TextView>
+
+
+    <ImageView
+        android:id="@+id/iv_small_circle_two"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_alignTop="@+id/tv_content_two"
+        android:layout_alignBottom="@+id/tv_content_two"
+        android:layout_marginLeft="17dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/red_circle_shape"></ImageView>
+
+
+    <TextView
+        android:id="@+id/tv_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_content_two"
+        android:layout_alignLeft="@+id/tv_content_two"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:text="更换绑定手机时请确认新手机未被其他账号使用"
+        android:textColor="@color/color_333333"
+        android:textSize="12sp">
+
+    </TextView>
+
+
+    <TextView
+        android:id="@+id/tv_content_three"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_two"
+        android:layout_marginLeft="31dp"
+        android:layout_marginTop="18dp"
+        android:text="账号安全"
+        android:textColor="@color/color_a0a0a0"
+        android:textSize="14sp"></TextView>
+
+
+    <ImageView
+        android:id="@+id/iv_small_circle_three"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_alignTop="@+id/tv_content_three"
+        android:layout_alignBottom="@+id/tv_content_three"
+        android:layout_marginLeft="17dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/red_circle_shape"></ImageView>
+
+
+    <TextView
+        android:id="@+id/tv_three"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_content_three"
+        android:layout_alignLeft="@+id/tv_content_three"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:lineSpacingExtra="8dp"
+        android:text="一个账号90天内只能申述一次 \n 恶意申诉他人账号 将承担法律责任"
+        android:textColor="@color/color_333333"
+        android:textSize="12sp">
+
+    </TextView>
+
+
+    <Button
+        android:id="@+id/btn_appeal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tv_three"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginRight="60dp"
+        android:background="@drawable/bg_btn_login_selected"
+        android:enabled="true"
+        android:text="开始申诉"
+        android:textColor="@color/color_ffffff"
+        android:textSize="16dp" />
+
+</RelativeLayout>
+
+
+
