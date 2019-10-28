@@ -74,13 +74,8 @@ public class SuggestActivity extends BaseActivity {
             }
         });
 
-        adapter.setOnItemClickListener(new GridImageAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View v) {
-
-                PictureSelector.create(mContext).themeStyle(R.style.picture_default_style).openExternalPreview(position, selectList);
-            }
-        });
+        adapter.setOnItemClickListener((position, v) ->
+                PictureSelector.create(mContext).themeStyle(R.style.picture_default_style).openExternalPreview(position, selectList));
     }
 
     @Override

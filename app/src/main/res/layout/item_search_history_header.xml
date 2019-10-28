@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="21dp"
+        android:text="搜索历史"
+        android:textColor="@color/color_a0a0a0"
+        android:textSize="14sp"></TextView>
+
+    <ImageView
+        android:id="@+id/iv_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tv_header"
+        android:layout_alignBottom="@+id/tv_header"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="4dp"
+        android:paddingLeft="15dp"
+        android:src="@mipmap/search_history_clear"></ImageView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/iv_clear"
+        android:layout_marginRight="15dp">
+
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

@@ -6,4 +6,22 @@
     <string name="bottom_forum_name" translatable="false">论坛</string>
     <string name="bottom_personal_name" translatable="false">个人</string>
 
+    <string-array name="array_menu">
+        <item>Ranking</item>
+        <item>Menu1</item>
+        <item>Menu2</item>
+        <item>Menu3</item>
+        <item>Menu4</item>
+        <item>Menu5</item>
+        <item>Menu6</item>
+        <item>Menu7</item>
+        <item>Menu8</item>
+        <item>Menu9</item>
+        <item>Menu10</item>
+        <item>Menu11</item>
+        <item>Menu12</item>
+        <item>Menu13</item>
+        <item>Menu14</item>
+    </string-array>
+
 </resources>

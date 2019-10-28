@@ -1,7 +1,10 @@
 package com.meis.base.mei.base;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -347,6 +350,14 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
                 finish();
             }
         });
+    }
+
+    public Intent getAppDetailSettingIntent(Context context) {
+        Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+        localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+        return localIntent;
     }
 
     /**

@@ -55,42 +55,33 @@ public class EditUserBottomDialog extends RxDialog {
                 new RxPermissions(context).request(new String[]{
                         Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE
                         , Manifest.permission.READ_EXTERNAL_STORAGE})
-                        .subscribe(new Consumer<Boolean>() {
-                            @Override
-                            public void accept(Boolean aBoolean) throws Exception {
-                                if (aBoolean) {
-                                    RxPhotoTool.openCameraImage(context);
-                                    cancel();
-                                } else {
-                                    RxToast.error("请允许拍照权限~");
-                                    context.startActivity(getAppDetailSettingIntent(context));
-                                }
+                        .subscribe(aBoolean -> {
+                            if (aBoolean) {
+                                RxPhotoTool.openCameraImage(context);
+                                cancel();
+                            } else {
+                                RxToast.error("请允许拍照权限~");
+                                context.startActivity(getAppDetailSettingIntent(context));
                             }
                         });
 
             }
         });
-        mTvFile.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                new RxPermissions(context).request(new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        , Manifest.permission.READ_EXTERNAL_STORAGE})
-                        .subscribe(new Consumer<Boolean>() {
-                            @Override
-                            public void accept(Boolean aBoolean) throws Exception {
-                                if (aBoolean) {
-                                    RxPhotoTool.openLocalImage(context);
-                                    cancel();
-                                } else {
-                                    RxToast.error("请允许读取本地文件~");
-                                    context.startActivity(getAppDetailSettingIntent(context));
-                                }
-                            }
-                        });
-            }
-        });
+        mTvFile.setOnClickListener(arg0 -> new RxPermissions(context).request(new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                , Manifest.permission.READ_EXTERNAL_STORAGE})
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+                            RxPhotoTool.openLocalImage(context);
+                            cancel();
+                        } else {
+                            RxToast.error("请允许读取本地文件~");
+                            context.startActivity(getAppDetailSettingIntent(context));
+                        }
+                    }
+                }));
 
         setContentView(dialogView);
         getWindow().setWindowAnimations(R.style.BottomDialog);

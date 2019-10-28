@@ -46,5 +46,9 @@ public class Constant {
     // 公共
     public static final String COMMON_WEB_VIEW = "/fy/webview";
 
+    // 搜索
+    public static final String HOME_SEARCH = "/home/search";
 
+    // 搜索-结果
+    public static final String HOME_RESULT_SEARCH = "/home/result_search";
 }

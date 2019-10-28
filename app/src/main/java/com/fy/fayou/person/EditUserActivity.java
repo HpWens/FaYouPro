@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -43,17 +42,9 @@ public class EditUserActivity extends BaseActivity {
         ButterKnife.bind(this);
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
         setToolBarCenterTitle("编辑资料");
-        setLeftBackListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        }).setRightTextListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditUserBottomDialog dialog = new EditUserBottomDialog(mContext);
-                dialog.show();
-            }
+        setLeftBackListener(v -> finish()).setRightTextListener(v -> {
+            EditUserBottomDialog dialog = new EditUserBottomDialog(mContext);
+            dialog.show();
         });
     }
 

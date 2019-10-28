@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/color_ffffff"
+        android:orientation="horizontal"
+        android:paddingTop="4.5dp"
+        android:paddingBottom="4.5dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/search_top_shape">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:src="@mipmap/home_top_search"></ImageView>
+
+            <TextView
+                android:id="@+id/et_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="请输入关键字"
+                android:textColor="@color/color_333333"
+                android:textColorHint="@color/color_d2d2d2"
+                android:textSize="14sp"></TextView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:paddingRight="15dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/search_clear_ic"></ImageView>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="15dp"
+            android:text="取消"
+            android:textColor="@color/color_d2d2d2"></TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_layout"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/fl_list_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/fl_content_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5" />
+    </LinearLayout>
+
+</RelativeLayout>

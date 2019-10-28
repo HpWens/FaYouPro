@@ -1,6 +1,8 @@
 package com.fy.fayou.login;
 
 import android.animation.ObjectAnimator;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.NestedScrollView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,13 +16,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
+import com.fy.fayou.common.Constant;
+import com.fy.fayou.utils.RegexUtils;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.vondear.rxtool.RxAnimationTool;
 import com.vondear.rxtool.RxKeyboardTool;
+import com.vondear.rxtool.view.RxToast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +67,27 @@ public class LoginActivity extends BaseActivity {
     private int keyHeight = 0; //软件盘弹起后所占高度
     private float scale = 0.6f; //logo缩放比例
 
+    private int reSendTime = MAX_TIME;
+    private static final int MAX_TIME = 10;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {
+                if (reSendTime < 0) {
+                    reSendTime = MAX_TIME;
+                    againSend.setText("重新发送");
+                    againSend.setEnabled(true);
+                    againSend.setTextColor(getResources().getColor(R.color.color_ed4040));
+                } else {
+                    againSend.setText("重新发送(" + reSendTime + ")");
+                    reSendTime--;
+                    handler.sendEmptyMessageDelayed(1, 1000);
+                }
+            }
+        }
+    };
+
     @Override
     protected void initView() {
         ButterKnife.bind(this);
@@ -87,6 +117,11 @@ public class LoginActivity extends BaseActivity {
                 } else if (TextUtils.isEmpty(s)) {
                     ivCleanPhone.setVisibility(View.GONE);
                 }
+
+                if (!TextUtils.isEmpty(s.toString()) && s.length() == 11 && RegexUtils.checkMobile(s.toString())) {
+                    againSend.setVisibility(View.VISIBLE);
+                }
+
             }
         });
         scrollView.setOnTouchListener((v, event) -> true);
@@ -125,14 +160,45 @@ public class LoginActivity extends BaseActivity {
         return R.layout.activity_login;
     }
 
-    @OnClick({R.id.iv_clean_phone, R.id.btn_login})
+    @OnClick({R.id.iv_clean_phone, R.id.btn_login, R.id.again_send
+            , R.id.iv_wechat, R.id.iv_qq, R.id.iv_weibo})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_clean_phone:
+                etMobile.setText("");
                 break;
             case R.id.btn_login:
                 RxKeyboardTool.hideSoftInput(mContext);
+                if (checkMobile()) {
+                    ARouter.getInstance().build(Constant.CREATE_NICKNAME).navigation();
+                }
+                break;
+            case R.id.again_send:
+                if (checkMobile()) {
+                    againSend.setEnabled(false);
+                    againSend.setTextColor(getResources().getColor(R.color.color_d2d2d2));
+                    handler.sendEmptyMessage(1);
+                }
+                break;
+            case R.id.iv_wechat:
+            case R.id.iv_qq:
+            case R.id.iv_weibo:
+                Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private boolean checkMobile() {
+        String mobile = etMobile.getText().toString();
+        if (TextUtils.isEmpty(mobile)) {
+            RxToast.normal("输入的手机号码不能为空");
+            return false;
+        }
+
+        if (!RegexUtils.checkMobile(mobile)) {
+            RxToast.normal("请输入正确的手机号码");
+            return false;
+        }
+        return true;
     }
 }
