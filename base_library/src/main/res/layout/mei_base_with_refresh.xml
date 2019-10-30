@@ -49,4 +49,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <ViewStub
+        android:id="@+id/base_dark_stub"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/mei_base_dark_stub"></ViewStub>
+
 </FrameLayout>

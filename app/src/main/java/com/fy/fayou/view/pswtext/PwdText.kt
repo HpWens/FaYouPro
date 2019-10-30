@@ -311,8 +311,8 @@ class PwdText : View {
                     }
                     for ((index: Int, num: Int) in results.withIndex()) {
                         //圆点坐标
-                        val circleX = (((index - 1) * (borderWidth + spacingWidth)).toDouble() + (borderWidth / 2).toDouble() + 0.5 * spacingWidth).toFloat()
-                        val circleY = (height / 2).toFloat()
+                        //val circleX = (((index - 1) * (borderWidth + spacingWidth)).toDouble() + (borderWidth / 2).toDouble() + 0.5 * spacingWidth).toFloat()
+                        //val circleY = (height / 2).toFloat()
                         //密码框坐标
                         val left = (index * (borderWidth + spacingWidth) + 0.5 * spacingWidth).toInt()
                         val right = (((index + 1) * borderWidth).toDouble() + (index * spacingWidth).toDouble() + 0.5 * spacingWidth).toInt()
@@ -353,12 +353,12 @@ class PwdText : View {
     private fun drawBorder(canvas: Canvas, height: Int) {
         val bitmap: Bitmap? = BitmapFactory.decodeResource(resources, pswAttrsBean.getBorderImg())
         if (bitmap != null) {
-            val src = Rect(0, 0, bitmap.width, bitmap.height)
+            // val src = Rect(0, 0, bitmap.width, bitmap.height)
             for (i in 0 until pswAttrsBean.getPswLength()) {
                 val left = (i * (borderWidth + spacingWidth) + 0.5 * spacingWidth).toInt()
                 val right = (((i + 1) * borderWidth).toDouble() + (i * spacingWidth).toDouble() + 0.5 * spacingWidth).toInt()
                 if (pswAttrsBean.isBorderImg()) {
-                    val dst = Rect(left, borderPaint.strokeWidth.toInt(), right, (height - borderPaint.strokeWidth).toInt())
+                    // val dst = Rect(left, borderPaint.strokeWidth.toInt(), right, (height - borderPaint.strokeWidth).toInt())
                     // canvas.drawBitmap(bitmap, src, dst, borderPaint)
                 } else {
                     borderRectF.set(left.toFloat(), borderPaint.strokeWidth, right.toFloat(), height - borderPaint.strokeWidth)

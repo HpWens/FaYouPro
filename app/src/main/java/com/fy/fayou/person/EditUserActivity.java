@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
@@ -13,20 +15,33 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.UserService;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.vondear.rxtool.RxPhotoTool;
 import com.vondear.rxtool.RxSPTool;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 @Route(path = "/person/edit")
@@ -37,20 +52,70 @@ public class EditUserActivity extends BaseActivity {
     @BindView(R.id.et_name)
     EditText etName;
 
+    private String avatarPath = "";
+
     @Override
     protected void initView() {
         ButterKnife.bind(this);
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
         setToolBarCenterTitle("编辑资料");
         setLeftBackListener(v -> finish()).setRightTextListener(v -> {
-            EditUserBottomDialog dialog = new EditUserBottomDialog(mContext);
-            dialog.show();
+            String nickName = etName.getText().toString();
+            if (TextUtils.isEmpty(nickName)) {
+                Toast.makeText(mContext, "请输入昵称", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            requestNick(avatarPath, nickName);
         });
     }
 
     @Override
     protected void initData() {
+        avatarPath = UserService.getInstance().getAvatar();
+        if (!TextUtils.isEmpty(avatarPath)) {
+            Glide.with(mContext).
+                    load(avatarPath).
+                    apply(getAvatarOption()).
+                    thumbnail(0.5f).
+                    into(ivAvatar);
+        }
+        String nick = UserService.getInstance().getNickName();
+        if (!TextUtils.isEmpty(nick)) {
+            etName.setText(nick);
+        }
+    }
 
+    private void requestNick(String avatar, final String nick) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("nickName", nick);
+        params.put("avatar", avatar);
+        JSONObject jsonObject = new JSONObject(params);
+
+        EasyHttp.post(ApiUrl.USER_UPDATE)
+                .upJson(jsonObject.toString())
+                .execute(new SimpleCallBack<String>() {
+
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        // 更新数据
+                        UserService.getInstance().setAvatar(avatar);
+                        UserService.getInstance().setNickName(nick);
+                        finish();
+                    }
+                });
+    }
+
+    @OnClick(R.id.iv_header)
+    public void onClick() {
+        boolean isLook = !TextUtils.isEmpty(avatarPath);
+        EditUserBottomDialog dialog = new EditUserBottomDialog(mContext, isLook).setOnItemListener(() -> {
+            if (!TextUtils.isEmpty(avatarPath)) previewPic();
+        });
+        dialog.show();
     }
 
     @Override
@@ -99,6 +164,8 @@ public class EditUserActivity extends BaseActivity {
                     Uri resultUri = UCrop.getOutput(data);
                     roadImageView(resultUri, ivAvatar);
                     RxSPTool.putContent(mContext, "AVATAR", resultUri.toString());
+
+                    avatarPath = resultUri.getPath();
                 } else if (resultCode == UCrop.RESULT_ERROR) {
                     final Throwable cropError = UCrop.getError(data);
                 }
@@ -112,6 +179,15 @@ public class EditUserActivity extends BaseActivity {
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    // 预览图片
+    private void previewPic() {
+        LocalMedia media = new LocalMedia();
+        media.setPath(avatarPath);
+        List<LocalMedia> list = new ArrayList<>();
+        list.add(media);
+        PictureSelector.create(this).themeStyle(R.style.picture_default_style).openExternalPreview(0, list);
     }
 
     private void initUCrop(Uri uri) {
@@ -158,13 +234,7 @@ public class EditUserActivity extends BaseActivity {
 
     // 从Uri中加载图片 并将其转化成File文件返回
     private File roadImageView(Uri uri, ImageView imageView) {
-        RequestOptions options = new RequestOptions()
-                .placeholder(R.color.color_e5e5e5)
-                //异常占位图(当加载异常的时候出现的图片)
-                .error(R.color.color_e5e5e5)
-                .transform(new CircleCrop())
-                //禁止Glide硬盘缓存缓存
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+        RequestOptions options = getAvatarOption();
 
         Glide.with(mContext).
                 load(uri).
@@ -173,5 +243,15 @@ public class EditUserActivity extends BaseActivity {
                 into(imageView);
 
         return (new File(RxPhotoTool.getImageAbsolutePath(this, uri)));
+    }
+
+    private RequestOptions getAvatarOption() {
+        return new RequestOptions()
+                .placeholder(R.color.color_e5e5e5)
+                //异常占位图(当加载异常的时候出现的图片)
+                .error(R.color.color_e5e5e5)
+                .transform(new CircleCrop())
+                //禁止Glide硬盘缓存缓存
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
     }
 }

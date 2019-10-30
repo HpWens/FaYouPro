@@ -5,7 +5,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
@@ -212,6 +211,24 @@ public class MeiCompatActivity extends RxAppCompatActivity implements IMeiCompat
      */
     protected void hideState(@ViewState.Val int viewState) {
         mDelegate.hideState(viewState);
+    }
+
+    /**
+     * 黑夜模式
+     */
+    protected void showDark() {
+        mDelegate.showDark();
+    }
+
+    protected void hideDark() {
+        mDelegate.hideDark();
+    }
+
+    /**
+     * @param backgroundColor
+     */
+    protected void showDark(int backgroundColor) {
+        mDelegate.showDark(backgroundColor);
     }
 
     /**

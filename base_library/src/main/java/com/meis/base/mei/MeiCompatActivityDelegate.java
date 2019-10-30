@@ -15,7 +15,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.meis.base.R;import com.meis.base.mei.fragment.IMeiCompatFragment;
+import com.meis.base.R;
+import com.meis.base.mei.fragment.IMeiCompatFragment;
 import com.meis.base.mei.status.IStatusHelper;
 import com.meis.base.mei.status.StatusHelper;
 import com.meis.base.mei.status.ViewState;
@@ -297,6 +298,30 @@ public class MeiCompatActivityDelegate {
     protected void hideState(@ViewState.Val int viewState) {
         if (mMeiCompatActivity.canStatusHelper()) {
             mStatusHelper.showState(viewState, false, false);
+        }
+    }
+
+    /**
+     * 黑夜模式
+     */
+    protected void showDark() {
+        if (mMeiCompatActivity.canStatusHelper()) {
+            mStatusHelper.showDark(true);
+        }
+    }
+
+    protected void hideDark() {
+        if (mMeiCompatActivity.canStatusHelper()) {
+            mStatusHelper.showDark(false);
+        }
+    }
+
+    /**
+     * @param backgroundColor
+     */
+    protected void showDark(int backgroundColor) {
+        if (mMeiCompatActivity.canStatusHelper()) {
+            mStatusHelper.showDark(true, backgroundColor);
         }
     }
 

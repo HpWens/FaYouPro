@@ -5,7 +5,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,7 @@ import com.meis.base.mei.annotation.PullToRefresh;
 import com.meis.base.mei.status.IStatusHelper;
 import com.meis.base.mei.status.ViewState;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
-import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 /**
  * desc: https://github.com/HpWens/MeiBaseModule
@@ -83,7 +82,7 @@ public class MeiCompatFragment extends RxFragment implements IMeiCompatFragment,
 
     @Override
     public RefreshHeader getRefreshHeader() {
-        return new BezierRadarHeader(getActivity());
+        return new ClassicsHeader(getActivity());
     }
 
     @Override

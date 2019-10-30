@@ -2,6 +2,7 @@ package com.meis.base.mei.base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.net.Uri;
@@ -16,6 +17,9 @@ import android.widget.TextView;
 import com.meis.base.R;
 import com.meis.base.mei.MeiCompatActivity;
 import com.meis.base.mei.dialog.MeiCompatDialog;
+import com.meis.base.mei.utils.Eyes;
+
+import org.greenrobot.eventbus.EventBus;
 
 import me.yokeyword.fragmentation.ExtraTransaction;
 import me.yokeyword.fragmentation.ISupportActivity;
@@ -42,6 +46,24 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
         setContentView(layoutResId());
         initView();
         initData();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (isRegisterEventBus())
+            EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isRegisterEventBus())
+            EventBus.getDefault().unregister(this);
+    }
+
+    private boolean isRegisterEventBus() {
+        return false;
     }
 
     @Override
@@ -358,6 +380,16 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
         localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
         localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
         return localIntent;
+    }
+
+    public void showDarkMode() {
+        showDark();
+        Eyes.setStatusBarColor(this, Color.parseColor("#4f000000"), true);
+    }
+
+    public void showLightMode() {
+        hideDark();
+        Eyes.setStatusBarColor(this, Color.parseColor("#ffffff"), true);
     }
 
     /**

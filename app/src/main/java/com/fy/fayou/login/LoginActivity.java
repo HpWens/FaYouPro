@@ -20,16 +20,30 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.fy.fayou.FYApplication;
 import com.fy.fayou.R;
+import com.fy.fayou.bean.UserBean;
+import com.fy.fayou.bean.UserInfo;
+import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
+import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.utils.RegexUtils;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.vondear.rxtool.RxAnimationTool;
 import com.vondear.rxtool.RxKeyboardTool;
 import com.vondear.rxtool.view.RxToast;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +51,13 @@ import butterknife.OnClick;
 
 @Route(path = "/fy/login")
 public class LoginActivity extends BaseActivity {
+
+    @Autowired(name = "origin")
+    public int jumpOrigin = 0;
+
+    public static final String ORIGIN = "origin";
+    // 首页-个人
+    public static final int HOME_PERSONAL_ORIGIN = 0X0003;
 
     @BindView(R.id.logo)
     ImageView logo;
@@ -68,7 +89,7 @@ public class LoginActivity extends BaseActivity {
     private float scale = 0.6f; //logo缩放比例
 
     private int reSendTime = MAX_TIME;
-    private static final int MAX_TIME = 10;
+    private static final int MAX_TIME = 60;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -169,8 +190,9 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.btn_login:
                 RxKeyboardTool.hideSoftInput(mContext);
-                if (checkMobile()) {
-                    ARouter.getInstance().build(Constant.CREATE_NICKNAME).navigation();
+                if (checkMobile() && checkVerifyCode()) {
+                    // 请求接口
+                    requestLogin(etMobile.getText().toString(), etCode.getText().toString());
                 }
                 break;
             case R.id.again_send:
@@ -200,5 +222,52 @@ public class LoginActivity extends BaseActivity {
             return false;
         }
         return true;
+    }
+
+    private boolean checkVerifyCode() {
+        String verifyCode = etCode.getText().toString();
+        if (TextUtils.isEmpty(verifyCode)) {
+            RxToast.normal("请输入短信验证码");
+            return false;
+        }
+        return true;
+    }
+
+    private void requestLogin(String mobile, String code) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("mobile", mobile);
+        params.put("code", code);
+        JSONObject jsonObject = new JSONObject(params);
+
+        EasyHttp.post(ApiUrl.LOGIN_MOBILE)
+                .upJson(jsonObject.toString())
+                .execute(new SimpleCallBack<String>() {
+
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        UserBean userBean = ParseUtils.parseData(s, UserBean.class);
+                        if (userBean != null && userBean.user != null) {
+                            UserInfo userInfo = userBean.user;
+                            userInfo.token = userBean.token;
+                            UserService.getInstance().saveUser(userInfo);
+                            if (getApplication() instanceof FYApplication) {
+                                ((FYApplication) getApplication()).addEasyTokenHeader();
+                            }
+
+                            // 判定是否设置昵称
+                            if (TextUtils.isEmpty(userInfo.nickName)) {
+                                ARouter.getInstance().build(Constant.CREATE_NICKNAME).navigation();
+                            }
+
+                            finish();
+                        }
+                    }
+                });
+
     }
 }

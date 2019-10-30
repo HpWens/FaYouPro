@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_see"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/my_publish_see_selector"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+    <TextView
+        android:id="@+id/tv_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="45123123"
+        android:textColor="@color/color_d2d2d2"
+        android:textSize="10sp"
+        app:layout_constraintLeft_toLeftOf="@+id/iv_see"
+        app:layout_constraintRight_toRightOf="@+id/iv_see"
+        app:layout_constraintTop_toBottomOf="@+id/iv_see"></TextView>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="22dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="4dp"
+        android:maxLines="2"
+        android:text="中美合作是大势所趋美国豁免437项中国,中国展现 大国风范中美合作是大势所趋美国豁免437项中国中美合作是大势所趋美国豁免437项中国"
+        android:textColor="@color/color_333333"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toRightOf="@+id/iv_see"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></TextView>
+
+
+    <LinearLayout
+        android:id="@+id/sign_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_content"
+        app:layout_constraintRight_toLeftOf="@+id/tv_pic_num"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:background="@drawable/my_publish_sign_shape"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="婚姻法"
+            android:textColor="@color/color_6a78bc"
+            android:textSize="11sp"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/my_publish_sign_shape"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="婚姻法"
+            android:textColor="@color/color_6a78bc"
+            android:textSize="11sp"></TextView>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_pic_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:drawableRight="@mipmap/my_pic_num"
+        android:drawablePadding="6dp"
+        android:text="0"
+        android:textColor="@color/color_a0a0a0"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@+id/sign_layout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sign_layout"></TextView>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/color_e5e5e5"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sign_layout"></View>
+
+
+</android.support.constraint.ConstraintLayout>

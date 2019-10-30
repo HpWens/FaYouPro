@@ -1,6 +1,7 @@
 package com.meis.base.mei.header;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,7 +19,6 @@ import com.scwang.smartrefresh.layout.api.RefreshKernel;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.util.DensityUtil;
 
 /**
  * author: ws4
@@ -60,8 +60,13 @@ public class DingDangHeader extends LinearLayout implements RefreshHeader {
         mTvStatus = view.findViewById(R.id.refresh_text);
         addView(view);
         setGravity(Gravity.CENTER);
-        setMinimumHeight(DensityUtil.dp2px(64));
+        setMinimumHeight(dp2px(64));
     }
+
+    public static int dp2px(float dpValue) {
+        return (int) (0.5f + dpValue * Resources.getSystem().getDisplayMetrics().density);
+    }
+
 
     /**
      * 获取真实视图（必须返回，不能为null）

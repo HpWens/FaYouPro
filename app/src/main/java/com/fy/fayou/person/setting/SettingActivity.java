@@ -5,10 +5,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
+import com.fy.fayou.common.Constant;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.vondear.rxtool.view.RxToast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,12 +42,7 @@ public class SettingActivity extends BaseActivity {
         ButterKnife.bind(this);
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
         setToolBarCenterTitle("设置");
-        setLeftBackListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        setLeftBackListener(v -> finish());
     }
 
 
@@ -58,22 +56,30 @@ public class SettingActivity extends BaseActivity {
         return R.layout.activity_setting;
     }
 
-    @OnClick({R.id.recommend_layout, R.id.suggest_layout, R.id.tv_cache, R.id.tv_service, R.id.tv_praise, R.id.about_layout, R.id.tv_exit})
+    @OnClick({R.id.recommend_layout, R.id.suggest_layout, R.id.tv_cache, R.id.tv_service, R.id.tv_praise,
+            R.id.about_layout, R.id.tv_exit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.recommend_layout:
+                RxToast.normal("敬请期待");
                 break;
             case R.id.suggest_layout:
+                ARouter.getInstance().build(Constant.PERSON_SUGGEST).navigation();
                 break;
             case R.id.tv_cache:
+                RxToast.normal("敬请期待");
                 break;
             case R.id.tv_service:
+                RxToast.normal("敬请期待");
                 break;
             case R.id.tv_praise:
+                RxToast.normal("敬请期待");
                 break;
             case R.id.about_layout:
+                RxToast.normal("敬请期待");
                 break;
             case R.id.tv_exit:
+                RxToast.normal("敬请期待");
                 break;
         }
     }

@@ -40,12 +40,9 @@ public class RecommendFragment extends BaseListFragment<RecommendEntity> {
     @Override
     protected void initView() {
         super.initView();
-        mRecyclerView.setOnScrollClashListener(new HomeClashRecyclerView.OnScrollClashListener() {
-            @Override
-            public void onScroll(boolean isScroll) {
-                if (mListener != null) {
-                    mListener.onScroll(isScroll);
-                }
+        mRecyclerView.setOnScrollClashListener(isScroll -> {
+            if (mListener != null) {
+                mListener.onScroll(isScroll);
             }
         });
     }

@@ -6,12 +6,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
+
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
+import com.fy.fayou.login.LoginActivity;
 
 
 /**
@@ -59,21 +63,26 @@ public class BottomBar extends LinearLayout {
     }
 
     public BottomBar addItem(final BottomBarTab tab) {
-        tab.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener == null) return;
+        tab.setOnClickListener(v -> {
+            if (mListener == null) return;
 
-                int pos = tab.getTabPosition();
-                if (mCurrentPosition == pos) {
-                    mListener.onTabReselected(pos);
-                } else {
-                    mListener.onTabSelected(pos, mCurrentPosition);
-                    tab.setSelected(true);
-                    mListener.onTabUnselected(mCurrentPosition);
-                    mTabLayout.getChildAt(mCurrentPosition).setSelected(false);
-                    mCurrentPosition = pos;
-                }
+            int pos = tab.getTabPosition();
+
+            if (pos == 3 && !UserService.getInstance().isLogin()) {
+                ARouter.getInstance().build(Constant.LOGIN)
+                        .withInt(LoginActivity.ORIGIN, LoginActivity.HOME_PERSONAL_ORIGIN)
+                        .navigation();
+                return;
+            }
+
+            if (mCurrentPosition == pos) {
+                mListener.onTabReselected(pos);
+            } else {
+                mListener.onTabSelected(pos, mCurrentPosition);
+                tab.setSelected(true);
+                mListener.onTabUnselected(mCurrentPosition);
+                mTabLayout.getChildAt(mCurrentPosition).setSelected(false);
+                mCurrentPosition = pos;
             }
         });
         tab.setTabPosition(mTabLayout.getChildCount());

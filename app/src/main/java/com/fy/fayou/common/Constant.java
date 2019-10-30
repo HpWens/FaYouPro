@@ -2,6 +2,10 @@ package com.fy.fayou.common;
 
 public class Constant {
 
+    public static final String BASE_URL = "http://192.168.1.165:8080";
+
+    public static final String BASE_URL_RELEASE = "http://192.168.1.165:8080";
+
     // 路由地址常量
     // 登录
     // public static final String LOGIN = "/fy/login";
@@ -51,4 +55,17 @@ public class Constant {
 
     // 搜索-结果
     public static final String HOME_RESULT_SEARCH = "/home/result_search";
+
+    // 我的-关注
+    public static final String MY_FOLLOW = "/my/follow";
+
+    // 我的-粉丝
+    public static final String MY_FAN = "/my/fan";
+
+    // 发表-评论
+    public static final String MY_PUBLISH_COMMENT = "/my/publish_comment";
+
+
+    // 保存用户数据
+    public static String USER_INFO = "user_info_data";
 }

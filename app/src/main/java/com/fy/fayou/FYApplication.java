@@ -2,13 +2,23 @@ package com.fy.fayou;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.fy.fayou.bean.UserInfo;
+import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
+import com.google.gson.Gson;
 import com.meis.base.mei.BaseApplication;
 import com.vondear.rxtool.RxTool;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.cache.converter.SerializableDiskConverter;
+import com.zhouyou.http.model.HttpHeaders;
+import com.zhouyou.http.model.HttpParams;
+
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FYApplication extends BaseApplication {
-
 
     @Override
     public void onCreate() {
@@ -17,6 +27,39 @@ public class FYApplication extends BaseApplication {
         initARouter();
 
         RxTool.init(this);
+
+        UserService.init(this);
+
+        initEasyHttp();
+    }
+
+    private void initEasyHttp() {
+        // 初始化网络框架
+        EasyHttp.init(this);
+        // 设置请求头
+        HttpHeaders headers = new HttpHeaders();
+        UserInfo userInfo = UserService.getInstance().getUserInfo();
+        if (null != userInfo && !TextUtils.isEmpty(userInfo.token)) {
+            headers.put("Authorization", userInfo.token);
+        }
+        // 设置请求参数
+        HttpParams params = new HttpParams();
+        EasyHttp.getInstance()
+                .debug("RxEasyHttp", isDebug() ? BuildConfig.DEBUG : false)
+                .setReadTimeOut(10 * 60 * 1000)
+                .setWriteTimeOut(10 * 60 * 1000)
+                .setConnectTimeout(10 * 60 * 1000)
+                .setRetryCount(3) // 默认网络不好自动重试3次
+                .setRetryDelay(500) // 每次延时500ms重试
+                .setRetryIncreaseDelay(500) // 每次延时叠加500ms
+                .setBaseUrl(Constant.BASE_URL)
+                .setCacheDiskConverter(new SerializableDiskConverter()) // 默认缓存使用序列化转化
+                .setCacheMaxSize(50 * 1024 * 1024) // 设置缓存大小为50M
+                .setCacheVersion(1) // 缓存版本为1
+                .setCertificates() // 信任所有证书
+                .addConverterFactory(GsonConverterFactory.create(new Gson()))
+                .addCommonHeaders(headers) // 设置全局公共头
+                .addCommonParams(params); // 设置全局公共参数
     }
 
     private void initARouter() {
@@ -38,4 +81,15 @@ public class FYApplication extends BaseApplication {
         }
         return debuggable;
     }
+
+    public void addEasyTokenHeader() {
+        HttpHeaders headers = new HttpHeaders();
+        UserInfo userInfo = UserService.getInstance().getUserInfo();
+        if (null != userInfo && !TextUtils.isEmpty(userInfo.token)) {
+            headers.put("Authorization", userInfo.token);
+            EasyHttp.getInstance().getCommonHeaders().clear();
+            EasyHttp.getInstance().addCommonHeaders(headers);
+        }
+    }
+
 }

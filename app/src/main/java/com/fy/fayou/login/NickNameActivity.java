@@ -17,6 +17,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.UserService;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -25,7 +27,13 @@ import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.vondear.rxtool.view.RxToast;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -34,6 +42,8 @@ import butterknife.OnClick;
 
 @Route(path = "/login/nickname")
 public class NickNameActivity extends BaseActivity {
+
+
     @BindView(R.id.iv_avatar)
     ImageView ivAvatar;
     @BindView(R.id.et_nickname)
@@ -42,6 +52,8 @@ public class NickNameActivity extends BaseActivity {
     Button btnGo;
     @BindView(R.id.tv_after)
     TextView tvAfter;
+
+    String avatarPath;
 
     @Override
     protected void initView() {
@@ -79,19 +91,47 @@ public class NickNameActivity extends BaseActivity {
                 break;
             case R.id.btn_go:
                 if (checkNick()) {
-
+                    requestNick(etNickname.getText().toString(), avatarPath);
                 }
                 break;
             case R.id.tv_after:
-
+                finish();
                 break;
         }
+    }
+
+    private void requestNick(String avatar, String nick) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("nickName", nick);
+        params.put("avatar", avatar);
+        JSONObject jsonObject = new JSONObject(params);
+
+        EasyHttp.post(ApiUrl.USER_UPDATE)
+                .upJson(jsonObject.toString())
+                .execute(new SimpleCallBack<String>() {
+
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        // 更新数据
+                        UserService.getInstance().setAvatar(avatar);
+                        UserService.getInstance().setNickName(etNickname.getText().toString());
+                        finish();
+                    }
+                });
     }
 
     private boolean checkNick() {
         String nick = etNickname.getText().toString();
         if (TextUtils.isEmpty(nick)) {
             Toast.makeText(this, "请输入昵称", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(avatarPath)) {
+            Toast.makeText(this, "请设置头像", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -146,7 +186,7 @@ public class NickNameActivity extends BaseActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         Glide.with(this)
-                .load(path)
+                .load(avatarPath = path)
                 .apply(options)
                 .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                 .into(ivAvatar);

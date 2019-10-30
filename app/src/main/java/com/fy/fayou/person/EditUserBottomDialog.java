@@ -16,72 +16,71 @@ import com.vondear.rxtool.RxPhotoTool;
 import com.vondear.rxtool.view.RxToast;
 import com.vondear.rxui.view.dialog.RxDialog;
 
-import io.reactivex.functions.Consumer;
-
 public class EditUserBottomDialog extends RxDialog {
 
     private TextView mTvCamera;
     private TextView mTvFile;
     private TextView mTvCancel;
+    private TextView mTvLook;
+
+    private boolean mLookLargePic;
 
     public EditUserBottomDialog(FragmentActivity context, int themeResId) {
         super(context, themeResId);
         initView(context);
     }
 
-    public EditUserBottomDialog(FragmentActivity context) {
+    public EditUserBottomDialog(FragmentActivity context, boolean lookLargePic) {
         super(context);
+        mLookLargePic = lookLargePic;
         initView(context);
     }
 
     public void initView(final FragmentActivity context) {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_edit_bottom, null);
 
-        mTvCamera = dialogView.findViewById(com.vondear.rxui.R.id.tv_camera);
-        mTvFile = dialogView.findViewById(com.vondear.rxui.R.id.tv_file);
-        mTvCancel = dialogView.findViewById(com.vondear.rxui.R.id.tv_cancel);
+        mTvCamera = dialogView.findViewById(R.id.tv_camera);
+        mTvFile = dialogView.findViewById(R.id.tv_file);
+        mTvCancel = dialogView.findViewById(R.id.tv_cancel);
+        mTvLook = dialogView.findViewById(R.id.tv_look);
 
-        mTvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                cancel();
-            }
-        });
-        mTvCamera.setOnClickListener(new View.OnClickListener() {
+        mTvLook.setEnabled(mLookLargePic);
+        mTvLook.setTextColor(context.getResources().getColor(mLookLargePic ? R.color.color_333333 : R.color.color_e5e5e5));
 
-            @Override
-            public void onClick(View arg0) {
-                // 请求权限
-                new RxPermissions(context).request(new String[]{
-                        Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        , Manifest.permission.READ_EXTERNAL_STORAGE})
-                        .subscribe(aBoolean -> {
-                            if (aBoolean) {
-                                RxPhotoTool.openCameraImage(context);
-                                cancel();
-                            } else {
-                                RxToast.error("请允许拍照权限~");
-                                context.startActivity(getAppDetailSettingIntent(context));
-                            }
-                        });
+        mTvCancel.setOnClickListener(arg0 -> cancel());
+        mTvCamera.setOnClickListener(arg0 -> {
+            // 请求权限
+            new RxPermissions(context).request(new String[]{
+                    Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    , Manifest.permission.READ_EXTERNAL_STORAGE})
+                    .subscribe(aBoolean -> {
+                        if (aBoolean) {
+                            RxPhotoTool.openCameraImage(context);
+                            cancel();
+                        } else {
+                            RxToast.error("请允许拍照权限~");
+                            context.startActivity(getAppDetailSettingIntent(context));
+                        }
+                    });
 
-            }
         });
         mTvFile.setOnClickListener(arg0 -> new RxPermissions(context).request(new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
                 , Manifest.permission.READ_EXTERNAL_STORAGE})
-                .subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) throws Exception {
-                        if (aBoolean) {
-                            RxPhotoTool.openLocalImage(context);
-                            cancel();
-                        } else {
-                            RxToast.error("请允许读取本地文件~");
-                            context.startActivity(getAppDetailSettingIntent(context));
-                        }
+                .subscribe(aBoolean -> {
+                    if (aBoolean) {
+                        RxPhotoTool.openLocalImage(context);
+                        cancel();
+                    } else {
+                        RxToast.error("请允许读取本地文件~");
+                        context.startActivity(getAppDetailSettingIntent(context));
                     }
                 }));
+
+        mTvLook.setOnClickListener(v -> {
+            if (mListener != null) mListener.onClick();
+            cancel();
+        });
 
         setContentView(dialogView);
         getWindow().setWindowAnimations(R.style.BottomDialog);
@@ -95,6 +94,17 @@ public class EditUserBottomDialog extends RxDialog {
         localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
         localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
         return localIntent;
+    }
+
+    private OnItemListener mListener;
+
+    public interface OnItemListener {
+        void onClick();
+    }
+
+    public EditUserBottomDialog setOnItemListener(OnItemListener listener) {
+        mListener = listener;
+        return this;
     }
 
 }

@@ -6,10 +6,16 @@ import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -17,8 +23,15 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.vondear.rxtool.RxImageTool;
+import com.vondear.rxtool.view.RxToast;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,28 +39,70 @@ import butterknife.ButterKnife;
 
 @Route(path = "/person/suggest")
 public class SuggestActivity extends BaseActivity {
+
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
+    @BindView(R.id.et_suggest)
+    EditText etSuggest;
+    @BindView(R.id.et_contact)
+    EditText etContact;
+    @BindView(R.id.tv_limit)
+    TextView tvLimit;
 
     private GridImageAdapter adapter;
     private List<LocalMedia> selectList = new ArrayList<>();
+
+    private static final int MAX_CHAR_LIMIT = 200;
 
     @Override
     protected void initView() {
         ButterKnife.bind(this);
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
         setToolBarCenterTitle("意见反馈");
-        setLeftBackListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        }).setRightTextListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+        setLeftBackListener(v -> finish()).setRightTextListener(v -> {
+            if (checkContent()) {
+                requestFeedBack();
             }
         }, "提交");
+    }
+
+    private void requestFeedBack() {
+        String contact = etContact.getText().toString();
+        String suggest = etSuggest.getText().toString();
+        HashMap<String, String> params = new HashMap<>();
+        params.put("phone", contact);
+        params.put("content", suggest);
+        params.put("type", "COMMENTS");
+        JSONObject jsonObject = new JSONObject(params);
+
+        EasyHttp.post(ApiUrl.USER_UPDATE)
+                .upJson(jsonObject.toString())
+                .execute(new SimpleCallBack<String>() {
+
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        RxToast.normal("意见反馈成功");
+                        finish();
+                    }
+                });
+    }
+
+    private boolean checkContent() {
+        String suggest = etSuggest.getText().toString();
+        if (TextUtils.isEmpty(suggest)) {
+            RxToast.normal("请输入问题及建议");
+            return false;
+        }
+        String contact = etContact.getText().toString();
+        if (TextUtils.isEmpty(contact)) {
+            RxToast.normal("请留下联系方式");
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -76,6 +131,23 @@ public class SuggestActivity extends BaseActivity {
 
         adapter.setOnItemClickListener((position, v) ->
                 PictureSelector.create(mContext).themeStyle(R.style.picture_default_style).openExternalPreview(position, selectList));
+
+        etSuggest.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                tvLimit.setText(s.length() + "/" + MAX_CHAR_LIMIT);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override

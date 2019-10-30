@@ -2,7 +2,6 @@ package com.meis.base.mei.status;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.DrawableRes;
@@ -20,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.meis.base.R;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
@@ -39,6 +37,9 @@ public class StatusHelper {
     private View mLoadingView;
     private View mEmptyView;
     private View mErrorView;
+
+    // 黑夜模式
+    private View mDarkView;
 
     /**
      * action bar view
@@ -182,6 +183,13 @@ public class StatusHelper {
         setViewStubLayoutRes(R.id.base_loading_stub, layoutResId);
         mLoadingView = inflateViewStub(R.id.base_loading_stub);
         return mLoadingView;
+    }
+
+    public View setDarkLayout(@LayoutRes int layoutResId) {
+        if (null != mDarkView) return mDarkView;
+        setViewStubLayoutRes(R.id.base_dark_stub, layoutResId);
+        mDarkView = inflateViewStub(R.id.base_dark_stub);
+        return mDarkView;
     }
 
     /**
@@ -333,6 +341,11 @@ public class StatusHelper {
         }
     }
 
+    // 黑夜模式
+    public void showDark(boolean show, Object... args) {
+        setDarkViewVisible(show, args);
+    }
+
     /**
      * @param viewState
      * @param show
@@ -369,6 +382,23 @@ public class StatusHelper {
             }
         }
         mCurrentState = viewState;
+    }
+
+    private void setDarkViewVisible(boolean visible, Object... args) {
+        if (visible && mDarkView == null) {
+            mDarkView = inflateViewStub(R.id.base_dark_stub);
+        }
+        if (mDarkView != null) {
+            View view = mDarkView.findViewById(R.id.dark_layout);
+            if (args != null && view != null) {
+                for (Object obj : args) {
+                    if (obj instanceof Integer) {
+                        view.setBackgroundColor((Integer) obj);
+                    }
+                }
+            }
+            mDarkView.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
     }
 
     private void setContentViewVisible(boolean visible) {

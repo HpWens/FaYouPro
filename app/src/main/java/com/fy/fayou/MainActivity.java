@@ -1,8 +1,6 @@
 package com.fy.fayou;
 
 
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.fragment.ForumFragment;
 import com.fy.fayou.fragment.HomeFragment;
 import com.fy.fayou.fragment.LearnFragment;
@@ -79,11 +77,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        ARouter.getInstance().build(Constant.LOGIN)
-                .withString("name", "ni")
-                .withInt("age", 18)
-                .navigation();
+
     }
+
 
     @Override
     protected int layoutResId() {
