@@ -1,20 +1,27 @@
 package com.meis.base.mei.base;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.constant.DataConstants;
 import com.meis.base.mei.entity.Result;
 import com.meis.base.mei.status.ViewState;
 import com.meis.base.mei.utils.ListUtils;
+import com.meis.base.mei.utils.ParameterizedTypeImpl;
 
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
 
@@ -205,4 +212,43 @@ public abstract class BaseListFragment<T> extends BaseFragment {
 
     @Override
     public abstract boolean canPullToRefresh();
+
+    private List<T> parseListData(String json, Class<T> clazz) {
+        Type listType = new ParameterizedTypeImpl(List.class, new Class[]{clazz});
+        return new Gson().fromJson(json, listType);
+    }
+
+    protected Observable<Result<List<T>>> getListByField(final String json, final String field, final Class<T> clazz) {
+        final Result<List<T>> result = new Result<>();
+        return Observable.just(json).map(new Function<String, Result<List<T>>>() {
+            @Override
+            public Result<List<T>> apply(String s) throws Exception {
+                if (!TextUtils.isEmpty(s)) {
+                    JSONObject json = new JSONObject(s);
+                    if (json != null && field != null && json.has(field)) {
+                        List<T> list = parseListData(json.optString(field), clazz);
+                        result.data = list;
+                    }
+                }
+                return result;
+            }
+        });
+    }
+
+    protected Observable<Result<List<T>>> getListByField(Observable<String> observable, final String field, final Class<T> clazz) {
+        final Result<List<T>> result = new Result<>();
+        return observable.map(new Function<String, Result<List<T>>>() {
+            @Override
+            public Result<List<T>> apply(String s) throws Exception {
+                if (!TextUtils.isEmpty(s)) {
+                    JSONObject json = new JSONObject(s);
+                    if (json != null && field != null && json.has(field)) {
+                        List<T> list = parseListData(json.optString(field), clazz);
+                        result.data = list;
+                    }
+                }
+                return result;
+            }
+        });
+    }
 }

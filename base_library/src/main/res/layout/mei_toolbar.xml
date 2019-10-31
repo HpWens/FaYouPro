@@ -61,6 +61,18 @@
 
             </TextView>
 
+
+            <ImageView
+                android:id="@+id/iv_right_more"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_more"
+                android:visibility="gone"></ImageView>
+
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>

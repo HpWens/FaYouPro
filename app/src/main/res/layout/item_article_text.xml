@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginRight="15dp"
+        android:lineSpacingExtra="6dp"
+        android:text="好帅啊，好快啊，这啥电脑，真的酷，反正瞎写一些看看能怎么样，这是一段没有感情的占位文字
+   好帅啊好快啊这啥电脑真的酷，反正瞎写一些看看能怎么样，这是一段没有感情的占位文字。好帅啊好快啊啊，这啥电脑真的酷反正瞎写一些看看能怎么样，这是一段没有感情的占位文字。"
+        android:textColor="@color/color_333333"
+        android:textSize="16sp"></TextView>
+
+</LinearLayout>

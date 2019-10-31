@@ -22,4 +22,8 @@ public class UserInfo implements Serializable {
     public String mobile;
     public String mail;
 
+
+    // 是否取消关注-[我的关注]
+    public boolean isCancelFollow;
+
 }

@@ -1,8 +1,10 @@
 package com.meis.base.mei.base;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -11,6 +13,8 @@ import android.widget.TextView;
 import com.meis.base.R;
 import com.meis.base.mei.MeiCompatActivity;
 import com.meis.base.mei.fragment.MeiCompatFragment;
+
+import java.util.List;
 
 import me.yokeyword.fragmentation.ExtraTransaction;
 import me.yokeyword.fragmentation.ISupportFragment;
@@ -489,6 +493,68 @@ public abstract class BaseFragment extends MeiCompatFragment implements ISupport
                 pop();
             }
         });
+    }
+
+    public void removeFragment(Class fragmentClss) {
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(fragmentClss.getName());
+        if (fragment != null) {
+            getChildFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
+        }
+    }
+
+    public void hideFragment(int fragmentId) {
+        Fragment fragment = getChildFragmentManager().findFragmentById(fragmentId);
+        if (fragment != null) {
+            hideFragment(fragment);
+        }
+    }
+
+    public void hideFragment(Fragment fragment) {
+        if (fragment.isVisible()) {
+            getChildFragmentManager().beginTransaction()
+                    .hide(fragment).commitAllowingStateLoss();
+        }
+    }
+
+    public void showFragment(int container, Fragment fragment) {
+        showFragment(container, fragment, false);
+    }
+
+    public void showFragment(int container, Fragment fragment, boolean hideOther) {
+        if (!isAdded()) return;
+        if (fragment.isAdded()) {
+            getChildFragmentManager().beginTransaction()
+                    .show(fragment).commitAllowingStateLoss();
+        } else {
+            getChildFragmentManager().beginTransaction()
+                    .add(container, fragment, fragment.getClass().getName()).commitAllowingStateLoss();
+        }
+        if (hideOther) {
+            @SuppressLint("RestrictedApi")
+            List<Fragment> fragmentList = getChildFragmentManager().getFragments();
+            if (fragmentList == null) return;
+            for (int i = fragmentList.size() - 1; i >= 0; i--) {
+                Fragment frag = fragmentList.get(i);
+                if (frag != null && !frag.getClass().getName().equals(fragment.getClass().getName())) {
+                    Object obj = frag.getTag();
+                    if (obj == null || !obj.toString().equals("publish"))
+                        hideFragment(frag);
+                }
+            }
+        }
+    }
+
+    public boolean isAddedFragment(String name) {
+        @SuppressLint("RestrictedApi")
+        List<Fragment> fragmentList = getChildFragmentManager().getFragments();
+        if (fragmentList == null || fragmentList.isEmpty()) return false;
+        for (int i = fragmentList.size() - 1; i >= 0; i--) {
+            if (fragmentList.get(i) != null && fragmentList.get(i).getClass() != null && fragmentList.get(i).getClass
+                    ().getSimpleName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

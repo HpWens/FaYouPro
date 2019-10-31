@@ -3,21 +3,18 @@ package com.fy.fayou.my;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 
 import com.fy.fayou.R;
 import com.fy.fayou.bean.UserInfo;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.my.adapter.FollowAdapter;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
 import com.zhouyou.http.EasyHttp;
-
-import org.json.JSONObject;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
 import java.util.List;
 
@@ -44,7 +41,13 @@ public class FollowFragment extends BaseListFragment<UserInfo> {
 
     @Override
     protected MeiBaseAdapter<UserInfo> getAdapter() {
-        mAdapter = new FollowAdapter();
+        mAdapter = new FollowAdapter((user, cancelFollow, position) -> {
+            if (cancelFollow) {
+                cancelFollow(user, position);
+            } else {
+                requestFollow(user, position);
+            }
+        });
         return mAdapter;
     }
 
@@ -55,18 +58,44 @@ public class FollowFragment extends BaseListFragment<UserInfo> {
                 .params("page", (pageNo - 1) + "")
                 .params("size", "20")
                 .execute(String.class);
-        return observable.map(s -> {
-            Result<List<UserInfo>> result = new Result<>();
-            if (!TextUtils.isEmpty(s)) {
-                JSONObject json = new JSONObject(s);
-                if (json.has("content")) {
-                    List<UserInfo> list = new Gson().fromJson(json.optString("content"), new TypeToken<List<UserInfo>>() {
-                    }.getType());
-                    result.data = list;
-                }
-            }
-            return result;
-        });
+        return getListByField(observable, "content", UserInfo.class);
+    }
+
+    // 请求关注
+    private void requestFollow(final UserInfo user, final int position) {
+        EasyHttp.post(ApiUrl.USER_REQUEST_FOLLOW)
+                .upJson(user.id)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        user.isCancelFollow = false;
+                        mAdapter.setData(position, user);
+                    }
+                });
+    }
+
+
+    // 取消关注
+    private void cancelFollow(final UserInfo user, final int position) {
+        EasyHttp.post(ApiUrl.USER_CANCEL_FOLLOW)
+                .upJson(user.id)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        user.isCancelFollow = true;
+                        mAdapter.setData(position, user);
+                    }
+                });
     }
 
     @Override

@@ -28,4 +28,6 @@
         <item name="android:paddingBottom">4dp</item>
     </style>
 
+    <style name="ActivityTransparentTheme" parent="AppTheme"></style>
+
 </resources>

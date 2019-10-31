@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_pic"
+        android:layout_width="112dp"
+        android:layout_height="74dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:background="#ff0000"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="16dp"
+        android:lineSpacingExtra="2dp"
+        android:lines="2"
+        android:text="#新闻#244名电信网络诈骗犯 罪嫌疑人从菲律宾被押解回国"
+        android:textColor="@color/color_333333"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/iv_pic"
+        app:layout_constraintTop_toTopOf="@+id/iv_pic"></TextView>
+
+    <TextView
+        android:id="@+id/tv_origin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="法报头条·外链"
+        android:textColor="@color/color_b2b2b2"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_pic"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_title"></TextView>
+
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="2019-10-30"
+        android:textColor="@color/color_b2b2b2"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_pic"
+        app:layout_constraintLeft_toRightOf="@+id/tv_origin"></TextView>
+
+    <View
+        android:id="@+id/line_bottom"
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:background="@color/color_e5e5e5"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_title"
+        app:layout_constraintRight_toRightOf="@+id/iv_pic"
+        app:layout_constraintTop_toBottomOf="@+id/iv_pic"></View>
+
+</android.support.constraint.ConstraintLayout>

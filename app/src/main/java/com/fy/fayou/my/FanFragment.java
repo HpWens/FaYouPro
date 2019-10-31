@@ -5,18 +5,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
+import com.fy.fayou.bean.UserInfo;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.my.adapter.FanAdapter;
-import com.fy.fayou.my.bean.FanEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
 
-public class FanFragment extends BaseListFragment<FanEntity> {
+public class FanFragment extends BaseListFragment<UserInfo> {
 
     RecyclerView mRecyclerView;
     FanAdapter mAdapter;
@@ -36,15 +40,41 @@ public class FanFragment extends BaseListFragment<FanEntity> {
     }
 
     @Override
-    protected MeiBaseAdapter<FanEntity> getAdapter() {
-        mAdapter = new FanAdapter();
+    protected MeiBaseAdapter<UserInfo> getAdapter() {
+        mAdapter = new FanAdapter((user, position) -> {
+            requestFollow(user, position);
+        });
         return mAdapter;
     }
 
     @Override
-    protected Observable<Result<List<FanEntity>>> getListObservable(int pageNo) {
-        return null;
+    protected Observable<Result<List<UserInfo>>> getListObservable(int pageNo) {
+        Observable<String> observable = EasyHttp.get(ApiUrl.USER_FAN)
+                .params("userId", "" + UserService.getInstance().getUserId())
+                .params("page", (pageNo - 1) + "")
+                .params("size", "20")
+                .execute(String.class);
+        return getListByField(observable, "content", UserInfo.class);
     }
+
+    // 请求关注
+    private void requestFollow(final UserInfo user, final int position) {
+        EasyHttp.post(ApiUrl.USER_REQUEST_FOLLOW)
+                .upJson(user.id)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        user.follow = true;
+                        mAdapter.setData(position, user);
+                    }
+                });
+    }
+
 
     @Override
     public boolean canLoadMore() {
@@ -64,12 +94,5 @@ public class FanFragment extends BaseListFragment<FanEntity> {
     @Override
     protected void initData() {
         super.initData();
-
-        List<FanEntity> list = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            FanEntity entity = new FanEntity();
-            list.add(entity);
-        }
-        mAdapter.setNewData(list);
     }
 }

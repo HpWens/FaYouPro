@@ -65,6 +65,9 @@ public class Constant {
     // 发表-评论
     public static final String MY_PUBLISH_COMMENT = "/my/publish_comment";
 
+    // 文章-详情
+    public static final String DETAIL_ARTICLE = "/detail/article";
+
 
     // 保存用户数据
     public static String USER_INFO = "user_info_data";

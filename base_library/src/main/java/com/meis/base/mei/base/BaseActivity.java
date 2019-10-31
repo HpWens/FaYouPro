@@ -1,5 +1,6 @@
 package com.meis.base.mei.base;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -20,6 +22,8 @@ import com.meis.base.mei.dialog.MeiCompatDialog;
 import com.meis.base.mei.utils.Eyes;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 
 import me.yokeyword.fragmentation.ExtraTransaction;
 import me.yokeyword.fragmentation.ISupportActivity;
@@ -349,6 +353,15 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
         return this;
     }
 
+    public BaseActivity setRightMoreListener(View.OnClickListener listener) {
+        View more = getToolbarView().findViewById(R.id.iv_right_more);
+        if (null != more) {
+            more.setVisibility(View.VISIBLE);
+            more.setOnClickListener(listener);
+        }
+        return this;
+    }
+
     public void setRightTextListener(View.OnClickListener listener) {
         setRightTextListener(listener, null);
     }
@@ -392,6 +405,69 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
         Eyes.setStatusBarColor(this, Color.parseColor("#ffffff"), true);
     }
 
+    public void removeFragment(Class fragmentClss) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(fragmentClss.getName());
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
+        }
+    }
+
+    public void hideFragment(int fragmentId) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(fragmentId);
+        if (fragment != null) {
+            hideFragment(fragment);
+        }
+    }
+
+    public void hideFragment(Fragment fragment) {
+        if (fragment.isVisible()) {
+            getSupportFragmentManager().beginTransaction()
+                    .hide(fragment).commitAllowingStateLoss();
+        }
+    }
+
+    public void showFragment(int container, Fragment fragment) {
+        showFragment(container, fragment, false);
+    }
+
+    public void showFragment(int container, Fragment fragment, boolean hideOther) {
+        // if (!fragment.isAdded()) return;
+        if (fragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction()
+                    .show(fragment).commitAllowingStateLoss();
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .add(container, fragment, fragment.getClass().getName()).commitAllowingStateLoss();
+        }
+        if (hideOther) {
+            @SuppressLint("RestrictedApi")
+            List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+            if (fragmentList == null) return;
+            for (int i = fragmentList.size() - 1; i >= 0; i--) {
+                Fragment frag = fragmentList.get(i);
+                if (frag != null && !frag.getClass().getName().equals(fragment.getClass().getName())) {
+                    Object obj = frag.getTag();
+                    if (obj == null || !obj.toString().equals("publish"))
+                        hideFragment(frag);
+                }
+            }
+        }
+    }
+
+    public boolean isAddedFragment(String name) {
+        @SuppressLint("RestrictedApi")
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        if (fragmentList == null || fragmentList.isEmpty()) return false;
+        for (int i = fragmentList.size() - 1; i >= 0; i--) {
+            if (fragmentList.get(i) != null && fragmentList.get(i).getClass() != null && fragmentList.get(i).getClass
+                    ().getSimpleName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /**
      * 初始化控件
      * <p>
@@ -412,5 +488,6 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
      * @return
      */
     protected abstract int layoutResId();
+
 
 }

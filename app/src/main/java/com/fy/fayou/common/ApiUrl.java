@@ -19,4 +19,17 @@ public class ApiUrl {
     // 查找我的关注
     public static final String MY_FOLLOW = "/userRelationship/findFollowingsList";
 
+
+    // 取消关注
+    public static final String USER_CANCEL_FOLLOW = "/userRelationship/unFollower";
+
+
+    // 关注
+    public static final String USER_REQUEST_FOLLOW = "/userRelationship/follower";
+
+
+    // 查找用户粉丝
+    public static final String USER_FAN = "/userRelationship/findFollowerList";
+
+
 }

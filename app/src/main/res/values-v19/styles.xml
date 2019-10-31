@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ActivityTransparentTheme" parent="AppTheme">
+        <!--系统顶部状态栏悬浮到应用之上，不占有固定位置-->
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+</resources>
