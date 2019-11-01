@@ -467,7 +467,6 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
         return false;
     }
 
-
     /**
      * 初始化控件
      * <p>

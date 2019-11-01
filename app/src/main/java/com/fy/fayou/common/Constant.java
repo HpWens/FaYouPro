@@ -68,6 +68,9 @@ public class Constant {
     // 文章-详情
     public static final String DETAIL_ARTICLE = "/detail/article";
 
+    // 资讯-发布
+    public static final String NEWS_PUBLISH = "/news/publish";
+
 
     // 保存用户数据
     public static String USER_INFO = "user_info_data";

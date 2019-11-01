@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.meis.base.R;
 import com.meis.base.mei.MeiCompatActivity;
+import com.meis.base.mei.dialog.MeiCompatDialog;
 import com.meis.base.mei.fragment.MeiCompatFragment;
 
 import java.util.List;
@@ -555,6 +556,14 @@ public abstract class BaseFragment extends MeiCompatFragment implements ISupport
             }
         }
         return false;
+    }
+
+    /**
+     * @param baseDialog
+     */
+    public void showDialog(MeiCompatDialog baseDialog) {
+        getActivity().getSupportFragmentManager().beginTransaction().add(baseDialog, "dialog_" + baseDialog.getClass
+                ().getSimpleName()).commitAllowingStateLoss();
     }
 
     @Override

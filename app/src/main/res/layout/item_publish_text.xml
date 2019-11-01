@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/edit_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/et_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:hint="记录我的生活点滴"
+        android:padding="15dp"
+        android:textColor="@color/color_333333"
+        android:textColorHint="@color/color_d2d2d2"
+        android:textSize="16sp" />
+
+</LinearLayout>

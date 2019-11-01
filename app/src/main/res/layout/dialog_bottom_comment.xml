@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_ffffff"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_obj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:lines="1"
+        android:text="正在评论 总裁"
+        android:textColor="@color/color_a0a0a0"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/et_hint"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/bottom_comment_shape"
+        android:hint="请输入"
+        android:paddingLeft="15dp"
+        android:textColor="@color/color_333333"
+        android:textColorHint="@color/color_d2d2d2"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:padding="15dp"
+        android:text="发布"
+        android:textColor="@color/comment_dialog_send_color" />
+
+</LinearLayout>
+

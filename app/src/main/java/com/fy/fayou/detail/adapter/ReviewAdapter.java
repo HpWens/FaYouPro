@@ -1,10 +1,13 @@
 package com.fy.fayou.detail.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.fy.fayou.R;
+import com.fy.fayou.view.CustomPopWindow;
 import com.meis.base.mei.adapter.BaseMultiAdapter;
 
 import java.util.ArrayList;
@@ -22,6 +25,17 @@ public class ReviewAdapter extends BaseMultiAdapter<MultiItemEntity> {
 
     @Override
     protected void convert(@NonNull BaseViewHolder helper, MultiItemEntity item) {
+        helper.getView(R.id.tv_content).setOnLongClickListener(v -> {
+                    showPop(mContext, v);
+                    return false;
+                }
+        );
+    }
 
+    private void showPop(Context context, View view) {
+        CustomPopWindow popWindow = new CustomPopWindow.PopupWindowBuilder(context)
+                .setView(R.layout.pop_review_report)
+                .create();
+        popWindow.showAsDropDown(view);
     }
 }

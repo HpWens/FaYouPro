@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        ARouter.getInstance().build(Constant.DETAIL_ARTICLE).navigation();
+        ARouter.getInstance().build(Constant.NEWS_PUBLISH).navigation();
     }
 
 

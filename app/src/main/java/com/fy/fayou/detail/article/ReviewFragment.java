@@ -8,10 +8,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fy.fayou.R;
+import com.fy.fayou.detail.dialog.BottomCommentDialog;
 import com.meis.base.mei.base.BaseFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class ReviewFragment extends BaseFragment {
@@ -100,6 +102,15 @@ public class ReviewFragment extends BaseFragment {
     public ReviewFragment setOnReviewListener(OnReviewListener listener) {
         mListener = listener;
         return this;
+    }
+
+    @OnClick({R.id.comment_layout})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.comment_layout:
+                showDialog(new BottomCommentDialog());
+                break;
+        }
     }
 
     public interface OnReviewListener {

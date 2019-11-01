@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.fy.fayou.view.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/percent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:background="#F8F8F8"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_picture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/iv_delete"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:background="@mipmap/news_publish_delete"
+        android:scaleType="centerInside" />
+
+    <View
+        android:id="@+id/iv_delete_stroke"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"></View>
+
+</com.fy.fayou.view.PercentRelativeLayout>

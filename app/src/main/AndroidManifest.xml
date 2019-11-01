@@ -126,10 +126,14 @@
         <activity
             android:name=".my.PublishCommentActivity"
             android:screenOrientation="portrait"></activity>
+
         <activity
             android:name=".detail.article.ArticleDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ActivityTransparentTheme"></activity>
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".pufa.PublishNewsActivity"
+            android:screenOrientation="portrait"></activity>
 
         <meta-data
             android:name="design_width_in_dp"
