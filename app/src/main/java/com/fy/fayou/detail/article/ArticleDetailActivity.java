@@ -22,6 +22,7 @@ import com.fy.fayou.detail.bean.PicBean;
 import com.fy.fayou.detail.bean.RecommendBean;
 import com.fy.fayou.detail.bean.RecommendHeaderBean;
 import com.fy.fayou.detail.bean.TextBean;
+import com.fy.fayou.detail.dialog.BottomShareDialog;
 import com.meis.base.mei.adapter.MeiBaseMixAdapter;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
@@ -120,7 +121,7 @@ public class ArticleDetailActivity extends BaseActivity {
         return R.layout.activity_detail_article;
     }
 
-    @OnClick({R.id.tv_publish, R.id.tv_message, R.id.tv_collect, R.id.tv_share})
+    @OnClick({R.id.tv_publish, R.id.iv_right_more, R.id.tv_message, R.id.tv_collect, R.id.tv_share})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_publish:
@@ -131,6 +132,12 @@ public class ArticleDetailActivity extends BaseActivity {
             case R.id.tv_collect:
                 break;
             case R.id.tv_share:
+                break;
+            case R.id.iv_right_more:
+                showDialog(new BottomShareDialog().setOnItemClickListener(() -> {
+                    transMask.setVisibility(View.GONE);
+                }));
+                transMask.setVisibility(View.VISIBLE);
                 break;
         }
     }

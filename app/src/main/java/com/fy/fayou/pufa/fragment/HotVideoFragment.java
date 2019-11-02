@@ -1,13 +1,12 @@
-package com.fy.fayou.search.result;
-
+package com.fy.fayou.pufa.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
-import com.fy.fayou.search.adapter.ResultContentAdapter;
-import com.fy.fayou.search.bean.SearchResultEntity;
+import com.fy.fayou.pufa.adapter.HotVideoAdapter;
+import com.fy.fayou.pufa.bean.HotVideoEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
@@ -17,29 +16,17 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-
-public class ContentFragment extends BaseListFragment<SearchResultEntity> {
-
-    private static final String ARG_MENU = "arg_menu";
+public class HotVideoFragment extends BaseListFragment<HotVideoEntity> {
 
     RecyclerView mRecyclerView;
-    ResultContentAdapter mAdapter;
+    HotVideoAdapter mAdapter;
 
-    public static ContentFragment newInstance(String menu) {
-
+    public static HotVideoFragment newInstance() {
         Bundle args = new Bundle();
-        args.putString(ARG_MENU, menu);
-
-        ContentFragment fragment = new ContentFragment();
+        HotVideoFragment fragment = new HotVideoFragment();
         fragment.setArguments(args);
         return fragment;
     }
-
-    @Override
-    public boolean onBackPressedSupport() {
-        return super.onBackPressedSupport();
-    }
-
 
     @Override
     protected RecyclerView getRecyclerView() {
@@ -49,13 +36,13 @@ public class ContentFragment extends BaseListFragment<SearchResultEntity> {
     }
 
     @Override
-    protected MeiBaseAdapter<SearchResultEntity> getAdapter() {
-        mAdapter = new ResultContentAdapter();
+    protected MeiBaseAdapter<HotVideoEntity> getAdapter() {
+        mAdapter = new HotVideoAdapter();
         return mAdapter;
     }
 
     @Override
-    protected Observable<Result<List<SearchResultEntity>>> getListObservable(int pageNo) {
+    protected Observable<Result<List<HotVideoEntity>>> getListObservable(int pageNo) {
         return null;
     }
 
@@ -66,21 +53,21 @@ public class ContentFragment extends BaseListFragment<SearchResultEntity> {
 
     @Override
     public boolean canPullToRefresh() {
-        return false;
+        return true;
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_search_result_content;
+        return R.layout.comm_recycler;
     }
 
     @Override
     protected void initData() {
         super.initData();
 
-        List<SearchResultEntity> list = new ArrayList<>();
+        List<HotVideoEntity> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            SearchResultEntity entity = new SearchResultEntity();
+            HotVideoEntity entity = new HotVideoEntity();
             list.add(entity);
         }
 

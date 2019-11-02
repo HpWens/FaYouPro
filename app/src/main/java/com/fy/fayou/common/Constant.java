@@ -71,6 +71,12 @@ public class Constant {
     // 资讯-发布
     public static final String NEWS_PUBLISH = "/news/publish";
 
+    // 资讯-发布
+    public static final String NEWS_PUBLISH_NEXT = "/news/publish_next";
+
+    // 全网通缉
+    public static final String WANTED = "/home/wanted";
+
 
     // 保存用户数据
     public static String USER_INFO = "user_info_data";

@@ -73,7 +73,8 @@
             android:id="@+id/fl_list_container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/color_ffffff" />
 
         <FrameLayout
             android:id="@+id/fl_content_container"

@@ -7,21 +7,21 @@
     <string name="bottom_personal_name" translatable="false">个人</string>
 
     <string-array name="array_menu">
-        <item>Ranking</item>
-        <item>Menu1</item>
-        <item>Menu2</item>
-        <item>Menu3</item>
-        <item>Menu4</item>
-        <item>Menu5</item>
-        <item>Menu6</item>
-        <item>Menu7</item>
-        <item>Menu8</item>
-        <item>Menu9</item>
-        <item>Menu10</item>
-        <item>Menu11</item>
-        <item>Menu12</item>
-        <item>Menu13</item>
-        <item>Menu14</item>
+        <item>司法解释\n(290)</item>
+        <item>司法解释\n(290)</item>
+        <item>司法解释\n(290)</item>
+        <item>司法解释\n(290)</item>
+        <item>司法解释\n(290)</item>
+        <item>司法解释\n(290)</item>
+        <item>司法解释\n(290)</item>
+    </string-array>
+
+    <string-array name="markArray">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
     </string-array>
 
 </resources>

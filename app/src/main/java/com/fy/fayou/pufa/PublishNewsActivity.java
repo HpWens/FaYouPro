@@ -8,7 +8,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.utils.SoftKeyBoardListener;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -63,6 +65,7 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
             case R.id.tv_cancel:
                 break;
             case R.id.tv_right:
+                ARouter.getInstance().build(Constant.NEWS_PUBLISH_NEXT).navigation();
                 break;
             case R.id.iv_add_pic:
                 startPictureSelector();

@@ -1,13 +1,12 @@
-package com.fy.fayou.search.result;
-
+package com.fy.fayou.pufa.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
-import com.fy.fayou.search.adapter.ResultContentAdapter;
-import com.fy.fayou.search.bean.SearchResultEntity;
+import com.fy.fayou.pufa.adapter.NewsAdapter;
+import com.fy.fayou.pufa.bean.NewsEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
@@ -17,27 +16,16 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-
-public class ContentFragment extends BaseListFragment<SearchResultEntity> {
-
-    private static final String ARG_MENU = "arg_menu";
+public class NewsFragment extends BaseListFragment<NewsEntity> {
 
     RecyclerView mRecyclerView;
-    ResultContentAdapter mAdapter;
+    NewsAdapter mAdapter;
 
-    public static ContentFragment newInstance(String menu) {
-
+    public static NewsFragment newInstance() {
         Bundle args = new Bundle();
-        args.putString(ARG_MENU, menu);
-
-        ContentFragment fragment = new ContentFragment();
+        NewsFragment fragment = new NewsFragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public boolean onBackPressedSupport() {
-        return super.onBackPressedSupport();
     }
 
 
@@ -49,13 +37,13 @@ public class ContentFragment extends BaseListFragment<SearchResultEntity> {
     }
 
     @Override
-    protected MeiBaseAdapter<SearchResultEntity> getAdapter() {
-        mAdapter = new ResultContentAdapter();
+    protected MeiBaseAdapter<NewsEntity> getAdapter() {
+        mAdapter = new NewsAdapter();
         return mAdapter;
     }
 
     @Override
-    protected Observable<Result<List<SearchResultEntity>>> getListObservable(int pageNo) {
+    protected Observable<Result<List<NewsEntity>>> getListObservable(int pageNo) {
         return null;
     }
 
@@ -66,21 +54,21 @@ public class ContentFragment extends BaseListFragment<SearchResultEntity> {
 
     @Override
     public boolean canPullToRefresh() {
-        return false;
+        return true;
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_search_result_content;
+        return R.layout.comm_recycler;
     }
 
     @Override
     protected void initData() {
         super.initData();
 
-        List<SearchResultEntity> list = new ArrayList<>();
+        List<NewsEntity> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            SearchResultEntity entity = new SearchResultEntity();
+            NewsEntity entity = new NewsEntity();
             list.add(entity);
         }
 

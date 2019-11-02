@@ -30,4 +30,22 @@
 
     <style name="ActivityTransparentTheme" parent="AppTheme"></style>
 
+    <style name="CreateLiveDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:backgroundDimAmount">0</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/DialogAnimation.BottomInOut</item>
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="DialogAnimation" parent="Animation.AppCompat.Dialog"></style>
+
+    <style name="DialogAnimation.BottomInOut">
+        <item name="android:windowEnterAnimation">@anim/comm_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/comm_bottom_out</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <!--  <item name="behavior_peekHeight">340dp</item>-->
+    </style>
+
 </resources>

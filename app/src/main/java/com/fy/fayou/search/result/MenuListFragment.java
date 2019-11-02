@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
+import com.fy.fayou.search.SearchResultActivity;
 import com.fy.fayou.search.adapter.MenuListAdapter;
 import com.meis.base.mei.base.BaseFragment;
 
@@ -63,6 +64,10 @@ public class MenuListFragment extends BaseFragment {
             }
             mCurrentPosition = position;
             adapter.setItemChecked(position);
+
+            if (getActivity() instanceof SearchResultActivity) {
+                ((SearchResultActivity) getActivity()).switchContentFragment(mMenus.get(position));
+            }
         }));
 
         adapter.setNewData(mMenus);

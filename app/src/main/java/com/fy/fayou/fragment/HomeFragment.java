@@ -8,10 +8,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomeRecommendVPAdapter;
-import com.fy.fayou.common.OnScrollClashListener;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseFragment;
 import com.vondear.rxtool.RxImageTool;
@@ -60,12 +61,7 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
         viewpager.setAdapter(mAdapter = new HomeRecommendVPAdapter(getChildFragmentManager(), mTitles));
         tab.setViewPager(viewpager);
 
-        mAdapter.setOnScrollClashListener(new OnScrollClashListener() {
-            @Override
-            public void onScroll(boolean isScroll) {
-                viewpager.setScroll(isScroll);
-            }
-        });
+        mAdapter.setOnScrollClashListener(isScroll -> viewpager.setScroll(isScroll));
 
         appBarLayout.addOnOffsetChangedListener(this);
 
@@ -74,7 +70,9 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
 
     @Override
     protected void initData() {
-
+        ivFloatSearch.setOnClickListener(v -> {
+            ARouter.getInstance().build(Constant.HOME_SEARCH).navigation();
+        });
     }
 
     @Override

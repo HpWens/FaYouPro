@@ -26,7 +26,10 @@ public class MenuListAdapter extends MeiBaseAdapter<String> {
     protected void convert(@NonNull BaseViewHolder helper, String item) {
         helper.setText(R.id.tv_name, item);
 
-        helper.setVisible(R.id.view_line, mBooleanArray.get(helper.getAdapterPosition()));
+        boolean isSelected = mBooleanArray.get(helper.getAdapterPosition());
+        helper.setVisible(R.id.view_line, isSelected);
+        int selectedBgColor = helper.itemView.getResources().getColor(isSelected ? R.color.color_f5f5f5 : R.color.color_ffffff);
+        helper.itemView.setBackgroundColor(selectedBgColor);
 
         helper.itemView.setOnClickListener(v -> {
             if (mListener != null) {

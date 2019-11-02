@@ -1,8 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff00ff"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@mipmap/home_pufa_top_ic"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal">
+
+            <com.flyco.tablayout.SlidingTabLayout
+                android:id="@+id/tab"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_toLeftOf="@+id/iv_publish"
+                app:tl_indicator_width="0dp"
+                app:tl_textBold="BOTH"
+                app:tl_textSelectColor="@color/color_ffffff"
+                app:tl_textUnselectColor="@color/color_8f_ffffff"
+                app:tl_textsize="18sp">
+
+            </com.flyco.tablayout.SlidingTabLayout>
+
+            <ImageView
+                android:id="@+id/iv_publish"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/home_pufa_publish_ic"></ImageView>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <com.fy.fayou.view.HomeViewpager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </com.fy.fayou.view.HomeViewpager>
+
 
 </LinearLayout>
