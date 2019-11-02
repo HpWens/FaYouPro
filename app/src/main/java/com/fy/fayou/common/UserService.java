@@ -42,15 +42,15 @@ public class UserService {
 
 
     public void saveUser(UserInfo user) {
-        ACache.get(mContext).put(Constant.USER_INFO, user);
+        ACache.get(mContext).put(Constant.SP.USER_INFO, user);
     }
 
     public void clearUser() {
-        ACache.get(mContext).put(Constant.USER_INFO, new UserInfo());
+        ACache.get(mContext).put(Constant.SP.USER_INFO, new UserInfo());
     }
 
     public UserInfo getUserInfo() {
-        Object userObj = ACache.get(mContext).getAsObject(Constant.USER_INFO);
+        Object userObj = ACache.get(mContext).getAsObject(Constant.SP.USER_INFO);
         if (null != userObj && userObj instanceof UserInfo) {
             return (UserInfo) userObj;
         }

@@ -40,7 +40,7 @@ public class MenuListFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_search_result_list;
+        return R.layout.comm_transparent_recycler;
     }
 
     @Override

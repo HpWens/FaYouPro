@@ -77,7 +77,13 @@ public class Constant {
     // 全网通缉
     public static final String WANTED = "/home/wanted";
 
+    // 全网通缉
+    public static final String CITY_SELECT = "/city/select";
 
-    // 保存用户数据
-    public static String USER_INFO = "user_info_data";
+
+    public interface SP {
+        String USER_INFO = "user_info_data";
+
+        String CITY_INFO = "city_info_data";
+    }
 }

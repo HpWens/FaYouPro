@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/toolbar_layout"
@@ -17,64 +19,69 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/mei_ic_tool_back"
+            android:src="@mipmap/ic_white_back"
             android:visibility="visible">
 
         </ImageView>
 
 
-        <ImageView
-            android:id="@+id/iv_right_more"
+        <TextView
+            android:id="@+id/tv_center_title"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:gravity="center"
+            android:lines="1"
+            android:singleLine="true"
+            android:text="全网通缉"
+            android:textColor="@color/color_ffffff"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/tv_right"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
             android:layout_alignParentRight="true"
+            android:drawableLeft="@mipmap/ic_national"
+            android:drawablePadding="4dp"
+            android:gravity="center"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:scaleType="centerInside"
-            android:src="@mipmap/ic_more"
-            android:visibility="visible"></ImageView>
+            android:text="全国"
+            android:textColor="@color/color_ffffff"
+            android:textSize="14sp"></TextView>
 
     </RelativeLayout>
 
+
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/tab"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/color_ffffff"
+        app:tl_indicator_color="@color/color_ed4040"
+        app:tl_indicator_height="0dp"
+        app:tl_indicator_margin_bottom="5dp"
+        app:tl_indicator_width="15dp"
+        app:tl_textSelectColor="@color/color_ed4040"
+        app:tl_textUnselectColor="@color/color_333333"
+        app:tl_textsize="14sp">
+
+    </com.flyco.tablayout.SlidingTabLayout>
+
     <View
-        android:id="@+id/top_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@+id/toolbar_layout"
         android:background="@color/color_e5e5e5"></View>
 
-
-    <include
-        layout="@layout/comm_recycler"
+    <com.fy.fayou.view.HomeViewpager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/comment_layout"
-        android:layout_below="@+id/top_line"></include>
+        android:layout_height="match_parent">
 
-    <include
-        layout="@layout/comm_bottom_comment"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"></include>
+    </com.fy.fayou.view.HomeViewpager>
 
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/bottom_bar_height"
-        android:background="@drawable/actionbar_shadow_up" />
-
-    <View
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#8f000000"
-        android:visibility="gone"></View>
-
-    <FrameLayout
-        android:id="@+id/fl_comment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
-
-</RelativeLayout>
+</LinearLayout>

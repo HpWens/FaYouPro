@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_thumb"
+        android:layout_width="75dp"
+        android:layout_height="92dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:background="#ed4512"
+        android:scaleType="centerCrop"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="15dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="2dp"
+        android:text="1991年8月1日，安徽省无为县严桥镇尚礼社区大万自然村发生一起重大刑事案件，经侦查，乐先木拥有重大作案嫌疑。 犯罪嫌疑人乐先木在..."
+        android:textColor="@color/color_333333"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_thumb"
+        app:layout_constraintLeft_toRightOf="@+id/iv_thumb"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_thumb"></TextView>
+
+
+    <TextView
+        android:id="@+id/tv_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="4dp"
+        android:text="[详细查看]"
+        android:textColor="@color/color_ed4040"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_thumb"
+        app:layout_constraintRight_toRightOf="parent">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:text="乐木先"
+        android:textColor="@color/color_ed4040"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@+id/iv_thumb"
+        app:layout_constraintRight_toRightOf="@+id/iv_thumb"
+        app:layout_constraintTop_toBottomOf="@+id/iv_thumb" />
+
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:text="发布时间：2019-10-06"
+        android:textColor="@color/color_999999"
+        android:textSize="12sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_name"
+        app:layout_constraintRight_toRightOf="parent"></TextView>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/color_e5e5e5"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"></View>
+
+
+</android.support.constraint.ConstraintLayout>
