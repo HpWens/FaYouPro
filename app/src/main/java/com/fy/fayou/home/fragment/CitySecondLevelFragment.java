@@ -58,6 +58,7 @@ public class CitySecondLevelFragment extends BaseFragment {
                 } else {
                     outRect.left = mSpacing / 2;
                     outRect.right = mSpacing;
+
                 }
             }
         });
