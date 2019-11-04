@@ -83,8 +83,8 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
         appBarLayout.removeOnOffsetChangedListener(this);
+        unbinder.unbind();
     }
 
     @Override

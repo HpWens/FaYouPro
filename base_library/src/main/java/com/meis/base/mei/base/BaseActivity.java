@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.meis.base.R;
@@ -349,6 +350,14 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
         if (null != ivBack) {
             ivBack.setVisibility(View.VISIBLE);
             ivBack.setOnClickListener(listener);
+        }
+        return this;
+    }
+
+    public BaseActivity setRightMoreRes(int res) {
+        ImageView ivMore = getToolbarView().findViewById(R.id.iv_right_more);
+        if (null != ivMore) {
+            ivMore.setImageResource(res);
         }
         return this;
     }

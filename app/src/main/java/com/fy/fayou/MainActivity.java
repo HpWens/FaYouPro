@@ -1,6 +1,7 @@
 package com.fy.fayou;
 
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.fragment.ForumFragment;
@@ -14,7 +15,7 @@ import com.meis.base.mei.utils.Eyes;
 
 import me.yokeyword.fragmentation.ISupportFragment;
 
-
+@Route(path = "/fayou/main")
 public class MainActivity extends BaseActivity {
 
     public static final int FIRST = 0;
@@ -79,7 +80,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        ARouter.getInstance().build(Constant.WANTED).navigation();
+        post(() -> ARouter.getInstance().build(Constant.USER_CENTER).navigation());
     }
 
 

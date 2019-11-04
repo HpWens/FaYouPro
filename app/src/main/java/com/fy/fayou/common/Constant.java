@@ -80,6 +80,13 @@ public class Constant {
     // 全网通缉
     public static final String CITY_SELECT = "/city/select";
 
+    // 资讯列表
+    public static final String NEWS_LIST = "/news/list";
+
+    public static final String MAIN = "/fayou/main";
+
+    // 用户中心
+    public static final String USER_CENTER = "/user/center";
 
     public interface SP {
         String USER_INFO = "user_info_data";

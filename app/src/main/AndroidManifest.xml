@@ -58,14 +58,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait">
+            android:name=".WelcomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name=".HomeDetailActivity"
@@ -314,6 +319,14 @@
             android:value="7ae623cb54cd5d5c2254d6bfc2aa095a"></meta-data>
         <service android:name="com.amap.api.location.APSService"></service>
 
+
+        <activity
+            android:name=".my.NewsListActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".my.UserCenterActivity"
+            android:screenOrientation="portrait"></activity>
 
     </application>
 
