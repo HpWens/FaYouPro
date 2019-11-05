@@ -1,144 +1,251 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="20dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-            <ImageView
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/personal_header_bg"></ImageView>
+                app:contentScrim="?attr/colorPrimary"
+                app:expandedTitleMarginEnd="64dp"
+                app:expandedTitleMarginStart="20dp"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <ImageView
-                android:id="@+id/iv_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="38dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:src="@mipmap/ic_white_back"></ImageView>
+                <android.support.v7.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="68dp">
 
+                </android.support.v7.widget.Toolbar>
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="184dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/personal_header_bg"></ImageView>
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/iv_avatar"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="76dp"
-                    android:src="@mipmap/ic_avatar_default"
-                    app:civ_border_color="@color/color_ffffff"
-                    app:civ_border_width="2dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                </de.hdodenhof.circleimageview.CircleImageView>
-
-                <TextView
-                    android:id="@+id/tv_name"
+                <ImageView
+                    android:id="@+id/iv_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="15dp"
-                    android:gravity="center_vertical"
-                    android:singleLine="true"
-                    android:text="用户QWE123"
-                    android:textColor="#ffffffff"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
-                    app:layout_constraintLeft_toRightOf="@+id/iv_avatar"
-                    app:layout_constraintTop_toTopOf="@+id/iv_avatar" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@drawable/user_header_follow_shape"
-                    android:gravity="center"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:text="已关注"
-                    android:textColor="@color/color_ffffff"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/iv_avatar"></TextView>
+                    android:layout_marginTop="38dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:src="@mipmap/ic_white_back"></ImageView>
 
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginBottom="16dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent">
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_avatar"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="76dp"
+                        android:src="@mipmap/ic_avatar_default"
+                        app:civ_border_color="@color/color_ffffff"
+                        app:civ_border_width="2dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </de.hdodenhof.circleimageview.CircleImageView>
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="18dp"
+                        android:layout_marginRight="15dp"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="用户QWE123"
+                        android:textColor="#ffffffff"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+                        app:layout_constraintLeft_toRightOf="@+id/iv_avatar"
+                        app:layout_constraintTop_toTopOf="@+id/iv_avatar" />
 
                     <TextView
                         android:id="@+id/tv_follow"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="756 关注"
+                        android:layout_height="24dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/user_header_follow_shape"
+                        android:gravity="center"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:text="已关注"
                         android:textColor="@color/color_ffffff"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/iv_avatar"></TextView>
 
-                    <View
-                        android:layout_width="0.5dp"
-                        android:layout_height="12dp"
-                        android:layout_marginLeft="9dp"
-                        android:background="@color/color_e5e5e5"></View>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="9dp"
-                        android:text="756 粉丝"
-                        android:textColor="@color/color_ffffff"
-                        android:textSize="12sp" />
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent">
 
-                    <View
-                        android:layout_width="0.5dp"
-                        android:layout_height="12dp"
-                        android:layout_marginLeft="9dp"
-                        android:background="@color/color_e5e5e5"></View>
+                        <TextView
+                            android:id="@+id/tv_follow_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="756 关注"
+                            android:textColor="@color/color_ffffff"
+                            android:textSize="12sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="9dp"
-                        android:text="756 获赞"
-                        android:textColor="@color/color_ffffff"
-                        android:textSize="12sp" />
+                        <View
+                            android:layout_width="0.5dp"
+                            android:layout_height="12dp"
+                            android:layout_marginLeft="9dp"
+                            android:background="@color/color_e5e5e5"></View>
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_fan_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:text="756 粉丝"
+                            android:textColor="@color/color_ffffff"
+                            android:textSize="12sp" />
+
+                        <View
+                            android:layout_width="0.5dp"
+                            android:layout_height="12dp"
+                            android:layout_marginLeft="9dp"
+                            android:background="@color/color_e5e5e5"></View>
+
+                        <TextView
+                            android:id="@+id/tv_praise_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:text="756 获赞"
+                            android:textColor="@color/color_ffffff"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
 
 
-            </android.support.constraint.ConstraintLayout>
+                </android.support.constraint.ConstraintLayout>
 
 
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+            <com.flyco.tablayout.SlidingTabLayout
+                android:id="@+id/tab"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/color_ffffff"
+                app:tl_indicator_color="@color/color_ed4040"
+                app:tl_indicator_height="2dp"
+                app:tl_indicator_margin_bottom="5dp"
+                app:tl_indicator_width="15dp"
+                app:tl_textSelectColor="@color/color_ed4040"
+                app:tl_textUnselectColor="@color/color_333333"
+                app:tl_textsize="14sp">
+
+            </com.flyco.tablayout.SlidingTabLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/color_e5e5e5"></View>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <com.fy.fayou.view.HomeViewpager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        </com.fy.fayou.view.HomeViewpager>
+
+    </android.support.design.widget.CoordinatorLayout>
 
 
-</android.support.design.widget.CoordinatorLayout>
+    <LinearLayout
+        android:id="@+id/top_header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_ffffff"
+        android:orientation="horizontal"
+        android:paddingTop="24dp"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/mei_ic_tool_back"
+            android:visibility="visible">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/iv_top_avatar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/iv_close"
+            android:src="@mipmap/ic_avatar_default"></ImageView>
+
+
+        <TextView
+            android:id="@+id/tv_top_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_weight="1"
+            android:lines="1"
+            android:singleLine="true"
+            android:text="用户QWE123"
+            android:textColor="@color/color_333333"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:id="@+id/tv_top_follow"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/my_follow_red_round"
+            android:gravity="center"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="+关注"
+            android:textColor="@color/color_ffffff"
+            android:textSize="12sp"></TextView>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

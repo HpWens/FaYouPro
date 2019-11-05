@@ -103,13 +103,10 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
             mFloatSearchVisible = true;
             ValueAnimator animator = ValueAnimator.ofFloat(0f, 1.0f);
             animator.setDuration(200);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    float value = (float) animation.getAnimatedValue();
-                    ivFloatSearch.setScaleX(value);
-                    ivFloatSearch.setScaleY(value);
-                }
+            animator.addUpdateListener(animation -> {
+                float value = (float) animation.getAnimatedValue();
+                ivFloatSearch.setScaleX(value);
+                ivFloatSearch.setScaleY(value);
             });
             animator.start();
         }
@@ -118,13 +115,10 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
             mFloatSearchVisible = false;
             ValueAnimator animator = ValueAnimator.ofFloat(1.0f, 0f);
             animator.setDuration(200);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    float value = (float) animation.getAnimatedValue();
-                    ivFloatSearch.setScaleX(value);
-                    ivFloatSearch.setScaleY(value);
-                }
+            animator.addUpdateListener(animation -> {
+                float value = (float) animation.getAnimatedValue();
+                ivFloatSearch.setScaleX(value);
+                ivFloatSearch.setScaleY(value);
             });
             animator.start();
         }

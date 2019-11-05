@@ -10,7 +10,7 @@ import com.meis.base.mei.utils.Eyes;
 public class UserCenterActivity extends BaseActivity {
     @Override
     protected void initView() {
-        Eyes.translucentStatusBar(this, true);
+        Eyes.translucentStatusBar(this, true, false);
     }
 
     @Override
