@@ -25,21 +25,15 @@
                 android:scaleType="centerCrop"
                 android:src="@mipmap/personal_header_bg"></ImageView>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="68dp"
-                android:orientation="horizontal"
-                app:layout_collapseMode="pin">
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:src="@mipmap/ic_white_back"></ImageView>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="24dp"
-                    android:paddingRight="15dp"
-                    android:src="@mipmap/ic_white_back"></ImageView>
-
-            </android.support.v7.widget.Toolbar>
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
