@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -12,16 +11,19 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.UploadService;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.vondear.rxtool.RxDeviceTool;
 import com.vondear.rxtool.RxImageTool;
 import com.vondear.rxtool.view.RxToast;
 import com.zhouyou.http.EasyHttp;
@@ -61,18 +63,32 @@ public class SuggestActivity extends BaseActivity {
         setToolBarCenterTitle("意见反馈");
         setLeftBackListener(v -> finish()).setRightTextListener(v -> {
             if (checkContent()) {
-                requestFeedBack();
+                // 提交图片
+                if (null != selectList && !selectList.isEmpty()) {
+                    UploadService.getInstance().syncUploadMultiFileByMedia(selectList, new UploadService.OnUploadListener() {
+                        @Override
+                        public void onSuccess(String key) {
+                            requestFeedBack(key);
+                        }
+
+                        @Override
+                        public void onFailure(String error) {
+                            Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         }, "提交");
     }
 
-    private void requestFeedBack() {
+    private void requestFeedBack(String pics) {
         String contact = etContact.getText().toString();
         String suggest = etSuggest.getText().toString();
         HashMap<String, String> params = new HashMap<>();
         params.put("phone", contact);
         params.put("content", suggest);
         params.put("type", "COMMENTS");
+        params.put("pics", pics);
         JSONObject jsonObject = new JSONObject(params);
 
         EasyHttp.post(ApiUrl.USER_UPDATE)
@@ -107,7 +123,12 @@ public class SuggestActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        FullyGridLayoutManager manager = new FullyGridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
+        // NestedScrollView 嵌套 RecyclerView
+        int recyclerHeight = (RxDeviceTool.getScreenWidth(mContext) - RxImageTool.dp2px(30 + 5 * 2)) / 3;
+        recyclerView.getLayoutParams().height = recyclerHeight;
+        recyclerView.requestLayout();
+
+        FullyGridLayoutManager manager = new FullyGridLayoutManager(this, 3);
         recyclerView.setLayoutManager(manager);
         adapter = new GridImageAdapter(this, onAddPicClickListener);
         adapter.setList(selectList);

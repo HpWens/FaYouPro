@@ -17,7 +17,6 @@ import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.base.BaseFragment;
 import com.vondear.rxtool.RxDataTool;
-import com.vondear.rxtool.view.RxToast;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
@@ -120,7 +119,7 @@ public class PersonalFragment extends BaseFragment {
     }
 
     @OnClick({R.id.fl_mes, R.id.iv_set, R.id.header_layout, R.id.layout_publish, R.id.layout_attention, R.id.layout_fan,
-            R.id.layout_praise, R.id.my_collect, R.id.my_history, R.id.my_phone, R.id.my_wechat, R.id.tv_exit})
+            R.id.layout_praise, R.id.my_collect, R.id.my_history, R.id.my_phone, R.id.my_wechat, R.id.tv_exit, R.id.my_news})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fl_mes:
@@ -138,7 +137,8 @@ public class PersonalFragment extends BaseFragment {
                         .navigation();
                 break;
             case R.id.layout_publish:
-                RxToast.normal("敬请期待");
+                ARouter.getInstance().build(Constant.MY_COMMENT)
+                        .navigation();
                 break;
             case R.id.layout_attention:
                 ARouter.getInstance().build(Constant.MY_FOLLOW)
@@ -149,9 +149,9 @@ public class PersonalFragment extends BaseFragment {
                         .navigation();
                 break;
             case R.id.layout_praise:
-                RxToast.normal("敬请期待");
                 break;
             case R.id.my_collect:
+
                 break;
             case R.id.my_history:
                 break;
@@ -161,6 +161,10 @@ public class PersonalFragment extends BaseFragment {
                 break;
             case R.id.tv_exit:
                 UserService.getInstance().clearUser();
+                break;
+            case R.id.my_news:
+                ARouter.getInstance().build(Constant.NEWS_LIST)
+                        .navigation();
                 break;
         }
     }

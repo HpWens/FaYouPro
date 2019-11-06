@@ -1,4 +1,4 @@
-package com.fy.fayou.my;
+package com.fy.fayou.my.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;

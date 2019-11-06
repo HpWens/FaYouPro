@@ -58,6 +58,7 @@ public class FullyGridLayoutManager extends GridLayoutManager {
                     width = mMeasuredDimension[0];
                 }
             }
+
         }
 
         switch (widthMode) {

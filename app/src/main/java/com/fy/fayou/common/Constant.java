@@ -90,6 +90,15 @@ public class Constant {
     // 用户中心
     public static final String USER_CENTER = "/user/center";
 
+    // 我的评论
+    public static final String MY_COMMENT = "/my/comment";
+
+    // 我的收藏
+    public static final String MY_COLLECT = "/my/collect";
+
+    // 我的历史
+    public static final String MY_HISTORY = "/my/history";
+
     public interface SP {
         String USER_INFO = "user_info_data";
 
@@ -100,5 +109,6 @@ public class Constant {
         String AccessKey = "cOUw3kpUgnqxLhPrQRZvwIAsTrOfOZcicNZFElCp"; // 此处填你自己的AccessKey
         String SecretKey = "ew5SxqqMY4Xxyk1MoWugSP2IEr9EfB2z1PxQSK8R"; // 此处填你自己的SecretKey
         String BUCKET_NAME = "zhdf-prod";
+        String DOMAIN = "http://q0f8wkdot.bkt.clouddn.com/";
     }
 }

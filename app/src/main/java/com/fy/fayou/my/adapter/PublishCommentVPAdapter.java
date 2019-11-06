@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.fy.fayou.my.PublishFragment;
+import com.fy.fayou.my.fragment.PublishFragment;
 
 public class PublishCommentVPAdapter extends FragmentPagerAdapter {
 

@@ -16,6 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.UploadService;
 import com.fy.fayou.common.UserService;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -66,8 +67,18 @@ public class EditUserActivity extends BaseActivity {
                 return;
             }
 
+            UploadService.getInstance().uploadSingleFile(avatarPath, new UploadService.OnUploadListener() {
+                @Override
+                public void onSuccess(String key) {
+                    requestNick(key, nickName);
+                }
 
-            requestNick(avatarPath, nickName);
+                @Override
+                public void onFailure(String error) {
+
+                }
+            });
+
         });
     }
 

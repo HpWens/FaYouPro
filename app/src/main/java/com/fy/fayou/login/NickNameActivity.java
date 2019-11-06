@@ -108,6 +108,7 @@ public class NickNameActivity extends BaseActivity {
                     uploadManager.put(uploadFile, "123", uploadToken, new UpCompletionHandler() {
                         @Override
                         public void complete(String key, ResponseInfo info, JSONObject response) {
+                            // info.isOK()
                         }
                     }, null);
                     // requestNick(etNickname.getText().toString(), avatarPath);

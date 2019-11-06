@@ -45,7 +45,7 @@ public class CitySecondLevelFragment extends BaseFragment {
     protected void initData() {
         recycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recycler.setAdapter(mAdapter = new CitySecondLevelAdapter());
-        mSpacing = RxImageTool.dip2px(15);
+        mSpacing = RxImageTool.dp2px(15);
 
         recycler.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override

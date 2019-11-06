@@ -2,6 +2,7 @@ package com.fy.fayou.my;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.fy.fayou.R;
+import com.fy.fayou.my.fragment.FollowFragment;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 
