@@ -197,9 +197,7 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.again_send:
                 if (checkMobile()) {
-                    againSend.setEnabled(false);
-                    againSend.setTextColor(getResources().getColor(R.color.color_d2d2d2));
-                    handler.sendEmptyMessage(1);
+                    requestVerifyCode();
                 }
                 break;
             case R.id.iv_wechat:
@@ -208,6 +206,26 @@ public class LoginActivity extends BaseActivity {
                 Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void requestVerifyCode() {
+        againSend.setEnabled(false);
+        againSend.setTextColor(getResources().getColor(R.color.color_d2d2d2));
+        handler.sendEmptyMessage(1);
+
+        EasyHttp.get(ApiUrl.SEND_VERIFY_CODE)
+                .params("phoneNumber", "" + etMobile.getText().toString())
+                .params("type", "1")
+                .baseUrl(Constant.BASE_URL2)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                    }
+                });
     }
 
     private boolean checkMobile() {
@@ -245,7 +263,9 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onError(ApiException e) {
-
+                        if (e.getCode() == 500) {
+                            Toast.makeText(mContext, "请输入正确的验证码", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override

@@ -40,6 +40,7 @@ public class FYApplication extends BaseApplication {
         initEasyHttp();
 
         initPush();
+
     }
 
     private void initPush() {

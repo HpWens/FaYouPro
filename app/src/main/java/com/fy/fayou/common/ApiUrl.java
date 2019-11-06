@@ -32,4 +32,6 @@ public class ApiUrl {
     public static final String USER_FAN = "/userRelationship/findFollowerList";
 
 
+    // 发送验证码
+    public static final String SEND_VERIFY_CODE = "/sms/getVerifyCode";
 }

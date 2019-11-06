@@ -80,7 +80,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        post(() -> ARouter.getInstance().build(Constant.USER_CENTER).navigation());
+        post(() -> ARouter.getInstance().build(Constant.LOGIN).navigation());
     }
 
 

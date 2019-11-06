@@ -19,12 +19,18 @@ import com.bumptech.glide.request.RequestOptions;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.UserService;
+import com.fy.fayou.utils.qiniu.Auth;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.qiniu.android.common.FixedZone;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.Configuration;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadManager;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.vondear.rxtool.view.RxToast;
 import com.zhouyou.http.EasyHttp;
@@ -33,6 +39,7 @@ import com.zhouyou.http.exception.ApiException;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -91,7 +98,19 @@ public class NickNameActivity extends BaseActivity {
                 break;
             case R.id.btn_go:
                 if (checkNick()) {
-                    requestNick(etNickname.getText().toString(), avatarPath);
+                    // 请求图片接口
+                    File uploadFile = new File(this.avatarPath);
+                    String AccessKey = "cOUw3kpUgnqxLhPrQRZvwIAsTrOfOZcicNZFElCp"; // 此处填你自己的AccessKey
+                    String SecretKey = "ew5SxqqMY4Xxyk1MoWugSP2IEr9EfB2z1PxQSK8R"; // 此处填你自己的SecretKey\
+
+                    UploadManager uploadManager = new UploadManager(new Configuration.Builder().zone(FixedZone.zone2).build());
+                    String uploadToken = Auth.create(AccessKey, SecretKey).uploadToken("zhdf-prod");
+                    uploadManager.put(uploadFile, "123", uploadToken, new UpCompletionHandler() {
+                        @Override
+                        public void complete(String key, ResponseInfo info, JSONObject response) {
+                        }
+                    }, null);
+                    // requestNick(etNickname.getText().toString(), avatarPath);
                 }
                 break;
             case R.id.tv_after:

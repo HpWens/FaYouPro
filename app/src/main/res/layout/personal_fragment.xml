@@ -33,6 +33,7 @@
                 android:src="@mipmap/personal_top_mes_ic"></ImageView>
 
             <TextView
+                android:id="@+id/tv_mes_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|top"
@@ -40,7 +41,8 @@
                 android:gravity="center"
                 android:text="666"
                 android:textColor="@color/color_ffffff"
-                android:textSize="8sp"></TextView>
+                android:textSize="8sp"
+                android:visibility="gone"></TextView>
 
 
         </FrameLayout>
@@ -51,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/fl_mes"
             android:layout_alignBottom="@+id/fl_mes"
+            android:layout_marginTop="2dp"
             android:layout_marginRight="25dp"
             android:layout_toLeftOf="@+id/fl_mes"
             android:src="@mipmap/personal_top_set_ic"></ImageView>
@@ -70,7 +73,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginLeft="15dp"
-                android:src="@mipmap/personal_header_bg"
+                android:src="@mipmap/ic_avatar_default"
                 app:civ_border_color="@color/color_ffffff"
                 app:civ_border_width="3dp">
 
@@ -85,7 +88,7 @@
                 android:layout_weight="1"
                 android:lines="1"
                 android:text="用户QWE123"
-                android:textColor="@color/color_333333"
+                android:textColor="@color/color_ffffff"
                 android:textSize="18sp"
                 android:textStyle="bold"></TextView>
 
@@ -93,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
-                android:src="@mipmap/personal_column_arrow">
+                android:src="@mipmap/personal_column_white_arrow">
 
             </ImageView>
 
@@ -236,11 +239,12 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:scaleType="centerInside"
                 android:src="@mipmap/personal_column_collect">
 
             </ImageView>
@@ -276,11 +280,12 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:scaleType="centerInside"
                 android:src="@mipmap/personal_column_history">
 
             </ImageView>
@@ -304,9 +309,8 @@
 
         </LinearLayout>
 
-
         <LinearLayout
-            android:id="@+id/my_phone"
+            android:id="@+id/my_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/my_history"
@@ -317,11 +321,94 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/personal_column_news">
+
+            </ImageView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="11.5dp"
+                android:layout_weight="1"
+                android:text="我的资讯"
+                android:textColor="@color/color_333333"
+                android:textSize="14sp"></TextView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/personal_top_arrow"></ImageView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/my_art"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/my_news"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/personal_column_shape"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/personal_column_art">
+
+            </ImageView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="11.5dp"
+                android:layout_weight="1"
+                android:text="我的帖子"
+                android:textColor="@color/color_333333"
+                android:textSize="14sp"></TextView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/personal_top_arrow"></ImageView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/my_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/my_art"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/personal_column_shape"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="centerInside"
                 android:src="@mipmap/personal_column_mobile">
 
             </ImageView>
@@ -364,15 +451,17 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/personal_column_shape"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:scaleType="centerInside"
                 android:src="@mipmap/personal_column_wechat">
 
             </ImageView>

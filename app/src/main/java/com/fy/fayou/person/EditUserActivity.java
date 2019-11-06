@@ -65,6 +65,8 @@ public class EditUserActivity extends BaseActivity {
                 Toast.makeText(mContext, "请输入昵称", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+
             requestNick(avatarPath, nickName);
         });
     }

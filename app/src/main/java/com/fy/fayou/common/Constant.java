@@ -6,6 +6,8 @@ public class Constant {
 
     public static final String BASE_URL_RELEASE = "http://192.168.1.165:8080";
 
+    public static final String BASE_URL2 = "http://192.168.1.191:8080";
+
     // 路由地址常量
     // 登录
     // public static final String LOGIN = "/fy/login";
@@ -92,5 +94,11 @@ public class Constant {
         String USER_INFO = "user_info_data";
 
         String CITY_INFO = "city_info_data";
+    }
+
+    public interface QiNiu {
+        String AccessKey = "cOUw3kpUgnqxLhPrQRZvwIAsTrOfOZcicNZFElCp"; // 此处填你自己的AccessKey
+        String SecretKey = "ew5SxqqMY4Xxyk1MoWugSP2IEr9EfB2z1PxQSK8R"; // 此处填你自己的SecretKey
+        String BUCKET_NAME = "zhdf-prod";
     }
 }

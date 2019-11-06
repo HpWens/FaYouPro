@@ -125,4 +125,6 @@ dependencies {
     implementation 'cn.jiguang.sdk:jpush:3.3.9'  // 此处以JPush 3.3.9 版本为例。
     implementation 'cn.jiguang.sdk:jcore:2.1.6'  // 此处以JCore 2.1.6 版本为例。
 
+    implementation 'com.qiniu:qiniu-android-sdk:7.4.2'
+
 }

@@ -13,6 +13,7 @@ import com.fy.fayou.R;
 import com.fy.fayou.my.adapter.UserCenterVPAdapter;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseFragment;
+import com.vondear.rxtool.RxImageTool;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +58,8 @@ public class UserCenterFragment extends BaseFragment {
 
     Unbinder unbinder;
 
+    private int maxOffset;
+
     private final String[] mTitles = {
             "资讯", "帖子"
     };
@@ -74,13 +77,15 @@ public class UserCenterFragment extends BaseFragment {
     protected void initView() {
         unbinder = ButterKnife.bind(this, getView());
 
+        maxOffset = -RxImageTool.dip2px(116);
+
         viewpager.setAdapter(mAdapter = new UserCenterVPAdapter(getChildFragmentManager(), mTitles));
         tab.setViewPager(viewpager);
 
         mAdapter.setOnScrollClashListener(isScroll -> viewpager.setScroll(isScroll));
 
         appBar.addOnOffsetChangedListener((appBarLayout, i) -> {
-
+            topHeaderLayout.setAlpha(((float) i / maxOffset));
         });
     }
 
