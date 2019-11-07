@@ -3,11 +3,15 @@ package com.fy.fayou.my;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.my.adapter.NewsListVPAdapter;
 import com.fy.fayou.my.fragment.NewsListFragment;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,8 +51,25 @@ public class NewsListActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        requestStatus();
+
         viewpager.setAdapter(mAdapter = new NewsListVPAdapter(getSupportFragmentManager(), mTitles, NewsListVPAdapter.NEWS_TYPE, mTypes));
         tab.setViewPager(viewpager);
+    }
+
+    private void requestStatus() {
+        EasyHttp.get(ApiUrl.MY_NEWS_STATUS)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+
+                    }
+                });
     }
 
     @Override

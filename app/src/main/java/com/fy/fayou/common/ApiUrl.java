@@ -62,4 +62,8 @@ public class ApiUrl {
     // 我的资讯
     public static final String MY_NEWS = "/article/myArticle";
 
+    // 新闻根据审核状态统计
+    public static final String MY_NEWS_STATUS = "/article/groupByAuditStatus";
+
+
 }
