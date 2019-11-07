@@ -8,6 +8,12 @@ public class Constant {
 
     public static final String BASE_URL2 = "http://192.168.1.191:8080";
 
+    public static final String BASE_URL3 = "http://192.168.1.165:8082";
+
+    public static final String BASE_URL4 = "http://192.168.1.165:8081";
+
+    public static final String BASE_URL5 = "http://192.168.1.165:8083";
+
     // 路由地址常量
     // 登录
     // public static final String LOGIN = "/fy/login";
@@ -102,9 +108,14 @@ public class Constant {
     // 我的帖子
     public static final String MY_POST = "/my/post";
 
-
     // 关于我们
     public static final String ABOUT_MY = "/about/my";
+
+    // 合同模板
+    public static final String CONTRACT_TEMPLATE = "/contract/template";
+
+    // 合同筛选
+    public static final String CONTRACT_FILTER = "/contract/filter";
 
     public interface SP {
         String USER_INFO = "user_info_data";

@@ -46,7 +46,8 @@
         android:paddingRight="15dp"
         android:text="全国"
         android:textColor="@color/color_ffffff"
-        android:textSize="14sp"></TextView>
+        android:textSize="14sp"
+        android:visibility="gone"></TextView>
 
 
 </RelativeLayout>

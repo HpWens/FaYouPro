@@ -11,9 +11,22 @@ public class NewsListVPAdapter extends FragmentPagerAdapter {
 
     private String[] mTitles;
 
+    private String[] mTypes;
+
     private int type = 1;
 
     public static final int COLLECT_TYPE = 2;
+
+    public static final int NEWS_TYPE = 1;
+
+    public static final int HISTORY_TYPE = 3;
+
+    public NewsListVPAdapter(FragmentManager fm, String[] titles, int type, String[] types) {
+        super(fm);
+        this.mTitles = titles;
+        this.mTypes = types;
+        this.type = type;
+    }
 
     public NewsListVPAdapter(FragmentManager fm, String[] titles) {
         super(fm);
@@ -28,11 +41,14 @@ public class NewsListVPAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        if (type == 1) {
-            return NewsListFragment.newInstance();
-        } else {
-            return CollectFragment.newInstance();
+        if (type == NEWS_TYPE) {
+            return NewsListFragment.newInstance(mTypes[i]);
+        } else if (type == COLLECT_TYPE) {
+            return CollectFragment.newInstance(true);
+        } else if (type == HISTORY_TYPE) {
+            return CollectFragment.newInstance(false);
         }
+        return NewsListFragment.newInstance("");
     }
 
     @Override

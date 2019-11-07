@@ -9,11 +9,9 @@
         android:layout_height="10dp"
         android:background="@color/color_f5f5f5"></View>
 
-    <com.yanzhenjie.recyclerview.SwipeRecyclerView
-        android:id="@+id/recycler"
+    <FrameLayout
+        android:id="@+id/fl_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </com.yanzhenjie.recyclerview.SwipeRecyclerView>
+        android:layout_height="match_parent"></FrameLayout>
 
 </LinearLayout>

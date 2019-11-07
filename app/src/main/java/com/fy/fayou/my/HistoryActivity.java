@@ -34,7 +34,7 @@ public class HistoryActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        viewpager.setAdapter(mAdapter = new NewsListVPAdapter(getSupportFragmentManager(), mTitles, NewsListVPAdapter.COLLECT_TYPE));
+        viewpager.setAdapter(mAdapter = new NewsListVPAdapter(getSupportFragmentManager(), mTitles, NewsListVPAdapter.HISTORY_TYPE));
         tab.setViewPager(viewpager);
     }
 

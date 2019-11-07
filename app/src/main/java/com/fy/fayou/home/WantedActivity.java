@@ -38,6 +38,7 @@ public class WantedActivity extends BaseActivity {
     protected void initView() {
         ButterKnife.bind(this);
         Eyes.translucentStatusBar(this, true, false);
+        tvRight.setVisibility(View.VISIBLE);
     }
 
     @Override

@@ -14,7 +14,7 @@ import com.meis.base.mei.annotation.PullToRefresh;
 import com.meis.base.mei.status.IStatusHelper;
 import com.meis.base.mei.status.ViewState;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
-import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 /**
  * desc: https://github.com/HpWens/MeiBaseModule
@@ -69,7 +69,7 @@ public class MeiCompatActivity extends RxAppCompatActivity implements IMeiCompat
 
     @Override
     public RefreshHeader getRefreshHeader() {
-        return new BezierRadarHeader(this);
+        return new ClassicsHeader(this);
     }
 
     public void setRefreshHeader(RefreshHeader refreshHeader) {

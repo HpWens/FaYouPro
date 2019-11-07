@@ -39,4 +39,27 @@ public class ApiUrl {
     // 换绑手机
     public static final String BIND_MOBILE = "/user/changeBindMobile";
 
+
+    // 我的消息
+    public static final String MESSAGE_CENTER = "/message";
+
+    // 推荐
+    public static final String PUBLIC_INVITE = "/public/invite";
+
+    // 联系客服
+    public static final String CONTACT_SERVICE = "/public/customerService";
+
+    // 我的评论
+    public static final String MY_COMMENT = "/comment/myComment";
+
+
+    // 我的收藏
+    public static final String MY_COLLECT = "/collect";
+
+    // 历史记录
+    public static final String MY_HISTORY = "/browse";
+
+    // 我的资讯
+    public static final String MY_NEWS = "/article/myArticle";
+
 }

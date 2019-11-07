@@ -45,6 +45,8 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
@@ -354,6 +356,13 @@
             android:name=".my.AboutActivity"
             android:screenOrientation="portrait"></activity>
 
+        <activity
+            android:name=".contract.TemplateActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".contract.FilterActivity"
+            android:screenOrientation="portrait"></activity>
 
     </application>
 

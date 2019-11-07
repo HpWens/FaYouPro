@@ -1,32 +1,29 @@
-package com.fy.fayou.my.fragment;
+package com.fy.fayou.contract;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
-import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.Constant;
-import com.fy.fayou.my.adapter.CommentAdapter;
-import com.fy.fayou.my.bean.CommentEntity;
+import com.fy.fayou.contract.adapter.TemplateAdapter;
+import com.fy.fayou.contract.bean.TemplateEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
-import com.zhouyou.http.EasyHttp;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
 
-public class CommentFragment extends BaseListFragment<CommentEntity> {
+public class TemplateFragment extends BaseListFragment<TemplateEntity> {
 
     RecyclerView mRecyclerView;
-    CommentAdapter mAdapter;
+    TemplateAdapter mAdapter;
 
-    public static CommentFragment newInstance() {
+    public static TemplateFragment newInstance() {
         Bundle args = new Bundle();
-        CommentFragment fragment = new CommentFragment();
+        TemplateFragment fragment = new TemplateFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,17 +36,14 @@ public class CommentFragment extends BaseListFragment<CommentEntity> {
     }
 
     @Override
-    protected MeiBaseAdapter<CommentEntity> getAdapter() {
-        mAdapter = new CommentAdapter();
+    protected MeiBaseAdapter<TemplateEntity> getAdapter() {
+        mAdapter = new TemplateAdapter();
         return mAdapter;
     }
 
     @Override
-    protected Observable<Result<List<CommentEntity>>> getListObservable(int pageNo) {
-        Observable<String> observable = EasyHttp.get(ApiUrl.MY_COMMENT)
-                .baseUrl(Constant.BASE_URL4)
-                .execute(String.class);
-        return getListByField(observable, "content", CommentEntity.class);
+    protected Observable<Result<List<TemplateEntity>>> getListObservable(int pageNo) {
+        return null;
     }
 
     @Override
@@ -71,12 +65,13 @@ public class CommentFragment extends BaseListFragment<CommentEntity> {
     protected void initData() {
         super.initData();
 
-        List<CommentEntity> list = new ArrayList<>();
+        List<TemplateEntity> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            CommentEntity entity = new CommentEntity();
+            TemplateEntity entity = new TemplateEntity();
             list.add(entity);
         }
 
         mAdapter.setNewData(list);
     }
+
 }
