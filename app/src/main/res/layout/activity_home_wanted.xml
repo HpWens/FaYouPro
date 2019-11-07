@@ -5,56 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/toolbar_layout"
+    <include
+        layout="@layout/comm_red_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@mipmap/home_pufa_top_ic"
-        android:paddingTop="24dp">
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:scaleType="centerInside"
-            android:src="@mipmap/ic_white_back"
-            android:visibility="visible">
-
-        </ImageView>
-
-
-        <TextView
-            android:id="@+id/tv_center_title"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:gravity="center"
-            android:lines="1"
-            android:singleLine="true"
-            android:text="全网通缉"
-            android:textColor="@color/color_ffffff"
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/tv_right"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:layout_alignParentRight="true"
-            android:drawableLeft="@mipmap/ic_national"
-            android:drawablePadding="4dp"
-            android:gravity="center"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="全国"
-            android:textColor="@color/color_ffffff"
-            android:textSize="14sp"></TextView>
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"></include>
 
 
     <com.flyco.tablayout.SlidingTabLayout
