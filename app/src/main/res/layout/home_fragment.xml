@@ -33,7 +33,9 @@
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"></ImageView>
+                        android:layout_height="200dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/home_top_bg"></ImageView>
 
 
                     <ImageView
@@ -59,7 +61,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:layout_weight="1"
-                            android:text="合同法126条"
+                            android:text="电信诈骗"
                             android:textColor="@color/color_a0a0a0"
                             android:textSize="16sp"></TextView>
 
@@ -95,7 +97,8 @@
                                 android:layout_height="80dp"
                                 android:layout_marginRight="8dp"
                                 android:layout_weight="1"
-                                android:background="#abc123" />
+                                android:scaleType="fitXY"
+                                android:src="@mipmap/home_column_laws" />
 
 
                             <ImageView
@@ -103,7 +106,8 @@
                                 android:layout_height="80dp"
                                 android:layout_marginLeft="8dp"
                                 android:layout_weight="1"
-                                android:background="#ff00ab" />
+                                android:scaleType="fitXY"
+                                android:src="@mipmap/home_column_judicial" />
 
 
                         </LinearLayout>
@@ -121,7 +125,8 @@
                                 android:layout_height="80dp"
                                 android:layout_marginRight="8dp"
                                 android:layout_weight="1"
-                                android:background="#f12345" />
+                                android:scaleType="fitXY"
+                                android:src="@mipmap/home_column_guiding" />
 
 
                             <ImageView
@@ -129,7 +134,8 @@
                                 android:layout_height="80dp"
                                 android:layout_marginLeft="8dp"
                                 android:layout_weight="1"
-                                android:background="#a234ab" />
+                                android:scaleType="fitXY"
+                                android:src="@mipmap/home_column_judgments" />
 
 
                         </LinearLayout>
@@ -146,7 +152,8 @@
                                 android:layout_height="80dp"
                                 android:layout_marginRight="8dp"
                                 android:layout_weight="1"
-                                android:background="#f12345" />
+                                android:scaleType="fitXY"
+                                android:src="@mipmap/home_column_contract" />
 
 
                             <ImageView
@@ -154,7 +161,8 @@
                                 android:layout_height="80dp"
                                 android:layout_marginLeft="8dp"
                                 android:layout_weight="1"
-                                android:background="#a234ab" />
+                                android:scaleType="fitXY"
+                                android:src="@mipmap/home_column_legal" />
 
 
                         </LinearLayout>

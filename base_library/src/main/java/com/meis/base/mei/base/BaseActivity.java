@@ -49,6 +49,9 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
         super.onCreate(savedInstanceState);
         mDelegate.onCreate(savedInstanceState);
         setContentView(layoutResId());
+        if (isRegisterEventBus()) {
+            EventBus.getDefault().register(this);
+        }
         initView();
         initData();
     }
@@ -56,18 +59,14 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
     @Override
     protected void onStart() {
         super.onStart();
-        if (isRegisterEventBus())
-            EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (isRegisterEventBus())
-            EventBus.getDefault().unregister(this);
     }
 
-    private boolean isRegisterEventBus() {
+    public boolean isRegisterEventBus() {
         return false;
     }
 
@@ -158,6 +157,9 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
     protected void onDestroy() {
         mDelegate.onDestroy();
         super.onDestroy();
+        if (isRegisterEventBus()) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     /**

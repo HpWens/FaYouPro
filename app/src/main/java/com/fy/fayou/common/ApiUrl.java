@@ -34,4 +34,9 @@ public class ApiUrl {
 
     // 发送验证码
     public static final String SEND_VERIFY_CODE = "/sms/getVerifyCode";
+
+
+    // 换绑手机
+    public static final String BIND_MOBILE = "/user/changeBindMobile";
+
 }

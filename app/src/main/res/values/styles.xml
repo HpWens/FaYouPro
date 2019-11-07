@@ -6,7 +6,6 @@
         <item name="colorPrimary">@color/color_ffffff</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
         <item name="android:actionBarSize">44dp</item>
         <item name="actionBarSize">44dp</item>
     </style>

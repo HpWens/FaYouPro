@@ -346,6 +346,15 @@
             android:name=".my.HistoryActivity"
             android:screenOrientation="portrait"></activity>
 
+        <activity
+            android:name=".my.PostActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".my.AboutActivity"
+            android:screenOrientation="portrait"></activity>
+
+
     </application>
 
 </manifest>

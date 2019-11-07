@@ -34,10 +34,11 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="你的账号目前绑定手号是+86152****4561,请输入你 希望绑定的新手机号。"
+                android:text="@string/mobile_bind_hint"
                 android:textColor="@color/color_a0a0a0"
                 android:textSize="14sp"></TextView>
 

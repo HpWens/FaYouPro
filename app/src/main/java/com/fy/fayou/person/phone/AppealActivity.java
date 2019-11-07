@@ -1,6 +1,7 @@
 package com.fy.fayou.person.phone;
 
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.fy.fayou.R;
@@ -37,5 +38,6 @@ public class AppealActivity extends BaseActivity {
 
     @OnClick(R.id.btn_appeal)
     public void onClick() {
+        Toast.makeText(mContext, "敬请期待", Toast.LENGTH_SHORT).show();
     }
 }

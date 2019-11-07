@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_ffffff"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_f5f5f5"></View>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="37.5dp"
+        android:src="@mipmap/login_top_logo"></ImageView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="35.5dp"
+        android:layout_marginRight="15dp"
+        android:lineSpacingExtra="6dp"
+        android:text="    智合东方（厦门）法务咨询有限公司成立于2019年8月，是以新媒体资源运营为基础，旨在培养和打造菁英律师、法务类工作者，为用户提供在线法律法规咨询，专注于孵化与培育互联网时代新型律师事务所、法务公司创始人的孵化平台。"
+        android:textColor="@color/color_333333"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="33dp"
+        android:layout_marginRight="15dp"
+        android:lineSpacingExtra="6dp"
+        android:text="
+官网：www.xhdfxm.com \n
+电话：0592-5797333 \n
+邮箱：service@zhdfxm.com \n
+地址：厦门市湖里区东黄路215号海西金融广场A栋1402-1406单元
+"
+        android:textColor="#ff333333"
+        android:textSize="14sp" />
+
+</LinearLayout>

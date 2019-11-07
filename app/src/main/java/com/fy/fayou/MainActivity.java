@@ -2,8 +2,7 @@ package com.fy.fayou;
 
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.fy.fayou.common.Constant;
+import com.fy.fayou.event.ExitLoginEvent;
 import com.fy.fayou.fragment.ForumFragment;
 import com.fy.fayou.fragment.HomeFragment;
 import com.fy.fayou.fragment.LearnFragment;
@@ -12,6 +11,9 @@ import com.fy.fayou.view.BottomBar;
 import com.fy.fayou.view.BottomBarTab;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import me.yokeyword.fragmentation.ISupportFragment;
 
@@ -80,12 +82,24 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        post(() -> ARouter.getInstance().build(Constant.MY_HISTORY).navigation());
+        // post(() -> ARouter.getInstance().build(Constant.ABOUT_MY).navigation());
     }
 
 
     @Override
     protected int layoutResId() {
         return R.layout.activity_main;
+    }
+
+    @Override
+    public boolean isRegisterEventBus() {
+        return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onExitLoginEvent(ExitLoginEvent event) {
+        if (mBottomBar != null) {
+            mBottomBar.setCurrentItem(0);
+        }
     }
 }

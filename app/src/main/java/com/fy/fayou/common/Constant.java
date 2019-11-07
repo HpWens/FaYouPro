@@ -79,7 +79,7 @@ public class Constant {
     // 全网通缉
     public static final String WANTED = "/home/wanted";
 
-    // 全网通缉
+    // 城市选择
     public static final String CITY_SELECT = "/city/select";
 
     // 资讯列表
@@ -99,6 +99,13 @@ public class Constant {
     // 我的历史
     public static final String MY_HISTORY = "/my/history";
 
+    // 我的帖子
+    public static final String MY_POST = "/my/post";
+
+
+    // 关于我们
+    public static final String ABOUT_MY = "/about/my";
+
     public interface SP {
         String USER_INFO = "user_info_data";
 
@@ -110,5 +117,9 @@ public class Constant {
         String SecretKey = "ew5SxqqMY4Xxyk1MoWugSP2IEr9EfB2z1PxQSK8R"; // 此处填你自己的SecretKey
         String BUCKET_NAME = "zhdf-prod";
         String DOMAIN = "http://q0f8wkdot.bkt.clouddn.com/";
+    }
+
+    public interface Param {
+        String MOBILE = "mobile";
     }
 }

@@ -108,6 +108,10 @@ public class FYApplication extends BaseApplication {
         }
     }
 
+    public void clearTokenHeader() {
+        EasyHttp.getInstance().getCommonHeaders().clear();
+    }
+
     public static String sHA1(Context context) {
         try {
             PackageInfo info = context.getPackageManager().getPackageInfo(

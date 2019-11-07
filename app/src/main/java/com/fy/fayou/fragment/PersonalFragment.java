@@ -119,7 +119,8 @@ public class PersonalFragment extends BaseFragment {
     }
 
     @OnClick({R.id.fl_mes, R.id.iv_set, R.id.header_layout, R.id.layout_publish, R.id.layout_attention, R.id.layout_fan,
-            R.id.layout_praise, R.id.my_collect, R.id.my_history, R.id.my_phone, R.id.my_wechat, R.id.tv_exit, R.id.my_news})
+            R.id.layout_praise, R.id.my_collect, R.id.my_history, R.id.my_phone, R.id.my_wechat, R.id.tv_exit, R.id.my_news
+            , R.id.my_post})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fl_mes:
@@ -151,11 +152,21 @@ public class PersonalFragment extends BaseFragment {
             case R.id.layout_praise:
                 break;
             case R.id.my_collect:
-
+                ARouter.getInstance().build(Constant.MY_COLLECT)
+                        .navigation();
                 break;
             case R.id.my_history:
+                ARouter.getInstance().build(Constant.MY_HISTORY)
+                        .navigation();
+                break;
+            case R.id.my_post:
+                ARouter.getInstance().build(Constant.MY_POST)
+                        .navigation();
                 break;
             case R.id.my_phone:
+                ARouter.getInstance().build(Constant.PERSON_RESET_PHONE)
+                        .withString(Constant.Param.MOBILE, UserService.getInstance().getMobile())
+                        .navigation();
                 break;
             case R.id.my_wechat:
                 break;

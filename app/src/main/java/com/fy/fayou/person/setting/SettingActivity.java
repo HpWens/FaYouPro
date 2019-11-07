@@ -6,12 +6,18 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.fy.fayou.FYApplication;
 import com.fy.fayou.R;
 import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
+import com.fy.fayou.event.ExitLoginEvent;
+import com.fy.fayou.utils.GlideCacheUtil;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.vondear.rxtool.view.RxToast;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,19 +73,22 @@ public class SettingActivity extends BaseActivity {
                 ARouter.getInstance().build(Constant.PERSON_SUGGEST).navigation();
                 break;
             case R.id.tv_cache:
-                RxToast.normal("敬请期待");
+                GlideCacheUtil.getInstance().clearImageAllCache(mContext);
+                RxToast.normal("清理成功");
                 break;
             case R.id.tv_service:
-                RxToast.normal("敬请期待");
                 break;
             case R.id.tv_praise:
-                RxToast.normal("敬请期待");
+                RxToast.normal("敬请期待~");
                 break;
             case R.id.about_layout:
-                RxToast.normal("敬请期待");
+                ARouter.getInstance().build(Constant.ABOUT_MY).navigation();
                 break;
             case R.id.tv_exit:
-                RxToast.normal("敬请期待");
+                UserService.getInstance().clearUser();
+                ((FYApplication) getApplication()).clearTokenHeader();
+                EventBus.getDefault().post(new ExitLoginEvent());
+                finish();
                 break;
         }
     }

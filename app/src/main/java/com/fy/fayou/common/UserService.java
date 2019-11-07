@@ -92,6 +92,15 @@ public class UserService {
         return "";
     }
 
+    // 获取手机号码
+    public String getMobile() {
+        UserInfo userInfo = getUserInfo();
+        if (null != userInfo) {
+            return userInfo.mobile;
+        }
+        return "";
+    }
+
 
     // 设置昵称
     public void setNickName(String nick) {
