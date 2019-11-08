@@ -6,11 +6,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.search.adapter.ResultContentAdapter;
 import com.fy.fayou.search.bean.SearchResultEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
+import com.zhouyou.http.EasyHttp;
 
 import java.util.List;
 
@@ -69,13 +73,12 @@ public class ContentFragment extends BaseListFragment<SearchResultEntity> {
 
     @Override
     protected Observable<Result<List<SearchResultEntity>>> getListObservable(int pageNo) {
-        if(pageNo==1){
-
-            return null;
-        }else {
-
-            return null;
-        }
+        Observable<String> observable = EasyHttp.get(pageNo == 1 ? getRequestFooter() : getRequestMoreFooter())
+                .params("userId", "" + UserService.getInstance().getUserId())
+                .params("keyword", mKey)
+                .baseUrl(Constant.BASE_URL6)
+                .execute(String.class);
+        return getListByField(observable, "data", SearchResultEntity.class);
     }
 
     @Override
@@ -96,6 +99,38 @@ public class ContentFragment extends BaseListFragment<SearchResultEntity> {
     @Override
     protected void initData() {
         super.initData();
+    }
+
+    private String getRequestFooter() {
+        switch (mMenu) {
+            default:
+            case "legalProvisions":
+                return ApiUrl.SEARCH_LEGAL;
+            case "judicialInterpretation":
+                return ApiUrl.SEARCH_JUDICIAL;
+            case "newInfo":
+                return ApiUrl.SEARCH_NEWS;
+            case "judgement":
+                return ApiUrl.SEARCH_JUDGEMENT;
+            case "caseInfo":
+                return ApiUrl.SEARCH_CASE_INFO;
+        }
+    }
+
+    private String getRequestMoreFooter() {
+        switch (mMenu) {
+            default:
+            case "legalProvisions":
+                return ApiUrl.SEARCH_LEGAL_MORE;
+            case "judicialInterpretation":
+                return ApiUrl.SEARCH_JUDICIAL_MORE;
+            case "newInfo":
+                return ApiUrl.SEARCH_NEWS_MORE;
+            case "judgement":
+                return ApiUrl.SEARCH_JUDGEMENT_MORE;
+            case "caseInfo":
+                return ApiUrl.SEARCH_CASE_INFO_MORE;
+        }
     }
 
 

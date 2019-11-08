@@ -72,4 +72,41 @@ public class ApiUrl {
     // 获取各种类数据记录数
     public static final String SEARCH_RESULT_MENU = "/search/getSearchDataNumber";
 
+
+    // 查询法律法规
+    public static final String SEARCH_LEGAL = "/legalProvisions/search";
+
+    // 查询法律法规
+    public static final String SEARCH_LEGAL_MORE = "/legalProvisions/loadMore";
+
+
+    // 查询司法解释
+    public static final String SEARCH_JUDICIAL = "/judicialInterpretation/search";
+
+
+    // 查询司法解释
+    public static final String SEARCH_JUDICIAL_MORE = "/judicialInterpretation/loadMore";
+
+    // 查询资讯
+    public static final String SEARCH_NEWS = "/newsinfo/search";
+
+    // 查询资讯
+    public static final String SEARCH_NEWS_MORE = "/newsinfo/loadMore";
+
+
+    // 查询文书
+    public static final String SEARCH_JUDGEMENT = "/judgement/loadMore";
+
+
+    // 查询文书
+    public static final String SEARCH_JUDGEMENT_MORE = "/judgement/loadMore";
+
+
+    // 查询案例
+    public static final String SEARCH_CASE_INFO_MORE = "/caseInfo/loadMore";
+
+    // 查询案例
+    public static final String SEARCH_CASE_INFO = "/caseInfo/search";
+
+
 }
