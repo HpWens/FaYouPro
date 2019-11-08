@@ -14,6 +14,9 @@ public class Constant {
 
     public static final String BASE_URL5 = "http://192.168.1.165:8083";
 
+    public static final String BASE_URL6 = "http://192.168.1.191:8089";
+
+
     // 路由地址常量
     // 登录
     // public static final String LOGIN = "/fy/login";
@@ -121,6 +124,8 @@ public class Constant {
         String USER_INFO = "user_info_data";
 
         String CITY_INFO = "city_info_data";
+
+        String SEARCH_HISTORY = "search_history";
     }
 
     public interface QiNiu {
@@ -132,5 +137,7 @@ public class Constant {
 
     public interface Param {
         String MOBILE = "mobile";
+
+        String KEYWORD = "keyword";
     }
 }

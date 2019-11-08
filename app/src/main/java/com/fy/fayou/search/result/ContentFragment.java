@@ -12,7 +12,6 @@ import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -21,18 +20,32 @@ import io.reactivex.Observable;
 public class ContentFragment extends BaseListFragment<SearchResultEntity> {
 
     private static final String ARG_MENU = "arg_menu";
+    private static final String ARG_KEY = "arg_key";
 
     RecyclerView mRecyclerView;
     ResultContentAdapter mAdapter;
 
-    public static ContentFragment newInstance(String menu) {
+    private String mKey;
+    private String mMenu;
+
+    public static ContentFragment newInstance(String menu, String key) {
 
         Bundle args = new Bundle();
         args.putString(ARG_MENU, menu);
-
+        args.putString(ARG_KEY, key);
         ContentFragment fragment = new ContentFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    protected void initView() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mKey = bundle.getString(ARG_KEY);
+            mMenu = bundle.getString(ARG_MENU);
+        }
+        super.initView();
     }
 
     @Override
@@ -50,13 +63,19 @@ public class ContentFragment extends BaseListFragment<SearchResultEntity> {
 
     @Override
     protected MeiBaseAdapter<SearchResultEntity> getAdapter() {
-        mAdapter = new ResultContentAdapter();
+        mAdapter = new ResultContentAdapter(mKey);
         return mAdapter;
     }
 
     @Override
     protected Observable<Result<List<SearchResultEntity>>> getListObservable(int pageNo) {
-        return null;
+        if(pageNo==1){
+
+            return null;
+        }else {
+
+            return null;
+        }
     }
 
     @Override
@@ -77,13 +96,7 @@ public class ContentFragment extends BaseListFragment<SearchResultEntity> {
     @Override
     protected void initData() {
         super.initData();
-
-        List<SearchResultEntity> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            SearchResultEntity entity = new SearchResultEntity();
-            list.add(entity);
-        }
-
-        mAdapter.setNewData(list);
     }
+
+
 }

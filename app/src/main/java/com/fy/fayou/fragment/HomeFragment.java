@@ -4,9 +4,13 @@ import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextSwitcher;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -14,8 +18,12 @@ import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomeRecommendVPAdapter;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.view.HomeViewpager;
+import com.fy.fayou.view.TextSwitcherAnimation;
 import com.meis.base.mei.base.BaseFragment;
 import com.vondear.rxtool.RxImageTool;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,11 +35,14 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
             "推荐", "栏目"
     };
 
+    private TextSwitcherAnimation textSwitcherAnimation;
     private Unbinder unbinder;
     private HomeRecommendVPAdapter mAdapter;
     private int mFloatSearchVisibleHeight;
     private boolean mFloatSearchVisible = false;
 
+    @BindView(R.id.switcher)
+    TextSwitcher switcher;
     @BindView(R.id.tab)
     SlidingTabLayout tab;
     @BindView(R.id.viewpager)
@@ -73,6 +84,29 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
         ivFloatSearch.setOnClickListener(v -> {
             ARouter.getInstance().build(Constant.HOME_SEARCH).navigation();
         });
+        topSearchLayout.setOnClickListener(v -> {
+            ivFloatSearch.performClick();
+        });
+
+        initSwitcher();
+    }
+
+    private void initSwitcher() {
+        List<String> hintList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            hintList.add("电信诈骗");
+        }
+        switcher.setFactory(() -> {
+            TextView tv = new TextView(getActivity());
+            tv.setTextColor(getActivity().getResources().getColor(R.color.color_a0a0a0));
+            tv.setTextSize(16);
+            tv.post(() -> {
+                ((FrameLayout.LayoutParams) tv.getLayoutParams()).gravity = Gravity.CENTER_VERTICAL;
+            });
+            return tv;
+        });
+        textSwitcherAnimation = new TextSwitcherAnimation(switcher, hintList);
+        textSwitcherAnimation.create();
     }
 
     @Override
@@ -138,4 +172,9 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
         FloatSearchVisible();
     }
 
+    @Override
+    public void onDestroy() {
+        textSwitcherAnimation.onDestroy();
+        super.onDestroy();
+    }
 }

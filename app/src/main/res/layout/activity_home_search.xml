@@ -40,9 +40,11 @@
                 android:textSize="14sp"></EditText>
 
             <ImageView
+                android:id="@+id/iv_clean"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
+                android:visibility="gone"
                 android:paddingRight="15dp"
                 android:scaleType="centerInside"
                 android:src="@mipmap/search_clear_ic"></ImageView>

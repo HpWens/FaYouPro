@@ -8,15 +8,15 @@
     <string name="mobile_bind_hint" translatable="false">你的账号目前绑定手号是%1$s,请输入你 希望绑定的新手机号。</string>
     <string name="verify_mobile_hint" translatable="false">短信号码已发送至%1$s</string>
     <string name="again_get_verify_code" translatable="false">%1$ds再次获取验证码</string>
+    <string name="contract_template" translatable="false">1.男女双方定于【】年【】月【】日在【】省（直辖 市自治区）市【】区（县）办理结婚登记手续。为防 止今后可能出现的婚姻财产纠纷，现经协商一致，自 愿自愿就目前的婚前财产达成如下协议：</string>
 
     <string-array name="array_menu">
-        <item>司法解释\n(290)</item>
-        <item>司法解释\n(290)</item>
-        <item>司法解释\n(290)</item>
-        <item>司法解释\n(290)</item>
-        <item>司法解释\n(290)</item>
-        <item>司法解释\n(290)</item>
-        <item>司法解释\n(290)</item>
+        <item>法律法规</item>
+        <item>司法解释</item>
+        <item>指导性意见</item>
+        <item>裁判文书</item>
+        <item>合同模板</item>
+        <item>普法天地</item>
     </string-array>
 
     <string-array name="markArray">

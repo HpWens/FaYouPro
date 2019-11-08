@@ -72,6 +72,7 @@ public class MenuListFragment extends BaseFragment {
 
         adapter.setNewData(mMenus);
         adapter.setItemChecked(0);
+
     }
 
     @Override

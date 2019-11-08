@@ -65,5 +65,11 @@ public class ApiUrl {
     // 新闻根据审核状态统计
     public static final String MY_NEWS_STATUS = "/article/groupByAuditStatus";
 
+    // 获取热搜
+    public static final String HOT_SEARCH = "/search/getHotSearch";
+
+
+    // 获取各种类数据记录数
+    public static final String SEARCH_RESULT_MENU = "/search/getSearchDataNumber";
 
 }

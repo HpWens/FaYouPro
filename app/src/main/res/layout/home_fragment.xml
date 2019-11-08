@@ -56,14 +56,14 @@
                         android:background="@drawable/home_search_shape"
                         android:gravity="center_vertical">
 
-                        <TextView
+                        <TextSwitcher
+                            android:id="@+id/switcher"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_marginLeft="25dp"
-                            android:layout_weight="1"
-                            android:text="电信诈骗"
-                            android:textColor="@color/color_a0a0a0"
-                            android:textSize="16sp"></TextView>
+                            android:layout_weight="1">
+
+                        </TextSwitcher>
 
                         <ImageView
                             android:layout_width="wrap_content"

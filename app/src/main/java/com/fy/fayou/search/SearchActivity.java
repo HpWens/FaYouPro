@@ -1,21 +1,33 @@
 package com.fy.fayou.search;
 
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.search.adapter.FlowAdapter;
 import com.fy.fayou.search.adapter.SearchAdapter;
 import com.fy.fayou.search.bean.SearchEntity;
+import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.flow.FlowLayoutManager;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,15 +39,15 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.et_search)
     EditText etSearch;
     @BindView(R.id.tv_cancel)
-    TextView tvCancel;
+    TextView tvSearch;
     @BindView(R.id.recycler)
     RecyclerView recycler;
+    @BindView(R.id.iv_clean)
+    ImageView ivClean;
 
     SearchAdapter mAdapter;
     FlowAdapter mFlowAdapter;
-
-    String[] sign = {"中华人民共和国宪法", "中华和国宪法", "中和国宪法", "中和法", "中华人民共和"};
-
+    AssociateFragment associateFragment;
 
     @Override
     protected void initView() {
@@ -44,22 +56,79 @@ public class SearchActivity extends BaseActivity {
 
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.setAdapter(mAdapter = new SearchAdapter());
-        mAdapter.addHeaderView(getHeaderView());
 
-        List<SearchEntity> list = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            SearchEntity entity = new SearchEntity();
-            list.add(entity);
-        }
-        mAdapter.setNewData(list);
+        loadRootFragment(R.id.associate_fl, associateFragment = AssociateFragment.newInstance());
 
-        loadRootFragment(R.id.associate_fl, AssociateFragment.newInstance());
+        recycler.post(() -> {
+            hideFragment(R.id.associate_fl);
+        });
+
+        addHeaderView();
     }
 
+    private void addHeaderView() {
+        List<String> list = UserService.getInstance().getHistorySearch();
+        if (list != null && !list.isEmpty()) {
+            if (mAdapter.getHeaderLayoutCount() == 0) {
+                mAdapter.addHeaderView(getHeaderView());
+            }
+            mFlowAdapter.setNewData(list);
+        }
+    }
 
     @Override
     protected void initData() {
 
+        requestHot();
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s) && ivClean.getVisibility() == View.GONE) {
+                    ivClean.setVisibility(View.VISIBLE);
+                    tvSearch.setText("搜索");
+                    tvSearch.setTextColor(Color.parseColor("#A0A0A0"));
+                } else if (TextUtils.isEmpty(s)) {
+                    ivClean.setVisibility(View.GONE);
+                    tvSearch.setText("取消");
+                    tvSearch.setTextColor(Color.parseColor("#D2D2D2"));
+                }
+            }
+        });
+
+        ivClean.setOnClickListener(v -> {
+            etSearch.setText("");
+        });
+
+        tvSearch.setOnClickListener(v -> {
+            if (ivClean.getVisibility() == View.VISIBLE) {
+
+                jumpSearchResult(etSearch.getText().toString());
+
+            } else {
+                finish();
+            }
+        });
+    }
+
+    private void jumpSearchResult(String key) {
+        ARouter.getInstance().build(Constant.HOME_RESULT_SEARCH)
+                .withString(Constant.Param.KEYWORD, key)
+                .navigation();
+        // 保存历史记录
+        UserService.getInstance().addHistorySearch(key);
+        etSearch.setText("");
+        addHeaderView();
     }
 
     @Override
@@ -72,22 +141,35 @@ public class SearchActivity extends BaseActivity {
         RecyclerView recyclerView = header.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new FlowLayoutManager());
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(mFlowAdapter = new FlowAdapter());
-        header.findViewById(R.id.iv_clear).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapter.removeAllHeaderView();
-            }
+        recyclerView.setAdapter(mFlowAdapter = new FlowAdapter((v, key) -> {
+            jumpSearchResult(key);
+        }));
+        header.findViewById(R.id.iv_clear).setOnClickListener(v -> {
+            UserService.getInstance().clearHistorySearch();
+            mAdapter.removeAllHeaderView();
         });
-
-        List<String> list = new ArrayList<>();
-        for (String value : sign) {
-            list.add(value);
-        }
-
-        mFlowAdapter.setNewData(list);
-
         return header;
+    }
+
+    private void requestHot() {
+        EasyHttp.get(ApiUrl.HOT_SEARCH)
+                .params("page", "0")
+                .params("size", "20")
+                .baseUrl(Constant.BASE_URL6)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            List<SearchEntity> list = ParseUtils.parseListData(s, SearchEntity.class);
+                            mAdapter.setNewData(list);
+                        }
+                    }
+                });
     }
 
 }

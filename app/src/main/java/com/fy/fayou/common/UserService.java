@@ -5,6 +5,11 @@ import android.text.TextUtils;
 
 import com.fy.fayou.bean.UserInfo;
 import com.fy.fayou.utils.ACache;
+import com.fy.fayou.utils.ParseUtils;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserService {
 
@@ -128,4 +133,38 @@ public class UserService {
         }
         return true;
     }
+
+    // 保存历史记录
+    public void saveHistorySearch(String record) {
+        ACache.get(mContext).put(Constant.SP.SEARCH_HISTORY, record);
+    }
+
+    public List<String> getHistorySearch() {
+        String data = ACache.get(mContext).getAsString(Constant.SP.SEARCH_HISTORY);
+        if (TextUtils.isEmpty(data)) {
+            return new ArrayList<>();
+        } else {
+            return ParseUtils.parseListData(data, String.class);
+        }
+    }
+
+    public void addHistorySearch(String key) {
+        List<String> data = getHistorySearch();
+        if (data != null) {
+            if (data.isEmpty()) {
+                data.add(key);
+            } else {
+                if (data.contains(key)) {
+                    data.remove(key);
+                }
+                data.add(0, key);
+            }
+            saveHistorySearch(new Gson().toJson(data));
+        }
+    }
+
+    public void clearHistorySearch() {
+        saveHistorySearch("");
+    }
+
 }

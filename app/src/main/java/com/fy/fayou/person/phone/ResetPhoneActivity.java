@@ -29,7 +29,7 @@ import butterknife.OnClick;
 public class ResetPhoneActivity extends BaseActivity {
 
     @Autowired
-    public String mobile = "15985841233";
+    public String mobile = "";
 
     @BindView(R.id.tv_hint)
     TextView tvHint;

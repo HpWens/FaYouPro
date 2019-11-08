@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        post(() -> ARouter.getInstance().build(Constant.NEWS_LIST).navigation());
+        post(() -> ARouter.getInstance().build(Constant.HOME_SEARCH).navigation());
     }
 
 
