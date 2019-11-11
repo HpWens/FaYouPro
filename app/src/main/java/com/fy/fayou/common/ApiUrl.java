@@ -109,4 +109,7 @@ public class ApiUrl {
     public static final String SEARCH_CASE_INFO = "/caseInfo/search";
 
 
+    // 新闻分页查找
+    public static final String HOME_ARTICLE = "/article";
+
 }

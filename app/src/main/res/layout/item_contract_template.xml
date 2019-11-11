@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/iv_cover"
+        android:id="@+id/fl_video"
         android:layout_width="110dp"
         android:layout_height="130dp"
         android:layout_marginLeft="10.5dp"
@@ -23,9 +23,9 @@
         android:text="股权转让合同"
         android:textColor="@color/color_333333"
         android:textSize="12sp"
-        app:layout_constraintLeft_toLeftOf="@+id/iv_cover"
-        app:layout_constraintRight_toRightOf="@+id/iv_cover"
-        app:layout_constraintTop_toTopOf="@+id/iv_cover" />
+        app:layout_constraintLeft_toLeftOf="@+id/fl_video"
+        app:layout_constraintRight_toRightOf="@+id/fl_video"
+        app:layout_constraintTop_toTopOf="@+id/fl_video" />
 
     <TextView
         android:id="@+id/tv_num"
@@ -35,9 +35,9 @@
         android:text="30条"
         android:textColor="@color/color_333333"
         android:textSize="11sp"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
-        app:layout_constraintLeft_toLeftOf="@+id/iv_cover"
-        app:layout_constraintRight_toRightOf="@+id/iv_cover" />
+        app:layout_constraintBottom_toBottomOf="@+id/fl_video"
+        app:layout_constraintLeft_toLeftOf="@+id/fl_video"
+        app:layout_constraintRight_toRightOf="@+id/fl_video" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -48,8 +48,8 @@
         android:text="股权转让合同"
         android:textColor="@color/color_333333"
         android:textSize="16sp"
-        app:layout_constraintLeft_toRightOf="@+id/iv_cover"
-        app:layout_constraintTop_toTopOf="@+id/iv_cover" />
+        app:layout_constraintLeft_toRightOf="@+id/fl_video"
+        app:layout_constraintTop_toTopOf="@+id/fl_video" />
 
 
     <TextView
@@ -84,7 +84,7 @@
         android:text="限时免费"
         android:textColor="@color/color_ed4040"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+        app:layout_constraintBottom_toBottomOf="@+id/fl_video"
         app:layout_constraintLeft_toLeftOf="@+id/tv_name"
         app:rv_radiusHalfHeightEnable="true"
         app:rv_strokeColor="@color/color_ed4040"
@@ -101,6 +101,6 @@
         android:background="@color/color_e5e5e5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_cover"></View>
+        app:layout_constraintTop_toBottomOf="@+id/fl_video"></View>
 
 </android.support.constraint.ConstraintLayout>

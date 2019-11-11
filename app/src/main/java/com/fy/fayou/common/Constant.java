@@ -2,17 +2,17 @@ package com.fy.fayou.common;
 
 public class Constant {
 
-    public static final String BASE_URL = "http://192.168.1.165:8080";
+    public static final String BASE_URL = "http://192.168.1.166:8080";
 
-    public static final String BASE_URL_RELEASE = "http://192.168.1.165:8080";
+    public static final String BASE_URL_RELEASE = "http://192.168.1.166:8080";
 
     public static final String BASE_URL2 = "http://192.168.1.191:8080";
 
-    public static final String BASE_URL3 = "http://192.168.1.165:8082";
+    public static final String BASE_URL3 = "http://192.168.1.166:8082";
 
-    public static final String BASE_URL4 = "http://192.168.1.165:8081";
+    public static final String BASE_URL4 = "http://192.168.1.166:8081";
 
-    public static final String BASE_URL5 = "http://192.168.1.165:8083";
+    public static final String BASE_URL5 = "http://192.168.1.166:8083";
 
     public static final String BASE_URL6 = "http://192.168.1.191:8089";
 

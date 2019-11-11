@@ -10,6 +10,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
+import com.fy.fayou.event.SearchResultEvent;
 import com.fy.fayou.search.bean.MenuEntity;
 import com.fy.fayou.search.result.ContentFragment;
 import com.fy.fayou.search.result.MenuListFragment;
@@ -20,6 +21,8 @@ import com.meis.base.mei.utils.Eyes;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -34,7 +37,7 @@ public class SearchResultActivity extends BaseActivity {
     public String keyword = "";
 
     @BindView(R.id.et_search)
-    TextView etSearch;
+    TextView tVSearch;
     @BindView(R.id.tv_cancel)
     TextView tvCancel;
     @BindView(R.id.iv_close)
@@ -50,13 +53,21 @@ public class SearchResultActivity extends BaseActivity {
     @Override
     protected void initData() {
 
-        etSearch.setText(keyword);
+        tVSearch.setText(keyword);
+
+        tVSearch.setOnClickListener(v -> {
+            EventBus.getDefault().post(new SearchResultEvent(SearchResultEvent.RESULT_FOCUS));
+            finish();
+        });
+
         tvCancel.setOnClickListener(v -> {
+            EventBus.getDefault().post(new SearchResultEvent(SearchResultEvent.RESULT_FINISH));
             finish();
         });
 
         ivClose.setOnClickListener(v -> {
-            tvCancel.performClick();
+            EventBus.getDefault().post(new SearchResultEvent(SearchResultEvent.RESULT_CLEAN));
+            finish();
         });
 
         requestMenuListData();

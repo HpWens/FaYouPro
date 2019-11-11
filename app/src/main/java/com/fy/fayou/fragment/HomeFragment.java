@@ -17,10 +17,13 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomeRecommendVPAdapter;
 import com.fy.fayou.common.Constant;
+import com.fy.fayou.event.HomeRefreshEvent;
 import com.fy.fayou.view.HomeViewpager;
 import com.fy.fayou.view.TextSwitcherAnimation;
 import com.meis.base.mei.base.BaseFragment;
 import com.vondear.rxtool.RxImageTool;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +35,7 @@ import butterknife.Unbinder;
 public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetChangedListener {
 
     private final String[] mTitles = {
-            "推荐", "栏目"
+            "推荐"
     };
 
     private TextSwitcherAnimation textSwitcherAnimation;
@@ -106,7 +109,10 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
             return tv;
         });
         textSwitcherAnimation = new TextSwitcherAnimation(switcher, hintList);
-        textSwitcherAnimation.create();
+
+        switcher.postDelayed(() -> {
+            textSwitcherAnimation.create();
+        }, 400);
     }
 
     @Override
@@ -168,6 +174,9 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
                 appBarLayoutBehavior.setTopAndBottomOffset(0);
             }
         }
+
+        // 发送事件 刷新首页
+        EventBus.getDefault().post(new HomeRefreshEvent());
 
         FloatSearchVisible();
     }

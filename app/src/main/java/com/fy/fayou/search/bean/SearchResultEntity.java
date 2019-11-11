@@ -3,6 +3,7 @@ package com.fy.fayou.search.bean;
 import java.io.Serializable;
 
 public class SearchResultEntity implements Serializable {
+
     public String name;
     public String caseId;
     public String title;
@@ -15,5 +16,9 @@ public class SearchResultEntity implements Serializable {
     public String labels;
     public String showDate;
     public String refuseNote;
+    public String pointId;
+    public String bookId;
+    public String chapter;
+    public String point;
 
 }

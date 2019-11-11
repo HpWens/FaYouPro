@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
+import com.fy.fayou.event.SearchResultEvent;
 import com.fy.fayou.search.adapter.FlowAdapter;
 import com.fy.fayou.search.adapter.SearchAdapter;
 import com.fy.fayou.search.bean.SearchEntity;
@@ -24,9 +26,13 @@ import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.flow.FlowLayoutManager;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.vondear.rxtool.RxKeyboardTool;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -106,15 +112,20 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
+        etSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                jumpSearchResult(etSearch.getText().toString());
+            }
+            return false;
+        });
+
         ivClean.setOnClickListener(v -> {
             etSearch.setText("");
         });
 
         tvSearch.setOnClickListener(v -> {
             if (ivClean.getVisibility() == View.VISIBLE) {
-
                 jumpSearchResult(etSearch.getText().toString());
-
             } else {
                 finish();
             }
@@ -125,9 +136,9 @@ public class SearchActivity extends BaseActivity {
         ARouter.getInstance().build(Constant.HOME_RESULT_SEARCH)
                 .withString(Constant.Param.KEYWORD, key)
                 .navigation();
+
         // 保存历史记录
         UserService.getInstance().addHistorySearch(key);
-        etSearch.setText("");
         addHeaderView();
     }
 
@@ -142,6 +153,7 @@ public class SearchActivity extends BaseActivity {
         recyclerView.setLayoutManager(new FlowLayoutManager());
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mFlowAdapter = new FlowAdapter((v, key) -> {
+            etSearch.setText(key);
             jumpSearchResult(key);
         }));
         header.findViewById(R.id.iv_clear).setOnClickListener(v -> {
@@ -172,4 +184,30 @@ public class SearchActivity extends BaseActivity {
                 });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMainEvent(SearchResultEvent event) {
+        if (event.code == SearchResultEvent.RESULT_CLEAN) {
+            if (etSearch != null) {
+                etSearch.setText("");
+                etSearch.postDelayed(() -> {
+                    RxKeyboardTool.showSoftInput(mContext, etSearch);
+                }, 160);
+            }
+        } else if (event.code == SearchResultEvent.RESULT_FINISH) {
+            finish();
+        } else if (event.code == SearchResultEvent.RESULT_FOCUS) {
+            if (etSearch != null) {
+                etSearch.requestFocus();
+                etSearch.setSelection(etSearch.getText().length());
+                etSearch.postDelayed(() -> {
+                    RxKeyboardTool.showSoftInput(mContext, etSearch);
+                }, 160);
+            }
+        }
+    }
+
+    @Override
+    public boolean isRegisterEventBus() {
+        return true;
+    }
 }

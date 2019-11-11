@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:maxLines="2"
+        android:text="#普法# 刑事案件可以和解处理吗？"
+        android:textColor="@color/color_333333"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/video_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintDimensionRatio="H,16:9"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name">
+        
+        <cn.jzvd.JzvdStd
+            android:id="@+id/video_player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+
+    <com.fy.fayou.view.CornersView
+        android:id="@+id/fl_video"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cornerSize="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/video_layout"
+        app:layout_constraintLeft_toLeftOf="@+id/video_layout"
+        app:layout_constraintRight_toRightOf="@+id/video_layout"
+        app:layout_constraintTop_toTopOf="@+id/video_layout">
+
+
+    </com.fy.fayou.view.CornersView>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/home_item_player_ic"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/fl_video"
+        app:layout_constraintLeft_toLeftOf="@+id/fl_video"
+        app:layout_constraintRight_toRightOf="@+id/fl_video"
+        app:layout_constraintTop_toTopOf="@+id/fl_video"></ImageView>
+
+    <com.fy.fayou.view.radius.RadiusTextView
+        android:id="@+id/tv_play_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="12dp"
+        android:paddingLeft="6dp"
+        android:paddingTop="3dp"
+        android:paddingRight="6dp"
+        android:paddingBottom="3dp"
+        android:text="00:00"
+        android:textColor="@color/color_ffffff"
+        android:textSize="11sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/fl_video"
+        app:layout_constraintRight_toRightOf="@+id/fl_video"
+        app:rv_backgroundColor="@color/color_8f_000000"
+        app:rv_radius="2dp">
+
+    </com.fy.fayou.view.radius.RadiusTextView>
+
+    <TextView
+        android:id="@+id/tv_origin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="11dp"
+        android:text="法报头条"
+        android:textColor="@color/color_b2b2b2"
+        android:textSize="11sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fl_video"></TextView>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/color_b3b3b3"
+        android:textSize="11sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_origin"
+        app:layout_constraintLeft_toRightOf="@+id/tv_origin"
+        tools:text="2019-9-20">
+
+    </TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/color_e5e5e5"
+        app:layout_constraintTop_toBottomOf="@+id/tv_origin"></View>
+
+
+</android.support.constraint.ConstraintLayout>

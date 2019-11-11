@@ -199,7 +199,7 @@
                     android:layout_height="40dp"
                     android:background="@color/color_ffffff"
                     app:tl_indicator_color="@color/color_ed4040"
-                    app:tl_indicator_height="2dp"
+                    app:tl_indicator_height="0dp"
                     app:tl_indicator_margin_bottom="5dp"
                     app:tl_indicator_width="15dp"
                     app:tl_textBold="BOTH"

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/fl_video"
+        android:layout_width="112dp"
+        android:layout_height="74dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+    <ImageView
+        android:id="@+id/iv_top"
+        android:layout_width="32dp"
+        android:layout_height="15dp"
+        android:layout_marginLeft="15dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/home_item_top_ic"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fl_video"></ImageView>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="15dp"
+        android:lines="1"
+        android:text="#我和我的祖国#"
+        android:textColor="@color/color_333333"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toRightOf="@+id/iv_top"
+        app:layout_constraintRight_toLeftOf="@+id/fl_video"
+        app:layout_constraintTop_toTopOf="@+id/fl_video" />
+
+    <TextView
+        android:id="@+id/tv_origin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:text="法友"
+        android:textColor="@color/color_b2b2b2"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@+id/fl_video"
+        app:layout_constraintLeft_toLeftOf="parent"></TextView>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="3分钟前"
+        android:textColor="@color/color_b2b2b2"
+        android:textSize="11sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_origin"
+        app:layout_constraintLeft_toRightOf="@+id/tv_origin"></TextView>
+
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/color_e5e5e5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fl_video"></View>
+
+
+</android.support.constraint.ConstraintLayout>

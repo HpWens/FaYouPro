@@ -9,12 +9,15 @@ import com.fy.fayou.utils.listener.OnApiErrorListener;
 import com.google.gson.Gson;
 import com.meis.base.mei.entity.Result;
 import com.meis.base.mei.utils.ParameterizedTypeImpl;
+import com.vondear.rxtool.RxTimeTool;
 import com.vondear.rxtool.view.RxToast;
 import com.zhouyou.http.exception.ApiException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -98,6 +101,48 @@ public class ParseUtils {
             if (!TextUtils.isEmpty(apiException.getMessage())) {
                 listener.onError(apiException.getMessage());
             }
+        }
+    }
+
+    public static String getTime(String time) {
+        if (TextUtils.isEmpty(time)) return "";
+        long t = RxTimeTool.string2Milliseconds(time);
+        return getTimeStateNew(t);
+    }
+
+    public static String getTimeStateNew(long long_time) {
+        Timestamp time = new Timestamp(long_time);
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        //    System.out.println("传递过来的时间:"+format.format(time));
+        //    System.out.println("现在的时间:"+format.format(now));
+        long day_conver = 1000 * 60 * 60 * 24;
+        long hour_conver = 1000 * 60 * 60;
+        long min_conver = 1000 * 60;
+        long time_conver = now.getTime() - time.getTime();
+        long temp_conver;
+        //    System.out.println("天数:"+time_conver/day_conver);
+        if ((time_conver / day_conver) < 1) {
+            temp_conver = time_conver / day_conver;
+            if (temp_conver <= 2 && temp_conver >= 1) {
+                return temp_conver + "天前";
+            } else {
+                temp_conver = (time_conver / hour_conver);
+                if (temp_conver >= 1) {
+                    return temp_conver + "小时前";
+                } else {
+                    temp_conver = (time_conver / min_conver);
+                    if (temp_conver > 5) {
+                        return Math.ceil(temp_conver / 10) + "0分钟前";
+                    } else if (temp_conver > 1 && temp_conver <= 5) {
+                        return temp_conver + "分钟前";
+                    } else {
+                        return "刚刚";
+                    }
+                }
+            }
+        } else {
+            return format.format(time);
         }
     }
 

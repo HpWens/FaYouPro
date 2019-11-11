@@ -2,8 +2,6 @@ package com.fy.fayou;
 
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.event.ExitLoginEvent;
 import com.fy.fayou.fragment.ForumFragment;
 import com.fy.fayou.fragment.HomeFragment;
@@ -84,7 +82,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        post(() -> ARouter.getInstance().build(Constant.HOME_SEARCH).navigation());
+        // post(() -> ARouter.getInstance().build(Constant.HOME_SEARCH).navigation());
     }
 
 

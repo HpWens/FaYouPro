@@ -15,6 +15,8 @@ import com.meis.base.mei.MeiCompatActivity;
 import com.meis.base.mei.dialog.MeiCompatDialog;
 import com.meis.base.mei.fragment.MeiCompatFragment;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import me.yokeyword.fragmentation.ExtraTransaction;
@@ -49,6 +51,10 @@ public abstract class BaseFragment extends MeiCompatFragment implements ISupport
         return mDelegate.extraTransaction();
     }
 
+    public boolean isRegisterEventBus() {
+        return false;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -59,6 +65,9 @@ public abstract class BaseFragment extends MeiCompatFragment implements ISupport
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (isRegisterEventBus()) {
+            EventBus.getDefault().register(this);
+        }
         mDelegate.onCreate(savedInstanceState);
     }
 
@@ -102,6 +111,9 @@ public abstract class BaseFragment extends MeiCompatFragment implements ISupport
     public void onDestroyView() {
         mDelegate.onDestroyView();
         super.onDestroyView();
+        if (isRegisterEventBus()) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     @Override
