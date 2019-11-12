@@ -15,9 +15,12 @@ public class ColumnEntity implements Parcelable {
     // 用于请求接口参数
     public String param;
 
+    // 法律法规数量
+    public String number;
 
     // 全网通缉
     public String type;
+    // 全网通缉数量
     public String numberOfPeople;
 
 

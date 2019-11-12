@@ -18,13 +18,15 @@ package com.fy.fayou.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.util.List;
 
 /**
  * <p>区域实体。</p>
  * Created by ws on 2017/6/1.
  */
-public class City implements Parcelable {
+public class City implements Parcelable, MultiItemEntity {
 
     /**
      * id。
@@ -45,6 +47,14 @@ public class City implements Parcelable {
      * 是否选中。
      */
     public boolean isSelect;
+
+
+    // 辅助字段
+    public int spanSize = NORMAL_ROW;
+    public int childrenIndex = 0;
+    public boolean isHistory;
+    public static final int FULL_ROW = 2;
+    public static final int NORMAL_ROW = 1;
 
     public City() {
     }
@@ -120,4 +130,8 @@ public class City implements Parcelable {
         isSelect = mIsSelect;
     }
 
+    @Override
+    public int getItemType() {
+        return spanSize;
+    }
 }

@@ -120,4 +120,12 @@ public class ApiUrl {
     // 查找列表
     public static final String CRIMINAL_FIND_LIST = "/criminalSuspect/findList";
 
+    // 查找分类
+    public static final String LEGAL_FIND_LIST = "/lawRegulationsCategory/findAll";
+
+    // 根据ID查找文章
+    public static final String ARTICLE_DETAIL = "/article/";
+
+    // 评论查找
+    public static final String COMMENT_LIST = "/comment";
 }

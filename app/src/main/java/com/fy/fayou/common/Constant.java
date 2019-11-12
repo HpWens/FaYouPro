@@ -88,6 +88,9 @@ public class Constant {
     // 全网通缉
     public static final String WANTED = "/home/wanted";
 
+    // 法律法规 司法解释
+    public static final String LEGAL = "/home/legal";
+
     // 城市选择
     public static final String CITY_SELECT = "/city/select";
 
@@ -126,6 +129,9 @@ public class Constant {
         String CITY_INFO = "city_info_data";
 
         String SEARCH_HISTORY = "search_history";
+
+        // 城市历史
+        String CITY_HISTORY = "city_history";
     }
 
     public interface QiNiu {
@@ -139,5 +145,11 @@ public class Constant {
         String MOBILE = "mobile";
 
         String KEYWORD = "keyword";
+
+        String CITY_NAME = "city_name";
+
+        String ARTICLE_ID = "article_id";
+
+        int RESULT_CODE = 200;
     }
 }

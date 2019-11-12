@@ -3,6 +3,7 @@ package com.fy.fayou.home.adapter;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.SparseBooleanArray;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -25,6 +26,8 @@ public class CityFirstLevelAdapter extends BaseQuickAdapter<City, BaseViewHolder
     @Override
     protected void convert(@NonNull BaseViewHolder helper, City item) {
         boolean isSelected = mBooleanArray.get(helper.getAdapterPosition());
+        TextView tvName = helper.getView(R.id.tv_name);
+        tvName.getPaint().setFakeBoldText(isSelected);
         helper.setVisible(R.id.view_line, isSelected).setText(R.id.tv_name, item.name);
         int selectedBgColor = helper.itemView.getResources().getColor(!isSelected ? R.color.color_f5f5f5 : R.color.color_ffffff);
         helper.itemView.setBackgroundColor(selectedBgColor);

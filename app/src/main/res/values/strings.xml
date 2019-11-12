@@ -9,6 +9,8 @@
     <string name="verify_mobile_hint" translatable="false">短信号码已发送至%1$s</string>
     <string name="again_get_verify_code" translatable="false">%1$ds再次获取验证码</string>
     <string name="contract_template" translatable="false">1.男女双方定于【】年【】月【】日在【】省（直辖 市自治区）市【】区（县）办理结婚登记手续。为防 止今后可能出现的婚姻财产纠纷，现经协商一致，自 愿自愿就目前的婚前财产达成如下协议：</string>
+    <string name="module_source" translatable="false">来源：%1$s</string>
+    <string name="module_publish_time" translatable="false">发布时间：%1$s</string>
 
     <string-array name="array_menu">
         <item>法律法规</item>

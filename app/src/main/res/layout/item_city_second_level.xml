@@ -1,18 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_name"
+    <com.fy.fayou.view.radius.RadiusLinearLayout
+        android:id="@+id/pos_layout"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/city_second_level_item"
         android:gravity="center"
-        android:text="吉林省"
-        android:textColor="@color/color_333333"
-        android:textSize="12sp"></TextView>
+        android:orientation="horizontal"
+        app:rv_backgroundColor="@color/color_f5f5f5"
+        app:rv_radius="2dp">
+
+        <ImageView
+            android:id="@+id/iv_pos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:src="@mipmap/item_city_position"
+            android:visibility="gone"></ImageView>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="吉林省"
+            android:textColor="@color/color_333333"
+            android:textSize="12sp"></TextView>
+
+    </com.fy.fayou.view.radius.RadiusLinearLayout>
+
 
 </LinearLayout>

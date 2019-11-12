@@ -8,6 +8,8 @@ import com.fy.fayou.utils.ACache;
 import com.fy.fayou.utils.ParseUtils;
 import com.google.gson.Gson;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -165,6 +167,73 @@ public class UserService {
 
     public void clearHistorySearch() {
         saveHistorySearch("");
+    }
+
+
+    // 分类保持 历史记录
+
+    /**
+     * @param json
+     * @param classify 1 城市选择
+     */
+
+    public static int CLASSIFY_CITY_HISTORY = 1;
+
+    public void saveClassify(String json, int classify) {
+        String key = getClassifyKey(classify);
+        ACache.get(mContext).put(key, json);
+    }
+
+    @NotNull
+    private String getClassifyKey(int classify) {
+        String key = Constant.SP.CITY_HISTORY;
+        switch (classify) {
+            default:
+            case 1:
+                key = Constant.SP.CITY_HISTORY;
+                break;
+        }
+        return key;
+    }
+
+    public List<String> getClassify(int classify) {
+        String key = getClassifyKey(classify);
+        String data = ACache.get(mContext).getAsString(key);
+        if (TextUtils.isEmpty(data)) {
+            return new ArrayList<>();
+        } else {
+            return ParseUtils.parseListData(data, String.class);
+        }
+    }
+
+    /**
+     * 添加分类的数据
+     *
+     * @param value
+     * @param classify
+     */
+    public void addClassify(String value, int classify) {
+        List<String> data = getClassify(classify);
+        if (data != null) {
+            if (data.isEmpty()) {
+                data.add(value);
+            } else {
+                if (data.contains(value)) {
+                    data.remove(value);
+                }
+                data.add(0, value);
+            }
+            saveClassify(new Gson().toJson(data), classify);
+        }
+    }
+
+    /**
+     * 清理分类数据
+     *
+     * @param classify
+     */
+    public void clearClassify(int classify) {
+        saveClassify("", classify);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.fy.fayou.home.fragment;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,8 @@ import android.view.View;
 
 import com.fy.fayou.R;
 import com.fy.fayou.bean.City;
+import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.home.adapter.CitySecondLevelAdapter;
 import com.meis.base.mei.base.BaseFragment;
 import com.vondear.rxtool.RxImageTool;
@@ -44,7 +47,14 @@ public class CitySecondLevelFragment extends BaseFragment {
     @Override
     protected void initData() {
         recycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        recycler.setAdapter(mAdapter = new CitySecondLevelAdapter());
+        recycler.setAdapter(mAdapter = new CitySecondLevelAdapter((v, item) -> {
+            UserService.getInstance().addClassify(item.name, UserService.CLASSIFY_CITY_HISTORY);
+
+            Intent intent = new Intent();
+            intent.putExtra(Constant.Param.CITY_NAME, item.name);
+            getActivity().setResult(Constant.Param.RESULT_CODE, intent);
+            getActivity().finish();
+        }));
         mSpacing = RxImageTool.dp2px(15);
 
         recycler.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -52,15 +62,29 @@ public class CitySecondLevelFragment extends BaseFragment {
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
                 int pos = parent.getChildAdapterPosition(view);
+                City city = mAdapter.getData().get(pos);
+
+                if (city.spanSize == City.FULL_ROW) {
+                    return;
+                }
+
+                if (city.isHistory) {
+                    pos = city.childrenIndex;
+                }
+
                 if (pos % 2 == 0) {
                     outRect.left = mSpacing;
                     outRect.right = mSpacing / 2;
                 } else {
                     outRect.left = mSpacing / 2;
                     outRect.right = mSpacing;
-
                 }
             }
+        });
+
+        mAdapter.setSpanSizeLookup((gridLayoutManager, position) -> {
+            City city = mAdapter.getData().get(position);
+            return city.spanSize;
         });
     }
 

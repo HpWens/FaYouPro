@@ -6,8 +6,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
+import com.fy.fayou.detail.adapter.CommentHeaderPresenter;
 import com.fy.fayou.detail.adapter.CommentPresenter;
 import com.fy.fayou.detail.adapter.FooterPresenter;
 import com.fy.fayou.detail.adapter.HeaderPresenter;
@@ -15,17 +20,11 @@ import com.fy.fayou.detail.adapter.PicPresenter;
 import com.fy.fayou.detail.adapter.RecommendHeaderPresenter;
 import com.fy.fayou.detail.adapter.RecommendPresenter;
 import com.fy.fayou.detail.adapter.TextPresenter;
-import com.fy.fayou.detail.bean.CommentBean;
-import com.fy.fayou.detail.bean.FooterBean;
-import com.fy.fayou.detail.bean.HeaderBean;
-import com.fy.fayou.detail.bean.PicBean;
-import com.fy.fayou.detail.bean.RecommendBean;
-import com.fy.fayou.detail.bean.RecommendHeaderBean;
-import com.fy.fayou.detail.bean.TextBean;
 import com.fy.fayou.detail.dialog.BottomShareDialog;
 import com.meis.base.mei.adapter.MeiBaseMixAdapter;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.zhouyou.http.EasyHttp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +32,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
 
 @Route(path = "/detail/article")
 public class ArticleDetailActivity extends BaseActivity {
 
+    @Autowired(name = "article_id")
+    public String id;
 
     @BindView(R.id.recycler)
     RecyclerView recycler;
@@ -59,6 +61,7 @@ public class ArticleDetailActivity extends BaseActivity {
     @Override
     protected void initView() {
         ButterKnife.bind(this);
+        ARouter.getInstance().inject(this);
         Eyes.translucentStatusBar(this, true, true);
     }
 
@@ -66,6 +69,7 @@ public class ArticleDetailActivity extends BaseActivity {
     protected void initData() {
         mAdapter = new MeiBaseMixAdapter();
         mAdapter.addItemPresenter(new CommentPresenter());
+        mAdapter.addItemPresenter(new CommentHeaderPresenter());
         mAdapter.addItemPresenter(new FooterPresenter());
         mAdapter.addItemPresenter(new HeaderPresenter());
         mAdapter.addItemPresenter(new PicPresenter());
@@ -75,45 +79,30 @@ public class ArticleDetailActivity extends BaseActivity {
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.setAdapter(mAdapter);
 
+        requestData();
+    }
 
-        HeaderBean headerBean = new HeaderBean();
-        mDataList.add(headerBean);
+    private void requestData() {
+        Observable.zip(requestDetail(), requestComment(), (s, s2) -> {
+            mDataList = new ArrayList<>();
+            return mDataList;
+        }).compose(bindToLifecycle()).subscribe(objects -> {
 
-        PicBean picBean = new PicBean();
-        mDataList.add(picBean);
+        });
+    }
 
-        TextBean textBean = new TextBean();
-        mDataList.add(textBean);
+    private Observable<String> requestDetail() {
+        return EasyHttp.get(ApiUrl.ARTICLE_DETAIL + id)
+                .baseUrl(Constant.BASE_URL4).execute(String.class);
+    }
 
-        picBean = new PicBean();
-        mDataList.add(picBean);
-
-        textBean = new TextBean();
-        mDataList.add(textBean);
-
-        FooterBean footerBean = new FooterBean();
-        mDataList.add(footerBean);
-
-        RecommendHeaderBean recommendHeaderBean = new RecommendHeaderBean();
-        mDataList.add(recommendHeaderBean);
-
-        RecommendBean recommendBean = new RecommendBean();
-        mDataList.add(recommendBean);
-        recommendBean = new RecommendBean();
-        mDataList.add(recommendBean);
-        recommendBean = new RecommendBean();
-        mDataList.add(recommendBean);
-
-        CommentBean commentBean = new CommentBean();
-        mDataList.add(commentBean);
-        commentBean = new CommentBean();
-        mDataList.add(commentBean);
-        commentBean = new CommentBean();
-        mDataList.add(commentBean);
-        commentBean = new CommentBean();
-        mDataList.add(commentBean);
-
-        mAdapter.setNewData(mDataList);
+    private Observable<String> requestComment() {
+        return EasyHttp.get(ApiUrl.COMMENT_LIST)
+                .params("articleId", id)
+                .params("parentId", "0")
+                .params("page", "0")
+                .params("size", "3")
+                .baseUrl(Constant.BASE_URL4).execute(String.class);
     }
 
     @Override

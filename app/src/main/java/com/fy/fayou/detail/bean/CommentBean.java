@@ -1,4 +1,11 @@
 package com.fy.fayou.detail.bean;
 
-public class CommentBean {
+import java.io.Serializable;
+
+public class CommentBean implements Serializable {
+
+    public String userId;
+    public String userAvatar;
+    public String nickName;
+
 }

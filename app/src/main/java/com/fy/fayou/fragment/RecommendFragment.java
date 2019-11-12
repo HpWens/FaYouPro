@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.RecommendAdapter;
 import com.fy.fayou.bean.RecommendEntity;
@@ -85,6 +86,12 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
     @Override
     protected BaseMultiAdapter<RecommendEntity> getAdapter() {
         mAdapter = new RecommendAdapter();
+        mAdapter.setOnItemListener((v, item) -> {
+            ARouter.getInstance()
+                    .build(Constant.DETAIL_ARTICLE)
+                    .withString(Constant.Param.ARTICLE_ID, item.id)
+                    .navigation();
+        });
         return mAdapter;
     }
 

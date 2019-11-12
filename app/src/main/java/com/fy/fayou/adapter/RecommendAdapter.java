@@ -19,6 +19,8 @@ import cn.jzvd.JzvdStd;
 
 public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
 
+    private OnItemListener mListener;
+
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
@@ -63,6 +65,14 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                             .apply(GlideOption.getRadiusOption(112, 74, 2))
                             .into(ivThumb);
                 }
+
+                // 跳转到文章详情页
+                helper.itemView.setOnClickListener(v -> {
+                    if (mListener != null) {
+                        mListener.onClick(v, item);
+                    }
+                });
+
                 break;
             case RecommendEntity.TYPE_VIDEO:
                 helper.itemView.setTag("video");
@@ -83,5 +93,13 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
             default:
                 break;
         }
+    }
+
+    public void setOnItemListener(OnItemListener listener) {
+        mListener = listener;
+    }
+
+    public interface OnItemListener {
+        void onClick(View v, RecommendEntity item);
     }
 }

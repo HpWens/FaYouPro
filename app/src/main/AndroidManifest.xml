@@ -385,6 +385,10 @@
             android:name=".contract.FilterActivity"
             android:screenOrientation="portrait"></activity>
 
+        <activity
+            android:name=".legal.LegalActivity"
+            android:screenOrientation="portrait"></activity>
+
     </application>
 
 </manifest>

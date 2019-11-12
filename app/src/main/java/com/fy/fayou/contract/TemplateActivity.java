@@ -19,10 +19,6 @@ import butterknife.OnClick;
 @Route(path = "/contract/template")
 public class TemplateActivity extends BaseActivity {
 
-    private final String[] mTitles = {
-            "典型模板(100)", "定制模板(100)"
-    };
-
     @BindView(R.id.tv_center_title)
     TextView tvCenterTitle;
     @BindView(R.id.tab)

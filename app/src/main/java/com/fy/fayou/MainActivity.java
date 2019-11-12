@@ -84,7 +84,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-         post(() -> ARouter.getInstance().build(Constant.WANTED).navigation());
+        ARouter.getInstance()
+                .build(Constant.DETAIL_ARTICLE)
+                .withString(Constant.Param.ARTICLE_ID, "110328945139777536")
+                .navigation();
     }
 
 

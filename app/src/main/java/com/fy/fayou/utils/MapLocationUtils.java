@@ -3,7 +3,6 @@ package com.fy.fayou.utils;
 import android.content.Context;
 
 import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationListener;
 
 public class MapLocationUtils {
 
@@ -14,17 +13,36 @@ public class MapLocationUtils {
         //初始化定位
         mLocationClient = new AMapLocationClient(application);
         //设置定位回调监听
-        mLocationClient.setLocationListener(mAMapLocationListener);
+        mLocationClient.setLocationListener(amapLocation -> {
+            if (amapLocation != null) {
+                if (amapLocation.getErrorCode() == 0) {
+                    //解析定位结果
+                    amapLocation.getCity();
+
+                    mLocationClient.stopLocation();
+                }
+            }
+        });
         //启动定位
         mLocationClient.startLocation();
     }
 
-    //异步获取定位结果
-    AMapLocationListener mAMapLocationListener = amapLocation -> {
-        if (amapLocation != null) {
-            if (amapLocation.getErrorCode() == 0) {
-                //解析定位结果
+    public static void startLocation(Context context, OnLocationListener listener) {
+        AMapLocationClient locationClient = new AMapLocationClient(context);
+        locationClient.setLocationListener(aMapLocation -> {
+            if (aMapLocation != null) {
+                if (aMapLocation.getErrorCode() == 0) {
+                    //解析定位结果
+                    String city = aMapLocation.getCity();
+                    listener.location(city);
+                    locationClient.stopLocation();
+                }
             }
-        }
-    };
+        });
+        locationClient.startLocation();
+    }
+
+    public interface OnLocationListener {
+        void location(String cityName);
+    }
 }
