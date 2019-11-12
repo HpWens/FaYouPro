@@ -112,4 +112,12 @@ public class ApiUrl {
     // 新闻分页查找
     public static final String HOME_ARTICLE = "/article";
 
+
+    // 查找嫌疑人分类及人数统计
+    public static final String CRIMINAL_COLUMN = "/criminalSuspect/findTypeList";
+
+
+    // 查找列表
+    public static final String CRIMINAL_FIND_LIST = "/criminalSuspect/findList";
+
 }

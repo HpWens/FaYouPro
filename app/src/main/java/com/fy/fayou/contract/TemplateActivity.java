@@ -10,6 +10,8 @@ import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -39,7 +41,7 @@ public class TemplateActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), mTitles, WantedVPAdapter.TEMPLATE));
+        viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), new ArrayList<>(), WantedVPAdapter.TEMPLATE));
         tab.setViewPager(viewpager);
     }
 

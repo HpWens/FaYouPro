@@ -11,6 +11,7 @@ import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.event.SearchResultEvent;
+import com.fy.fayou.search.bean.ColumnEntity;
 import com.fy.fayou.search.bean.MenuEntity;
 import com.fy.fayou.search.result.ContentFragment;
 import com.fy.fayou.search.result.MenuListFragment;
@@ -88,29 +89,43 @@ public class SearchResultActivity extends BaseActivity {
                         if (!TextUtils.isEmpty(s)) {
                             MenuEntity entity = ParseUtils.parseData(s, MenuEntity.class);
 
-                            ArrayList<String> listData = new ArrayList<>();
+                            ArrayList<ColumnEntity> columnArray = new ArrayList<>();
                             if (entity.legalProvisions != null) {
-                                listData.add("法律法规\n(" + entity.legalProvisions + ")");
+                                ColumnEntity column = new ColumnEntity();
+                                column.name = "法律法规\n(" + entity.legalProvisions + ")";
+                                column.param = "legalProvisions";
+                                columnArray.add(column);
                             }
                             if (entity.judicialInterpretation != null) {
-                                listData.add("司法解释\n(" + entity.judicialInterpretation + ")");
+                                ColumnEntity column = new ColumnEntity();
+                                column.name = "司法解释\n(" + entity.judicialInterpretation + ")";
+                                column.param = "judicialInterpretation";
+                                columnArray.add(column);
                             }
                             if (entity.newInfo != null) {
-                                listData.add("新闻\n(" + entity.newInfo + ")");
+                                ColumnEntity column = new ColumnEntity();
+                                column.name = "新闻\n(" + entity.newInfo + ")";
+                                column.param = "newInfo";
+                                columnArray.add(column);
                             }
                             if (entity.judgement != null) {
-                                listData.add("判决文书\n(" + entity.judgement + ")");
+                                ColumnEntity column = new ColumnEntity();
+                                column.name = "判决文书\n(" + entity.judgement + ")";
+                                column.param = "judgement";
+                                columnArray.add(column);
                             }
                             if (entity.caseInfo != null) {
-                                listData.add("案例\n(" + entity.caseInfo + ")");
+                                ColumnEntity column = new ColumnEntity();
+                                column.name = "案例\n(" + entity.caseInfo + ")";
+                                column.param = "caseInfo";
+                                columnArray.add(column);
                             }
 
                             if (findFragment(MenuListFragment.class) == null) {
-                                ArrayList<String> listMenus = listData;
-                                MenuListFragment menuListFragment = MenuListFragment.newInstance(listMenus);
+                                MenuListFragment menuListFragment = MenuListFragment.newInstance(columnArray);
                                 loadRootFragment(R.id.fl_list_container, menuListFragment);
                                 // false:  不加入回退栈;  false: 不显示动画
-                                loadRootFragment(R.id.fl_content_container, ContentFragment.newInstance(listMenus.get(0), keyword), false, false);
+                                loadRootFragment(R.id.fl_content_container, ContentFragment.newInstance(columnArray.get(0).param, keyword), false, false);
                             }
 
                         }

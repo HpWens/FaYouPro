@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import com.fy.fayou.R;
 import com.fy.fayou.search.SearchResultActivity;
 import com.fy.fayou.search.adapter.MenuListAdapter;
+import com.fy.fayou.search.bean.ColumnEntity;
 import com.meis.base.mei.base.BaseFragment;
 
 import java.util.ArrayList;
@@ -25,13 +26,13 @@ public class MenuListFragment extends BaseFragment {
     MenuListAdapter adapter;
     Unbinder unbinder;
 
-    private ArrayList<String> mMenus;
+    private ArrayList<ColumnEntity> mMenus;
     private int mCurrentPosition = -1;
 
-    public static MenuListFragment newInstance(ArrayList<String> menus) {
+    public static MenuListFragment newInstance(ArrayList<ColumnEntity> columns) {
 
         Bundle args = new Bundle();
-        args.putStringArrayList(ARG_MENUS, menus);
+        args.putParcelableArrayList(ARG_MENUS, columns);
 
         MenuListFragment fragment = new MenuListFragment();
         fragment.setArguments(args);
@@ -53,7 +54,7 @@ public class MenuListFragment extends BaseFragment {
     protected void initView() {
         Bundle args = getArguments();
         if (args != null) {
-            mMenus = args.getStringArrayList(ARG_MENUS);
+            mMenus = args.getParcelableArrayList(ARG_MENUS);
         }
         unbinder = ButterKnife.bind(this, getView());
 
@@ -66,7 +67,7 @@ public class MenuListFragment extends BaseFragment {
             adapter.setItemChecked(position);
 
             if (getActivity() instanceof SearchResultActivity) {
-                ((SearchResultActivity) getActivity()).switchContentFragment(mMenus.get(position));
+                ((SearchResultActivity) getActivity()).switchContentFragment(mMenus.get(position).param);
             }
         }));
 

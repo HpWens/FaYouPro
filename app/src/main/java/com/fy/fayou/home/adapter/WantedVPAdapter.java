@@ -6,44 +6,47 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.fy.fayou.contract.TemplateFragment;
 import com.fy.fayou.home.fragment.WantedFragment;
+import com.fy.fayou.search.bean.ColumnEntity;
+
+import java.util.ArrayList;
 
 public class WantedVPAdapter extends FragmentPagerAdapter {
 
-    private String[] mTitles;
+    private ArrayList<ColumnEntity> mColumns;
 
-    private int type = 1;
-
+    /***
+     * WANTED 全网通缉
+     * TEMPLATE 合同模板
+     */
+    private int mType;
+    // 合同模板
     public static int TEMPLATE = 2;
+    // 全网通缉
     public static int WANTED = 1;
 
-    public WantedVPAdapter(FragmentManager fm, String[] titles, int type) {
+    public WantedVPAdapter(FragmentManager fm, ArrayList<ColumnEntity> columns, int type) {
         super(fm);
-        mTitles = titles;
-        this.type = type;
-    }
-
-    public WantedVPAdapter(FragmentManager fm, String[] titles) {
-        super(fm);
-        this.mTitles = titles;
+        this.mColumns = columns;
+        this.mType = type;
     }
 
     @Override
     public Fragment getItem(final int i) {
-        if (type == WANTED) {
-            return WantedFragment.newInstance();
-        } else if (type == TEMPLATE) {
+        if (mType == WANTED) {
+            return WantedFragment.newInstance(mColumns.get(i).type, "", "");
+        } else if (mType == TEMPLATE) {
             return TemplateFragment.newInstance();
         }
-        return WantedFragment.newInstance();
+        return WantedFragment.newInstance(mColumns.get(i).type, "", "");
     }
 
     @Override
     public int getCount() {
-        return mTitles.length;
+        return mColumns.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mTitles[position];
+        return mColumns.get(position).type + "(" + mColumns.get(position).numberOfPeople + ")";
     }
 }

@@ -6,12 +6,13 @@ import android.util.SparseBooleanArray;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
+import com.fy.fayou.search.bean.ColumnEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuListAdapter extends MeiBaseAdapter<String> {
+public class MenuListAdapter extends MeiBaseAdapter<ColumnEntity> {
 
     private int mLastCheckedPosition = -1;
     private SparseBooleanArray mBooleanArray;
@@ -23,8 +24,8 @@ public class MenuListAdapter extends MeiBaseAdapter<String> {
     }
 
     @Override
-    protected void convert(@NonNull BaseViewHolder helper, String item) {
-        helper.setText(R.id.tv_name, item);
+    protected void convert(@NonNull BaseViewHolder helper, ColumnEntity item) {
+        helper.setText(R.id.tv_name, item.name);
 
         boolean isSelected = mBooleanArray.get(helper.getAdapterPosition());
         helper.setVisible(R.id.view_line, isSelected);
@@ -39,7 +40,7 @@ public class MenuListAdapter extends MeiBaseAdapter<String> {
     }
 
     @Override
-    public void setNewData(@Nullable List<String> data) {
+    public void setNewData(@Nullable List<ColumnEntity> data) {
         mBooleanArray = new SparseBooleanArray(data.size());
         super.setNewData(data);
     }

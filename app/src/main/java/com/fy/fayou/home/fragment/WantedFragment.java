@@ -5,27 +5,50 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.home.adapter.WantedAdapter;
 import com.fy.fayou.home.bean.WantedEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
+import com.zhouyou.http.EasyHttp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
 
 public class WantedFragment extends BaseListFragment<WantedEntity> {
 
+    private static final String ARG_NAME = "arg_name";
+    private static final String ARG_TYPE = "arg_type";
+    private static final String ARG_POSITION = "arg_position";
+    private String type;
+    private String name;
+    private String position;
+
     RecyclerView mRecyclerView;
     WantedAdapter mAdapter;
 
-    public static WantedFragment newInstance() {
+    public static WantedFragment newInstance(String type, String name, String position) {
         Bundle args = new Bundle();
+        args.putString(ARG_TYPE, type);
+        args.putString(ARG_NAME, name);
+        args.putString(ARG_POSITION, position);
         WantedFragment fragment = new WantedFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    protected void initView() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            type = bundle.getString(ARG_TYPE, "A级通缉");
+            name = bundle.getString(ARG_NAME, "");
+            position = bundle.getString(ARG_POSITION, "");
+        }
+        super.initView();
     }
 
     @Override
@@ -44,7 +67,15 @@ public class WantedFragment extends BaseListFragment<WantedEntity> {
 
     @Override
     protected Observable<Result<List<WantedEntity>>> getListObservable(int pageNo) {
-        return null;
+        Observable<String> observable = EasyHttp.get(ApiUrl.CRIMINAL_FIND_LIST)
+                .params("name", name)
+                .params("type", type)
+                .params("position", position)
+                .params("size", "20")
+                .params("page", (pageNo - 1) + "")
+                .baseUrl(Constant.BASE_URL4)
+                .execute(String.class);
+        return getListByField(observable, "content", WantedEntity.class);
     }
 
     @Override
@@ -65,13 +96,10 @@ public class WantedFragment extends BaseListFragment<WantedEntity> {
     @Override
     protected void initData() {
         super.initData();
+    }
 
-        List<WantedEntity> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            WantedEntity entity = new WantedEntity();
-            list.add(entity);
-        }
-
-        mAdapter.setNewData(list);
+    @Override
+    protected boolean loadOnShow() {
+        return false;
     }
 }

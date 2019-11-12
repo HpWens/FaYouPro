@@ -73,6 +73,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':base_library')
     implementation project(':picture_library')
+    implementation project(':FlycoTabLayout_Lib')
     implementation project(path: ':ucrop')
     //noinspection GradleCompatible
     implementation 'com.android.support:support-v4:28.0.0'
@@ -105,7 +106,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
     // tab layout
-    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    // implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
 
     // 阿里路由
     implementation 'com.alibaba:arouter-api:1.5.0'

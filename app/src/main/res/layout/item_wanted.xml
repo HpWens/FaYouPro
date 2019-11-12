@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <ImageView
@@ -11,7 +12,6 @@
         android:layout_height="92dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="20dp"
-        android:background="#ed4512"
         android:scaleType="centerCrop"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"></ImageView>
@@ -27,7 +27,7 @@
         android:ellipsize="end"
         android:lineSpacingExtra="4dp"
         android:lines="4"
-        android:text="1991年8月1日安徽省无为县严桥镇尚礼社区大万自然村发生一起重大刑事案件，安徽省无为县严桥镇尚礼社区大万自然村发生一起重大刑事案件，经侦查，乐先木拥有重大作案嫌疑。 犯罪嫌疑人乐先木在..."
+        tools:text="1991年8月1日安徽省无为县严桥镇尚礼社区大万自然村发生一起重大刑事案件，安徽省无为县严桥镇尚礼社区大万自然村发生一起重大刑事案件，经侦查，乐先木拥有重大作案嫌疑。 犯罪嫌疑人乐先木在..."
         android:textColor="@color/color_333333"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_thumb"
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="11dp"
-        android:text="乐木先"
+        tools:text="乐木先"
         android:textColor="@color/color_ed4040"
         android:textSize="12sp"
         app:layout_constraintLeft_toLeftOf="@+id/iv_thumb"
@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="15dp"
-        android:text="发布时间：2019-10-06"
+        android:text="发布时间：2000-00-00"
         android:textColor="@color/color_999999"
         android:textSize="12sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/tv_name"

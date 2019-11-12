@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -47,6 +48,11 @@ public class ParseUtils {
     }
 
     public static <T> List<T> parseListData(String json, Class<T> clazz) {
+        Type listType = new ParameterizedTypeImpl(List.class, new Class[]{clazz});
+        return new Gson().fromJson(json, listType);
+    }
+
+    public static <T> ArrayList<T> parseArrayListData(String json, Class<T> clazz) {
         Type listType = new ParameterizedTypeImpl(List.class, new Class[]{clazz});
         return new Gson().fromJson(json, listType);
     }

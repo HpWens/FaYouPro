@@ -2,6 +2,7 @@ package com.meis.base.mei.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -62,5 +63,9 @@ public abstract class MeiBaseAdapter<T> extends BaseQuickAdapter<T, BaseViewHold
 
     public int getDataCount() {
         return getData().size();
+    }
+
+    public String getNonEmpty(String ch) {
+        return TextUtils.isEmpty(ch) ? "" : ch;
     }
 }

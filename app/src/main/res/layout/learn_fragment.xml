@@ -23,10 +23,11 @@
                 android:layout_height="40dp"
                 android:layout_toLeftOf="@+id/iv_publish"
                 app:tl_indicator_width="0dp"
-                app:tl_textBold="BOTH"
+                app:tl_textBold="SELECT"
                 app:tl_textSelectColor="@color/color_ffffff"
+                app:tl_textSelectSize="18sp"
                 app:tl_textUnselectColor="@color/color_8f_ffffff"
-                app:tl_textsize="18sp">
+                app:tl_textsize="14sp">
 
             </com.flyco.tablayout.SlidingTabLayout>
 
