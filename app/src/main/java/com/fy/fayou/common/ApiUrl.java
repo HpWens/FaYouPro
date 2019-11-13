@@ -128,4 +128,17 @@ public class ApiUrl {
 
     // 评论查找
     public static final String COMMENT_LIST = "/comment";
+
+    // 评论点赞取消赞
+    public static final String COMMENT_PRAISE = "/comment/";
+
+    // 查看用户信息
+    public static final String USER_INFO = "user/view/";
+
+    // 关注用户
+    public static final String FOLLOW_USER = "/api-user/userRelationship/follower";
+
+    // 取消关注用户
+    public static final String UN_FOLLOW_USER = "/api-user/userRelationship/unFollower";
+
 }

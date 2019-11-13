@@ -22,7 +22,8 @@
             android:layout_weight="1"
             android:text="相关推荐"
             android:textColor="@color/color_333333"
-            android:textSize="16sp"></TextView>
+            android:textSize="16sp"
+            android:textStyle="bold"></TextView>
 
         <ImageView
             android:id="@+id/iv_refresh"
@@ -30,7 +31,8 @@
             android:layout_height="match_parent"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:src="@mipmap/ic_article_recommend_refresh"></ImageView>
+            android:src="@mipmap/ic_article_recommend_refresh"
+            android:visibility="gone"></ImageView>
 
     </LinearLayout>
 

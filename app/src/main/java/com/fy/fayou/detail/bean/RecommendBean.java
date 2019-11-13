@@ -16,4 +16,8 @@ public class RecommendBean implements Serializable {
     public boolean showIndex;
     public String videoUrl;
 
+    // 辅助字段
+    public int childIndex = 0;
+    public boolean lastIndex = false;
+
 }

@@ -1,5 +1,6 @@
 package com.fy.fayou.common;
 
+import com.fy.fayou.detail.bean.PicBean;
 import com.fy.fayou.utils.qiniu.Auth;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.qiniu.android.common.FixedZone;
@@ -9,11 +10,13 @@ import com.qiniu.android.storage.UploadManager;
 import com.vondear.rxtool.RxTimeTool;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
@@ -96,6 +99,67 @@ public class UploadService {
         syncUploadMultiFile(picList, listener);
     }
 
+    public void uploadMultiFile(final List<PicBean> images, final OnUploadListener2 listener) {
+        // 七牛返回的文件名
+        ArrayList<PicBean> resultImagePath = new ArrayList<>();
+
+        Observable.fromIterable(images)
+                .concatMap((Function<PicBean, ObservableSource<PicBean>>) picBean -> Observable.create((ObservableOnSubscribe<PicBean>) emitter -> {
+                    File uploadFile = new File(picBean.path);
+                    ResponseInfo responseInfo = uploadManager.syncPut(uploadFile, getPictureName(), uploadToken, null);
+                    if (responseInfo.isOK()) {
+                        String path = Constant.QiNiu.DOMAIN + responseInfo.response.optString("key");
+                        picBean.httpPath = path;
+                        emitter.onNext(picBean);
+                        emitter.onComplete();
+                    } else {
+                        // 上传失败
+                        emitter.onError(new IOException(responseInfo.error));
+                    }
+                }).subscribeOn(Schedulers.io())) // 线程切换
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(bean -> {
+                    resultImagePath.add(bean);
+                    if (resultImagePath.size() == images.size()) {
+                        listener.onSuccess(resultImagePath);
+                    }
+                }, throwable -> {
+                    listener.onFailure(throwable.getMessage());
+                });
+    }
+
+    public void uploadMultiImage(final List<String> arrayPath, final OnUploadListener listener) {
+        if (null == arrayPath || arrayPath.isEmpty()) {
+            return;
+        }
+        ArrayList<String> imagePath = new ArrayList<>();
+        Observable.fromIterable(arrayPath)
+                .concatMap((Function<String, ObservableSource<String>>) s -> Observable.create((ObservableOnSubscribe<String>) emitter -> {
+                    File uploadFile = new File(s);
+                    ResponseInfo responseInfo = uploadManager.syncPut(uploadFile, getPictureName(), uploadToken, null);
+                    if (responseInfo.isOK()) {
+                        String path = Constant.QiNiu.DOMAIN + responseInfo.response.optString("key");
+                        emitter.onNext(path);
+                        emitter.onComplete();
+                    } else {
+                        // 上传失败
+                        emitter.onError(new IOException(responseInfo.error));
+                    }
+                }).subscribeOn(Schedulers.io())).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(s -> {
+                    imagePath.add(s);
+                    if (imagePath.size() == arrayPath.size()) {
+                        StringBuilder sb = new StringBuilder();
+                        for (String pic : imagePath) {
+                            sb.append(pic + ",");
+                        }
+                        listener.onSuccess(sb.substring(0, sb.length() - 1));
+                    }
+                }, throwable -> {
+                    listener.onFailure(throwable.getMessage());
+                });
+    }
+
     public void uploadMultiFile(final List<String> arrayPath, final OnUploadListener listener) {
         if (null == arrayPath || arrayPath.isEmpty()) {
             return;
@@ -139,6 +203,12 @@ public class UploadService {
 
     public interface OnUploadListener {
         void onSuccess(String key);
+
+        void onFailure(String error);
+    }
+
+    public interface OnUploadListener2 {
+        void onSuccess(List<PicBean> list);
 
         void onFailure(String error);
     }

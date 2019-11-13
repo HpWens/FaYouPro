@@ -3,9 +3,11 @@ package com.fy.fayou.my.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.fy.fayou.R;
 import com.fy.fayou.bean.UserInfo;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.my.adapter.FanAdapter;
@@ -41,8 +43,16 @@ public class FanFragment extends BaseListFragment<UserInfo> {
 
     @Override
     protected MeiBaseAdapter<UserInfo> getAdapter() {
-        mAdapter = new FanAdapter((user, position) -> {
-            requestFollow(user, position);
+        mAdapter = new FanAdapter(new FanAdapter.OnItemListener() {
+            @Override
+            public void onFollow(UserInfo user, int position) {
+                requestFollow(user, position);
+            }
+
+            @Override
+            public void onJumpUserCenter(View v, String id) {
+                ARoute.jumpUserCenter(id);
+            }
         });
         return mAdapter;
     }

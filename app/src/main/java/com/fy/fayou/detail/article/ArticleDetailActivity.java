@@ -1,5 +1,6 @@
 package com.fy.fayou.detail.article;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -20,11 +21,18 @@ import com.fy.fayou.detail.adapter.PicPresenter;
 import com.fy.fayou.detail.adapter.RecommendHeaderPresenter;
 import com.fy.fayou.detail.adapter.RecommendPresenter;
 import com.fy.fayou.detail.adapter.TextPresenter;
+import com.fy.fayou.detail.bean.CommentBean;
+import com.fy.fayou.detail.bean.CommentHeaderBean;
+import com.fy.fayou.detail.bean.RecommendBean;
+import com.fy.fayou.detail.bean.RecommendHeaderBean;
 import com.fy.fayou.detail.dialog.BottomShareDialog;
+import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.adapter.MeiBaseMixAdapter;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +40,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jzvd.Jzvd;
 import io.reactivex.Observable;
 
 @Route(path = "/detail/article")
@@ -68,7 +77,9 @@ public class ArticleDetailActivity extends BaseActivity {
     @Override
     protected void initData() {
         mAdapter = new MeiBaseMixAdapter();
-        mAdapter.addItemPresenter(new CommentPresenter());
+        mAdapter.addItemPresenter(new CommentPresenter((v, pos, item) -> {
+            requestPraise(item.id, pos, item);
+        }));
         mAdapter.addItemPresenter(new CommentHeaderPresenter());
         mAdapter.addItemPresenter(new FooterPresenter());
         mAdapter.addItemPresenter(new HeaderPresenter());
@@ -78,6 +89,24 @@ public class ArticleDetailActivity extends BaseActivity {
         mAdapter.addItemPresenter(new TextPresenter());
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.setAdapter(mAdapter);
+        recycler.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                if (view.getTag() != null && view.getTag().toString().equals("video")) {
+                    Jzvd jzvd = view.findViewById(R.id.video_player);
+                    if (jzvd != null && Jzvd.CURRENT_JZVD != null &&
+                            jzvd.jzDataSource.containsTheUrl(Jzvd.CURRENT_JZVD.jzDataSource.getCurrentUrl())) {
+                        if (Jzvd.CURRENT_JZVD != null && Jzvd.CURRENT_JZVD.screen != Jzvd.SCREEN_FULLSCREEN) {
+                            Jzvd.releaseAllVideos();
+                        }
+                    }
+                }
+            }
+        });
 
         requestData();
     }
@@ -85,9 +114,32 @@ public class ArticleDetailActivity extends BaseActivity {
     private void requestData() {
         Observable.zip(requestDetail(), requestComment(), (s, s2) -> {
             mDataList = new ArrayList<>();
+            List<CommentBean> commentList = ParseUtils.parseListData(s2, "content", CommentBean.class);
+            List<RecommendBean> recommendList = ParseUtils.parseListData(s, "recommendArticles", RecommendBean.class);
+
+            if (commentList != null && !commentList.isEmpty()) {
+                mDataList.add(new CommentHeaderBean());
+                for (int i = 0; i < commentList.size(); i++) {
+                    CommentBean bean = commentList.get(i);
+                    bean.childIndex = i;
+                    bean.lastIndex = (i == commentList.size() - 1);
+                    mDataList.add(bean);
+                }
+            }
+
+            if (recommendList != null && !recommendList.isEmpty()) {
+                mDataList.add(new RecommendHeaderBean());
+                for (int i = 0; i < recommendList.size(); i++) {
+                    RecommendBean bean = recommendList.get(i);
+                    bean.childIndex = i;
+                    bean.lastIndex = (i == recommendList.size() - 1);
+                    mDataList.add(bean);
+                }
+            }
+
             return mDataList;
         }).compose(bindToLifecycle()).subscribe(objects -> {
-
+            mAdapter.setNewData(objects);
         });
     }
 
@@ -137,8 +189,7 @@ public class ArticleDetailActivity extends BaseActivity {
             mReviewFragment.setOnReviewListener(new ReviewFragment.OnReviewListener() {
                 @Override
                 public void onDismiss() {
-                    hideFragment(mReviewFragment);
-                    transMask.setVisibility(View.GONE);
+                    hideReviewFragment();
                 }
 
                 @Override
@@ -147,13 +198,75 @@ public class ArticleDetailActivity extends BaseActivity {
                 }
             });
             recycler.postDelayed(() -> {
-                transMask.setVisibility(View.VISIBLE);
-                mReviewFragment.showBehavior();
+                showReviewFragment();
             }, 200);
         } else {
-            transMask.setVisibility(View.VISIBLE);
             showHideFragment(mReviewFragment);
-            mReviewFragment.showBehavior();
+            showReviewFragment();
         }
+    }
+
+    /**
+     * 显示评论页
+     */
+    public void showReviewFragment() {
+        if (mReviewFragment == null) return;
+        transMask.setVisibility(View.VISIBLE);
+        mReviewFragment.showBehavior();
+    }
+
+    /**
+     * 隐藏评论页
+     */
+    public void hideReviewFragment() {
+        if (mReviewFragment == null) return;
+        hideFragment(mReviewFragment);
+        transMask.setVisibility(View.GONE);
+    }
+
+    /**
+     * 请求点赞
+     *
+     * @param id
+     * @param item
+     */
+    private void requestPraise(String id, int position, CommentBean item) {
+        EasyHttp.post(ApiUrl.COMMENT_PRAISE + id)
+                .baseUrl(Constant.BASE_URL4)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (item.give) {
+                            item.gives -= 1;
+                        } else {
+                            item.gives += 1;
+                        }
+                        item.give = !item.give;
+                        mAdapter.notifyItemChanged(position);
+                    }
+                });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Jzvd.releaseAllVideos();
+    }
+
+    @Override
+    public void onBackPressedSupport() {
+        if (mReviewFragment != null && mReviewFragment.isShowing()) {
+            mReviewFragment.hideBehavior();
+            return;
+        }
+        if (Jzvd.backPress()) {
+            return;
+        }
+        super.onBackPressedSupport();
     }
 }

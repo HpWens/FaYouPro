@@ -9,6 +9,7 @@ import com.fy.fayou.adapter.HomeColumnVPAdapter;
 import com.fy.fayou.common.OnScrollClashListener;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseFragment;
+import com.meis.base.mei.status.ViewState;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,18 +44,17 @@ public class ColumnFragment extends BaseFragment {
     protected void initView() {
         unbinder = ButterKnife.bind(this, getView());
 
-        viewpager.setAdapter(mAdapter = new HomeColumnVPAdapter(getChildFragmentManager(), mTitles));
-        tab.setViewPager(viewpager);
+        setState(ViewState.EMPTY, "敬请期待");
 
-        mAdapter.setOnScrollClashListener(new OnScrollClashListener() {
-            @Override
-            public void onScroll(boolean isScroll) {
-                viewpager.setScroll(isScroll);
-                if (mListener != null) {
-                    mListener.onScroll(isScroll);
-                }
-            }
-        });
+//        viewpager.setAdapter(mAdapter = new HomeColumnVPAdapter(getChildFragmentManager(), mTitles));
+//        tab.setViewPager(viewpager);
+//
+//        mAdapter.setOnScrollClashListener(isScroll -> {
+//            viewpager.setScroll(isScroll);
+//            if (mListener != null) {
+//                mListener.onScroll(isScroll);
+//            }
+//        });
 
     }
 

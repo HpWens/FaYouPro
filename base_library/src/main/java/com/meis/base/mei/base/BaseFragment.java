@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.TextView;
@@ -576,6 +577,10 @@ public abstract class BaseFragment extends MeiCompatFragment implements ISupport
     public void showDialog(MeiCompatDialog baseDialog) {
         getActivity().getSupportFragmentManager().beginTransaction().add(baseDialog, "dialog_" + baseDialog.getClass
                 ().getSimpleName()).commitAllowingStateLoss();
+    }
+
+    public String getNonEmpty(String ch) {
+        return TextUtils.isEmpty(ch) ? "" : ch;
     }
 
     @Override

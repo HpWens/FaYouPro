@@ -1,6 +1,7 @@
 package com.fy.fayou.my.adapter;
 
 import android.support.annotation.NonNull;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -44,9 +45,15 @@ public class FanAdapter extends MeiBaseAdapter<UserInfo> {
                 .apply(GlideOption.getAvatarOption(width, height))
                 .into(ivAvatar);
 
+        ivAvatar.setOnClickListener(v -> {
+            mListener.onJumpUserCenter(v, item.id);
+        });
+
     }
 
     public interface OnItemListener {
         void onFollow(UserInfo user, int position);
+
+        void onJumpUserCenter(View v, String id);
     }
 }

@@ -1,5 +1,7 @@
 package com.meis.base.mei.adapter;
 
+import android.text.TextUtils;
+
 import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.lang.reflect.Type;
@@ -32,4 +34,8 @@ public abstract class ItemPresenter<T> {
     public abstract int getLayoutRes();
 
     public abstract void convert(BaseViewHolder holder, T item);
+
+    public String getNonEmpty(String ch) {
+        return TextUtils.isEmpty(ch) ? "" : ch;
+    }
 }

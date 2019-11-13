@@ -3,17 +3,31 @@ package com.fy.fayou.my.fragment;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
+import com.fy.fayou.bean.UserInfo;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.my.adapter.UserCenterVPAdapter;
+import com.fy.fayou.utils.GlideOption;
+import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseFragment;
 import com.vondear.rxtool.RxImageTool;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,15 +73,19 @@ public class UserCenterFragment extends BaseFragment {
     Unbinder unbinder;
 
     private int maxOffset;
-
     private final String[] mTitles = {
             "资讯", "帖子"
     };
 
+    // 是否关注
+    private boolean isFollow;
+    private String userId = "";
+
     UserCenterVPAdapter mAdapter;
 
-    public static UserCenterFragment newInstance() {
+    public static UserCenterFragment newInstance(String userId) {
         Bundle args = new Bundle();
+        args.putString(Constant.Param.USER_ID, userId);
         UserCenterFragment fragment = new UserCenterFragment();
         fragment.setArguments(args);
         return fragment;
@@ -75,6 +93,9 @@ public class UserCenterFragment extends BaseFragment {
 
     @Override
     protected void initView() {
+        if (getArguments() != null) {
+            userId = getArguments().getString(Constant.Param.USER_ID, "");
+        }
         unbinder = ButterKnife.bind(this, getView());
 
         maxOffset = -RxImageTool.dip2px(116);
@@ -92,6 +113,7 @@ public class UserCenterFragment extends BaseFragment {
     @Override
     protected void initData() {
 
+        requestUserData();
     }
 
     @Override
@@ -108,14 +130,85 @@ public class UserCenterFragment extends BaseFragment {
     @OnClick({R.id.iv_back, R.id.tv_follow, R.id.iv_close, R.id.tv_top_follow})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_back:
-                break;
-            case R.id.tv_follow:
-                break;
             case R.id.iv_close:
+            case R.id.iv_back:
+                getActivity().finish();
                 break;
             case R.id.tv_top_follow:
+            case R.id.tv_follow:
+                requestFollowOrCancel();
                 break;
         }
     }
+
+    // 请求用户数据
+    private void requestUserData() {
+        EasyHttp.get(ApiUrl.USER_INFO + userId)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            UserInfo user = ParseUtils.parseData(s, UserInfo.class);
+                            fillingData(user);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 填充数据
+     *
+     * @param user
+     */
+    private void fillingData(UserInfo user) {
+        if (user == null) return;
+        isFollow = user.follow;
+        tvName.setText(getNonEmpty(user.nickName));
+        Glide.with(getActivity())
+                .load(getNonEmpty(user.avatar))
+                .apply(GlideOption.getAvatarOption(RxImageTool.dp2px(60), RxImageTool.dp2px(60)))
+                .into(ivAvatar);
+
+        tvFollow.setText(isFollow ? "已关注" : "+关注");
+        tvTopFollow.setText(isFollow ? "已关注" : "+关注");
+
+        tvTopName.setText(getNonEmpty(user.nickName));
+        Glide.with(getActivity())
+                .load(getNonEmpty(user.avatar))
+                .apply(GlideOption.getAvatarOption(RxImageTool.dp2px(30), RxImageTool.dp2px(30)))
+                .into(ivTopAvatar);
+
+        tvFollowNum.setText(user.followings + " 关注");
+        tvFanNum.setText(user.followers + " 粉丝");
+        tvPraiseNum.setText(user.gives + " 获赞");
+    }
+
+    private void requestFollowOrCancel() {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("beNoticeId", userId);
+        JSONObject jsonObject = new JSONObject(params);
+
+        EasyHttp.post(isFollow ? ApiUrl.UN_FOLLOW_USER : ApiUrl.FOLLOW_USER)
+                .upJson(jsonObject.toString())
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        isFollow = !isFollow;
+
+                        tvFollow.setText(isFollow ? "已关注" : "+关注");
+                        tvTopFollow.setText(isFollow ? "已关注" : "+关注");
+                    }
+                });
+    }
+
 }

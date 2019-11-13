@@ -72,7 +72,7 @@
                         android:layout_marginRight="15dp"
                         android:gravity="center_vertical"
                         android:singleLine="true"
-                        android:text="用户QWE123"
+                        android:text="用户"
                         android:textColor="#ffffffff"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -111,7 +111,7 @@
                             android:id="@+id/tv_follow_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="756 关注"
+                            android:text="0 关注"
                             android:textColor="@color/color_ffffff"
                             android:textSize="12sp" />
 
@@ -126,7 +126,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="9dp"
-                            android:text="756 粉丝"
+                            android:text="0 粉丝"
                             android:textColor="@color/color_ffffff"
                             android:textSize="12sp" />
 
@@ -141,7 +141,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="9dp"
-                            android:text="756 获赞"
+                            android:text="0 获赞"
                             android:textColor="@color/color_ffffff"
                             android:textSize="12sp" />
 
@@ -226,7 +226,7 @@
             android:layout_weight="1"
             android:lines="1"
             android:singleLine="true"
-            android:text="用户QWE123"
+            android:text="用户"
             android:textColor="@color/color_333333"
             android:textSize="14sp" />
 

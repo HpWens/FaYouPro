@@ -150,6 +150,8 @@ public class Constant {
 
         String ARTICLE_ID = "article_id";
 
+        String USER_ID = "userId";
+
         int RESULT_CODE = 200;
     }
 }

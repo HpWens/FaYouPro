@@ -76,7 +76,7 @@ public class ReviewFragment extends BaseFragment {
     }
 
     public void hideBehavior() {
-        mBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        mBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     public boolean isShowing() {

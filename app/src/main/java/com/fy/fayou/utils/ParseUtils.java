@@ -13,6 +13,9 @@ import com.vondear.rxtool.RxTimeTool;
 import com.vondear.rxtool.view.RxToast;
 import com.zhouyou.http.exception.ApiException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -50,6 +53,21 @@ public class ParseUtils {
     public static <T> List<T> parseListData(String json, Class<T> clazz) {
         Type listType = new ParameterizedTypeImpl(List.class, new Class[]{clazz});
         return new Gson().fromJson(json, listType);
+    }
+
+    public static <T> List<T> parseListData(String json, String field, Class<T> clazz) {
+        if (TextUtils.isEmpty(json)) {
+            return new ArrayList<T>();
+        }
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            if (jsonObject.has(field)) {
+                return parseListData(jsonObject.optString(field), clazz);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<T>();
     }
 
     public static <T> ArrayList<T> parseArrayListData(String json, Class<T> clazz) {
