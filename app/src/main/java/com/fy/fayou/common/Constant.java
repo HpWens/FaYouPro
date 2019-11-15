@@ -2,19 +2,14 @@ package com.fy.fayou.common;
 
 public class Constant {
 
-    public static final String BASE_URL = "http://192.168.1.166:8080";
-
-    public static final String BASE_URL_RELEASE = "http://192.168.1.166:8080";
+    public static final String BASE_URL = "http://118.31.76.141:9506";
 
     public static final String BASE_URL2 = "http://192.168.1.191:8080";
-
     public static final String BASE_URL3 = "http://192.168.1.166:8082";
-
     public static final String BASE_URL4 = "http://192.168.1.166:8081";
-
     public static final String BASE_URL5 = "http://192.168.1.166:8083";
-
     public static final String BASE_URL6 = "http://192.168.1.191:8089";
+    public static final String BASE_URL_RELEASE = "http://192.168.1.166:8080";
 
 
     // 路由地址常量
@@ -123,6 +118,9 @@ public class Constant {
     // 合同筛选
     public static final String CONTRACT_FILTER = "/contract/filter";
 
+    // 举报
+    public static final String REPORT = "/detail/report";
+
     public interface SP {
         String USER_INFO = "user_info_data";
 
@@ -144,6 +142,8 @@ public class Constant {
     public interface Param {
         String MOBILE = "mobile";
 
+        String TYPE = "type";
+
         String KEYWORD = "keyword";
 
         String CITY_NAME = "city_name";
@@ -152,6 +152,13 @@ public class Constant {
 
         String USER_ID = "userId";
 
+        String CATEGORY_ID = "userId";
+
         int RESULT_CODE = 200;
+
+        String VIDEO = "VIDEO";
+
+        int VIDEO_TYPE = 1;
+        int ARTICLE_TYPE = 0;
     }
 }

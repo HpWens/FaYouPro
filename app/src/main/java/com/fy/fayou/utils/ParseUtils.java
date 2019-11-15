@@ -4,9 +4,12 @@ import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.bean.ErrorApi;
+import com.fy.fayou.common.ApiResult;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.utils.listener.OnApiErrorListener;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.meis.base.mei.entity.Result;
 import com.meis.base.mei.utils.ParameterizedTypeImpl;
 import com.vondear.rxtool.RxTimeTool;
@@ -17,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -26,7 +28,6 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.HttpException;
@@ -39,6 +40,11 @@ public class ParseUtils {
 
     public static <T> Result<T> fromJsonObject(String json, Class<T> clazz) {
         Type type = new ParameterizedTypeImpl(Result.class, new Class[]{clazz});
+        return new Gson().fromJson(json, type);
+    }
+
+    public static <T> ApiResult<T> fromJsonApiResult(String json, Class<T> clazz) {
+        Type type = new ParameterizedTypeImpl(ApiResult.class, new Class[]{clazz});
         return new Gson().fromJson(json, type);
     }
 
@@ -98,7 +104,7 @@ public class ParseUtils {
                     Observable.just(responseBody.byteStream())
                             .filter(inputStream -> inputStream != null)
                             .observeOn(Schedulers.io())
-                            .map((Function<InputStream, String>) inputStream -> {
+                            .map(inputStream -> {
                                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                                 int read;
                                 while ((read = inputStream.read()) != -1) {
@@ -110,9 +116,13 @@ public class ParseUtils {
                                 return str;
                             }).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(s -> {
-                                ErrorApi errorApi = parseData(s, ErrorApi.class);
-                                if (!TextUtils.isEmpty(errorApi.display)) {
-                                    listener.onError(errorApi.display);
+                                if (!TextUtils.isEmpty(s) && isJson(s)) {
+                                    ErrorApi errorApi = parseData(s, ErrorApi.class);
+                                    if (!TextUtils.isEmpty(errorApi.display)) {
+                                        listener.onError(errorApi.display);
+                                    }
+                                } else {
+                                    listener.onError(s);
                                 }
                             });
                 }
@@ -125,6 +135,15 @@ public class ParseUtils {
             if (!TextUtils.isEmpty(apiException.getMessage())) {
                 listener.onError(apiException.getMessage());
             }
+        }
+    }
+
+    private static boolean isJson(String json) {
+        try {
+            new JsonParser().parse(json);
+            return true;
+        } catch (JsonParseException e) {
+            return false;
         }
     }
 
@@ -157,7 +176,7 @@ public class ParseUtils {
                 } else {
                     temp_conver = (time_conver / min_conver);
                     if (temp_conver > 5) {
-                        return Math.ceil(temp_conver / 10) + "0分钟前";
+                        return (int) Math.ceil(temp_conver / 10f) + "0分钟前";
                     } else if (temp_conver > 1 && temp_conver <= 5) {
                         return temp_conver + "分钟前";
                     } else {

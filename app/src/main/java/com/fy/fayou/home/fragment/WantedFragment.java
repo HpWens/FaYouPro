@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.home.adapter.WantedAdapter;
 import com.fy.fayou.home.bean.WantedEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
@@ -73,7 +72,6 @@ public class WantedFragment extends BaseListFragment<WantedEntity> {
                 .params("position", position)
                 .params("size", "20")
                 .params("page", (pageNo - 1) + "")
-                .baseUrl(Constant.BASE_URL4)
                 .execute(String.class);
         return getListByField(observable, "content", WantedEntity.class);
     }

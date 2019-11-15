@@ -5,14 +5,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.detail.adapter.CommentHeaderPresenter;
 import com.fy.fayou.detail.adapter.CommentPresenter;
 import com.fy.fayou.detail.adapter.FooterPresenter;
@@ -42,6 +43,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jzvd.Jzvd;
 import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 @Route(path = "/detail/article")
 public class ArticleDetailActivity extends BaseActivity {
@@ -49,6 +52,14 @@ public class ArticleDetailActivity extends BaseActivity {
     @Autowired(name = "article_id")
     public String id;
 
+    // 类型 0 文章 1 视频
+    @Autowired(name = "type")
+    public int type;
+
+    @BindView(R.id.rl_article_navigation)
+    RelativeLayout rlArticleNavigation;
+    @BindView(R.id.rl_video_navigation)
+    RelativeLayout rlVideoNavigation;
     @BindView(R.id.recycler)
     RecyclerView recycler;
     @BindView(R.id.tv_publish)
@@ -65,20 +76,31 @@ public class ArticleDetailActivity extends BaseActivity {
     MeiBaseMixAdapter mAdapter;
     List<Object> mDataList = new ArrayList<>();
 
+
     private ReviewFragment mReviewFragment;
 
     @Override
     protected void initView() {
         ButterKnife.bind(this);
         ARouter.getInstance().inject(this);
-        Eyes.translucentStatusBar(this, true, true);
+        Eyes.translucentStatusBar(this, true, type == 1 ? false : true);
     }
 
     @Override
     protected void initData() {
+        rlArticleNavigation.setVisibility(type != 1 ? View.VISIBLE : View.GONE);
+        rlVideoNavigation.setVisibility(type == 1 ? View.VISIBLE : View.GONE);
         mAdapter = new MeiBaseMixAdapter();
-        mAdapter.addItemPresenter(new CommentPresenter((v, pos, item) -> {
-            requestPraise(item.id, pos, item);
+        mAdapter.addItemPresenter(new CommentPresenter(new CommentPresenter.OnClickListener() {
+            @Override
+            public void onPraise(View v, int pos, CommentBean item) {
+                requestPraise(item.id, pos, item);
+            }
+
+            @Override
+            public void onLook(View view) {
+                showBottomDialog();
+            }
         }));
         mAdapter.addItemPresenter(new CommentHeaderPresenter());
         mAdapter.addItemPresenter(new FooterPresenter());
@@ -138,14 +160,36 @@ public class ArticleDetailActivity extends BaseActivity {
             }
 
             return mDataList;
-        }).compose(bindToLifecycle()).subscribe(objects -> {
-            mAdapter.setNewData(objects);
-        });
+        }).compose(bindToLifecycle())
+                .subscribe(new Observer<List<Object>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(List<Object> objects) {
+                        mAdapter.setNewData(objects);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // cao 后台 500
+                        if (e instanceof ApiException) {
+                            ParseUtils.handlerApiError((ApiException) e, error -> {
+                                Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
     }
 
     private Observable<String> requestDetail() {
         return EasyHttp.get(ApiUrl.ARTICLE_DETAIL + id)
-                .baseUrl(Constant.BASE_URL4).execute(String.class);
+                .execute(String.class);
     }
 
     private Observable<String> requestComment() {
@@ -154,7 +198,7 @@ public class ArticleDetailActivity extends BaseActivity {
                 .params("parentId", "0")
                 .params("page", "0")
                 .params("size", "3")
-                .baseUrl(Constant.BASE_URL4).execute(String.class);
+                .execute(String.class);
     }
 
     @Override
@@ -162,18 +206,23 @@ public class ArticleDetailActivity extends BaseActivity {
         return R.layout.activity_detail_article;
     }
 
-    @OnClick({R.id.tv_publish, R.id.iv_right_more, R.id.tv_message, R.id.tv_collect, R.id.tv_share})
+    @OnClick({R.id.tv_publish, R.id.iv_right_more, R.id.tv_message, R.id.iv_back_white,
+            R.id.tv_collect, R.id.tv_share, R.id.iv_back, R.id.iv_more_white})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_publish:
-                showBottomDialog();
+            case R.id.iv_back_white:
+            case R.id.iv_back:
+                finish();
                 break;
             case R.id.tv_message:
+            case R.id.tv_publish:
+                showBottomDialog();
                 break;
             case R.id.tv_collect:
                 break;
             case R.id.tv_share:
                 break;
+            case R.id.iv_more_white:
             case R.id.iv_right_more:
                 showDialog(new BottomShareDialog().setOnItemClickListener(() -> {
                     transMask.setVisibility(View.GONE);
@@ -185,7 +234,7 @@ public class ArticleDetailActivity extends BaseActivity {
 
     private void showBottomDialog() {
         if (mReviewFragment == null) {
-            loadRootFragment(R.id.fl_comment, mReviewFragment = ReviewFragment.newInstance());
+            loadRootFragment(R.id.fl_comment, mReviewFragment = ReviewFragment.newInstance(id));
             mReviewFragment.setOnReviewListener(new ReviewFragment.OnReviewListener() {
                 @Override
                 public void onDismiss() {
@@ -211,8 +260,10 @@ public class ArticleDetailActivity extends BaseActivity {
      */
     public void showReviewFragment() {
         if (mReviewFragment == null) return;
-        transMask.setVisibility(View.VISIBLE);
         mReviewFragment.showBehavior();
+        transMask.post(() -> {
+            transMask.setVisibility(View.VISIBLE);
+        });
     }
 
     /**
@@ -232,7 +283,6 @@ public class ArticleDetailActivity extends BaseActivity {
      */
     private void requestPraise(String id, int position, CommentBean item) {
         EasyHttp.post(ApiUrl.COMMENT_PRAISE + id)
-                .baseUrl(Constant.BASE_URL4)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

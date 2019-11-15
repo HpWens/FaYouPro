@@ -103,7 +103,6 @@ public class VerifyCodeActivity extends BaseActivity {
         EasyHttp.get(ApiUrl.SEND_VERIFY_CODE)
                 .params("phoneNumber", mobile)
                 .params("type", "4")
-                .baseUrl(Constant.BASE_URL2)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

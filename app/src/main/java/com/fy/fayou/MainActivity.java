@@ -85,10 +85,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initData() {
         ARouter.getInstance()
-                .build(Constant.ABOUT_MY)
+                .build(Constant.DETAIL_ARTICLE)
                 .withString(Constant.Param.ARTICLE_ID, "110328945139777536")
                 .navigation();
-        // ARoute.jumpUserCenter("104958942680973312");
     }
 
 

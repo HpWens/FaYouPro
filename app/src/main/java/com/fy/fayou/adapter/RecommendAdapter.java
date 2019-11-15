@@ -89,6 +89,13 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                         .apply(GlideOption.getFullScreenWOption(mContext))
                         .into(jzvdStd.thumbImageView);
 
+                // 跳转到视频详情页
+                helper.itemView.setOnClickListener(v -> {
+                    if (mListener != null) {
+                        mListener.onClick(v, item);
+                    }
+                });
+
                 break;
             default:
                 break;

@@ -16,6 +16,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomeRecommendVPAdapter;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.event.HomeRefreshEvent;
 import com.fy.fayou.view.HomeViewpager;
@@ -30,6 +31,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetChangedListener {
@@ -185,5 +187,32 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
     public void onDestroy() {
         textSwitcherAnimation.onDestroy();
         super.onDestroy();
+    }
+
+    @OnClick({R.id.iv_column0, R.id.iv_column1, R.id.iv_column2, R.id.iv_column3,
+            R.id.iv_column4, R.id.iv_column5, R.id.tab_top_spacing})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_column0:
+                ARoute.jumpModule(ARoute.LEGAL_TYPE);
+                break;
+            case R.id.iv_column1:
+                ARoute.jumpModule(ARoute.JUDICIAL_TYPE);
+                break;
+            case R.id.iv_column2:
+                ARoute.jumpModule(ARoute.GUIDE_TYPE);
+                break;
+            case R.id.iv_column3:
+                ARoute.jumpModule(ARoute.JUDGE_TYPE);
+                break;
+            case R.id.iv_column4:
+                ARoute.jumpModule(ARoute.TEMPLATE_TYPE);
+                break;
+            case R.id.iv_column5:
+                ARoute.jumpModule(ARoute.BOOKS_TYPE);
+                break;
+            case R.id.tab_top_spacing:
+                break;
+        }
     }
 }

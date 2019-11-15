@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.search.adapter.ResultContentAdapter;
 import com.fy.fayou.search.bean.SearchResultEntity;
@@ -76,7 +75,6 @@ public class ContentFragment extends BaseListFragment<SearchResultEntity> {
         Observable<String> observable = EasyHttp.get(pageNo == 1 ? getRequestFooter() : getRequestMoreFooter())
                 .params("userId", "" + UserService.getInstance().getUserId())
                 .params("keyword", mKey)
-                .baseUrl(Constant.BASE_URL6)
                 .execute(String.class);
         return getListByField(observable, "data", SearchResultEntity.class);
     }

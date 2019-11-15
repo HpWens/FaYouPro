@@ -61,7 +61,6 @@ public class WantedActivity extends BaseActivity {
     private void requestColumn(String position) {
         EasyHttp.get(ApiUrl.CRIMINAL_COLUMN)
                 .params("position", position)
-                .baseUrl(Constant.BASE_URL4)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

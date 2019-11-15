@@ -20,5 +20,6 @@ public class CommentEntity implements Serializable {
     public String userAvatar;
     public String reUserAvatar;
     public String userName;
+    public String articleTitle;
 
 }

@@ -1,15 +1,24 @@
 package com.fy.fayou.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomePuFaVPAdapter;
+import com.fy.fayou.bean.TagEntity;
+import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
+import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseFragment;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,10 +26,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class LearnFragment extends BaseFragment {
-
-    private final String[] mTitles = {
-            "新闻", "小视频", "热门视频"
-    };
 
     @BindView(R.id.tab)
     SlidingTabLayout tab;
@@ -44,9 +49,28 @@ public class LearnFragment extends BaseFragment {
     protected void initView() {
         unbinder = ButterKnife.bind(this, getView());
 
-        viewpager.setAdapter(mAdapter = new HomePuFaVPAdapter(getChildFragmentManager(), mTitles));
-        tab.setViewPager(viewpager);
+        // 请求栏目分类
+        requestCategoryTag();
+    }
 
+    private void requestCategoryTag() {
+        EasyHttp.get(ApiUrl.FIND_ARTICLE_TAG)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            List<TagEntity> list = ParseUtils.parseListData(s, TagEntity.class);
+
+                            viewpager.setAdapter(mAdapter = new HomePuFaVPAdapter(getChildFragmentManager(), list));
+                            tab.setViewPager(viewpager);
+                        }
+                    }
+                });
     }
 
     @Override

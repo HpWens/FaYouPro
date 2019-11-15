@@ -25,10 +25,6 @@ import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -189,12 +185,8 @@ public class UserCenterFragment extends BaseFragment {
     }
 
     private void requestFollowOrCancel() {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("beNoticeId", userId);
-        JSONObject jsonObject = new JSONObject(params);
-
         EasyHttp.post(isFollow ? ApiUrl.UN_FOLLOW_USER : ApiUrl.FOLLOW_USER)
-                .upJson(jsonObject.toString())
+                .upJson(userId)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

@@ -216,7 +216,6 @@ public class LoginActivity extends BaseActivity {
         EasyHttp.get(ApiUrl.SEND_VERIFY_CODE)
                 .params("phoneNumber", "" + etMobile.getText().toString())
                 .params("type", "1")
-                .baseUrl(Constant.BASE_URL2)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

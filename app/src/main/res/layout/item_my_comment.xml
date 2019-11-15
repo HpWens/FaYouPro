@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -11,9 +12,9 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
-        android:text="蔡英文任内2年“断”7个 台"
         android:textColor="@color/color_333333"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        tools:text="蔡英文任内2年“断”7个 台" />
 
 
     <LinearLayout
@@ -33,32 +34,52 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="10dp"
             android:lines="1"
-            android:text="回复全身透透力"
             android:textColor="@color/color_a0a0a0"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="回复全身透透力" />
 
         <TextView
+            android:id="@+id/tv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="12dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:text="熬过无人但自律的日子，才有诗和远方"
             android:textColor="@color/color_333333"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="熬过无人但自律的日子，才有诗和远方" />
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="15dp"
-        android:text="2019年10月13日"
-        android:textColor="@color/color_a0a0a0"
-        android:textSize="12sp" />
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingRight="15dp"
+            android:text="删除"
+            android:textColor="@color/color_ed4040"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+            android:layout_marginTop="8dp"
+            android:text="2019年01月01日"
+            android:textColor="@color/color_a0a0a0"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"

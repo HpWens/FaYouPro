@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.person.MessageAdapter;
 import com.fy.fayou.person.MessageEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
@@ -75,7 +74,6 @@ public class MessageListFragment extends BaseListFragment<MessageEntity> {
         Observable<String> observable = EasyHttp.get(ApiUrl.MESSAGE_CENTER)
                 .params("page", (pageNo - 1) + "")
                 .params("size", "20")
-                .baseUrl(Constant.BASE_URL3)
                 .execute(String.class);
         return getListByField(observable, "content", MessageEntity.class);
     }

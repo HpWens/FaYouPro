@@ -389,6 +389,10 @@
             android:name=".legal.LegalActivity"
             android:screenOrientation="portrait"></activity>
 
+        <activity
+            android:name=".detail.article.ReportActivity"
+            android:screenOrientation="portrait"></activity>
+
     </application>
 
 </manifest>

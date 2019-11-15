@@ -4,37 +4,39 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.fy.fayou.pufa.fragment.HotVideoFragment;
-import com.fy.fayou.pufa.fragment.NewsFragment;
-import com.fy.fayou.pufa.fragment.SmallVideoFragment;
+import com.fy.fayou.bean.TagEntity;
+import com.fy.fayou.fragment.RecommendFragment;
+
+import java.util.List;
 
 public class HomePuFaVPAdapter extends FragmentPagerAdapter {
 
-    private String[] mTitles;
+    List<TagEntity> mTags;
 
-    public HomePuFaVPAdapter(FragmentManager fm, String[] titles) {
+    public HomePuFaVPAdapter(FragmentManager fm, List<TagEntity> tags) {
         super(fm);
-        this.mTitles = titles;
+        this.mTags = tags;
     }
 
     @Override
     public Fragment getItem(final int i) {
-        if (i == 0) {
-            return NewsFragment.newInstance();
-        } else if (i == 1) {
-            return SmallVideoFragment.newInstance();
-        } else {
-            return HotVideoFragment.newInstance();
-        }
+        return RecommendFragment.newInstance();
+//        if (i == 0) {
+//            return NewsFragment.newInstance();
+//        } else if (i == 1) {
+//            return SmallVideoFragment.newInstance();
+//        } else {
+//            return HotVideoFragment.newInstance();
+//        }
     }
 
     @Override
     public int getCount() {
-        return mTitles.length;
+        return mTags.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mTitles[position];
+        return mTags.get(position).tagName;
     }
 }

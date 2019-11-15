@@ -24,7 +24,7 @@ public class GlideOption {
                 .error(R.color.color_e5e5e5)
                 .transform(new CircleCrop())
                 //禁止Glide硬盘缓存缓存
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
     }
 
     public static RequestOptions getAvatarOption(int width, int height) {
@@ -35,7 +35,7 @@ public class GlideOption {
                 .override(width, height)
                 .transform(new CircleCrop())
                 //禁止Glide硬盘缓存缓存
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
     }
 
     public static RequestOptions getFullScreenWROption(Context context, int radius) {

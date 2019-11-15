@@ -6,33 +6,80 @@
     <RelativeLayout
         android:id="@+id/toolbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/color_ffffff"
-        android:paddingTop="24dp">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:scaleType="centerInside"
-            android:src="@mipmap/mei_ic_tool_back"
-            android:visibility="visible">
-
-        </ImageView>
+        <RelativeLayout
+            android:id="@+id/rl_article_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_ffffff"
+            android:paddingTop="24dp">
 
 
-        <ImageView
-            android:id="@+id/iv_right_more"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:layout_alignParentRight="true"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:scaleType="centerInside"
-            android:src="@mipmap/ic_more"
-            android:visibility="visible"></ImageView>
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/mei_ic_tool_back"
+                android:visibility="visible">
+
+            </ImageView>
+
+
+            <ImageView
+                android:id="@+id/iv_right_more"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_more"
+                android:visibility="visible"></ImageView>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_video_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="236dp">
+
+            <cn.jzvd.JzvdStd
+                android:id="@+id/video_player"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/iv_back_white"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="24dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_white_back"
+                android:visibility="visible">
+
+            </ImageView>
+
+
+            <ImageView
+                android:id="@+id/iv_more_white"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="24dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_more_white"
+                android:visibility="visible"></ImageView>
+
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

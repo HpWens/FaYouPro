@@ -6,15 +6,15 @@ import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.my.adapter.CommentAdapter;
 import com.fy.fayou.my.bean.CommentEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
 import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -40,14 +40,32 @@ public class CommentFragment extends BaseListFragment<CommentEntity> {
 
     @Override
     protected MeiBaseAdapter<CommentEntity> getAdapter() {
-        mAdapter = new CommentAdapter();
+        mAdapter = new CommentAdapter((v, position, id) -> {
+            requestDeleteComment(position, id);
+        });
         return mAdapter;
+    }
+
+    private void requestDeleteComment(int position, String id) {
+        EasyHttp.delete(ApiUrl.COMMENT_DELETE + id)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        mAdapter.notifyItemRemoved(position);
+                        mAdapter.getData().remove(position);
+                    }
+                });
     }
 
     @Override
     protected Observable<Result<List<CommentEntity>>> getListObservable(int pageNo) {
         Observable<String> observable = EasyHttp.get(ApiUrl.MY_COMMENT)
-                .baseUrl(Constant.BASE_URL4)
+                .params("size", "20")
+                .params("page", "" + (pageNo - 1))
                 .execute(String.class);
         return getListByField(observable, "content", CommentEntity.class);
     }
@@ -70,13 +88,5 @@ public class CommentFragment extends BaseListFragment<CommentEntity> {
     @Override
     protected void initData() {
         super.initData();
-
-        List<CommentEntity> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            CommentEntity entity = new CommentEntity();
-            list.add(entity);
-        }
-
-        mAdapter.setNewData(list);
     }
 }

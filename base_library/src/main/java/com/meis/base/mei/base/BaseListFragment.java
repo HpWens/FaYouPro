@@ -251,4 +251,5 @@ public abstract class BaseListFragment<T> extends BaseFragment {
             }
         });
     }
+
 }

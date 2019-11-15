@@ -6,7 +6,7 @@ public class UserInfo implements Serializable {
 
     public String id;
     public String sex;
-    public String nickName;
+    public String nickName = "";
     public String avatar;
     public String wechatUuid;
     public String wechatName;

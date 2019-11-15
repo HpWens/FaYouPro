@@ -36,8 +36,15 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
 
     private OnScrollClashListener mListener;
 
+    private String categoryId = "";
+
     public static RecommendFragment newInstance() {
+        return newInstance("");
+    }
+
+    public static RecommendFragment newInstance(String categoryId) {
         Bundle args = new Bundle();
+        args.putString(Constant.Param.CATEGORY_ID, categoryId);
         RecommendFragment fragment = new RecommendFragment();
         fragment.setArguments(args);
         return fragment;
@@ -50,6 +57,9 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
 
     @Override
     protected void initView() {
+        if (getArguments() != null) {
+            categoryId = getArguments().getString(Constant.Param.CATEGORY_ID, "");
+        }
         super.initView();
         mRecyclerView.setOnScrollClashListener(isScroll -> {
             if (mListener != null) {
@@ -90,6 +100,8 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
             ARouter.getInstance()
                     .build(Constant.DETAIL_ARTICLE)
                     .withString(Constant.Param.ARTICLE_ID, item.id)
+                    .withInt(Constant.Param.TYPE, item.articleType.equals(Constant.Param.VIDEO) ?
+                            Constant.Param.VIDEO_TYPE : Constant.Param.ARTICLE_TYPE)
                     .navigation();
         });
         return mAdapter;
@@ -100,7 +112,7 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
         Observable<String> observable = EasyHttp.get(ApiUrl.HOME_ARTICLE)
                 .params("page", (pageNo - 1) + "")
                 .params("size", "20")
-                .baseUrl(Constant.BASE_URL4)
+                .params("categoryId", categoryId)
                 .execute(String.class);
         return getListByField(observable, "content", RecommendEntity.class);
     }

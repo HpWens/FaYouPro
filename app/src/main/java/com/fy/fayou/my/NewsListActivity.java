@@ -4,7 +4,6 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.my.adapter.NewsListVPAdapter;
 import com.fy.fayou.my.fragment.NewsListFragment;
 import com.fy.fayou.view.HomeViewpager;
@@ -60,7 +59,6 @@ public class NewsListActivity extends BaseActivity {
 
     private void requestStatus() {
         EasyHttp.get(ApiUrl.MY_NEWS_STATUS)
-                .baseUrl(Constant.BASE_URL4)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

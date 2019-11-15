@@ -10,8 +10,8 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.home.adapter.WantedVPAdapter;
 import com.fy.fayou.search.bean.ColumnEntity;
 import com.fy.fayou.utils.ParseUtils;
@@ -31,11 +31,8 @@ import butterknife.OnClick;
 @Route(path = "/home/legal")
 public class LegalActivity extends BaseActivity {
 
-    @Autowired
-    public int moduleType = LEGAL_TYPE;
-
-    public static final int LEGAL_TYPE = 1;
-    public static final int JUDICIAL_TYPE = 2;
+    @Autowired(name = "type")
+    public int moduleType = ARoute.LEGAL_TYPE;
 
     @BindView(R.id.iv_back)
     ImageView ivBack;
@@ -61,6 +58,27 @@ public class LegalActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        switch (moduleType) {
+            case ARoute.LEGAL_TYPE:
+                tvCenterTitle.setText("法律法规");
+                break;
+            case ARoute.JUDICIAL_TYPE:
+                tvCenterTitle.setText("司法解释");
+                break;
+            case ARoute.GUIDE_TYPE:
+                tvCenterTitle.setText("指导性意见");
+                break;
+            case ARoute.JUDGE_TYPE:
+                tvCenterTitle.setText("裁判文书");
+                tvRight.setText("筛选");
+                tvRight.setVisibility(View.VISIBLE);
+                break;
+            case ARoute.BOOKS_TYPE:
+                tvCenterTitle.setText("法律图书");
+                break;
+            default:
+                break;
+        }
         // 请求栏目1法律法规2司法解释
         requestColumn(moduleType);
     }
@@ -68,7 +86,6 @@ public class LegalActivity extends BaseActivity {
     private void requestColumn(int type) {
         EasyHttp.get(ApiUrl.LEGAL_FIND_LIST)
                 .params("type", type + "")
-                .baseUrl(Constant.BASE_URL2)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

@@ -167,7 +167,6 @@ public class SearchActivity extends BaseActivity {
         EasyHttp.get(ApiUrl.HOT_SEARCH)
                 .params("page", "0")
                 .params("size", "20")
-                .baseUrl(Constant.BASE_URL6)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

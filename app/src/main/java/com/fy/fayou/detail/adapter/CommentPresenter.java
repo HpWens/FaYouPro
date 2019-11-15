@@ -43,11 +43,17 @@ public class CommentPresenter extends ItemPresenter<CommentBean> {
             // 请求点赞
             mListener.onPraise(v, holder.getAdapterPosition(), item);
         });
+
+        holder.getView(R.id.tv_look).setOnClickListener(v -> {
+            mListener.onLook(v);
+        });
     }
 
     public interface OnClickListener {
 
         void onPraise(View v, int position, CommentBean comment);
+
+        void onLook(View view);
     }
 
 

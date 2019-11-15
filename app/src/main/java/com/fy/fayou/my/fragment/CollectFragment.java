@@ -52,7 +52,6 @@ public class CollectFragment extends BaseListFragment<CollectEntity> {
         Observable<String> observable = EasyHttp.get(isCollect ? ApiUrl.MY_COLLECT : ApiUrl.MY_HISTORY)
                 .params("page", (pageNo - 1) + "")
                 .params("size", "20")
-                .baseUrl(Constant.BASE_URL5)
                 .execute(String.class);
         return getListByField(observable, "content", CollectEntity.class);
     }

@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.my.adapter.NewsListAdapter;
 import com.fy.fayou.pufa.bean.NewsEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
@@ -71,7 +70,6 @@ public class NewsListFragment extends BaseListFragment<NewsEntity> {
                 .params("page", (pageNo - 1) + "")
                 .params("size", "20")
                 .params("auditStatus", status)
-                .baseUrl(Constant.BASE_URL4)
                 .execute(String.class);
         return getListByField(observable, "content", NewsEntity.class);
     }
