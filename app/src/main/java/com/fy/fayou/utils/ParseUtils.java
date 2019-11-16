@@ -116,10 +116,14 @@ public class ParseUtils {
                                 return str;
                             }).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(s -> {
-                                if (!TextUtils.isEmpty(s) && isJson(s)) {
-                                    ErrorApi errorApi = parseData(s, ErrorApi.class);
-                                    if (!TextUtils.isEmpty(errorApi.display)) {
-                                        listener.onError(errorApi.display);
+                                if (!TextUtils.isEmpty(s)) {
+                                    try {
+                                        ErrorApi errorApi = parseData(s, ErrorApi.class);
+                                        if (!TextUtils.isEmpty(errorApi.display)) {
+                                            listener.onError(errorApi.display);
+                                        }
+                                    } catch (Exception e) {
+                                        listener.onError(s);
                                     }
                                 } else {
                                     listener.onError(s);
@@ -138,6 +142,7 @@ public class ParseUtils {
         }
     }
 
+    // 判断字符串基本没有用 body:服务异常
     private static boolean isJson(String json) {
         try {
             new JsonParser().parse(json);

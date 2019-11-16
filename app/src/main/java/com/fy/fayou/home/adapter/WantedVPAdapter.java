@@ -42,7 +42,7 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
         } else if (mType == TEMPLATE) {
             return TemplateFragment.newInstance();
         } else if (mType == LEGAL) {
-            return LegalFragment.newInstance();
+            return LegalFragment.newInstance(mColumns.get(i).type);
         }
         return WantedFragment.newInstance(mColumns.get(i).type, "", "");
     }

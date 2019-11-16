@@ -5,13 +5,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.legal.adapter.LegalAdapter;
 import com.fy.fayou.legal.bean.LegalEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
+import com.zhouyou.http.EasyHttp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -21,11 +23,23 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
     RecyclerView mRecyclerView;
     LegalAdapter mAdapter;
 
-    public static LegalFragment newInstance() {
+    private String type;
+
+    public static LegalFragment newInstance(String type) {
         Bundle args = new Bundle();
+        args.putString(Constant.Param.TYPE, type);
         LegalFragment fragment = new LegalFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    protected void initView() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            type = bundle.getString(Constant.Param.TYPE, "");
+        }
+        super.initView();
     }
 
     @Override
@@ -43,7 +57,12 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
 
     @Override
     protected Observable<Result<List<LegalEntity>>> getListObservable(int pageNo) {
-        return null;
+        Observable<String> observable = EasyHttp.get(ApiUrl.FIND_LEGAL_LIST)
+                .params("type", type)
+                .params("size", "20")
+                .params("page", (pageNo - 1) + "")
+                .execute(String.class);
+        return getListByField(observable, "content", LegalEntity.class);
     }
 
     @Override
@@ -64,12 +83,5 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
     @Override
     protected void initData() {
         super.initData();
-
-        List<LegalEntity> list = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            LegalEntity entity = new LegalEntity();
-            list.add(entity);
-        }
-        mAdapter.setNewData(list);
     }
 }

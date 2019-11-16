@@ -48,7 +48,7 @@
             android:layout_height="236dp">
 
             <cn.jzvd.JzvdStd
-                android:id="@+id/video_player"
+                android:id="@+id/jzvdstd_player"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

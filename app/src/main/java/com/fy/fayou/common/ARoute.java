@@ -63,4 +63,29 @@ public class ARoute {
         }
     }
 
+    /**
+     * @param id
+     * @param type 类型 0 文章 1 视频
+     */
+    public static void jumpDetail(String id, int type) {
+        ARouter.getInstance()
+                .build(Constant.DETAIL_ARTICLE)
+                .withString(Constant.Param.ARTICLE_ID, id)
+                .withInt(Constant.Param.TYPE, type)
+                .navigation();
+    }
+
+    /**
+     * @param id
+     * @param type
+     */
+    public static void jumpDetail(String id, String type) {
+        ARouter.getInstance()
+                .build(Constant.DETAIL_ARTICLE)
+                .withString(Constant.Param.ARTICLE_ID, id)
+                .withInt(Constant.Param.TYPE, type.equals(Constant.Param.VIDEO) ?
+                        Constant.Param.VIDEO_TYPE : Constant.Param.ARTICLE_TYPE)
+                .navigation();
+    }
+
 }

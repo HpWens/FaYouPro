@@ -21,6 +21,10 @@ public class RecommendPresenter extends MultiItemPresenter<RecommendBean> {
     private int ARTICLE_TYPE = 1;
     private int VIDEO_TYPE = 2;
 
+    public RecommendPresenter(OnItemListener listener) {
+        mListener = listener;
+    }
+
     @Override
     public int getLayoutRes(int itemType) {
         if (itemType == ARTICLE_TYPE) {
@@ -62,6 +66,13 @@ public class RecommendPresenter extends MultiItemPresenter<RecommendBean> {
                         .load(getNonEmpty(item.cover))
                         .apply(GlideOption.getFullScreenWOption(helper.itemView.getContext()))
                         .into(jzvdStd.thumbImageView);
+
+                // 跳转到视频详情页
+                helper.itemView.setOnClickListener(v -> {
+                    if (mListener != null) {
+                        mListener.onClick(v, item);
+                    }
+                });
                 break;
             case "ARTICLE":
                 helper.itemView.setTag("article");

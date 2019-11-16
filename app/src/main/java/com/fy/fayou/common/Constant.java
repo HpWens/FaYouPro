@@ -121,6 +121,9 @@ public class Constant {
     // 举报
     public static final String REPORT = "/detail/report";
 
+    // 启动页
+    public static final String FIRST_LAUNCH = "/first/launch";
+
     public interface SP {
         String USER_INFO = "user_info_data";
 
@@ -132,6 +135,9 @@ public class Constant {
         String CITY_HISTORY = "city_history";
     }
 
+    /**
+     * 配置到 gradle
+     */
     public interface QiNiu {
         String AccessKey = "cOUw3kpUgnqxLhPrQRZvwIAsTrOfOZcicNZFElCp"; // 此处填你自己的AccessKey
         String SecretKey = "ew5SxqqMY4Xxyk1MoWugSP2IEr9EfB2z1PxQSK8R"; // 此处填你自己的SecretKey
@@ -140,6 +146,9 @@ public class Constant {
     }
 
     public interface Param {
+
+        String IS_FIRST_LAUNCH = "is_first_launch";
+
         String MOBILE = "mobile";
 
         String TYPE = "type";

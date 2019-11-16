@@ -1,6 +1,8 @@
 package com.fy.fayou;
 
 
+import android.widget.Toast;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.common.Constant;
@@ -105,6 +107,19 @@ public class MainActivity extends BaseActivity {
     public void onExitLoginEvent(ExitLoginEvent event) {
         if (mBottomBar != null) {
             mBottomBar.setCurrentItem(0);
+        }
+    }
+
+    private long mFirstTime;
+
+    @Override
+    public void onBackPressedSupport() {
+        long secondTime = System.currentTimeMillis();
+        if (secondTime - mFirstTime > 2000) {
+            Toast.makeText(mContext, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            mFirstTime = secondTime;
+        } else {
+            super.onBackPressedSupport();
         }
     }
 }

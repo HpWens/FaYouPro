@@ -7,6 +7,7 @@ import com.fy.fayou.bean.UserInfo;
 import com.fy.fayou.utils.ACache;
 import com.fy.fayou.utils.ParseUtils;
 import com.google.gson.Gson;
+import com.vondear.rxtool.RxSPTool;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +48,13 @@ public class UserService {
         mContext = app;
     }
 
+    public void saveFirstLaunch(boolean isLaunched) {
+        RxSPTool.putBoolean(mContext, Constant.Param.IS_FIRST_LAUNCH, isLaunched);
+    }
+
+    public boolean isFirstLaunch() {
+        return RxSPTool.getBoolean(mContext, Constant.Param.IS_FIRST_LAUNCH);
+    }
 
     public void saveUser(UserInfo user) {
         ACache.get(mContext).put(Constant.SP.USER_INFO, user);

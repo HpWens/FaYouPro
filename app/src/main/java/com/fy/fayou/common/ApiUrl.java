@@ -179,4 +179,7 @@ public class ApiUrl {
 
     // 查找更多评论
     public static final String FIND_COMMENT_MORE = "/api-information/comment/findMore";
+
+    // 根据分类获取法律列表
+    public static final String FIND_LEGAL_LIST = "/api-lawsRegulations/legalProvisions/findList";
 }

@@ -6,10 +6,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.RecommendAdapter;
 import com.fy.fayou.bean.RecommendEntity;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.OnScrollClashListener;
@@ -97,12 +97,7 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
     protected BaseMultiAdapter<RecommendEntity> getAdapter() {
         mAdapter = new RecommendAdapter();
         mAdapter.setOnItemListener((v, item) -> {
-            ARouter.getInstance()
-                    .build(Constant.DETAIL_ARTICLE)
-                    .withString(Constant.Param.ARTICLE_ID, item.id)
-                    .withInt(Constant.Param.TYPE, item.articleType.equals(Constant.Param.VIDEO) ?
-                            Constant.Param.VIDEO_TYPE : Constant.Param.ARTICLE_TYPE)
-                    .navigation();
+            ARoute.jumpDetail(item.id, item.articleType);
         });
         return mAdapter;
     }

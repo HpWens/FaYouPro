@@ -49,6 +49,7 @@
     <style name="AppTheme.Launcher" parent="AppTheme">
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowAnimationStyle">@style/Animation</item>
         <item name="android:windowBackground">@drawable/layer_launcher</item>
     </style>
 

@@ -47,6 +47,13 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                         .apply(GlideOption.getItemOption(112, 74))
                         .into(ivCover);
 
+                // 跳转到详情页
+                helper.itemView.setOnClickListener(v -> {
+                    if (mListener != null) {
+                        mListener.onClick(v, item);
+                    }
+                });
+
                 break;
             case RecommendEntity.TYPE_ARTICLE:
                 helper.itemView.setTag("article");

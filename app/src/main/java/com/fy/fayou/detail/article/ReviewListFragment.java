@@ -116,6 +116,7 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
                         if (!TextUtils.isEmpty(s)) {
                             ApiResult<CommentBean> apiResult = ParseUtils.fromJsonApiResult(s, CommentBean.class);
                             if (apiResult != null && apiResult.content != null) {
+                                if (apiResult.content.isEmpty()) return;
                                 for (CommentBean entity : apiResult.content) {
                                     entity.helperId = parentId;
                                     entity.level = 1;
@@ -244,15 +245,20 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
         if (isParent) {
             mAdapter.getData().add(0, entity);
             mAdapter.notifyItemInserted(0);
+            mRecyclerView.smoothScrollToPosition(0);
         } else {
             if (mAdapter.getData().size() > position) {
                 entity.level = 1;
                 int insert = getInsertPosition(position);
                 mAdapter.getData().add(insert, entity);
                 mAdapter.notifyItemInserted(insert);
+
+                // 滚动
+                mRecyclerView.postDelayed(() -> {
+                    mRecyclerView.smoothScrollToPosition(insert);
+                }, 400);
             }
         }
-        mRecyclerView.scrollToPosition(position);
     }
 
     // 获取到插入的位置
@@ -260,6 +266,11 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
         if (mAdapter.getData().get(position).level == 0) {
             position += 1;
         }
+
+        if (position == mAdapter.getData().size()) {
+            return position;
+        }
+
         if (mAdapter.getData().get(position).level == 0) {
             return position;
         } else {
@@ -270,7 +281,7 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
                 }
             }
         }
-        return position + 1;
+        return mAdapter.getData().size();
     }
 
     public interface OnItemClickListener {
