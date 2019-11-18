@@ -29,6 +29,7 @@ import com.fy.fayou.detail.adapter.TextPresenter;
 import com.fy.fayou.detail.bean.ArticleEntity;
 import com.fy.fayou.detail.bean.CommentBean;
 import com.fy.fayou.detail.bean.CommentHeaderBean;
+import com.fy.fayou.detail.bean.FooterBean;
 import com.fy.fayou.detail.bean.HeaderBean;
 import com.fy.fayou.detail.bean.PicBean;
 import com.fy.fayou.detail.bean.RecommendBean;
@@ -45,7 +46,10 @@ import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -78,7 +82,7 @@ public class ArticleDetailActivity extends BaseActivity {
     @BindView(R.id.tv_message)
     ImageView tvMessage;
     @BindView(R.id.tv_collect)
-    ImageView tvCollect;
+    ImageView ivCollect;
     @BindView(R.id.tv_share)
     ImageView tvShare;
     @BindView(R.id.line)
@@ -86,9 +90,11 @@ public class ArticleDetailActivity extends BaseActivity {
     @BindView(R.id.jzvdstd_player)
     JzvdStd jzvdStd;
 
+    private boolean isCollect = false;
+    private String articleId;
+
     MeiBaseMixAdapter mAdapter;
     List<Object> mDataList = new ArrayList<>();
-
 
     private ReviewFragment mReviewFragment;
 
@@ -116,8 +122,12 @@ public class ArticleDetailActivity extends BaseActivity {
             }
         }));
         mAdapter.addItemPresenter(new CommentHeaderPresenter());
-        mAdapter.addItemPresenter(new FooterPresenter());
-        mAdapter.addItemPresenter(new HeaderPresenter());
+        mAdapter.addItemPresenter(new FooterPresenter((v, id, pos, footer) -> {
+            requestPraise(footer, pos);
+        }));
+        mAdapter.addItemPresenter(new HeaderPresenter((v, id, position, header) -> {
+            requestFollow(header, position);
+        }));
         mAdapter.addItemPresenter(new PicPresenter());
         mAdapter.addItemPresenter(new RecommendHeaderPresenter());
         mAdapter.addItemPresenter(new RecommendPresenter((v, item) -> {
@@ -170,6 +180,8 @@ public class ArticleDetailActivity extends BaseActivity {
 
             fillContentData(articleEntity);
 
+            fillFooterData(articleEntity);
+
             if (commentList != null && !commentList.isEmpty()) {
                 mDataList.add(new CommentHeaderBean());
                 for (int i = 0; i < commentList.size(); i++) {
@@ -189,6 +201,10 @@ public class ArticleDetailActivity extends BaseActivity {
                     mDataList.add(bean);
                 }
             }
+
+            // 请求是否收藏接口
+            articleId = articleEntity.id;
+            requestCollectData(articleEntity.id);
 
             return mDataList;
         }).compose(bindToLifecycle())
@@ -216,6 +232,19 @@ public class ArticleDetailActivity extends BaseActivity {
                     public void onComplete() {
                     }
                 });
+    }
+
+    // 添加尾部数据
+    private void fillFooterData(ArticleEntity articleEntity) {
+        FooterBean footerBean = new FooterBean();
+        footerBean.author = articleEntity.author;
+        footerBean.source = articleEntity.source;
+        footerBean.tagNames = articleEntity.tagNames;
+        footerBean.gives = articleEntity.gives;
+        footerBean.give = articleEntity.give;
+        footerBean.id = articleEntity.id;
+        footerBean.giveRecords = articleEntity.giveRecords;
+        mDataList.add(footerBean);
     }
 
     // 填充内容
@@ -247,6 +276,7 @@ public class ArticleDetailActivity extends BaseActivity {
         header.auditName = articleEntity.auditName;
         header.createTime = articleEntity.createTime;
         header.follow = articleEntity.follow;
+        header.auditId = articleEntity.auditId;
         header.auditAvatar = articleEntity.auditAvatar;
         mDataList.add(header);
     }
@@ -263,6 +293,59 @@ public class ArticleDetailActivity extends BaseActivity {
                 .params("page", "0")
                 .params("size", "3")
                 .execute(String.class);
+    }
+
+    private void requestPraise(FooterBean footer, int position) {
+        EasyHttp.post(ApiUrl.ARTICLE_PRAISE + footer.id + "/give")
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        footer.give = !footer.give;
+                        mAdapter.notifyItemChanged(position);
+                    }
+                });
+    }
+
+    private void requestFollow(HeaderBean header, int position) {
+        EasyHttp.post(header.follow ? ApiUrl.UN_FOLLOW_USER : ApiUrl.FOLLOW_USER)
+                .upJson(header.auditId)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        header.follow = !header.follow;
+                        mAdapter.notifyItemChanged(position);
+                    }
+                });
+    }
+
+    /**
+     * @param articleId
+     */
+    private void requestCollectData(String articleId) {
+        EasyHttp.get(ApiUrl.IS_COLLECT)
+                .params("businessId", "" + articleId)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        isCollect = ParseUtils.getFieldByJson(s, "exist");
+                        ivCollect.setSelected(isCollect);
+                    }
+                });
     }
 
     @Override
@@ -283,14 +366,25 @@ public class ArticleDetailActivity extends BaseActivity {
                 showBottomDialog();
                 break;
             case R.id.tv_collect:
+                requestCollect(articleId);
                 break;
             case R.id.tv_share:
                 break;
             case R.id.iv_more_white:
             case R.id.iv_right_more:
-                showDialog(new BottomShareDialog().setOnItemClickListener(() -> {
-                    transMask.setVisibility(View.GONE);
-                }));
+                showDialog(new BottomShareDialog().setCollect(isCollect).setArticleId(articleId)
+                        .setOnItemClickListener(new BottomShareDialog.OnItemClickListener() {
+                            @Override
+                            public void onDismiss() {
+                                transMask.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onCollect(boolean collected) {
+                                isCollect = collected;
+                                ivCollect.setSelected(isCollect);
+                            }
+                        }));
                 transMask.setVisibility(View.VISIBLE);
                 break;
         }
@@ -317,6 +411,28 @@ public class ArticleDetailActivity extends BaseActivity {
             showHideFragment(mReviewFragment);
             showReviewFragment();
         }
+    }
+
+    private void requestCollect(String articleId) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("businessId", articleId);
+        params.put("collectType", "ARTICLE");
+        JSONObject jsonObject = new JSONObject(params);
+
+        EasyHttp.post(ApiUrl.MY_COLLECT)
+                .upJson(jsonObject.toString())
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        isCollect = !isCollect;
+                        ivCollect.setSelected(isCollect);
+                    }
+                });
     }
 
     /**

@@ -87,7 +87,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initData() {
         ARouter.getInstance()
-                .build(Constant.DETAIL_ARTICLE)
+                .build(Constant.NEWS_PUBLISH_NEXT)
                 .withString(Constant.Param.ARTICLE_ID, "110328945139777536")
                 .navigation();
     }

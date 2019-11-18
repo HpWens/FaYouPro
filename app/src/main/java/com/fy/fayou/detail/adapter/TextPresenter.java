@@ -13,6 +13,6 @@ public class TextPresenter extends ItemPresenter<TextBean> {
 
     @Override
     public void convert(BaseViewHolder holder, TextBean item) {
-
+        holder.setText(R.id.tv_content, item.text);
     }
 }

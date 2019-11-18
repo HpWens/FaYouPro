@@ -7,12 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.fy.fayou.R;
-import com.fy.fayou.pufa.bean.LabelEntity;
+import com.fy.fayou.common.ApiUrl;
 import com.vondear.rxtool.RxDeviceTool;
 import com.vondear.rxui.view.dialog.RxDialog;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.zhouyou.http.EasyHttp;
 
 public class LabelDialog extends RxDialog {
 
@@ -46,15 +44,12 @@ public class LabelDialog extends RxDialog {
         mRecyclerView.setAdapter(mAdapter = new LabelAdapter());
         setContentView(dialogView);
 
-        List<LabelEntity> list = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            LabelEntity entity = new LabelEntity();
-            list.add(entity);
-        }
-        mAdapter.setNewData(list);
-
         mLayoutParams.width = (int) (RxDeviceTool.getScreenWidth(getContext()) * 0.8f);
 
+    }
+
+    private void requestTag() {
+        EasyHttp.get(ApiUrl.FIND_ARTICLE_TAG);
     }
 
 }

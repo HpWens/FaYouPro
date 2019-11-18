@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ArticleEntity implements Serializable {
 
-    public List<CommentBean> giveRecords;
+    public List<UserBean> giveRecords;
 
     public List<RecommendBean> recommendArticles;
 
@@ -28,4 +28,10 @@ public class ArticleEntity implements Serializable {
     public String videoUrl;
     public String auditAvatar;
     public List<String> tagNames;
+
+    public class UserBean {
+        public String userId;
+        public String userAvatar;
+        public String nickName;
+    }
 }

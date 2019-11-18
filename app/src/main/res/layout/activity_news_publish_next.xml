@@ -82,16 +82,36 @@
                 android:textColor="@color/color_333333"
                 android:textSize="14sp" />
 
-
-            <ImageView
-                android:id="@+id/iv_add_cover"
-                android:layout_width="150dp"
-                android:layout_height="98dp"
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:scaleType="fitXY"
-                android:src="@mipmap/news_publish_add_cover"></ImageView>
+                android:layout_marginTop="15dp">
 
+                <ImageView
+                    android:id="@+id/iv_add_cover"
+                    android:layout_width="150dp"
+                    android:layout_height="98dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/news_publish_add_cover"></ImageView>
+
+                <ImageView
+                    android:id="@+id/iv_thumb"
+                    android:layout_width="150dp"
+                    android:layout_height="98dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"></ImageView>
+
+                <ImageView
+                    android:id="@+id/iv_delete"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="right|top"
+                    android:background="@mipmap/news_publish_delete"
+                    android:scaleType="centerInside"
+                    android:visibility="gone" />
+
+            </FrameLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -104,15 +124,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="15dp"
                     android:text="文章来源："
                     android:textColor="@color/color_333333"
                     android:textSize="14sp" />
@@ -143,15 +161,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="15dp"
                     android:text="原作者："
                     android:textColor="@color/color_333333"
                     android:textSize="14sp" />

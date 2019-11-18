@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.fy.fayou.view.radius.RadiusTextView
+        android:id="@+id/tv_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="12dp"
+        android:paddingTop="6dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="6dp"
+        android:text="可爱"
+        android:textColor="@color/color_ed4040"
+        android:textSize="12sp"
+        app:rv_backgroundColor="@color/color_1f_ed4040"
+        app:rv_radius="2dp">
+
+    </com.fy.fayou.view.radius.RadiusTextView>
+
+</LinearLayout>

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.fy.fayou.R;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -22,6 +23,7 @@ import java.util.List;
 public class PublishMixingHelper {
 
     private PublishMixingAdapter mAdapter;
+    private Context mContext;
 
     private int mTouchSlop;
     private float mLastRawX;
@@ -31,6 +33,7 @@ public class PublishMixingHelper {
         if (recyclerView == null) {
             return;
         }
+        mContext = context;
         mTouchSlop = ViewConfiguration.get(recyclerView.getContext()).getScaledTouchSlop();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -126,6 +129,43 @@ public class PublishMixingHelper {
                 }
         );
 
+    }
+
+    public boolean isEmpty() {
+        if (mAdapter == null || mAdapter.getData().isEmpty()) {
+            return true;
+        }
+        Object titleObj = mAdapter.getData().get(0);
+        if (titleObj instanceof TitleEntity) {
+            TitleEntity titleEntity = (TitleEntity) titleObj;
+            if (TextUtils.isEmpty(titleEntity.name)) {
+                Toast.makeText(mContext, "请输入标题", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        }
+
+        boolean isEmpty = true;
+
+        for (int i = 1; i < mAdapter.getData().size(); i++) {
+            Object obj = mAdapter.getData().get(i);
+            if (obj instanceof TextEntity) {
+                TextEntity textEntity = (TextEntity) obj;
+                if (!TextUtils.isEmpty(textEntity.content)) {
+                    isEmpty = false;
+                    break;
+                }
+            } else if (obj instanceof PicEntity) {
+                isEmpty = false;
+                break;
+            }
+        }
+
+        if (isEmpty) {
+            Toast.makeText(mContext, "请输入内容", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return false;
     }
 
     /**

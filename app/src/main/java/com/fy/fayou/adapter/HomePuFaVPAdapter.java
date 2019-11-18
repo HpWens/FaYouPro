@@ -4,16 +4,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.fy.fayou.bean.TagEntity;
+import com.fy.fayou.bean.CategoryEntity;
 import com.fy.fayou.fragment.RecommendFragment;
 
 import java.util.List;
 
 public class HomePuFaVPAdapter extends FragmentPagerAdapter {
 
-    List<TagEntity> mTags;
+    List<CategoryEntity> mTags;
 
-    public HomePuFaVPAdapter(FragmentManager fm, List<TagEntity> tags) {
+    public HomePuFaVPAdapter(FragmentManager fm, List<CategoryEntity> tags) {
         super(fm);
         this.mTags = tags;
     }
@@ -37,6 +37,6 @@ public class HomePuFaVPAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mTags.get(position).tagName;
+        return mTags.get(position).categoryName;
     }
 }

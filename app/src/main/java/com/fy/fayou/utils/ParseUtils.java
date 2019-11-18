@@ -142,6 +142,18 @@ public class ParseUtils {
         }
     }
 
+    public static boolean getFieldByJson(String json, String filed) {
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            if (jsonObject.has(filed)) {
+                return jsonObject.optBoolean(filed);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     // 判断字符串基本没有用 body:服务异常
     private static boolean isJson(String json) {
         try {

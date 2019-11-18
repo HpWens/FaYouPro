@@ -42,7 +42,6 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
     protected void initView() {
         ButterKnife.bind(this);
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
-
     }
 
     @Override
@@ -65,7 +64,9 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
             case R.id.tv_cancel:
                 break;
             case R.id.tv_right:
-                ARouter.getInstance().build(Constant.NEWS_PUBLISH_NEXT).navigation();
+                if (!mMixingHelper.isEmpty()) {
+                    ARouter.getInstance().build(Constant.NEWS_PUBLISH_NEXT).navigation();
+                }
                 break;
             case R.id.iv_add_pic:
                 startPictureSelector();

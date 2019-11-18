@@ -126,6 +126,9 @@ public class ApiUrl {
     // 根据ID查找文章
     public static final String ARTICLE_DETAIL = "/api-information/article/";
 
+    // 文章点赞
+    public static final String ARTICLE_PRAISE = "/api-information/article/";
+
     // 评论查找
     public static final String COMMENT_LIST = "/api-information/comment";
 

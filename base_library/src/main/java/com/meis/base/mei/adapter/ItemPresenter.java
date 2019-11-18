@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 
 public abstract class ItemPresenter<T> {
 
@@ -37,5 +38,12 @@ public abstract class ItemPresenter<T> {
 
     public String getNonEmpty(String ch) {
         return TextUtils.isEmpty(ch) ? "" : ch;
+    }
+
+    public boolean isEmpty(Collection coll) {
+        if (coll == null || coll.isEmpty()) {
+            return true;
+        }
+        return false;
     }
 }

@@ -8,6 +8,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomePuFaVPAdapter;
+import com.fy.fayou.bean.CategoryEntity;
 import com.fy.fayou.bean.TagEntity;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
@@ -54,7 +55,7 @@ public class LearnFragment extends BaseFragment {
     }
 
     private void requestCategoryTag() {
-        EasyHttp.get(ApiUrl.FIND_ARTICLE_TAG)
+        EasyHttp.get(ApiUrl.FIND_CATEGORY)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
@@ -64,7 +65,7 @@ public class LearnFragment extends BaseFragment {
                     @Override
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
-                            List<TagEntity> list = ParseUtils.parseListData(s, TagEntity.class);
+                            List<CategoryEntity> list = ParseUtils.parseListData(s, CategoryEntity.class);
 
                             viewpager.setAdapter(mAdapter = new HomePuFaVPAdapter(getChildFragmentManager(), list));
                             tab.setViewPager(viewpager);
