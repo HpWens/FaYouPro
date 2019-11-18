@@ -41,6 +41,7 @@ public class FYApplication extends BaseApplication {
 
         initPush();
 
+        UserService.getInstance().getPublishNew();
     }
 
     private void initPush() {

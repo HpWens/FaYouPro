@@ -2,8 +2,10 @@ package com.fy.fayou.common;
 
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.fy.fayou.bean.UserInfo;
+import com.fy.fayou.pufa.MixingEntity;
 import com.fy.fayou.utils.ACache;
 import com.fy.fayou.utils.ParseUtils;
 import com.google.gson.Gson;
@@ -242,6 +244,30 @@ public class UserService {
      */
     public void clearClassify(int classify) {
         saveClassify("", classify);
+    }
+
+
+    /****************************************************发布资讯****************************************************/
+
+    public void savePublishNew(List<MixingEntity> data) {
+        ACache.get(mContext).put(Constant.SP.PUBLISH_NEW, new Gson().toJson(data));
+    }
+
+    public void clearPublishNew() {
+        savePublishNew(new ArrayList<>());
+    }
+
+    public List<MixingEntity> getPublishNew() {
+        String json = ACache.get(mContext).getAsString(Constant.SP.PUBLISH_NEW);
+        if (TextUtils.isEmpty(json)) {
+            return new ArrayList<>();
+        } else {
+            List<MixingEntity> data = ParseUtils.parseListData(json, MixingEntity.class);
+            for (MixingEntity entity : data) {
+                Log.e("----------------", "***********" + entity);
+            }
+            return new ArrayList<>();
+        }
     }
 
 }

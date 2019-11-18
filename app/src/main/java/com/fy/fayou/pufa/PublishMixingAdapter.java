@@ -26,7 +26,7 @@ import java.util.List;
 public class PublishMixingAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private Context mContext;
-    private List<Object> mDataList = new ArrayList<>();
+    private List<MixingEntity> mDataList = new ArrayList<>();
 
     private int mCurrentFocusPos = -1;
 
@@ -325,14 +325,14 @@ public class PublishMixingAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         return mCurrentFocusPos;
     }
 
-    public void setNewData(List<Object> data) {
+    public void setNewData(List<MixingEntity> data) {
         if (null != data) {
             this.mDataList = data;
             notifyDataSetChanged();
         }
     }
 
-    public List<Object> getData() {
+    public List<MixingEntity> getData() {
         return mDataList;
     }
 

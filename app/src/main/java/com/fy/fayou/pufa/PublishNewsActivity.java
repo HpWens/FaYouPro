@@ -11,6 +11,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
 import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.utils.SoftKeyBoardListener;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -65,6 +66,8 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
                 break;
             case R.id.tv_right:
                 if (!mMixingHelper.isEmpty()) {
+                    // 保存发布资讯数据
+                    UserService.getInstance().savePublishNew(mMixingHelper.getData());
                     ARouter.getInstance().build(Constant.NEWS_PUBLISH_NEXT).navigation();
                 }
                 break;

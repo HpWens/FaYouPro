@@ -88,7 +88,7 @@ public class PublishMixingHelper {
         });
         recyclerView.setAdapter(mAdapter);
 
-        List<Object> data = new ArrayList<>();
+        List<MixingEntity> data = new ArrayList<>();
         TitleEntity titleEntity = new TitleEntity();
         data.add(titleEntity);
 
@@ -128,7 +128,6 @@ public class PublishMixingHelper {
                     return false;
                 }
         );
-
     }
 
     public boolean isEmpty() {
@@ -166,6 +165,21 @@ public class PublishMixingHelper {
         }
 
         return false;
+    }
+
+    public void setNewData(List<MixingEntity> data) {
+        if (mAdapter != null) {
+            mAdapter.setNewData(data);
+        }
+    }
+
+    /**
+     * 返回数据
+     *
+     * @return
+     */
+    public List<MixingEntity> getData() {
+        return mAdapter.getData();
     }
 
     /**
@@ -213,7 +227,7 @@ public class PublishMixingHelper {
         if (focusPos == -1) focusPos = 1;
         if (focusPos >= mAdapter.getData().size()) focusPos = mAdapter.getData().size() - 1;
 
-        List<Object> list = new ArrayList<>();
+        List<MixingEntity> list = new ArrayList<>();
 
         for (String url : urls) {
 

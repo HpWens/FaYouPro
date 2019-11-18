@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
 import com.fy.fayou.R;
+import com.fy.fayou.bean.TagEntity;
 import com.fy.fayou.pufa.adapter.ArticleLabelAdapter;
-import com.fy.fayou.pufa.bean.LabelEntity;
 import com.fy.fayou.pufa.dialog.LabelDialog;
 import com.fy.fayou.utils.GlideOption;
 import com.luck.picture.lib.PictureSelector;
@@ -59,18 +59,24 @@ public class PublishNewsNextActivity extends BaseActivity {
         ButterKnife.bind(this);
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
 
+
     }
 
     @Override
     protected void initData() {
         recycler.setLayoutManager(new GridLayoutManager(this, 3));
         recycler.setAdapter(mAdapter = new ArticleLabelAdapter(view -> {
-            LabelDialog dialog = new LabelDialog(this);
+            LabelDialog dialog = new LabelDialog(this, (v, data, labelDialog) -> {
+                TagEntity lastTag = new TagEntity();
+                data.add(lastTag);
+                mAdapter.setNewData(data);
+                labelDialog.dismiss();
+            }, mAdapter.getTags());
             dialog.show();
         }));
 
-        List<LabelEntity> list = new ArrayList<>();
-        LabelEntity entity = new LabelEntity();
+        List<TagEntity> list = new ArrayList<>();
+        TagEntity entity = new TagEntity();
         list.add(entity);
         mAdapter.setNewData(list);
     }

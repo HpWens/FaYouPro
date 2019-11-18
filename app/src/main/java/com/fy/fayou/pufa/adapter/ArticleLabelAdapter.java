@@ -1,16 +1,18 @@
 package com.fy.fayou.pufa.adapter;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
-import com.fy.fayou.pufa.bean.LabelEntity;
+import com.fy.fayou.bean.TagEntity;
+import com.meis.base.mei.adapter.MeiBaseAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ArticleLabelAdapter extends BaseQuickAdapter<LabelEntity, BaseViewHolder> {
+public class ArticleLabelAdapter extends MeiBaseAdapter<TagEntity> {
 
     OnItemClickListener mListener;
 
@@ -20,10 +22,11 @@ public class ArticleLabelAdapter extends BaseQuickAdapter<LabelEntity, BaseViewH
     }
 
     @Override
-    protected void convert(@NonNull BaseViewHolder helper, LabelEntity item) {
+    protected void convert(@NonNull BaseViewHolder helper, TagEntity item) {
         boolean isLast = (getData().size() - 1) == helper.getAdapterPosition();
 
         helper.setVisible(R.id.tv_label, !isLast)
+                .setText(R.id.tv_label, getNonEmpty(item.tagName))
                 .setVisible(R.id.iv_delete, !isLast)
                 .setVisible(R.id.tv_add, isLast)
                 .setVisible(R.id.iv_add, isLast);
@@ -36,5 +39,20 @@ public class ArticleLabelAdapter extends BaseQuickAdapter<LabelEntity, BaseViewH
 
     public interface OnItemClickListener {
         void onClick(View view);
+    }
+
+    /**
+     * 获取选中的标签数据
+     *
+     * @return
+     */
+    public List<TagEntity> getTags() {
+        List<TagEntity> tags = new ArrayList<>();
+        for (TagEntity tag : getData()) {
+            if (!TextUtils.isEmpty(tag.id)) {
+                tags.add(tag);
+            }
+        }
+        return tags;
     }
 }

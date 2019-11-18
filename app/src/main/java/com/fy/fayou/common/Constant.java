@@ -131,6 +131,8 @@ public class Constant {
 
         String SEARCH_HISTORY = "search_history";
 
+        String PUBLISH_NEW = "publish_new";
+
         // 城市历史
         String CITY_HISTORY = "city_history";
     }
