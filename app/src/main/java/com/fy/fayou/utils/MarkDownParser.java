@@ -79,7 +79,13 @@ public class MarkDownParser {
 
         mdList.add(" ");
 
-        String[] array = json.split(" ");
+        String[] array;
+
+        if (json.contains("\n")) {
+            array = json.split("\n");
+        } else {
+            array = json.split(" ");
+        }
 
         for (String str : array) {
             mdList.add(str);
@@ -127,7 +133,9 @@ public class MarkDownParser {
                 int index = line.indexOf('`', i + 1);
                 if (index != -1) {
                     String quoteName = line.substring(i + 1, index);
-                    line = line.replace(line.substring(i, index + 1), "<code>" + quoteName + "</code>");
+
+                    // 引用不解析
+                    // line = line.replace(line.substring(i, index + 1), "<code>" + quoteName + "</code>");
                 }
             }
             // 粗体
@@ -135,7 +143,9 @@ public class MarkDownParser {
                 int index = line.indexOf("**", i + 1);
                 if (index != -1) {
                     String quoteName = line.substring(i + 2, index);
-                    line = line.replace(line.substring(i, index + 2), "<strong>" + quoteName + "</strong>");
+
+                    // 粗体不解析
+                    // line = line.replace(line.substring(i, index + 2), "<strong>" + quoteName + "</strong>");
                 }
             }
             // 斜体
@@ -143,7 +153,9 @@ public class MarkDownParser {
                 int index = line.indexOf('*', i + 1);
                 if ((index + 1) < line.length() && index != -1 && line.charAt(index + 1) != '*') {
                     String quoteName = line.substring(i + 1, index);
-                    line = line.replace(line.substring(i, index + 1), "<i>" + quoteName + "</i>");
+
+                    // 斜体不解析
+                    // line = line.replace(line.substring(i, index + 1), "<i>" + quoteName + "</i>");
                 }
             }
         }

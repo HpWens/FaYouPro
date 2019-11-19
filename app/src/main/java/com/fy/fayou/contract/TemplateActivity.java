@@ -1,14 +1,21 @@
 package com.fy.fayou.contract;
 
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.home.adapter.WantedVPAdapter;
+import com.fy.fayou.search.bean.ColumnEntity;
+import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
 import java.util.ArrayList;
 
@@ -37,8 +44,26 @@ public class TemplateActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), new ArrayList<>(), WantedVPAdapter.TEMPLATE));
-        tab.setViewPager(viewpager);
+        EasyHttp.get(ApiUrl.GET_TEMPLATE_TYPE)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
+                            if (mAdapter == null) {
+                                viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.TEMPLATE));
+                                tab.setViewPager(viewpager);
+                            } else {
+                                mAdapter.setNewData(columns);
+                                tab.setViewPager(viewpager);
+                            }
+                        }
+                    }
+                });
     }
 
     @Override

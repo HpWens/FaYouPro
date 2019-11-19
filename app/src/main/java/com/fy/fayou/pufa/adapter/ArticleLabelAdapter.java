@@ -35,6 +35,11 @@ public class ArticleLabelAdapter extends MeiBaseAdapter<TagEntity> {
             mListener.onClick(v);
         });
 
+        helper.getView(R.id.iv_delete).setOnClickListener(v -> {
+            getData().remove(helper.getAdapterPosition());
+            notifyItemRemoved(helper.getAdapterPosition());
+        });
+
     }
 
     public interface OnItemClickListener {

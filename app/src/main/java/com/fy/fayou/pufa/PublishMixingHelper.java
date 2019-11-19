@@ -85,10 +85,15 @@ public class PublishMixingHelper {
             public void onFocusChange(boolean focus, int position) {
                 listener.onFocusChange(focus, position);
             }
+
+            @Override
+            public void onEditTextChanged() {
+                listener.onEditTextChanged();
+            }
         });
         recyclerView.setAdapter(mAdapter);
 
-        List<MixingEntity> data = new ArrayList<>();
+        List<Object> data = new ArrayList<>();
         TitleEntity titleEntity = new TitleEntity();
         data.add(titleEntity);
 
@@ -167,7 +172,7 @@ public class PublishMixingHelper {
         return false;
     }
 
-    public void setNewData(List<MixingEntity> data) {
+    public void setNewData(List<Object> data) {
         if (mAdapter != null) {
             mAdapter.setNewData(data);
         }
@@ -178,7 +183,7 @@ public class PublishMixingHelper {
      *
      * @return
      */
-    public List<MixingEntity> getData() {
+    public List<Object> getData() {
         return mAdapter.getData();
     }
 
@@ -227,7 +232,7 @@ public class PublishMixingHelper {
         if (focusPos == -1) focusPos = 1;
         if (focusPos >= mAdapter.getData().size()) focusPos = mAdapter.getData().size() - 1;
 
-        List<MixingEntity> list = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
 
         for (String url : urls) {
 
@@ -256,6 +261,8 @@ public class PublishMixingHelper {
 
     public interface OnMixingListener {
         void onFocusChange(boolean focus, int position);
+
+        void onEditTextChanged();
     }
 
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -26,7 +25,7 @@ import java.util.List;
 public class PublishMixingAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private Context mContext;
-    private List<MixingEntity> mDataList = new ArrayList<>();
+    private List<Object> mDataList = new ArrayList<>();
 
     private int mCurrentFocusPos = -1;
 
@@ -107,6 +106,10 @@ public class PublishMixingAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 @Override
                 public void afterTextChanged(Editable s) {
                     saveTitleToData(s.toString(), holder.getAdapterPosition());
+
+                    if (mListener != null) {
+                        mListener.onEditTextChanged();
+                    }
                 }
             };
 
@@ -169,12 +172,8 @@ public class PublishMixingAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                         resetDoubleDelete();
                     }
 
-                    // 删除前后空的输入框
-                    if (TextUtils.isEmpty(s.toString())) {
-                        if (mListener != null) {
-
-
-                        }
+                    if (mListener != null) {
+                        mListener.onEditTextChanged();
                     }
                 }
             };
@@ -325,14 +324,14 @@ public class PublishMixingAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         return mCurrentFocusPos;
     }
 
-    public void setNewData(List<MixingEntity> data) {
+    public void setNewData(List<Object> data) {
         if (null != data) {
             this.mDataList = data;
             notifyDataSetChanged();
         }
     }
 
-    public List<MixingEntity> getData() {
+    public List<Object> getData() {
         return mDataList;
     }
 
@@ -343,6 +342,8 @@ public class PublishMixingAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         void onDeleteSinglePicture(View v, int position);
 
         void onFocusChange(boolean focus, int position);
+
+        void onEditTextChanged();
     }
 
 }

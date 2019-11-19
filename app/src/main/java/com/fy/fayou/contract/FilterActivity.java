@@ -6,15 +6,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.contract.adapter.ExpandableItemAdapter;
 import com.fy.fayou.contract.bean.Level0Item;
 import com.fy.fayou.contract.bean.Level1Item;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.vondear.rxtool.RxImageTool;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +31,11 @@ import butterknife.ButterKnife;
 @Route(path = "/contract/filter")
 public class FilterActivity extends BaseActivity {
 
+    @Autowired
+    public String id = "";
+    @Autowired
+    public String name = "";
+
     @BindView(R.id.recycler)
     RecyclerView recycler;
 
@@ -34,8 +45,9 @@ public class FilterActivity extends BaseActivity {
     @Override
     protected void initView() {
         ButterKnife.bind(this);
+        ARouter.getInstance().inject(this);
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
-        setToolBarCenterTitle("婚内财产协议");
+        setToolBarCenterTitle(name);
         setLeftBackListener(v -> finish());
     }
 
@@ -53,7 +65,7 @@ public class FilterActivity extends BaseActivity {
                 super.getItemOffsets(outRect, view, parent, state);
                 int pos = parent.getChildAdapterPosition(view);
                 List<MultiItemEntity> list = adapter.getData();
-                if (pos < list.size() && list.get(pos) instanceof Level1Item) {
+                if (pos >= 0 && pos < list.size() && list.get(pos) instanceof Level1Item) {
                     Level1Item lv1 = (Level1Item) list.get(pos);
                     if (lv1.isLast) {
                         outRect.bottom = RxImageTool.dp2px(10);
@@ -61,6 +73,27 @@ public class FilterActivity extends BaseActivity {
                 }
             }
         });
+
+        requestData();
+    }
+
+    /**
+     * 请求数据
+     */
+    private void requestData() {
+        EasyHttp.get(ApiUrl.GET_TEMPLATE_TERMS)
+                .params("contractTemplateId", id)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+
+                    }
+                });
     }
 
     @Override

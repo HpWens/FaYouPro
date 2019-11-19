@@ -148,8 +148,11 @@ public class Constant {
     }
 
     public interface Param {
-
         String IS_FIRST_LAUNCH = "is_first_launch";
+
+        String ID = "id";
+
+        String NAME = "name";
 
         String MOBILE = "mobile";
 
@@ -163,7 +166,7 @@ public class Constant {
 
         String USER_ID = "userId";
 
-        String CATEGORY_ID = "userId";
+        String CATEGORY_ID = "category_id";
 
         int RESULT_CODE = 200;
 

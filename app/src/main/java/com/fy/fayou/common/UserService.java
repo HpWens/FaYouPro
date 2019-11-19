@@ -2,16 +2,20 @@ package com.fy.fayou.common;
 
 import android.app.Application;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.fy.fayou.bean.UserInfo;
-import com.fy.fayou.pufa.MixingEntity;
+import com.fy.fayou.pufa.PicEntity;
+import com.fy.fayou.pufa.TextEntity;
+import com.fy.fayou.pufa.TitleEntity;
 import com.fy.fayou.utils.ACache;
 import com.fy.fayou.utils.ParseUtils;
 import com.google.gson.Gson;
 import com.vondear.rxtool.RxSPTool;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -249,7 +253,7 @@ public class UserService {
 
     /****************************************************发布资讯****************************************************/
 
-    public void savePublishNew(List<MixingEntity> data) {
+    public void savePublishNew(List<Object> data) {
         ACache.get(mContext).put(Constant.SP.PUBLISH_NEW, new Gson().toJson(data));
     }
 
@@ -257,16 +261,45 @@ public class UserService {
         savePublishNew(new ArrayList<>());
     }
 
-    public List<MixingEntity> getPublishNew() {
+    /**
+     * 获取发布缓存数据
+     *
+     * @return
+     */
+    public List<Object> getPublishNew() {
         String json = ACache.get(mContext).getAsString(Constant.SP.PUBLISH_NEW);
         if (TextUtils.isEmpty(json)) {
             return new ArrayList<>();
         } else {
-            List<MixingEntity> data = ParseUtils.parseListData(json, MixingEntity.class);
-            for (MixingEntity entity : data) {
-                Log.e("----------------", "***********" + entity);
+            List<Object> data = new ArrayList<>();
+            try {
+                JSONArray jsonArray = new JSONArray(json);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    if (object.has("type")) {
+                        int type = object.optInt("type");
+                        switch (type) {
+                            case 0:
+                                TitleEntity title = ParseUtils.parseData(object.toString(), TitleEntity.class);
+                                data.add(title);
+                                break;
+                            case 1:
+                                TextEntity text = ParseUtils.parseData(object.toString(), TextEntity.class);
+                                data.add(text);
+                                break;
+                            case 2:
+                                PicEntity pic = ParseUtils.parseData(object.toString(), PicEntity.class);
+                                data.add(pic);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            return new ArrayList<>();
+            return data;
         }
     }
 

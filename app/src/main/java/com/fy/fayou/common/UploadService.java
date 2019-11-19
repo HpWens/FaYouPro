@@ -1,6 +1,7 @@
 package com.fy.fayou.common;
 
 import com.fy.fayou.detail.bean.PicBean;
+import com.fy.fayou.pufa.PicEntity;
 import com.fy.fayou.utils.qiniu.Auth;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.qiniu.android.common.FixedZone;
@@ -191,6 +192,44 @@ public class UploadService {
                 });
     }
 
+    // 定制资讯发布页上传图片
+    public void uploadPublishImages(final List<Object> data, final OnPublishUploadListener listener) {
+        List<PicEntity> picList = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i) instanceof PicEntity) {
+                PicEntity picEntity = (PicEntity) data.get(i);
+                picEntity.position = i;
+                picList.add(picEntity);
+            }
+        }
+        if (picList.isEmpty()) {
+            listener.onSuccess(data);
+            return;
+        }
+        List<Integer> posList = new ArrayList<>();
+        Observable.fromIterable(picList)
+                .concatMap((Function<PicEntity, ObservableSource<PicEntity>>) picEntity -> Observable.create((ObservableOnSubscribe<PicEntity>) emitter -> {
+                    File uploadFile = new File(picEntity.path);
+                    ResponseInfo responseInfo = uploadManager.syncPut(uploadFile, getPictureName(), uploadToken, null);
+                    if (responseInfo.isOK()) {
+                        String path = Constant.QiNiu.DOMAIN + responseInfo.response.optString("key");
+                        picEntity.httpPath = path;
+                        emitter.onNext(picEntity);
+                        emitter.onComplete();
+                    } else {
+                        // 上传失败
+                        emitter.onError(new IOException(responseInfo.error));
+                    }
+                }).subscribeOn(Schedulers.io())).observeOn(AndroidSchedulers.mainThread()).subscribe(picEntity -> {
+            data.set(picEntity.position, picEntity);
+            posList.add(picEntity.position);
+            if (posList.size() == picList.size()) {
+                listener.onSuccess(data);
+            }
+        }, throwable -> {
+            listener.onFailure(throwable.getMessage());
+        });
+    }
 
     //图片名称
     public static final String getPictureName() {
@@ -209,6 +248,15 @@ public class UploadService {
 
     public interface OnUploadListener2 {
         void onSuccess(List<PicBean> list);
+
+        void onFailure(String error);
+    }
+
+    /**
+     * 发布回调接口
+     */
+    public interface OnPublishUploadListener {
+        void onSuccess(List<Object> list);
 
         void onFailure(String error);
     }

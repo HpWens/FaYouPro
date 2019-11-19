@@ -66,7 +66,7 @@ public class ApiUrl {
     public static final String MY_NEWS_STATUS = "/api-information/article/groupByAuditStatus";
 
     // 获取热搜
-    public static final String HOT_SEARCH = "/api-searchengines/search/getHotSearch";
+    public static final String HOT_SEARCH = "/api-searchengines/public/search/getHotSearch";
 
 
     // 获取各种类数据记录数
@@ -74,10 +74,10 @@ public class ApiUrl {
 
 
     // 查询法律法规
-    public static final String SEARCH_LEGAL = "/api-searchengines/legalProvisions/search";
+    public static final String SEARCH_LEGAL = "/api-searchengines/public/legalProvisions/search";
 
     // 查询法律法规
-    public static final String SEARCH_LEGAL_MORE = "/api-searchengines/legalProvisions/loadMore";
+    public static final String SEARCH_LEGAL_MORE = "/api-searchengines/public/legalProvisions/loadMore";
 
 
     // 查询司法解释
@@ -121,7 +121,7 @@ public class ApiUrl {
     public static final String CRIMINAL_FIND_LIST = "/api-information/criminalSuspect/findList";
 
     // 查找分类
-    public static final String LEGAL_FIND_LIST = "/api-lawsRegulations/lawRegulationsCategory/findAll";
+    public static final String LEGAL_FIND_LIST = "/api-lawsRegulations/public/lawRegulationsCategory/findAll";
 
     // 根据ID查找文章
     public static final String ARTICLE_DETAIL = "/api-information/article/";
@@ -184,5 +184,18 @@ public class ApiUrl {
     public static final String FIND_COMMENT_MORE = "/api-information/comment/findMore";
 
     // 根据分类获取法律列表
-    public static final String FIND_LEGAL_LIST = "/api-lawsRegulations/legalProvisions/findList";
+    public static final String FIND_LEGAL_LIST = "/api-lawsRegulations/public/legalProvisions/findList";
+
+    // 获取合同模板类型
+    public static final String GET_TEMPLATE_TYPE = "/api-contract/public/contract/getTypeList";
+
+    // 获取合同列表
+    public static final String GET_TEMPLATE_LIST = "/api-contract/public/contract/findContractList";
+
+    // 获取合同条款
+    public static final String GET_TEMPLATE_TERMS = "/api-contract/public/contract/findTermsById";
+
+
+    // 全局搜索全部模块信息
+    public static final String GET_SEARCH_RESULT = "/api-searchengines/public/search/searchAll";
 }

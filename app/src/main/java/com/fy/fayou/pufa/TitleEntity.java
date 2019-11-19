@@ -2,12 +2,10 @@ package com.fy.fayou.pufa;
 
 import java.io.Serializable;
 
-public class TitleEntity extends MixingEntity implements Serializable {
+public class TitleEntity implements Serializable {
 
     public String name;
 
-    @Override
-    int getType() {
-        return 0;
-    }
+    // 辅助字段
+    public int type = 0;
 }

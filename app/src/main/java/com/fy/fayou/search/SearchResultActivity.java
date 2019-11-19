@@ -9,6 +9,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.SearchResultEvent;
 import com.fy.fayou.search.bean.ColumnEntity;
 import com.fy.fayou.search.bean.MenuEntity;
@@ -70,7 +71,22 @@ public class SearchResultActivity extends BaseActivity {
             finish();
         });
 
-        requestMenuListData();
+        // requestMenuListData();
+
+        EasyHttp.get(ApiUrl.GET_SEARCH_RESULT)
+                .params("keyword", keyword)
+                .params("userId", UserService.getInstance().getUserId())
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+
+                    }
+                });
     }
 
     private void requestMenuListData() {

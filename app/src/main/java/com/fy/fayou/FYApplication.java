@@ -40,8 +40,6 @@ public class FYApplication extends BaseApplication {
         initEasyHttp();
 
         initPush();
-
-        UserService.getInstance().getPublishNew();
     }
 
     private void initPush() {

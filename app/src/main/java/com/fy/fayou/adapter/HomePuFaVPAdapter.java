@@ -7,11 +7,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.fy.fayou.bean.CategoryEntity;
 import com.fy.fayou.fragment.RecommendFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomePuFaVPAdapter extends FragmentPagerAdapter {
 
-    List<CategoryEntity> mTags;
+    List<CategoryEntity> mTags = new ArrayList<>();
 
     public HomePuFaVPAdapter(FragmentManager fm, List<CategoryEntity> tags) {
         super(fm);
@@ -38,5 +39,9 @@ public class HomePuFaVPAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return mTags.get(position).categoryName;
+    }
+
+    public List<CategoryEntity> getTags() {
+        return mTags;
     }
 }

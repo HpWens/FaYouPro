@@ -40,7 +40,7 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
         if (mType == WANTED) {
             return WantedFragment.newInstance(mColumns.get(i).type, "", "");
         } else if (mType == TEMPLATE) {
-            return TemplateFragment.newInstance();
+            return TemplateFragment.newInstance(mColumns.get(i).type);
         } else if (mType == LEGAL) {
             return LegalFragment.newInstance(mColumns.get(i).type);
         }
@@ -64,7 +64,7 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (mType == LEGAL) {
+        if (mType == LEGAL || mType == TEMPLATE) {
             return mColumns.get(position).name + "(" + mColumns.get(position).number + ")";
         }
         return mColumns.get(position).type + "(" + mColumns.get(position).numberOfPeople + ")";

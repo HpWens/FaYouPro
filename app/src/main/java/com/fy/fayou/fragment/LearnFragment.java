@@ -1,7 +1,9 @@
 package com.fy.fayou.fragment;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -9,7 +11,6 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomePuFaVPAdapter;
 import com.fy.fayou.bean.CategoryEntity;
-import com.fy.fayou.bean.TagEntity;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.utils.ParseUtils;
@@ -36,7 +37,7 @@ public class LearnFragment extends BaseFragment {
     HomeViewpager viewpager;
 
     Unbinder unbinder;
-
+    int selectedPosition = -1;
     private HomePuFaVPAdapter mAdapter;
 
     public static LearnFragment newInstance() {
@@ -67,7 +68,25 @@ public class LearnFragment extends BaseFragment {
                         if (!TextUtils.isEmpty(s)) {
                             List<CategoryEntity> list = ParseUtils.parseListData(s, CategoryEntity.class);
 
+                            selectedPosition = 0;
+                            ivPublish.setVisibility(list.get(selectedPosition).enableUserAdd ? View.VISIBLE : View.GONE);
+
                             viewpager.setAdapter(mAdapter = new HomePuFaVPAdapter(getChildFragmentManager(), list));
+                            viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                @Override
+                                public void onPageScrolled(int i, float v, int i1) {
+                                }
+
+                                @Override
+                                public void onPageSelected(int i) {
+                                    selectedPosition = i;
+                                    ivPublish.setVisibility(list.get(i).enableUserAdd ? View.VISIBLE : View.GONE);
+                                }
+
+                                @Override
+                                public void onPageScrollStateChanged(int i) {
+                                }
+                            });
                             tab.setViewPager(viewpager);
                         }
                     }
@@ -92,6 +111,12 @@ public class LearnFragment extends BaseFragment {
 
     @OnClick(R.id.iv_publish)
     public void onClick() {
-        ARouter.getInstance().build(Constant.NEWS_PUBLISH).navigation();
+
+        if (selectedPosition == -1 || mAdapter == null) {
+            return;
+        }
+        ARouter.getInstance().build(Constant.NEWS_PUBLISH)
+                .withString(Constant.Param.CATEGORY_ID, "" + mAdapter.getTags().get(selectedPosition).id)
+                .navigation();
     }
 }

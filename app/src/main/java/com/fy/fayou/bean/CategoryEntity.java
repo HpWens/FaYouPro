@@ -11,4 +11,5 @@ public class CategoryEntity {
     public String showIndex;
     public String orderNum;
     public String updaterId;
+    public boolean enableUserAdd;
 }

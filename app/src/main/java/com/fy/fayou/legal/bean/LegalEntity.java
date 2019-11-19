@@ -19,4 +19,6 @@ public class LegalEntity {
     public String createTime;
     public String updateTime;
     public List<TagEntity> tags;
+    public String content;
+
 }

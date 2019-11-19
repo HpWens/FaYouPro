@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by wenshi on 2019/7/3.
  * Description
  */
-public class PicEntity extends MixingEntity implements Serializable {
+public class PicEntity implements Serializable {
 
     public int position;
 
@@ -18,8 +18,8 @@ public class PicEntity extends MixingEntity implements Serializable {
 
     public String originPath = "";
 
-    @Override
-    int getType() {
-        return 2;
-    }
+    public String httpPath;
+
+    // 辅助字段
+    public int type = 2;
 }

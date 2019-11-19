@@ -5,13 +5,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.contract.adapter.TemplateAdapter;
 import com.fy.fayou.contract.bean.TemplateEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
+import com.zhouyou.http.EasyHttp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -20,12 +22,22 @@ public class TemplateFragment extends BaseListFragment<TemplateEntity> {
 
     RecyclerView mRecyclerView;
     TemplateAdapter mAdapter;
+    String mType = "1";
 
-    public static TemplateFragment newInstance() {
+    public static TemplateFragment newInstance(String type) {
         Bundle args = new Bundle();
+        args.putString(Constant.Param.TYPE, type);
         TemplateFragment fragment = new TemplateFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    protected void initView() {
+        if (getArguments() != null) {
+            mType = getArguments().getString(Constant.Param.TYPE, "1");
+        }
+        super.initView();
     }
 
     @Override
@@ -43,7 +55,12 @@ public class TemplateFragment extends BaseListFragment<TemplateEntity> {
 
     @Override
     protected Observable<Result<List<TemplateEntity>>> getListObservable(int pageNo) {
-        return null;
+        Observable<String> observable = EasyHttp.get(ApiUrl.GET_TEMPLATE_LIST)
+                .params("type", mType)
+                .params("size", "20")
+                .params("page", (pageNo - 1) + "")
+                .execute(String.class);
+        return getListByField(observable, "content", TemplateEntity.class);
     }
 
     @Override
@@ -64,14 +81,6 @@ public class TemplateFragment extends BaseListFragment<TemplateEntity> {
     @Override
     protected void initData() {
         super.initData();
-
-        List<TemplateEntity> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            TemplateEntity entity = new TemplateEntity();
-            list.add(entity);
-        }
-
-        mAdapter.setNewData(list);
     }
 
 }
