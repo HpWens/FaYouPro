@@ -43,7 +43,7 @@ public class NewsListVPAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int i) {
         if (type == NEWS_TYPE) {
-            return NewsListFragment.newInstance(mTypes[i]);
+            return NewsListFragment.newInstance(mCategoryList.get(i).auditStatus);
         } else if (type == COLLECT_TYPE) {
             return CollectFragment.newInstance(true, mCategoryList.get(i).type);
         } else if (type == HISTORY_TYPE) {
@@ -54,7 +54,7 @@ public class NewsListVPAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        if (type == COLLECT_TYPE || type == HISTORY_TYPE) {
+        if (type == COLLECT_TYPE || type == HISTORY_TYPE || type == NEWS_TYPE) {
             return mCategoryList.size();
         }
         return mTitles.length;
@@ -64,6 +64,22 @@ public class NewsListVPAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         if (type == COLLECT_TYPE || type == HISTORY_TYPE) {
             return mCategoryList.get(position).title;
+        } else if (type == NEWS_TYPE) {
+            String status = mCategoryList.get(position).auditStatus;
+            int num = mCategoryList.get(position).num;
+            // 审核状态    SUBMIT待审核,     AUDIT审核通过,     AUDIT_FAIL审核未通过
+            switch (status) {
+                case "ALL":
+                    return "全部";
+                case "SUBMIT":
+                    return "待审核(" + num + ")";
+                case "AUDIT":
+                    return "审核通过(" + num + ")";
+                case "AUDIT_FAIL":
+                    return "审核未通过(" + num + ")";
+                default:
+                    return "";
+            }
         }
         return mTitles[position];
     }

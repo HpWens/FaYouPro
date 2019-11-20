@@ -69,7 +69,7 @@ public class NewsListFragment extends BaseListFragment<NewsEntity> {
         Observable<String> observable = EasyHttp.get(ApiUrl.MY_NEWS)
                 .params("page", (pageNo - 1) + "")
                 .params("size", "20")
-                .params("auditStatus", status)
+                .params("auditStatus", status.equals("ALL") ? "" : status)
                 .execute(String.class);
         return getListByField(observable, "content", NewsEntity.class);
     }

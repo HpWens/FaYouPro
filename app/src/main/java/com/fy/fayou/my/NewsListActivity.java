@@ -1,17 +1,23 @@
 package com.fy.fayou.my;
 
+import android.text.TextUtils;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
+import com.fy.fayou.bean.CategoryEntity;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.my.adapter.NewsListVPAdapter;
 import com.fy.fayou.my.fragment.NewsListFragment;
+import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,8 +59,7 @@ public class NewsListActivity extends BaseActivity {
     protected void initData() {
         requestStatus();
 
-        viewpager.setAdapter(mAdapter = new NewsListVPAdapter(getSupportFragmentManager(), mTitles, NewsListVPAdapter.NEWS_TYPE, mTypes));
-        tab.setViewPager(viewpager);
+
     }
 
     private void requestStatus() {
@@ -67,7 +72,17 @@ public class NewsListActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(String s) {
-
+                        if (!TextUtils.isEmpty(s)) {
+                            List<CategoryEntity> list = ParseUtils.parseListData(s, CategoryEntity.class);
+                            if (!list.isEmpty()) {
+                                CategoryEntity entity = new CategoryEntity();
+                                entity.num = 0;
+                                entity.auditStatus = "ALL";
+                                list.add(0, entity);
+                            }
+                            viewpager.setAdapter(mAdapter = new NewsListVPAdapter(getSupportFragmentManager(), list, NewsListVPAdapter.NEWS_TYPE));
+                            tab.setViewPager(viewpager);
+                        }
                     }
                 });
     }

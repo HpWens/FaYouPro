@@ -19,4 +19,7 @@ public class CategoryEntity {
     public String showCollect;
     public String showBrowse;
 
+    public int num;
+    public String auditStatus;
+
 }
