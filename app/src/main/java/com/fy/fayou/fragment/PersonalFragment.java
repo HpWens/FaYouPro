@@ -172,6 +172,9 @@ public class PersonalFragment extends BaseFragment {
                 break;
             case R.id.tv_exit:
                 UserService.getInstance().clearUser();
+                if (getActivity().getApplication() instanceof FYApplication) {
+                    ((FYApplication) getActivity().getApplication()).clearTokenHeader();
+                }
                 break;
             case R.id.my_news:
                 ARouter.getInstance().build(Constant.NEWS_LIST)

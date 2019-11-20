@@ -25,10 +25,20 @@ public class CollectFragment extends BaseListFragment<CollectEntity> {
 
     private boolean isCollect = true;
     private static final String IS_COLLECT = "is_collect";
+    private String categoryType = "";
 
     public static CollectFragment newInstance(boolean isCollect) {
         Bundle args = new Bundle();
         args.putBoolean(IS_COLLECT, isCollect);
+        CollectFragment fragment = new CollectFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static CollectFragment newInstance(boolean isCollect, String type) {
+        Bundle args = new Bundle();
+        args.putBoolean(IS_COLLECT, isCollect);
+        args.putString(Constant.Param.TYPE, type);
         CollectFragment fragment = new CollectFragment();
         fragment.setArguments(args);
         return fragment;
@@ -43,7 +53,7 @@ public class CollectFragment extends BaseListFragment<CollectEntity> {
 
     @Override
     protected MeiBaseAdapter<CollectEntity> getAdapter() {
-        mAdapter = new CollectAdapter();
+        mAdapter = new CollectAdapter(isCollect);
         return mAdapter;
     }
 
@@ -52,6 +62,7 @@ public class CollectFragment extends BaseListFragment<CollectEntity> {
         Observable<String> observable = EasyHttp.get(isCollect ? ApiUrl.MY_COLLECT : ApiUrl.MY_HISTORY)
                 .params("page", (pageNo - 1) + "")
                 .params("size", "20")
+                .params("collectType", categoryType)
                 .execute(String.class);
         return getListByField(observable, "content", CollectEntity.class);
     }
@@ -81,6 +92,7 @@ public class CollectFragment extends BaseListFragment<CollectEntity> {
         Bundle bundle = getArguments();
         if (bundle != null) {
             isCollect = bundle.getBoolean(IS_COLLECT);
+            categoryType = bundle.getString(Constant.Param.TYPE, "");
         }
         super.initView();
     }

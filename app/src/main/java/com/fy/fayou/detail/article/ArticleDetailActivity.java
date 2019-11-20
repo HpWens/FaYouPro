@@ -18,6 +18,7 @@ import com.fy.fayou.R;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.detail.adapter.CommentHeaderPresenter;
 import com.fy.fayou.detail.adapter.CommentPresenter;
 import com.fy.fayou.detail.adapter.FooterPresenter;
@@ -36,6 +37,7 @@ import com.fy.fayou.detail.bean.RecommendBean;
 import com.fy.fayou.detail.bean.RecommendHeaderBean;
 import com.fy.fayou.detail.bean.TextBean;
 import com.fy.fayou.detail.dialog.BottomShareDialog;
+import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.MarkDownParser;
 import com.fy.fayou.utils.ParseUtils;
@@ -46,6 +48,8 @@ import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -363,10 +367,14 @@ public class ArticleDetailActivity extends BaseActivity {
                 break;
             case R.id.tv_message:
             case R.id.tv_publish:
-                showBottomDialog();
+                if (UserService.getInstance().checkLoginAndJump()) {
+                    showBottomDialog();
+                }
                 break;
             case R.id.tv_collect:
-                requestCollect(articleId);
+                if (UserService.getInstance().checkLoginAndJump()) {
+                    requestCollect(articleId);
+                }
                 break;
             case R.id.tv_share:
                 break;
@@ -498,5 +506,15 @@ public class ArticleDetailActivity extends BaseActivity {
             return;
         }
         super.onBackPressedSupport();
+    }
+
+    @Override
+    public boolean isRegisterEventBus() {
+        return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoginSuccessEvent(LoginSuccessOrExitEvent event) {
+        if (recycler != null) requestData();
     }
 }

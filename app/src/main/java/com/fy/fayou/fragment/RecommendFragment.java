@@ -14,6 +14,7 @@ import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.OnScrollClashListener;
 import com.fy.fayou.event.HomeRefreshEvent;
+import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.view.HomeClashRecyclerView;
 import com.meis.base.mei.adapter.BaseMultiAdapter;
 import com.meis.base.mei.base.BaseMultiListFragment;
@@ -163,4 +164,18 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
     protected boolean loadOnShow() {
         return false;
     }
+
+    /**
+     * 登录成功刷新接口
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoginSuccessEvent(LoginSuccessOrExitEvent event) {
+        if (mRecyclerView != null) {
+            mRecyclerView.scrollToPosition(0);
+        }
+        loadPage(DataConstants.FIRST_PAGE);
+    }
+
 }

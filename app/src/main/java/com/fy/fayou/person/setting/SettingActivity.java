@@ -14,6 +14,7 @@ import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.ExitLoginEvent;
+import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.utils.GlideCacheUtil;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.meis.base.mei.base.BaseActivity;
@@ -97,6 +98,7 @@ public class SettingActivity extends BaseActivity {
                 UserService.getInstance().clearUser();
                 ((FYApplication) getApplication()).clearTokenHeader();
                 EventBus.getDefault().post(new ExitLoginEvent());
+                EventBus.getDefault().post(new LoginSuccessOrExitEvent());
                 finish();
                 break;
         }

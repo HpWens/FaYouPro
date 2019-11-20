@@ -124,7 +124,7 @@ public class ApiUrl {
     public static final String LEGAL_FIND_LIST = "/api-lawsRegulations/public/lawRegulationsCategory/findAll";
 
     // 根据ID查找文章
-    public static final String ARTICLE_DETAIL = "/api-information/article/";
+    public static final String ARTICLE_DETAIL = "/api-information/public/article/";
 
     // 文章点赞
     public static final String ARTICLE_PRAISE = "/api-information/article/";
@@ -198,4 +198,11 @@ public class ApiUrl {
 
     // 全局搜索全部模块信息
     public static final String GET_SEARCH_RESULT = "/api-searchengines/public/search/searchAll";
+
+    // 查找需要展示收藏的栏目
+    public static final String GET_COLLECT_CATEGORY = "/api-collect/menu/findBrowsMenu";
+
+    // 查找需要展示浏览记录的栏目
+    public static final String GET_HISTORY_CATEGORY = "/api-collect/menu/findCollectMenu";
+
 }

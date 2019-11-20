@@ -30,6 +30,7 @@ import com.fy.fayou.bean.UserInfo;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
+import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.utils.RegexUtils;
 import com.meis.base.mei.base.BaseActivity;
@@ -41,6 +42,7 @@ import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -274,9 +276,13 @@ public class LoginActivity extends BaseActivity {
                             UserInfo userInfo = userBean.user;
                             userInfo.token = userBean.token;
                             UserService.getInstance().saveUser(userInfo);
+                            // 第一步添加token
                             if (getApplication() instanceof FYApplication) {
                                 ((FYApplication) getApplication()).addEasyTokenHeader();
                             }
+
+                            // 发送登录成功事件
+                            EventBus.getDefault().post(new LoginSuccessOrExitEvent());
 
                             // 判定是否设置昵称
                             if (TextUtils.isEmpty(userInfo.nickName)) {

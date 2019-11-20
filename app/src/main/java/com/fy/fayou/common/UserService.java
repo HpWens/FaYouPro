@@ -3,6 +3,7 @@ package com.fy.fayou.common;
 import android.app.Application;
 import android.text.TextUtils;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.bean.UserInfo;
 import com.fy.fayou.pufa.PicEntity;
 import com.fy.fayou.pufa.TextEntity;
@@ -145,6 +146,19 @@ public class UserService {
     public boolean isLogin() {
         UserInfo userInfo = getUserInfo();
         if (null == userInfo || TextUtils.isEmpty(userInfo.id)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @return
+     */
+    public boolean checkLoginAndJump() {
+        UserInfo userInfo = getUserInfo();
+        if (null == userInfo || TextUtils.isEmpty(userInfo.id)) {
+            ARouter.getInstance().build(Constant.LOGIN)
+                    .navigation();
             return false;
         }
         return true;

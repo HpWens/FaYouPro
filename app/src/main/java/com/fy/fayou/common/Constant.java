@@ -112,6 +112,10 @@ public class Constant {
     // 关于我们
     public static final String ABOUT_MY = "/about/my";
 
+
+    // 关于我们
+    public static final String KT_ABOUT_MY = "/kt/about/my";
+
     // 合同模板
     public static final String CONTRACT_TEMPLATE = "/contract/template";
 

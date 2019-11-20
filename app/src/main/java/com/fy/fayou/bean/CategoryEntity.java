@@ -12,4 +12,11 @@ public class CategoryEntity {
     public String orderNum;
     public String updaterId;
     public boolean enableUserAdd;
+    public String title;
+    public String type;
+    public String categoryId;
+    public String showSearch;
+    public String showCollect;
+    public String showBrowse;
+
 }

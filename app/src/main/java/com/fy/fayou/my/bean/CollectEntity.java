@@ -12,5 +12,7 @@ public class CollectEntity implements Serializable {
     public String categoryName;
     public String createTime;
     public String collectType;
+    public String browseRecordType;
+
 
 }
