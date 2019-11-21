@@ -339,7 +339,7 @@ public class PublishNewsNextActivity extends BaseActivity {
         params.put("articleType", "ARTICLE");
         JSONObject jsonObject = new JSONObject(params);
 
-        EasyHttp.post(ApiUrl.HOME_ARTICLE)
+        EasyHttp.post(ApiUrl.SAVE_ARTICLE)
                 .upJson(jsonObject.toString())
                 .execute(new SimpleCallBack<String>() {
                     @Override

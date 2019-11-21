@@ -164,6 +164,8 @@ public class Constant {
 
         String TYPE = "type";
 
+        String PRE_TYPE = "pre_type";
+
         String KEYWORD = "keyword";
 
         String CITY_NAME = "city_name";

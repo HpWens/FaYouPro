@@ -9,7 +9,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
 import com.fy.fayou.my.bean.CollectEntity;
 import com.fy.fayou.utils.GlideOption;
-import com.fy.fayou.utils.TimeUtils;
+import com.fy.fayou.utils.KtTimeUtils;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class CollectAdapter extends MeiBaseAdapter<CollectEntity> {
         ivCover.setVisibility(TextUtils.isEmpty(item.cover) ? View.GONE : View.VISIBLE);
 
         holder.setText(R.id.tv_title, getNonEmpty(item.title))
-                .setText(R.id.tv_time, TimeUtils.getYMDTime(isCollect ? item.createTime : item.businessTime));
+                .setText(R.id.tv_time, KtTimeUtils.INSTANCE.getYMDTime(isCollect ? item.createTime : item.businessTime));
     }
 }
 

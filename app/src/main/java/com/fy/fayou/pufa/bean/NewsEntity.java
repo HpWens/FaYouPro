@@ -1,6 +1,8 @@
 package com.fy.fayou.pufa.bean;
 
-public class NewsEntity {
+import java.io.Serializable;
+
+public class NewsEntity implements Serializable {
 
     public String id;
     public String fullTitle;

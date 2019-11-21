@@ -53,6 +53,7 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
         if (isRegisterEventBus()) {
             EventBus.getDefault().register(this);
         }
+
         initView();
         initData();
     }
@@ -409,12 +410,16 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
 
     public void showDarkMode() {
         showDark();
-        Eyes.setStatusBarColor(this, Color.parseColor("#4f000000"), true);
+        if (!isFullScreen) {
+            Eyes.setStatusBarColor(this, Color.parseColor("#4f000000"), true);
+        }
     }
 
     public void showLightMode() {
         hideDark();
-        Eyes.setStatusBarColor(this, Color.parseColor("#ffffff"), true);
+        if (!isFullScreen) {
+            Eyes.setStatusBarColor(this, Color.parseColor("#ffffff"), true);
+        }
     }
 
     public void removeFragment(Class fragmentClss) {

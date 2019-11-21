@@ -1,6 +1,9 @@
 package com.fy.fayou.bean;
 
-public class CategoryEntity {
+import java.io.Serializable;
+
+public class CategoryEntity implements Serializable {
+
     public String id;
     public String createTime;
     public String updateTime;
@@ -18,7 +21,6 @@ public class CategoryEntity {
     public String showSearch;
     public String showCollect;
     public String showBrowse;
-
     public int num;
     public String auditStatus;
 

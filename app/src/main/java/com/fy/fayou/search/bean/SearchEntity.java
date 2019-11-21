@@ -1,6 +1,8 @@
 package com.fy.fayou.search.bean;
 
-public class SearchEntity {
+import java.io.Serializable;
+
+public class SearchEntity implements Serializable {
 
     public String name;
     public String id;

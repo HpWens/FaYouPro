@@ -97,6 +97,7 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
     }
 
     private void initSwitcher() {
+        requestHot();
         List<String> hintList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             hintList.add("电信诈骗");
@@ -115,6 +116,10 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
         switcher.postDelayed(() -> {
             textSwitcherAnimation.create();
         }, 400);
+    }
+
+    private void requestHot() {
+
     }
 
     @Override

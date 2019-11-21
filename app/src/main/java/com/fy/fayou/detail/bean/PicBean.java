@@ -8,4 +8,6 @@ public class PicBean {
     // 远程路径
     public String httpPath = "";
 
+    public int position = 0;
+
 }

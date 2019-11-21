@@ -5,12 +5,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
 import com.fy.fayou.bean.RecommendEntity;
-import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.adapter.BaseMultiAdapter;
@@ -62,14 +61,9 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                     if (mListener != null) {
                         if (TextUtils.isEmpty(item.id)) {
                             if (item.fixedMode == 1) {
-                                ARouter.getInstance()
-                                        .build(Constant.WANTED)
-                                        .navigation();
+                                ARoute.jumpWanted();
                             } else {
-                                ARouter.getInstance()
-                                        .build(Constant.COMMON_WEB_VIEW)
-                                        .withString(Constant.Param.URL, "http://fayou-h5.zhdfxm.com/myCountry")
-                                        .navigation();
+                                ARoute.jumpH5("http://fayou-h5.zhdfxm.com/myCountry");
                             }
                         } else {
                             mListener.onClick(v, item);

@@ -1,24 +1,14 @@
 package com.fy.fayou.legal.bean;
 
-import com.fy.fayou.bean.TagEntity;
+import java.io.Serializable;
 
-import java.util.List;
-
-public class LegalEntity {
-
+public class LegalEntity implements Serializable {
     public String id;
+    public String title;
+    public String source;
+    public String pubTime;
+    public String type;
+    public String toUrl;
     public String name;
     public String publishTime;
-    public TagEntity type;
-    public String updateUser;
-    public String source;
-    public int status;
-    public String longText;
-    public String judicialInterpretations;
-    public String toUrl;
-    public String createTime;
-    public String updateTime;
-    public List<TagEntity> tags;
-    public String content;
-
 }

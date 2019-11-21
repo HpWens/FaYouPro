@@ -42,6 +42,8 @@ import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.MarkDownParser;
 import com.fy.fayou.utils.ParseUtils;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.meis.base.mei.adapter.MeiBaseMixAdapter;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
@@ -102,6 +104,8 @@ public class ArticleDetailActivity extends BaseActivity {
     List<Object> mDataList = new ArrayList<>();
 
     private ReviewFragment mReviewFragment;
+    private List<LocalMedia> mPicMedia = new ArrayList<>();
+    private int mPicIndex = 0;
 
     @Override
     protected void initView() {
@@ -139,7 +143,9 @@ public class ArticleDetailActivity extends BaseActivity {
                 requestFollow(header, position);
             }
         }));
-        mAdapter.addItemPresenter(new PicPresenter());
+        mAdapter.addItemPresenter(new PicPresenter((v, item) -> {
+            PictureSelector.create(this).themeStyle(R.style.picture_default_style).openExternalPreview(item.position, mPicMedia);
+        }));
         mAdapter.addItemPresenter(new RecommendHeaderPresenter());
         mAdapter.addItemPresenter(new RecommendPresenter((v, item) -> {
             ARoute.jumpDetail(item.id, item.articleType);
@@ -278,13 +284,22 @@ public class ArticleDetailActivity extends BaseActivity {
     // 填充内容
     private void fillContentData(ArticleEntity articleEntity) {
         String content = articleEntity.content;
+        mPicMedia = new ArrayList<>();
+        mPicIndex = 0;
         if (!TextUtils.isEmpty(content)) {
             new MarkDownParser().readMarkdownByJson(content, new MarkDownParser.OnMarkListener() {
                 @Override
                 public void onPic(String pic) {
                     PicBean picBean = new PicBean();
                     picBean.httpPath = pic;
+                    picBean.position = mPicIndex;
                     mDataList.add(picBean);
+
+                    LocalMedia media = new LocalMedia();
+                    media.setPath(pic);
+                    mPicMedia.add(media);
+
+                    mPicIndex++;
                 }
 
                 @Override

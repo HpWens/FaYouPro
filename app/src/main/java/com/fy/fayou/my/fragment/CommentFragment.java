@@ -3,11 +3,13 @@ package com.fy.fayou.my.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.my.adapter.CommentAdapter;
 import com.fy.fayou.my.bean.CommentEntity;
+import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
@@ -51,6 +53,9 @@ public class CommentFragment extends BaseListFragment<CommentEntity> {
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
+                        ParseUtils.handlerApiError(e, error -> {
+                            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                        });
                     }
 
                     @Override

@@ -1,6 +1,8 @@
 package com.fy.fayou.bean;
 
-public class ErrorApi {
+import java.io.Serializable;
+
+public class ErrorApi implements Serializable {
 
     public String message;
 

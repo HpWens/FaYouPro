@@ -24,10 +24,12 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
     LegalAdapter mAdapter;
 
     private String type;
+    private int preType;
 
-    public static LegalFragment newInstance(String type) {
+    public static LegalFragment newInstance(int preType, String type) {
         Bundle args = new Bundle();
         args.putString(Constant.Param.TYPE, type);
+        args.putInt(Constant.Param.PRE_TYPE, preType);
         LegalFragment fragment = new LegalFragment();
         fragment.setArguments(args);
         return fragment;
@@ -38,6 +40,7 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
         Bundle bundle = getArguments();
         if (bundle != null) {
             type = bundle.getString(Constant.Param.TYPE, "");
+            preType = bundle.getInt(Constant.Param.PRE_TYPE, 3);
         }
         super.initView();
     }
@@ -51,13 +54,13 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
 
     @Override
     protected MeiBaseAdapter<LegalEntity> getAdapter() {
-        mAdapter = new LegalAdapter();
+        mAdapter = new LegalAdapter(preType);
         return mAdapter;
     }
 
     @Override
     protected Observable<Result<List<LegalEntity>>> getListObservable(int pageNo) {
-        Observable<String> observable = EasyHttp.get(ApiUrl.FIND_LEGAL_LIST)
+        Observable<String> observable = EasyHttp.get(preType == 3 ? ApiUrl.FIND_LEGAL_LIST : ApiUrl.FIND_JUDICIAL_LIST)
                 .params("type", type)
                 .params("size", "20")
                 .params("page", (pageNo - 1) + "")

@@ -81,6 +81,7 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_cancel:
+                finish();
                 break;
             case R.id.tv_right:
                 if (!mMixingHelper.isEmpty()) {

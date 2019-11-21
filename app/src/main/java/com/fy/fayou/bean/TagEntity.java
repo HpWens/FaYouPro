@@ -1,6 +1,8 @@
 package com.fy.fayou.bean;
 
-public class TagEntity {
+import java.io.Serializable;
+
+public class TagEntity implements Serializable {
 
     public String id;
     public String createTime;

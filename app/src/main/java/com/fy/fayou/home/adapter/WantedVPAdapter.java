@@ -28,6 +28,8 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
     public static int WANTED = 1;
     // 法律法规
     public static int LEGAL = 3;
+    // 司法解释
+    public static int JUDICIAL = 4;
 
     public WantedVPAdapter(FragmentManager fm, ArrayList<ColumnEntity> columns, int type) {
         super(fm);
@@ -41,8 +43,8 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
             return WantedFragment.newInstance(mColumns.get(i).type, "", "");
         } else if (mType == TEMPLATE) {
             return TemplateFragment.newInstance(mColumns.get(i).type);
-        } else if (mType == LEGAL) {
-            return LegalFragment.newInstance(mColumns.get(i).type);
+        } else if (mType == LEGAL || mType == JUDICIAL) {
+            return LegalFragment.newInstance(mType, mColumns.get(i).type);
         }
         return WantedFragment.newInstance(mColumns.get(i).type, "", "");
     }
@@ -64,7 +66,7 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (mType == LEGAL || mType == TEMPLATE) {
+        if (mType == LEGAL || mType == TEMPLATE || mType == JUDICIAL) {
             return mColumns.get(position).name + "(" + mColumns.get(position).number + ")";
         }
         return mColumns.get(position).type + "(" + mColumns.get(position).numberOfPeople + ")";

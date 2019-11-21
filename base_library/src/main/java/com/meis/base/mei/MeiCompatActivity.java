@@ -23,6 +23,8 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader;
  */
 public class MeiCompatActivity extends RxAppCompatActivity implements IMeiCompatActivity, IStatusHelper {
 
+    protected boolean isFullScreen = true;
+
     final MeiCompatActivityDelegate mDelegate = new MeiCompatActivityDelegate(this);
     public MeiCompatActivity mContext;
 
@@ -151,6 +153,7 @@ public class MeiCompatActivity extends RxAppCompatActivity implements IMeiCompat
      * @return
      */
     public Toolbar getToolbarView() {
+        isFullScreen = false;
         return mDelegate.getToolbarView();
     }
 

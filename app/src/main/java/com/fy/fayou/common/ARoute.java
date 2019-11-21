@@ -88,4 +88,11 @@ public class ARoute {
                 .navigation();
     }
 
+    public static void jumpH5(String url) {
+        ARouter.getInstance()
+                .build(Constant.COMMON_WEB_VIEW)
+                .withString(Constant.Param.URL, url)
+                .navigation();
+    }
+
 }

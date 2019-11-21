@@ -91,7 +91,7 @@ public class SuggestActivity extends BaseActivity {
         params.put("pics", pics);
         JSONObject jsonObject = new JSONObject(params);
 
-        EasyHttp.post(ApiUrl.USER_UPDATE)
+        EasyHttp.post(ApiUrl.FEED_BACK)
                 .upJson(jsonObject.toString())
                 .execute(new SimpleCallBack<String>() {
 

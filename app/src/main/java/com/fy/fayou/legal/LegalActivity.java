@@ -83,7 +83,7 @@ public class LegalActivity extends BaseActivity {
         requestColumn(moduleType);
     }
 
-    private void requestColumn(int type) {
+    private void requestColumn(final int type) {
         EasyHttp.get(ApiUrl.LEGAL_FIND_LIST)
                 .params("type", type + "")
                 .execute(new SimpleCallBack<String>() {
@@ -95,7 +95,8 @@ public class LegalActivity extends BaseActivity {
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
                             ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
-                            viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.LEGAL));
+                            viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns,
+                                    type == ARoute.LEGAL_TYPE ? WantedVPAdapter.LEGAL :  WantedVPAdapter.JUDICIAL));
                             tab.setViewPager(viewpager);
                         }
                     }

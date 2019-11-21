@@ -3,8 +3,10 @@ package com.fy.fayou.search.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 
-public class ColumnEntity implements Parcelable {
+
+public class ColumnEntity implements Parcelable, Serializable {
 
     // 栏目名称
     public String name;

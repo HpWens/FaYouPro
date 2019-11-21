@@ -33,7 +33,7 @@ public class ApiUrl {
 
 
     // 发送验证码
-    public static final String SEND_VERIFY_CODE = "/api-sms/sms/getVerifyCode";
+    public static final String SEND_VERIFY_CODE = "/api-sms/public/sms/getVerifyCode";
 
 
     // 换绑手机
@@ -112,6 +112,8 @@ public class ApiUrl {
     // 新闻分页查找
     public static final String HOME_ARTICLE = "/api-information/public/article";
 
+    // 文章保存
+    public static final String SAVE_ARTICLE = "/api-information/article";
 
     // 查找嫌疑人分类及人数统计
     public static final String CRIMINAL_COLUMN = "/api-information/criminalSuspect/findTypeList";
@@ -122,6 +124,10 @@ public class ApiUrl {
 
     // 查找分类
     public static final String LEGAL_FIND_LIST = "/api-lawsRegulations/public/lawRegulationsCategory/findAll";
+
+
+    // 根据类型查找司法解释列表
+    public static final String FIND_JUDICIAL_LIST = "/api-lawsRegulations/public/judicialInterpretation/findList";
 
     // 根据ID查找文章
     public static final String ARTICLE_DETAIL = "/api-information/public/article/";
