@@ -5,10 +5,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
 import com.fy.fayou.bean.RecommendEntity;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.adapter.BaseMultiAdapter;
@@ -42,15 +44,36 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                         .setText(R.id.tv_time, ParseUtils.getTime(item.createTime));
 
                 ImageView ivCover = helper.getView(R.id.fl_video);
-                Glide.with(mContext)
-                        .load(getNonEmpty(item.cover))
-                        .apply(GlideOption.getItemOption(112, 74))
-                        .into(ivCover);
+                if (TextUtils.isEmpty(item.id)) {
+                    if (item.fixedMode == 1) {
+                        ivCover.setImageResource(R.mipmap.ic_home_top_0);
+                    } else {
+                        ivCover.setImageResource(R.mipmap.ic_home_top_1);
+                    }
+                } else {
+                    Glide.with(mContext)
+                            .load(getNonEmpty(item.cover))
+                            .apply(GlideOption.getItemOption(112, 74))
+                            .into(ivCover);
+                }
 
                 // 跳转到详情页
                 helper.itemView.setOnClickListener(v -> {
                     if (mListener != null) {
-                        mListener.onClick(v, item);
+                        if (TextUtils.isEmpty(item.id)) {
+                            if (item.fixedMode == 1) {
+                                ARouter.getInstance()
+                                        .build(Constant.WANTED)
+                                        .navigation();
+                            } else {
+                                ARouter.getInstance()
+                                        .build(Constant.COMMON_WEB_VIEW)
+                                        .withString(Constant.Param.URL, "http://fayou-h5.zhdfxm.com/myCountry")
+                                        .navigation();
+                            }
+                        } else {
+                            mListener.onClick(v, item);
+                        }
                     }
                 });
 

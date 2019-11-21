@@ -15,6 +15,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.fy.fayou.R;
+import com.fy.fayou.bean.UserInfo;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
@@ -117,7 +118,9 @@ public class ArticleDetailActivity extends BaseActivity {
         mAdapter.addItemPresenter(new CommentPresenter(new CommentPresenter.OnClickListener() {
             @Override
             public void onPraise(View v, int pos, CommentBean item) {
-                requestPraise(item.id, pos, item);
+                if (UserService.getInstance().checkLoginAndJump()) {
+                    requestPraise(item.id, pos, item);
+                }
             }
 
             @Override
@@ -127,15 +130,36 @@ public class ArticleDetailActivity extends BaseActivity {
         }));
         mAdapter.addItemPresenter(new CommentHeaderPresenter());
         mAdapter.addItemPresenter(new FooterPresenter((v, id, pos, footer) -> {
-            requestPraise(footer, pos);
+            if (UserService.getInstance().checkLoginAndJump()) {
+                requestPraise(footer, pos);
+            }
         }));
         mAdapter.addItemPresenter(new HeaderPresenter((v, id, position, header) -> {
-            requestFollow(header, position);
+            if (UserService.getInstance().checkLoginAndJump()) {
+                requestFollow(header, position);
+            }
         }));
         mAdapter.addItemPresenter(new PicPresenter());
         mAdapter.addItemPresenter(new RecommendHeaderPresenter());
         mAdapter.addItemPresenter(new RecommendPresenter((v, item) -> {
             ARoute.jumpDetail(item.id, item.articleType);
+
+            // 新增浏览记录
+            HashMap<String, String> params = new HashMap<>();
+            params.put("businessId", item.id);
+            params.put("browseRecordType", item.articleType);
+            JSONObject jsonObject = new JSONObject(params);
+            EasyHttp.post(ApiUrl.MY_HISTORY)
+                    .upJson(jsonObject.toString())
+                    .execute(new SimpleCallBack<String>() {
+                        @Override
+                        public void onError(ApiException e) {
+                        }
+
+                        @Override
+                        public void onSuccess(String s) {
+                        }
+                    });
         }));
         mAdapter.addItemPresenter(new TextPresenter());
         recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -304,11 +328,35 @@ public class ArticleDetailActivity extends BaseActivity {
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
-
                     }
 
                     @Override
                     public void onSuccess(String s) {
+                        if (footer.give) {
+                            footer.gives -= 1;
+                            for (ArticleEntity.UserBean userBean : footer.giveRecords) {
+                                if (userBean.userId.equals(UserService.getInstance().getUserId())) {
+                                    footer.giveRecords.remove(userBean);
+                                    break;
+                                }
+                            }
+                        } else {
+                            boolean exist = false;
+                            for (ArticleEntity.UserBean userBean : footer.giveRecords) {
+                                if (userBean.userId.equals(UserService.getInstance().getUserId())) {
+                                    exist = true;
+                                    break;
+                                }
+                            }
+                            if (!exist) {
+                                UserInfo userInfo = UserService.getInstance().getUserInfo();
+                                ArticleEntity.UserBean userBean = new ArticleEntity.UserBean();
+                                userBean.userId = userInfo.id;
+                                userBean.userAvatar = userInfo.avatar;
+                                footer.giveRecords.add(userBean);
+                            }
+                            footer.gives += 1;
+                        }
                         footer.give = !footer.give;
                         mAdapter.notifyItemChanged(position);
                     }
@@ -367,9 +415,7 @@ public class ArticleDetailActivity extends BaseActivity {
                 break;
             case R.id.tv_message:
             case R.id.tv_publish:
-                if (UserService.getInstance().checkLoginAndJump()) {
-                    showBottomDialog();
-                }
+                showBottomDialog();
                 break;
             case R.id.tv_collect:
                 if (UserService.getInstance().checkLoginAndJump()) {

@@ -1,5 +1,6 @@
 package com.fy.fayou.detail.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FooterBean {
@@ -11,6 +12,6 @@ public class FooterBean {
     public boolean give;
     public String id;
 
-    public List<ArticleEntity.UserBean> giveRecords;
+    public List<ArticleEntity.UserBean> giveRecords = new ArrayList<>();
 
 }

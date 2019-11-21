@@ -29,7 +29,7 @@ public class ArticleEntity implements Serializable {
     public String auditAvatar;
     public List<String> tagNames;
 
-    public class UserBean {
+    public static class UserBean {
         public String userId;
         public String userAvatar;
         public String nickName;

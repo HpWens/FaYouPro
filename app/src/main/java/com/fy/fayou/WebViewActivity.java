@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.DownloadListener;
@@ -14,9 +15,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 
@@ -25,6 +27,9 @@ import butterknife.ButterKnife;
 
 @Route(path = "/fy/webview")
 public class WebViewActivity extends BaseActivity {
+
+    @Autowired(name = "url")
+    public String url = "";
 
     @BindView(R.id.web_base)
     WebView webBase;
@@ -38,6 +43,7 @@ public class WebViewActivity extends BaseActivity {
     @Override
     protected void initView() {
         ButterKnife.bind(this);
+        ARouter.getInstance().inject(this);
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
         setToolBarCenterTitle("用户服务协议及隐私政策");
         setLeftBackListener(v -> finish());
@@ -45,6 +51,10 @@ public class WebViewActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+
+        if (!TextUtils.isEmpty(url)) {
+            webPath = url;
+        }
 
         WebSettings webSettings = webBase.getSettings();
         if (Build.VERSION.SDK_INT >= 19) {
@@ -175,13 +185,14 @@ public class WebViewActivity extends BaseActivity {
         if (webBase.canGoBack()) {
             webBase.goBack();
         } else {
-            if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
-                super.onBackPressedSupport();
-                return;
-            } else {
-                Toast.makeText(getBaseContext(), "再次点击返回键退出", Toast.LENGTH_SHORT).show();
-            }
-            mBackPressed = System.currentTimeMillis();
+            super.onBackPressedSupport();
+//            if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
+//                super.onBackPressedSupport();
+//                return;
+//            } else {
+//                Toast.makeText(getBaseContext(), "再次点击返回键退出", Toast.LENGTH_SHORT).show();
+//            }
+//            mBackPressed = System.currentTimeMillis();
         }
     }
 

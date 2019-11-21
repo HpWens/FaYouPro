@@ -110,7 +110,7 @@ public class ApiUrl {
 
 
     // 新闻分页查找
-    public static final String HOME_ARTICLE = "/api-information/article";
+    public static final String HOME_ARTICLE = "/api-information/public/article";
 
 
     // 查找嫌疑人分类及人数统计
@@ -130,7 +130,7 @@ public class ApiUrl {
     public static final String ARTICLE_PRAISE = "/api-information/article/";
 
     // 评论查找
-    public static final String COMMENT_LIST = "/api-information/comment";
+    public static final String COMMENT_LIST = "/api-information/public/comment";
 
     // 评论删除
     public static final String COMMENT_DELETE = "/api-information/comment/";
@@ -164,7 +164,7 @@ public class ApiUrl {
 
 
     // 分类查找
-    public static final String FIND_CATEGORY = "/api-information/category";
+    public static final String FIND_CATEGORY = "/api-information/public/category";
 
 
     // 查找所有新闻标签
@@ -178,10 +178,10 @@ public class ApiUrl {
     public static final String UPDATE_PASSWORD = "/api-user/user/updatePassword";
 
     // 统计文章评论条数
-    public static final String COMMENT_COUNT = "/api-information/comment/count";
+    public static final String COMMENT_COUNT = "/api-information/public/comment/count";
 
     // 查找更多评论
-    public static final String FIND_COMMENT_MORE = "/api-information/comment/findMore";
+    public static final String FIND_COMMENT_MORE = "/api-information/public/comment/findMore";
 
     // 根据分类获取法律列表
     public static final String FIND_LEGAL_LIST = "/api-lawsRegulations/public/legalProvisions/findList";

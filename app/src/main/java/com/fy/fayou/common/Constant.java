@@ -158,6 +158,8 @@ public class Constant {
 
         String NAME = "name";
 
+        String URL = "url";
+
         String MOBILE = "mobile";
 
         String TYPE = "type";
@@ -165,6 +167,8 @@ public class Constant {
         String KEYWORD = "keyword";
 
         String CITY_NAME = "city_name";
+
+        String FIXED_COLUMN = "fixed_column";
 
         String ARTICLE_ID = "article_id";
 

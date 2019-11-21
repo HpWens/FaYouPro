@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.UserService;
 import com.meis.base.mei.base.BaseDialog;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
@@ -69,7 +70,13 @@ public class BottomShareDialog extends BaseDialog {
         mIvCollect.setImageResource(isCollect ? R.mipmap.detail_share_collect_selected : R.mipmap.detail_share_collect);
 
         mIvCollect.setOnClickListener(v -> {
-            requestCollect(articleId);
+            if (UserService.getInstance().checkLoginAndJump()) {
+                requestCollect(articleId);
+            }
+        });
+
+        findViewById(R.id.tv_cancel).setOnClickListener(v -> {
+            dismiss();
         });
     }
 

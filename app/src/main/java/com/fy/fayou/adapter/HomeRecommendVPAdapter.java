@@ -22,18 +22,12 @@ public class HomeRecommendVPAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int i) {
         if (i == 0) {
-            return RecommendFragment.newInstance().setOnScrollClashListener(new OnScrollClashListener() {
-                @Override
-                public void onScroll(boolean isScroll) {
-                    if (mListener != null) mListener.onScroll(isScroll);
-                }
+            return RecommendFragment.newInstance("", true).setOnScrollClashListener(isScroll -> {
+                if (mListener != null) mListener.onScroll(isScroll);
             });
         }
-        return ColumnFragment.newInstance().setOnScrollClashListener(new OnScrollClashListener() {
-            @Override
-            public void onScroll(boolean isScroll) {
-                if (mListener != null) mListener.onScroll(isScroll);
-            }
+        return ColumnFragment.newInstance().setOnScrollClashListener(isScroll -> {
+            if (mListener != null) mListener.onScroll(isScroll);
         });
     }
 

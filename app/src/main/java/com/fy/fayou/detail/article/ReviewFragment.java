@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.detail.dialog.BottomCommentDialog;
 import com.meis.base.mei.base.BaseFragment;
 import com.zhouyou.http.EasyHttp;
@@ -111,7 +112,9 @@ public class ReviewFragment extends BaseFragment {
 
         loadRootFragment(R.id.fl_recycler, mReviewListFragment = ReviewListFragment.newInstance(articleId)
                 .setOnItemClickListener((userName, articleId, parentId, position) -> {
-                    showBottomCommentDialog(userName, articleId, parentId, position);
+                    if (UserService.getInstance().checkLoginAndJump()) {
+                        showBottomCommentDialog(userName, articleId, parentId, position);
+                    }
                 }));
     }
 

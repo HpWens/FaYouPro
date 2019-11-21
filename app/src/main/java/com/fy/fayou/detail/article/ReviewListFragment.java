@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiResult;
@@ -222,7 +223,9 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
-
+                        ParseUtils.handlerApiError(e, error -> {
+                            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                        });
                     }
 
                     @Override

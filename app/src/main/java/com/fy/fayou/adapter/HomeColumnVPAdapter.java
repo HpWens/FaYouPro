@@ -20,12 +20,9 @@ public class HomeColumnVPAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(final int i) {
-        return RecommendFragment.newInstance().setOnScrollClashListener(new OnScrollClashListener() {
-            @Override
-            public void onScroll(boolean isScroll) {
-                if (mListener != null) {
-                    mListener.onScroll(isScroll);
-                }
+        return RecommendFragment.newInstance().setOnScrollClashListener(isScroll -> {
+            if (mListener != null) {
+                mListener.onScroll(isScroll);
             }
         });
     }

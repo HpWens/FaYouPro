@@ -9,11 +9,10 @@ import java.util.Locale;
 
 public class TimeUtils {
 
-    public static final SimpleDateFormat DEFAULT_SDF = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
+    private static SimpleDateFormat DEFAULT_SDF = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     public static String getYMDTime(String publishTime) {
-        if (TextUtils.isEmpty(publishTime)) return "";
-        return RxTimeTool.milliseconds2String(RxTimeTool.string2Milliseconds(publishTime), DEFAULT_SDF);
+        return (TextUtils.isEmpty(publishTime)) ? "" : RxTimeTool.milliseconds2String(RxTimeTool.string2Milliseconds(publishTime), DEFAULT_SDF);
     }
+
 }

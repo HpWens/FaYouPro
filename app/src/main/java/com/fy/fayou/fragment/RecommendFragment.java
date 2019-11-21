@@ -21,10 +21,14 @@ import com.meis.base.mei.base.BaseMultiListFragment;
 import com.meis.base.mei.constant.DataConstants;
 import com.meis.base.mei.entity.Result;
 import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 
 import cn.jzvd.Jzvd;
@@ -39,13 +43,20 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
 
     private String categoryId = "";
 
+    private boolean fixedColumn = false;
+
     public static RecommendFragment newInstance() {
         return newInstance("");
     }
 
     public static RecommendFragment newInstance(String categoryId) {
+        return newInstance(categoryId, false);
+    }
+
+    public static RecommendFragment newInstance(String categoryId, boolean fixedColumn) {
         Bundle args = new Bundle();
         args.putString(Constant.Param.CATEGORY_ID, categoryId);
+        args.putBoolean(Constant.Param.FIXED_COLUMN, fixedColumn);
         RecommendFragment fragment = new RecommendFragment();
         fragment.setArguments(args);
         return fragment;
@@ -60,6 +71,7 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
     protected void initView() {
         if (getArguments() != null) {
             categoryId = getArguments().getString(Constant.Param.CATEGORY_ID, "");
+            fixedColumn = getArguments().getBoolean(Constant.Param.FIXED_COLUMN, false);
         }
         super.initView();
         mRecyclerView.setOnScrollClashListener(isScroll -> {
@@ -99,6 +111,23 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
         mAdapter = new RecommendAdapter();
         mAdapter.setOnItemListener((v, item) -> {
             ARoute.jumpDetail(item.id, item.articleType);
+
+            // 新增浏览记录
+            HashMap<String, String> params = new HashMap<>();
+            params.put("businessId", item.id);
+            params.put("browseRecordType", item.articleType);
+            JSONObject jsonObject = new JSONObject(params);
+            EasyHttp.post(ApiUrl.MY_HISTORY)
+                    .upJson(jsonObject.toString())
+                    .execute(new SimpleCallBack<String>() {
+                        @Override
+                        public void onError(ApiException e) {
+                        }
+
+                        @Override
+                        public void onSuccess(String s) {
+                        }
+                    });
         });
         return mAdapter;
     }
@@ -111,6 +140,30 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
                 .params("categoryId", categoryId)
                 .execute(String.class);
         return getListByField(observable, "content", RecommendEntity.class);
+    }
+
+    @Override
+    protected void onDataLoaded(int pageNo, Result<List<RecommendEntity>> result) {
+        super.onDataLoaded(pageNo, result);
+
+        // 新增全网通缉（神一样的设计）
+        if (fixedColumn && pageNo == 1) {
+            RecommendEntity entity = new RecommendEntity();
+            entity.showIndex = true;
+            entity.fullTitle = "#全国网上追逃#";
+            entity.source = "法友";
+            entity.id = "";
+            entity.fixedMode = 1;
+            mAdapter.getData().add(0, entity);
+
+            entity = new RecommendEntity();
+            entity.showIndex = true;
+            entity.fullTitle = "#我和我的祖国#";
+            entity.source = "法友";
+            entity.id = "";
+            entity.fixedMode = 2;
+            mAdapter.getData().add(0, entity);
+        }
     }
 
     @Override
