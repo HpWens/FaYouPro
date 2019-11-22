@@ -11,4 +11,13 @@ public class LegalEntity implements Serializable {
     public String toUrl;
     public String name;
     public String publishTime;
+    public String editorId;
+    public String editorName;
+    public String editDate;
+    public String publicDate;
+    public String auditStatus;
+    public String auditorId;
+    public String auditorName;
+    public String auditDate;
+    public String url;
 }
