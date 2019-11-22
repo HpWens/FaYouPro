@@ -160,11 +160,15 @@ public class Constant {
 
         String URL = "url";
 
+        String DETAIL = "detail";
+
         String MOBILE = "mobile";
 
         String TYPE = "type";
 
         String PRE_TYPE = "pre_type";
+
+        String COLLECT_TYPE = "collect_type";
 
         String KEYWORD = "keyword";
 

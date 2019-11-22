@@ -3,9 +3,12 @@ package com.fy.fayou.contract;
 import android.text.TextUtils;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.home.adapter.WantedVPAdapter;
 import com.fy.fayou.search.bean.ColumnEntity;
@@ -26,6 +29,9 @@ import butterknife.OnClick;
 @Route(path = "/contract/template")
 public class TemplateActivity extends BaseActivity {
 
+    @Autowired(name = "type")
+    public int collectType = ARoute.TEMPLATE_TYPE;
+
     @BindView(R.id.tv_center_title)
     TextView tvCenterTitle;
     @BindView(R.id.tab)
@@ -38,7 +44,9 @@ public class TemplateActivity extends BaseActivity {
     @Override
     protected void initView() {
         ButterKnife.bind(this);
+        ARouter.getInstance().inject(this);
         Eyes.translucentStatusBar(this, true, false);
+
         tvCenterTitle.setText("合同模板");
     }
 
@@ -55,7 +63,7 @@ public class TemplateActivity extends BaseActivity {
                         if (!TextUtils.isEmpty(s)) {
                             ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
                             if (mAdapter == null) {
-                                viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.TEMPLATE));
+                                viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.TEMPLATE, collectType));
                                 tab.setViewPager(viewpager);
                             } else {
                                 mAdapter.setNewData(columns);

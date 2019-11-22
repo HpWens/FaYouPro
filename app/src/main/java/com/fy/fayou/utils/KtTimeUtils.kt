@@ -12,5 +12,4 @@ object KtTimeUtils {
     fun getYMDTime(publishTime: String): String {
         return if (TextUtils.isEmpty(publishTime)) "" else RxTimeTool.milliseconds2String(RxTimeTool.string2Milliseconds(publishTime), DEFAULT_SDF)
     }
-
 }

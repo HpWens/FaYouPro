@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.io.Serializable;
 
 
-public class ColumnEntity implements Parcelable, Serializable {
+public class ColumnEntity implements Serializable, Parcelable {
 
     // 栏目名称
     public String name;
@@ -21,21 +21,25 @@ public class ColumnEntity implements Parcelable, Serializable {
     public String number;
 
     // 全网通缉
-    public String type;
+    public String type = "";
     // 全网通缉数量
     public String numberOfPeople;
 
+    public String count;
+    public String id;
 
     public ColumnEntity() {
     }
-
 
     protected ColumnEntity(Parcel in) {
         name = in.readString();
         subName = in.readString();
         param = in.readString();
+        number = in.readString();
         type = in.readString();
         numberOfPeople = in.readString();
+        count = in.readString();
+        id = in.readString();
     }
 
     public static final Creator<ColumnEntity> CREATOR = new Creator<ColumnEntity>() {
@@ -60,7 +64,10 @@ public class ColumnEntity implements Parcelable, Serializable {
         dest.writeString(name);
         dest.writeString(subName);
         dest.writeString(param);
+        dest.writeString(number);
         dest.writeString(type);
         dest.writeString(numberOfPeople);
+        dest.writeString(count);
+        dest.writeString(id);
     }
 }

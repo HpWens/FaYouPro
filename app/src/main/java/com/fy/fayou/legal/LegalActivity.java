@@ -79,8 +79,31 @@ public class LegalActivity extends BaseActivity {
             default:
                 break;
         }
-        // 请求栏目1法律法规2司法解释
-        requestColumn(moduleType);
+        // 请求栏目1法律法规2司法解释3指导性意见
+        if (moduleType == ARoute.GUIDE_TYPE) {
+            requestGuideColumn();
+        } else {
+            requestColumn(moduleType);
+        }
+    }
+
+    // 请求指导性栏目
+    private void requestGuideColumn() {
+        EasyHttp.get(ApiUrl.GET_GUIDE_LIST)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
+                            viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.GUIDE, moduleType));
+                            tab.setViewPager(viewpager);
+                        }
+                    }
+                });
     }
 
     private void requestColumn(final int type) {
@@ -95,8 +118,7 @@ public class LegalActivity extends BaseActivity {
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
                             ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
-                            viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns,
-                                    type == ARoute.LEGAL_TYPE ? WantedVPAdapter.LEGAL :  WantedVPAdapter.JUDICIAL));
+                            viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, type == ARoute.LEGAL_TYPE ? WantedVPAdapter.LEGAL : WantedVPAdapter.JUDICIAL, moduleType));
                             tab.setViewPager(viewpager);
                         }
                     }
@@ -115,7 +137,7 @@ public class LegalActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_float_search:
-
+                ARoute.jumpSearch();
                 break;
         }
     }

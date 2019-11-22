@@ -27,6 +27,7 @@ import com.fy.fayou.FYApplication;
 import com.fy.fayou.R;
 import com.fy.fayou.bean.UserBean;
 import com.fy.fayou.bean.UserInfo;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
@@ -37,6 +38,7 @@ import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.vondear.rxtool.RxAnimationTool;
 import com.vondear.rxtool.RxKeyboardTool;
+import com.vondear.rxtool.RxNetTool;
 import com.vondear.rxtool.view.RxToast;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
@@ -184,7 +186,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     @OnClick({R.id.iv_clean_phone, R.id.btn_login, R.id.again_send
-            , R.id.iv_wechat, R.id.iv_qq, R.id.iv_weibo})
+            , R.id.iv_wechat, R.id.iv_qq, R.id.iv_weibo, R.id.tv_protocol})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_clean_phone:
@@ -198,6 +200,10 @@ public class LoginActivity extends BaseActivity {
                 }
                 break;
             case R.id.again_send:
+                if (!RxNetTool.isAvailable(this)) {
+                    Toast.makeText(mContext, "网络连接失败，请检查网络设置", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (checkMobile()) {
                     requestVerifyCode();
                 }
@@ -206,6 +212,9 @@ public class LoginActivity extends BaseActivity {
             case R.id.iv_qq:
             case R.id.iv_weibo:
                 Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tv_protocol:
+                ARoute.jumpH5("http://fayou-h5.zhdfxm.com/privacy");
                 break;
         }
     }

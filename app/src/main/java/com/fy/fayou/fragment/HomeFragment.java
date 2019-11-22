@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -12,17 +13,21 @@ import android.widget.LinearLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomeRecommendVPAdapter;
 import com.fy.fayou.common.ARoute;
-import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.event.HomeRefreshEvent;
+import com.fy.fayou.search.bean.SearchEntity;
+import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
 import com.fy.fayou.view.TextSwitcherAnimation;
 import com.meis.base.mei.base.BaseFragment;
 import com.vondear.rxtool.RxImageTool;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -87,21 +92,16 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
     @Override
     protected void initData() {
         ivFloatSearch.setOnClickListener(v -> {
-            ARouter.getInstance().build(Constant.HOME_SEARCH).navigation();
+            ARoute.jumpSearch();
         });
         topSearchLayout.setOnClickListener(v -> {
             ivFloatSearch.performClick();
         });
 
-        initSwitcher();
+        requestHot();
     }
 
-    private void initSwitcher() {
-        requestHot();
-        List<String> hintList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            hintList.add("电信诈骗");
-        }
+    private void initSwitcher(List<String> hintList) {
         switcher.setFactory(() -> {
             TextView tv = new TextView(getActivity());
             tv.setTextColor(getActivity().getResources().getColor(R.color.color_a0a0a0));
@@ -119,7 +119,26 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
     }
 
     private void requestHot() {
+        EasyHttp.get(ApiUrl.HOT_SEARCH)
+                .params("page", "0")
+                .params("size", "20")
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
 
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            List<SearchEntity> list = ParseUtils.parseListData(s, SearchEntity.class);
+                            List<String> hintList = new ArrayList<>();
+                            for (SearchEntity entity : list) {
+                                hintList.add(entity.keyword);
+                            }
+                            initSwitcher(hintList);
+                        }
+                    }
+                });
     }
 
     @Override

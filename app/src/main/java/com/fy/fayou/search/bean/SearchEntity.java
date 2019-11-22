@@ -9,7 +9,7 @@ public class SearchEntity implements Serializable {
     public String createTime;
     public String updateTime;
     public String version;
-    public String keyword;
+    public String keyword = "";
     public String searchNumber;
     public String recordTime;
 

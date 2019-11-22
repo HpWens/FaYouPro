@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name" translatable="false">FaYouPro</string>
+    <string name="app_name" translatable="false">法友</string>
 
     <string name="bottom_home_name" translatable="false">主页</string>
-    <string name="bottom_learning_name" translatable="false">学法</string>
+    <string name="bottom_learning_name" translatable="false">普法</string>
     <string name="bottom_forum_name" translatable="false">论坛</string>
     <string name="bottom_personal_name" translatable="false">个人</string>
     <string name="mobile_bind_hint" translatable="false">你的账号目前绑定手号是%1$s,请输入你 希望绑定的新手机号。</string>

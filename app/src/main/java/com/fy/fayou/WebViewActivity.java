@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -19,8 +18,18 @@ import android.widget.ProgressBar;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.fy.fayou.common.ARoute;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.detail.dialog.BottomShareDialog;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +39,15 @@ public class WebViewActivity extends BaseActivity {
 
     @Autowired(name = "url")
     public String url = "";
+
+    @Autowired(name = "id")
+    public String id = "";
+
+    @Autowired(name = "detail")
+    public boolean isDetail = false;
+
+    @Autowired(name = "type")
+    public int type = ARoute.ARTICLE_TYPE;
 
     @BindView(R.id.web_base)
     WebView webBase;
@@ -47,6 +65,27 @@ public class WebViewActivity extends BaseActivity {
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
         setToolBarCenterTitle("用户服务协议及隐私政策");
         setLeftBackListener(v -> finish());
+        if (isDetail) {
+            setRightMoreListener(v -> {
+                showBottomDialog();
+            });
+        }
+    }
+
+    private void showBottomDialog() {
+        showDialog(new BottomShareDialog()
+                .setArticleId(id)
+                .setGoneReport(true)
+                .setCollectType(type)
+                .setOnItemClickListener(new BottomShareDialog.OnItemClickListener() {
+                    @Override
+                    public void onDismiss() {
+                    }
+
+                    @Override
+                    public void onCollect(boolean collected) {
+                    }
+                }));
     }
 
     @Override
@@ -143,17 +182,38 @@ public class WebViewActivity extends BaseActivity {
                 return true;
             }
         });
-        webBase.setDownloadListener(new DownloadListener() {
-            @Override
-            public void onDownloadStart(String paramAnonymousString1, String paramAnonymousString2, String paramAnonymousString3, String paramAnonymousString4, long paramAnonymousLong) {
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.VIEW");
-                intent.setData(Uri.parse(paramAnonymousString1));
-                startActivity(intent);
-            }
+        webBase.setDownloadListener((paramAnonymousString1, paramAnonymousString2, paramAnonymousString3, paramAnonymousString4, paramAnonymousLong) -> {
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            intent.setData(Uri.parse(paramAnonymousString1));
+            startActivity(intent);
         });
 
         webBase.loadUrl(webPath);
+
+        if (type != ARoute.ARTICLE_TYPE) {
+            // 请求浏览记录
+            requestScanRecord();
+        }
+    }
+
+    private void requestScanRecord() {
+        // 新增浏览记录
+        HashMap<String, String> params = new HashMap<>();
+        params.put("businessId", id);
+        params.put("browseRecordType", ARoute.getCollectType(type));
+        JSONObject jsonObject = new JSONObject(params);
+        EasyHttp.post(ApiUrl.MY_HISTORY)
+                .upJson(jsonObject.toString())
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                    }
+                });
     }
 
     @Override

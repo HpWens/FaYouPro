@@ -96,4 +96,9 @@ public class CollectFragment extends BaseListFragment<CollectEntity> {
         }
         super.initView();
     }
+
+    @Override
+    protected boolean loadOnShow() {
+        return false;
+    }
 }

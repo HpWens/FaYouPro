@@ -180,6 +180,15 @@ public class ReviewAdapter extends BaseMultiAdapter<CommentBean> {
                 popWindow.dissmiss();
             });
 
+            TextView tvReport = contentView.findViewById(R.id.tv_report);
+            TextView tvReport2 = contentView.findViewById(R.id.tv_report2);
+            tvReport.setOnClickListener(v -> {
+                ARoute.jumpReport(item.id, ARoute.REPORT_COMMENT);
+            });
+            tvReport2.setOnClickListener(v -> {
+                ARoute.jumpReport(item.id, ARoute.REPORT_COMMENT);
+            });
+
         }
         if (isCross) {
             popWindow.showAsDropDown(view, 0, -popHeight + RxImageTool.dp2px(32));

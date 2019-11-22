@@ -14,12 +14,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.UploadService;
 import com.fy.fayou.person.suggest.FullyGridLayoutManager;
 import com.fy.fayou.person.suggest.GridImageAdapter;
+import com.fy.fayou.utils.ParseUtils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -29,6 +32,8 @@ import com.meis.base.mei.utils.Eyes;
 import com.vondear.rxtool.RxDeviceTool;
 import com.vondear.rxtool.RxImageTool;
 import com.vondear.rxtool.view.RxToast;
+import com.vondear.rxui.view.dialog.RxDialog;
+import com.vondear.rxui.view.dialog.RxDialogShapeLoading;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
@@ -45,6 +50,12 @@ import butterknife.ButterKnife;
 @Route(path = "/detail/report")
 public class ReportActivity extends BaseActivity {
 
+    @Autowired
+    public String id = "";
+
+    @Autowired
+    public String type = "";
+
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
     @BindView(R.id.et_suggest)
@@ -55,79 +66,104 @@ public class ReportActivity extends BaseActivity {
     TextView tvLimit;
 
     @BindView(R.id.cb_0)
-    CheckBox rb0;
+    CheckBox cb0;
     @BindView(R.id.cb_1)
-    CheckBox rb1;
+    CheckBox cb1;
     @BindView(R.id.cb_2)
-    CheckBox rb2;
+    CheckBox cb2;
     @BindView(R.id.cb_3)
-    CheckBox rb3;
+    CheckBox cb3;
     @BindView(R.id.cb_4)
-    CheckBox rb4;
+    CheckBox cb4;
     @BindView(R.id.cb_5)
-    CheckBox rb5;
+    CheckBox cb5;
     @BindView(R.id.cb_6)
-    CheckBox rb6;
+    CheckBox cb6;
     @BindView(R.id.cb_7)
-    CheckBox rb7;
+    CheckBox cb7;
 
     private GridImageAdapter adapter;
     private List<LocalMedia> selectList = new ArrayList<>();
+    private List<CheckBox> checkList = new ArrayList<>();
 
     private static final int MAX_CHAR_LIMIT = 200;
 
     @Override
     protected void initView() {
         ButterKnife.bind(this);
+        ARouter.getInstance().inject(this);
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
         setToolBarCenterTitle("举报");
         setLeftBackListener(v -> finish()).setRightTextListener(v -> {
             if (checkContent()) {
                 // 提交图片
+                final RxDialogShapeLoading dialog = new RxDialogShapeLoading(this);
+                dialog.show();
+
                 if (null != selectList && !selectList.isEmpty()) {
                     UploadService.getInstance().syncUploadMultiFileByMedia(selectList, new UploadService.OnUploadListener() {
                         @Override
                         public void onSuccess(String key) {
-                            requestFeedBack(key);
+                            requestFeedBack(dialog, key);
                         }
 
                         @Override
                         public void onFailure(String error) {
                             Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
                         }
                     });
+                } else {
+                    requestFeedBack(dialog, "");
                 }
+
             }
         }, "提交");
     }
 
-    private void requestFeedBack(String pics) {
+    private void requestFeedBack(final RxDialog dialog, String pics) {
         String contact = etContact.getText().toString();
         String suggest = etSuggest.getText().toString();
         HashMap<String, String> params = new HashMap<>();
         params.put("phone", contact);
         params.put("content", suggest);
-        params.put("type", "COMMENTS");
+        params.put("type", "REPORT");
         params.put("pics", pics);
+        params.put("contentType", getCheckReportType());
+        if (!TextUtils.isEmpty(id)) {
+            params.put("transationId", id);
+        }
+        if (!TextUtils.isEmpty(type)) {
+            params.put("feedbackTransationType", type);
+        }
         JSONObject jsonObject = new JSONObject(params);
 
-        EasyHttp.post(ApiUrl.USER_UPDATE)
+        EasyHttp.post(ApiUrl.FEED_BACK)
                 .upJson(jsonObject.toString())
                 .execute(new SimpleCallBack<String>() {
 
                     @Override
                     public void onError(ApiException e) {
+                        ParseUtils.handlerApiError(e, error -> {
+                            Toast.makeText(mContext, "提交失败", Toast.LENGTH_SHORT).show();
+                        });
+                        dialog.dismiss();
                     }
 
                     @Override
                     public void onSuccess(String s) {
                         RxToast.normal("举报成功");
+                        dialog.dismiss();
                         finish();
                     }
                 });
     }
 
     private boolean checkContent() {
+        if (!checkSelected()) {
+            RxToast.normal("请勾选举报类型");
+            return false;
+        }
         String suggest = etSuggest.getText().toString();
         if (TextUtils.isEmpty(suggest)) {
             RxToast.normal("请输入举报理由");
@@ -189,8 +225,49 @@ public class ReportActivity extends BaseActivity {
 
             }
         });
+
+        addCheckList();
     }
 
+    private void addCheckList() {
+        checkList.clear();
+        cb0.setTag("BROADCAST");
+        checkList.add(cb0);
+        cb1.setTag("TITLE");
+        checkList.add(cb1);
+        cb2.setTag("AD");
+        checkList.add(cb2);
+        cb3.setTag("VULGAR");
+        checkList.add(cb3);
+        cb4.setTag("FAKE");
+        checkList.add(cb4);
+        cb5.setTag("EXPIRED");
+        checkList.add(cb5);
+        cb6.setTag("RUMOR");
+        checkList.add(cb6);
+        cb7.setTag("ILLEGAL");
+        checkList.add(cb7);
+    }
+
+    private boolean checkSelected() {
+        for (CheckBox cb : checkList) {
+            if (cb.isChecked()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // 类型是举报，必传。举报内容类型（播放错误BROADCAST, 标题与内容不符合TITLE, 广告AD,低俗 VULGAR,假的FAKE, 过期 EXPIRED, 谣言RUMOR, 违法 ILLEGAL）
+    private String getCheckReportType() {
+        StringBuilder sb = new StringBuilder();
+        for (CheckBox cb : checkList) {
+            if (cb.isChecked()) {
+                sb.append(cb.getTag().toString() + ",");
+            }
+        }
+        return sb.length() > 1 ? sb.substring(0, sb.length() - 1) : "";
+    }
 
     @Override
     protected int layoutResId() {

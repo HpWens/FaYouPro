@@ -67,6 +67,10 @@ public class EditUserActivity extends BaseActivity {
                 return;
             }
 
+            if (avatarPath.startsWith("http://") || avatarPath.startsWith("https://")) {
+                requestNick(avatarPath, nickName);
+                return;
+            }
             UploadService.getInstance().uploadSingleFile(avatarPath, new UploadService.OnUploadListener() {
                 @Override
                 public void onSuccess(String key) {

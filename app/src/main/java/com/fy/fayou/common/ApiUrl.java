@@ -116,15 +116,17 @@ public class ApiUrl {
     public static final String SAVE_ARTICLE = "/api-information/article";
 
     // 查找嫌疑人分类及人数统计
-    public static final String CRIMINAL_COLUMN = "/api-information/criminalSuspect/findTypeList";
+    public static final String CRIMINAL_COLUMN = "/api-information/public/criminalSuspect/findTypeList";
 
 
     // 查找列表
-    public static final String CRIMINAL_FIND_LIST = "/api-information/criminalSuspect/findList";
+    public static final String CRIMINAL_FIND_LIST = "/api-information/public/criminalSuspect/findList";
 
     // 查找分类
     public static final String LEGAL_FIND_LIST = "/api-lawsRegulations/public/lawRegulationsCategory/findAll";
 
+    // 指导性意见 获取一级分类带计数
+    public static final String GET_GUIDE_LIST = "/api-popularize/public/caseType/getTypeWithCount";
 
     // 根据类型查找司法解释列表
     public static final String FIND_JUDICIAL_LIST = "/api-lawsRegulations/public/judicialInterpretation/findList";
@@ -191,6 +193,9 @@ public class ApiUrl {
 
     // 根据分类获取法律列表
     public static final String FIND_LEGAL_LIST = "/api-lawsRegulations/public/legalProvisions/findList";
+
+    // 根据分类查询 指导性意见
+    public static final String FIND_GUIDE_LIST = "/api-popularize/public/case/selectCase";
 
     // 获取合同模板类型
     public static final String GET_TEMPLATE_TYPE = "/api-contract/public/contract/getTypeList";
