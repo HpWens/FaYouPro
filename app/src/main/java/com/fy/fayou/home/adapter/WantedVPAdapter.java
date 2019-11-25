@@ -33,6 +33,8 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
     public static int JUDICIAL = 4;
     // 指导性意见
     public static int GUIDE = 5;
+    // 裁判文书
+    public static int JUDGE = 6;
 
     // 收藏类型
     public int mCollectType;
@@ -53,12 +55,12 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(final int i) {
         if (mType == WANTED) {
-            return WantedFragment.newInstance(mColumns.get(i).type, "", "");
+            return WantedFragment.newInstance(mColumns.get(i).type, mColumns.get(i).name, mColumns.get(i).position);
         } else if (mType == TEMPLATE) {
             return TemplateFragment.newInstance(mColumns.get(i).type);
-        } else if (mType == LEGAL || mType == JUDICIAL || mType == GUIDE) {
+        } else if (mType == LEGAL || mType == JUDICIAL || mType == GUIDE || mType == JUDGE) {
             String id = mColumns.get(i).type;
-            if (mType == GUIDE) {
+            if (mType == GUIDE || mType == JUDGE) {
                 id = mColumns.get(i).id;
             }
             return LegalFragment.newInstance(mType, id, mCollectType);
@@ -85,7 +87,7 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         if (mType == LEGAL || mType == TEMPLATE || mType == JUDICIAL) {
             return mColumns.get(position).name + "(" + mColumns.get(position).number + ")";
-        } else if (mType == GUIDE) {
+        } else if (mType == GUIDE || mType == JUDGE) {
             return mColumns.get(position).name + "(" + (TextUtils.isEmpty(mColumns.get(position).count) ? "0" : mColumns.get(position).count) + ")";
         }
         return mColumns.get(position).type + "(" + mColumns.get(position).numberOfPeople + ")";

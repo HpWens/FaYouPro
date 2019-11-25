@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class ColumnEntity implements Serializable, Parcelable {
 
     // 栏目名称
-    public String name;
+    public String name = "";
 
     // 栏目副标题
     public String subName;
@@ -25,8 +25,10 @@ public class ColumnEntity implements Serializable, Parcelable {
     // 全网通缉数量
     public String numberOfPeople;
 
+    public String position = "";
+
     public String count;
-    public String id;
+    public String id = "";
 
     public ColumnEntity() {
     }

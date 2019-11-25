@@ -3,6 +3,7 @@ package com.fy.fayou.home.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
@@ -13,6 +14,7 @@ import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
 import com.zhouyou.http.EasyHttp;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -66,12 +68,18 @@ public class WantedFragment extends BaseListFragment<WantedEntity> {
 
     @Override
     protected Observable<Result<List<WantedEntity>>> getListObservable(int pageNo) {
+        HashMap<String, String> hm = new HashMap();
+        if (!TextUtils.isEmpty(name)) {
+            hm.put("name", name);
+        }
+        if (!TextUtils.isEmpty(position)) {
+            hm.put("position", position);
+        }
+        hm.put("type", type);
+        hm.put("size", "20");
+        hm.put("page", (pageNo - 1) + "");
         Observable<String> observable = EasyHttp.get(ApiUrl.CRIMINAL_FIND_LIST)
-                .params("name", name)
-                .params("type", type)
-                .params("position", position)
-                .params("size", "20")
-                .params("page", (pageNo - 1) + "")
+                .params(hm)
                 .execute(String.class);
         return getListByField(observable, "content", WantedEntity.class);
     }

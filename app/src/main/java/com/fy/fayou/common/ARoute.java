@@ -1,6 +1,12 @@
 package com.fy.fayou.common;
 
+import android.app.Activity;
+
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.fy.fayou.contract.bean.Level1Item;
+import com.fy.fayou.legal.bean.JudgeLevel1;
+
+import java.util.ArrayList;
 
 public class ARoute {
 
@@ -171,4 +177,36 @@ public class ARoute {
     public static void jumpSearch() {
         ARouter.getInstance().build(Constant.HOME_SEARCH).navigation();
     }
+
+    /**
+     * 跳转到筛选界面
+     *
+     * @param id
+     * @param title
+     */
+    public static final int REQUEST_CODE = 101;
+
+    public static void jumpFilter(Activity activity, String id, String title, ArrayList<Level1Item> list) {
+        ARouter.getInstance()
+                .build(Constant.CONTRACT_FILTER)
+                .withString(Constant.Param.ID, id)
+                .withString(Constant.Param.NAME, title)
+                .withParcelableArrayList(Constant.Param.LIST, list)
+                .navigation(activity, REQUEST_CODE);
+    }
+
+
+    /**
+     * 跳转到裁判文书筛选界面
+     *
+     * @param activity
+     * @param list
+     */
+    public static void jumpJudgeFilter(Activity activity, ArrayList<JudgeLevel1> list) {
+        ARouter.getInstance()
+                .build(Constant.JUDGE_FILTER)
+                .withParcelableArrayList(Constant.Param.LIST, list)
+                .navigation(activity, REQUEST_CODE);
+    }
+
 }

@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.home.bean.WantedEntity;
 import com.fy.fayou.utils.GlideOption;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
@@ -43,11 +44,15 @@ public class WantedAdapter extends MeiBaseAdapter<WantedEntity> {
                 .setText(R.id.tv_time, getNonEmpty(item.pubTime));
 
         ImageView ivThumb = helper.getView(R.id.iv_thumb);
-        
+
         Glide.with(mContext)
                 .load(getNonEmpty(item.photoUrl))
                 .apply(GlideOption.getItemOption(75, 92))
                 .into(ivThumb);
+
+        helper.itemView.setOnClickListener(v -> {
+            ARoute.jumpH5(item.toUrl);
+        });
 
     }
 }

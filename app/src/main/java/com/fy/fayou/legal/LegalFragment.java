@@ -9,6 +9,7 @@ import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.legal.adapter.LegalAdapter;
+import com.fy.fayou.legal.bean.JudgeEntity;
 import com.fy.fayou.legal.bean.LegalEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
@@ -32,6 +33,8 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
     private int preType;
 
     private int mCollectType = ARoute.LEGAL_TYPE;
+
+    private JudgeEntity mJudgeEntity = null;
 
     public static LegalFragment newInstance(int preType, String type, int collectType) {
         Bundle args = new Bundle();
@@ -78,6 +81,24 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
             params.put("page", (pageNo - 1) + "");
             JSONObject jsonObject = new JSONObject(params);
             observable = EasyHttp.post(ApiUrl.FIND_GUIDE_LIST)
+                    .upJson(jsonObject.toString())
+                    .execute(String.class);
+        } else if (mCollectType == ARoute.JUDGE_TYPE) {
+            HashMap<String, String> params = new HashMap<>();
+            params.put("judgementType", type);
+            if (mJudgeEntity != null) {
+                params.put("typeReason", mJudgeEntity.typeReason);
+                params.put("typeCourtClass", mJudgeEntity.typeCourtClass);
+                params.put("judgementType", mJudgeEntity.judgementType);
+                params.put("typeZone", mJudgeEntity.typeZone);
+                params.put("typeSpnf", mJudgeEntity.typeSpnf);
+                params.put("typeSpcx", mJudgeEntity.typeSpcx);
+                params.put("typeBookType", mJudgeEntity.typeBookType);
+            }
+            params.put("size", "20");
+            params.put("page", (pageNo - 1) + "");
+            JSONObject jsonObject = new JSONObject(params);
+            observable = EasyHttp.post(ApiUrl.GET_JUDGE_LIST)
                     .upJson(jsonObject.toString())
                     .execute(String.class);
         } else {

@@ -24,6 +24,5 @@ public class WantedEntity implements Serializable {
     public String auditUser;
     public String auditFailReason;
     public String auditDate;
-
-
+    public String toUrl;
 }

@@ -55,6 +55,7 @@ public abstract class BaseListFragment<T> extends BaseFragment {
         }
         //是否首次加载 是否每次显示加载
         if (loadOnInit() || !loadOnShow()) {
+            setState(ViewState.LOADING);
             loadPage(DataConstants.FIRST_PAGE);
         }
     }

@@ -317,7 +317,7 @@ public class PublishNewsNextActivity extends BaseActivity {
                 }
             } else if (obj instanceof PicEntity) {
                 PicEntity picEntity = (PicEntity) obj;
-                sb.append("![](" + picEntity.httpPath + ")" + " ");
+                sb.append("\n![](" + picEntity.httpPath + ")" + "\n ");
             }
         }
 

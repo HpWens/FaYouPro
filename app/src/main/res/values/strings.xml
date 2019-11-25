@@ -13,6 +13,7 @@
     <string name="module_publish_time" translatable="false">发布时间：%1$s</string>
     <string name="comment_count" translatable="false">全部评论%1$d条</string>
     <string name="expand_comment" translatable="false">展开其他%1$d条评论</string>
+    <string name="judge_category_sign" translatable="false">手机端标签页</string>
 
     <string-array name="array_menu">
         <item>法律法规</item>

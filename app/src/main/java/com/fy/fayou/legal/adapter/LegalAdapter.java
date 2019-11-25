@@ -27,7 +27,7 @@ public class LegalAdapter extends MeiBaseAdapter<LegalEntity> {
     @Override
     protected void convert(@NonNull BaseViewHolder helper, LegalEntity item) {
 
-        if (collectType == ARoute.GUIDE_TYPE) {
+        if (collectType == ARoute.GUIDE_TYPE || collectType == ARoute.JUDGE_TYPE) {
             helper.setText(R.id.tv_name, item.title)
                     .setText(R.id.tv_source, helper.itemView.getResources().getString(R.string.module_source, getNonEmpty(item.source)))
                     .setText(R.id.tv_time, helper.itemView.getResources().getString(R.string.module_publish_time, item.publicDate));

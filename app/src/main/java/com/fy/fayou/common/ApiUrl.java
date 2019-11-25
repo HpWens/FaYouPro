@@ -216,4 +216,14 @@ public class ApiUrl {
     // 查找需要展示浏览记录的栏目
     public static final String GET_HISTORY_CATEGORY = "/api-collect/menu/findCollectMenu";
 
+    // 判决文书分类
+    public static final String GET_JUDGE_LEVEL = "/api-popularize/public/judgementType";
+
+    // 获取一级分类 带计数
+    public static final String GET_JUDGE_CATEGORY = "/api-popularize/public/judgementType/getTypeWithCount";
+
+    // 判决文书分类查询
+    public static final String GET_JUDGE_LIST = "/api-popularize/public/judgement/selectJudgement";
+
+
 }

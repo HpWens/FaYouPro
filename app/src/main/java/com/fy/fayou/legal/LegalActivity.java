@@ -1,5 +1,7 @@
 package com.fy.fayou.legal;
 
+import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,7 +14,9 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.home.adapter.WantedVPAdapter;
+import com.fy.fayou.legal.bean.JudgeLevel1;
 import com.fy.fayou.search.bean.ColumnEntity;
 import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
@@ -49,6 +53,7 @@ public class LegalActivity extends BaseActivity {
 
     WantedVPAdapter mAdapter;
 
+
     @Override
     protected void initView() {
         ButterKnife.bind(this);
@@ -67,6 +72,8 @@ public class LegalActivity extends BaseActivity {
                 break;
             case ARoute.GUIDE_TYPE:
                 tvCenterTitle.setText("指导性意见");
+                //tvRight.setText("全国");
+                //tvRight.setVisibility(View.VISIBLE);
                 break;
             case ARoute.JUDGE_TYPE:
                 tvCenterTitle.setText("裁判文书");
@@ -82,6 +89,8 @@ public class LegalActivity extends BaseActivity {
         // 请求栏目1法律法规2司法解释3指导性意见
         if (moduleType == ARoute.GUIDE_TYPE) {
             requestGuideColumn();
+        } else if (moduleType == ARoute.JUDGE_TYPE) {
+            requestJudgeCategory();
         } else {
             requestColumn(moduleType);
         }
@@ -136,11 +145,74 @@ public class LegalActivity extends BaseActivity {
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.tv_right:
+                ARoute.jumpJudgeFilter(this, filterList);
+                break;
             case R.id.iv_float_search:
                 ARoute.jumpSearch();
                 break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constant.Param.RESULT_CODE) {
+            String city = data.getStringExtra(Constant.Param.CITY_NAME);
+            tvRight.setText(city);
+
+        }
+    }
+
+    /**********************************************裁判文书接口**********************************************/
+    private ArrayList<JudgeLevel1> filterList = new ArrayList<>();
+
+    private void requestJudgeCategory() {
+        EasyHttp.get(ApiUrl.GET_JUDGE_LEVEL)
+                .params("id", "0")
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            filterList = ParseUtils.parseArrayListData(s, JudgeLevel1.class);
+                            String id = "";
+                            for (JudgeLevel1 level : filterList) {
+                                if (!TextUtils.isEmpty(level.name) && level.name.equals(getString(R.string.judge_category_sign))) {
+                                    id = level.id;
+                                    break;
+                                }
+                            }
+
+                            if (!TextUtils.isEmpty(id)) {
+                                requestJudgeCategory(id);
+                            }
+
+                        }
+                    }
+                });
+    }
+
+    private void requestJudgeCategory(String id) {
+        EasyHttp.get(ApiUrl.GET_JUDGE_CATEGORY)
+                .params("id", "" + id)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
+                            viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.JUDGE, moduleType));
+                            tab.setViewPager(viewpager);
+                        }
+                    }
+                });
+    }
 
 }

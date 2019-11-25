@@ -88,7 +88,9 @@ public class MarkDownParser {
         }
 
         for (String str : array) {
-            mdList.add(str);
+            if(!TextUtils.isEmpty(str)){
+                mdList.add(str);
+            }
         }
         mdList.add(" ");
 

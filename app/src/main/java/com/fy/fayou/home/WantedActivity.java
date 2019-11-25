@@ -76,6 +76,10 @@ public class WantedActivity extends BaseActivity {
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
                             ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
+                            if (columns.isEmpty()) return;
+                            for (ColumnEntity entity : columns) {
+                                entity.position = position;
+                            }
                             if (mAdapter == null) {
                                 viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.WANTED, collectType));
                                 tab.setViewPager(viewpager);

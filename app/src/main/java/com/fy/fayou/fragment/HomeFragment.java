@@ -102,6 +102,7 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
     }
 
     private void initSwitcher(List<String> hintList) {
+        if (hintList.isEmpty()) return;
         switcher.setFactory(() -> {
             TextView tv = new TextView(getActivity());
             tv.setTextColor(getActivity().getResources().getColor(R.color.color_a0a0a0));
@@ -209,7 +210,8 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
 
     @Override
     public void onDestroy() {
-        textSwitcherAnimation.onDestroy();
+        if (textSwitcherAnimation != null)
+            textSwitcherAnimation.onDestroy();
         super.onDestroy();
     }
 

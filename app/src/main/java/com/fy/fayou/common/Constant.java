@@ -128,7 +128,11 @@ public class Constant {
     // 启动页
     public static final String FIRST_LAUNCH = "/first/launch";
 
+    // 裁判文书筛选界面
+    public static final String JUDGE_FILTER = "/judge/filter";
+
     public interface SP {
+
         String USER_INFO = "user_info_data";
 
         String CITY_INFO = "city_info_data";
@@ -139,6 +143,7 @@ public class Constant {
 
         // 城市历史
         String CITY_HISTORY = "city_history";
+
     }
 
     /**
@@ -152,9 +157,12 @@ public class Constant {
     }
 
     public interface Param {
+
         String IS_FIRST_LAUNCH = "is_first_launch";
 
         String ID = "id";
+
+        String LIST = "list";
 
         String NAME = "name";
 
@@ -188,5 +196,6 @@ public class Constant {
 
         int VIDEO_TYPE = 1;
         int ARTICLE_TYPE = 0;
+
     }
 }
