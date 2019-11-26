@@ -16,11 +16,14 @@ import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.home.adapter.WantedVPAdapter;
+import com.fy.fayou.legal.bean.JudgeEntity;
 import com.fy.fayou.legal.bean.JudgeLevel1;
+import com.fy.fayou.legal.bean.JudgeLevel2;
 import com.fy.fayou.search.bean.ColumnEntity;
 import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseActivity;
+import com.meis.base.mei.status.ViewState;
 import com.meis.base.mei.utils.Eyes;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
@@ -82,7 +85,8 @@ public class LegalActivity extends BaseActivity {
                 break;
             case ARoute.BOOKS_TYPE:
                 tvCenterTitle.setText("法律图书");
-                break;
+                setState(ViewState.EMPTY);
+                return;
             default:
                 break;
         }
@@ -160,11 +164,87 @@ public class LegalActivity extends BaseActivity {
         if (resultCode == Constant.Param.RESULT_CODE) {
             String city = data.getStringExtra(Constant.Param.CITY_NAME);
             tvRight.setText(city);
-
+        } else if (resultCode == Constant.Param.TEMPLATE_FILTER_RESULT) {
+            ArrayList<JudgeLevel2> list = data.getParcelableArrayListExtra(Constant.Param.LIST);
+            if (list == null || list.isEmpty()) {
+                requestJudgeCategory();
+            } else {
+                String[] ids = new String[]{"0", "0", "0", "0", "0", "0", parentId};
+                for (JudgeLevel2 lv : list) {
+                    if (ids.length > lv.helperIndex) {
+                        ids[lv.helperIndex] = lv.id;
+                    }
+                }
+                StringBuilder sb = new StringBuilder();
+                JudgeEntity judgeEntity = new JudgeEntity();
+                for (int i = 0; i < ids.length; i++) {
+                    sb.append(ids[i] + ",");
+                    setJudgeEntity(i, ids[i], judgeEntity);
+                }
+                requestFilterCategory(judgeEntity, sb.subSequence(0, sb.length() - 1).toString());
+            }
         }
     }
 
     /**********************************************裁判文书接口**********************************************/
+    private void setJudgeEntity(int index, String id, JudgeEntity judge) {
+        switch (index) {
+            case 0:
+                judge.typeReason = id;
+                break;
+            case 1:
+                judge.typeCourtClass = id;
+                break;
+            case 2:
+                judge.typeZone = id;
+                break;
+            case 3:
+                judge.typeSpnf = id;
+                break;
+            case 4:
+                judge.typeSpcx = id;
+                break;
+            case 5:
+                judge.typeBookType = id;
+                break;
+
+        }
+    }
+
+    private String parentId = "0";
+
+    /**
+     * @param judge
+     * @param types
+     */
+    private void requestFilterCategory(JudgeEntity judge, String types) {
+        EasyHttp.get(ApiUrl.GET_JUDGE_FILTER_CATEGORY)
+                .params("types", types)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
+                            for (ColumnEntity column : columns) {
+                                column.judgeEntity = judge;
+                            }
+                            if (mAdapter == null) {
+                                viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.JUDGE, moduleType));
+                                tab.setViewPager(viewpager);
+                            } else {
+                                mAdapter.setNewData(columns);
+                                tab.setViewPager(viewpager);
+                                tab.setCurrentTab(0);
+                            }
+                        }
+                    }
+                });
+    }
+
     private ArrayList<JudgeLevel1> filterList = new ArrayList<>();
 
     private void requestJudgeCategory() {
@@ -182,7 +262,7 @@ public class LegalActivity extends BaseActivity {
                             String id = "";
                             for (JudgeLevel1 level : filterList) {
                                 if (!TextUtils.isEmpty(level.name) && level.name.equals(getString(R.string.judge_category_sign))) {
-                                    id = level.id;
+                                    parentId = id = level.id;
                                     break;
                                 }
                             }
@@ -208,8 +288,13 @@ public class LegalActivity extends BaseActivity {
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
                             ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
-                            viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.JUDGE, moduleType));
-                            tab.setViewPager(viewpager);
+                            if (mAdapter == null) {
+                                viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.JUDGE, moduleType));
+                                tab.setViewPager(viewpager);
+                            } else {
+                                mAdapter.setNewData(columns);
+                                tab.setViewPager(viewpager);
+                            }
                         }
                     }
                 });

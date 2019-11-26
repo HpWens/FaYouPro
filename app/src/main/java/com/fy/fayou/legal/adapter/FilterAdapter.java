@@ -2,8 +2,7 @@ package com.fy.fayou.legal.adapter;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.SparseArray;
-import android.widget.CheckBox;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -36,7 +35,8 @@ public class FilterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
     public static final int TYPE_LEVEL_10 = 10;
 
 
-    private List<JudgeLevel2> selectedArray = new ArrayList<>();
+    private ArrayList<JudgeLevel2> selectedArray = new ArrayList<>();
+    private OnCheckListener listener;
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -91,9 +91,9 @@ public class FilterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
             case TYPE_LEVEL_10:
                 final JudgeLevel2 level2 = (JudgeLevel2) item;
                 helper.setText(R.id.tv_name, level2.name)
-                        .setVisible(R.id.checkbox, !level2.hasChald || !level2.isExpanded())
+                        .setVisible(R.id.iv_select, !level2.hasChald || !level2.isExpanded())
                         .setVisible(R.id.iv_transform, level2.hasChald)
-                        .setChecked(R.id.checkbox, isColumnSelected(level2.helperIndex, level2.id))
+                        .setImageResource(R.id.iv_select, isSelected(level2) ? R.mipmap.filter_unselected_ic : R.mipmap.filter_selected_ic)
                         .setImageResource(R.id.iv_transform, !level2.isExpanded() ? R.mipmap.filter_collapse_ic : R.mipmap.filter_expand_ic);
 
                 LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) helper.getView(R.id.iv_transform).getLayoutParams();
@@ -112,10 +112,23 @@ public class FilterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
                     }
                 });
 
-                CheckBox cb = helper.getView(R.id.checkbox);
-                cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    clearColumnSelected(level2.helperIndex);
-                    addColumnSelected(level2);
+                helper.getView(R.id.iv_select).setOnClickListener(v -> {
+                    if (isSelected(level2)) {
+                        // 取消勾选
+                        selectedArray.remove(level2);
+                    } else {
+                        // 未选中1、移除同栏目其他选中
+                        for (JudgeLevel2 lv : selectedArray) {
+                            if (lv.helperIndex == level2.helperIndex) {
+                                selectedArray.remove(lv);
+                                break;
+                            }
+                        }
+                        selectedArray.add(level2);
+                    }
+                    notifyDataSetChanged();
+
+                    if (listener != null) listener.onCheck(v, selectedArray);
                 });
 
                 break;
@@ -124,24 +137,36 @@ public class FilterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
         }
     }
 
-    private boolean isColumnSelected(int index, String id) {
-        JudgeLevel2 level = selectedArray.get(index);
-        if (level != null) {
-            return level.isSelected && level.id.equals(id);
+    public void setOnCheckListener(OnCheckListener listener) {
+        this.listener = listener;
+    }
+
+    /**
+     * 判定是否选中
+     *
+     * @param level2
+     * @return
+     */
+    private boolean isSelected(JudgeLevel2 level2) {
+        for (JudgeLevel2 lv : selectedArray) {
+            if (lv.id.equals(level2.id)) {
+                return true;
+            }
         }
         return false;
     }
 
-    private void clearColumnSelected(int index) {
-        JudgeLevel2 level = selectedArray.get(index);
-        if (level != null) {
-            level.isSelected = false;
-        }
+    public void removeSingleSelected(JudgeLevel2 level2) {
+        selectedArray.remove(level2);
     }
 
-    private void addColumnSelected(JudgeLevel2 level2) {
-        level2.isSelected = true;
-        selectedArray.put(level2.helperIndex, level2);
+    public void clearSelectedArray() {
+        selectedArray.clear();
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<JudgeLevel2> getSelectedArray() {
+        return selectedArray;
     }
 
     /**
@@ -188,7 +213,9 @@ public class FilterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
                             List<JudgeLevel2> list = ParseUtils.parseListData(s, JudgeLevel2.class);
-                            for (JudgeLevel2 level2 : list) {
+                            for (int i = 0; i < list.size(); i++) {
+                                JudgeLevel2 level2 = list.get(i);
+                                level2.isFirstChild = i == 0;
                                 level2.level = TYPE_LEVEL_2;
                                 level2.helperId = level.id;
                                 level2.itemType = TYPE_LEVEL_2;
@@ -201,5 +228,8 @@ public class FilterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
                 });
     }
 
+    public interface OnCheckListener {
+        void onCheck(View v, List<JudgeLevel2> array);
+    }
 
 }

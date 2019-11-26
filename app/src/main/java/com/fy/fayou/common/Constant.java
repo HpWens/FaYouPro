@@ -162,6 +162,8 @@ public class Constant {
 
         String ID = "id";
 
+        String ENTITY = "entity";
+
         String LIST = "list";
 
         String NAME = "name";
@@ -191,6 +193,8 @@ public class Constant {
         String CATEGORY_ID = "category_id";
 
         int RESULT_CODE = 200;
+
+        int TEMPLATE_FILTER_RESULT = 201;
 
         String VIDEO = "VIDEO";
 

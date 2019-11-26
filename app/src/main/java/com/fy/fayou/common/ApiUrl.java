@@ -225,5 +225,11 @@ public class ApiUrl {
     // 判决文书分类查询
     public static final String GET_JUDGE_LIST = "/api-popularize/public/judgement/selectJudgement";
 
+    // 获取标签列表
+    public static final String GET_TEMPLATE_TAG = "/api-contract/public/tag/findList";
+
+    // 查询后获取横栏，带计数
+    public static final String GET_JUDGE_FILTER_CATEGORY = "/api-popularize/public/judgement/selectJudgementRail";
+
 
 }

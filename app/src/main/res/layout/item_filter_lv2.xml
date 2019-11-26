@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingBottom="10dp">
+    android:paddingBottom="15dp">
 
 
     <ImageView
@@ -27,11 +27,14 @@
         android:textSize="14sp"
         tools:text="形势案由" />
 
-    <CheckBox
-        android:id="@+id/checkbox"
+    <ImageView
+        android:id="@+id/iv_select"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:paddingRight="15dp"></CheckBox>
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/filter_selected_ic"></ImageView>
 
 </LinearLayout>

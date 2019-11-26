@@ -15,10 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.meis.base.R;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
@@ -280,10 +278,10 @@ public class StatusHelper {
             TextView view = mLoadingView.findViewById(R.id.tv_loading);
             setStatusArgs(view, args);
 
-            Glide.with(mLoadingView.getContext())
-                    .asGif()
-                    .load(R.mipmap.base_iv_loading)
-                    .into((ImageView) mLoadingView.findViewById(R.id.iv_loading));
+//            Glide.with(mLoadingView.getContext())
+//                    .asGif()
+//                    .load(R.mipmap.base_iv_loading)
+//                    .into((ImageView) mLoadingView.findViewById(R.id.iv_loading));
         }
     }
 

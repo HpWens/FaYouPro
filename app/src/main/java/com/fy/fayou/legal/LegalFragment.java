@@ -18,6 +18,7 @@ import com.zhouyou.http.EasyHttp;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,9 +38,14 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
     private JudgeEntity mJudgeEntity = null;
 
     public static LegalFragment newInstance(int preType, String type, int collectType) {
+        return newInstance(preType, type, collectType, null);
+    }
+
+    public static LegalFragment newInstance(int preType, String type, int collectType, JudgeEntity judgeEntity) {
         Bundle args = new Bundle();
         args.putString(Constant.Param.TYPE, type);
         args.putInt(Constant.Param.PRE_TYPE, preType);
+        args.putSerializable(Constant.Param.ENTITY, judgeEntity);
         args.putInt(Constant.Param.COLLECT_TYPE, collectType);
         LegalFragment fragment = new LegalFragment();
         fragment.setArguments(args);
@@ -53,6 +59,10 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
             type = bundle.getString(Constant.Param.TYPE, "");
             preType = bundle.getInt(Constant.Param.PRE_TYPE, 3);
             mCollectType = bundle.getInt(Constant.Param.COLLECT_TYPE, ARoute.LEGAL_TYPE);
+            Serializable serializable = bundle.getSerializable(Constant.Param.ENTITY);
+            if (serializable != null) {
+                mJudgeEntity = (JudgeEntity) serializable;
+            }
         }
         super.initView();
     }
@@ -89,7 +99,6 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
             if (mJudgeEntity != null) {
                 params.put("typeReason", mJudgeEntity.typeReason);
                 params.put("typeCourtClass", mJudgeEntity.typeCourtClass);
-                params.put("judgementType", mJudgeEntity.judgementType);
                 params.put("typeZone", mJudgeEntity.typeZone);
                 params.put("typeSpnf", mJudgeEntity.typeSpnf);
                 params.put("typeSpcx", mJudgeEntity.typeSpcx);

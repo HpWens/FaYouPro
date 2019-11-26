@@ -83,4 +83,8 @@ public class TemplateFragment extends BaseListFragment<TemplateEntity> {
         super.initData();
     }
 
+    @Override
+    protected boolean loadOnShow() {
+        return false;
+    }
 }

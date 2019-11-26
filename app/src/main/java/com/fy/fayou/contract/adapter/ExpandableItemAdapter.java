@@ -53,7 +53,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
             case TYPE_LEVEL_1:
                 final Level1Item lv1 = (Level1Item) item;
                 holder.setText(R.id.title, lv1.content)
-                        .setChecked(R.id.checkbox, lv1.isSelect);
+                        .setChecked(R.id.iv_select, lv1.isSelect);
                 holder.itemView.setOnClickListener(v -> {
                     int pos = holder.getAdapterPosition();
 

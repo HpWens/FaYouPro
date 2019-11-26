@@ -3,6 +3,8 @@ package com.fy.fayou.search.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fy.fayou.legal.bean.JudgeEntity;
+
 import java.io.Serializable;
 
 
@@ -29,6 +31,8 @@ public class ColumnEntity implements Serializable, Parcelable {
 
     public String count;
     public String id = "";
+    // 辅助字段
+    public JudgeEntity judgeEntity;
 
     public ColumnEntity() {
     }

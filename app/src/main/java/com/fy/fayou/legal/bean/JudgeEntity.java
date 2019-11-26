@@ -4,17 +4,18 @@ import java.io.Serializable;
 
 public class JudgeEntity implements Serializable {
 
-    public String typeReason = "";
+    // 案由
+    public String typeReason = "0";
 
-    public String typeCourtClass = "";
+    public String typeCourtClass = "0";
 
-    public String judgementType = "";
+    public String judgementType = "0";
 
-    public String typeZone = "";
+    public String typeZone = "0";
 
-    public String typeSpnf = "";
+    public String typeSpnf = "0";
 
-    public String typeSpcx = "";
+    public String typeSpcx = "0";
 
-    public String typeBookType = "";
+    public String typeBookType = "0";
 }

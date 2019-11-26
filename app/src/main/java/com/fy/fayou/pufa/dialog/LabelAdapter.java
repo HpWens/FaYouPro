@@ -1,6 +1,7 @@
 package com.fy.fayou.pufa.dialog;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,8 @@ public class LabelAdapter extends MeiBaseAdapter<TagEntity> {
 
     private int maxSelectNum = 5;
 
+    private TagEntity mCurrentSelectedTag;
+
     public LabelAdapter() {
         super(R.layout.item_dialog_article_label, new ArrayList<>());
     }
@@ -25,14 +28,14 @@ public class LabelAdapter extends MeiBaseAdapter<TagEntity> {
     @Override
     protected void convert(@NonNull BaseViewHolder helper, TagEntity item) {
         TextView tvTag = helper.getView(R.id.tv_label);
-        tvTag.setText(getNonEmpty(item.tagName));
+        tvTag.setText(getNonEmpty(TextUtils.isEmpty(item.tagName) ? item.name : item.tagName));
         tvTag.setSelected(isSelected(item.id));
         tvTag.setOnClickListener(v -> {
             if (isSelected(item.id)) {
-                selectedTags.remove(item);
+                if (mCurrentSelectedTag != null) selectedTags.remove(mCurrentSelectedTag);
             } else {
                 if (selectedTags.size() >= maxSelectNum) {
-                    Toast.makeText(mContext, "标签最多只能选择5个", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "标签最多只能选择" + maxSelectNum + "个", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 selectedTags.add(item);
@@ -44,10 +47,15 @@ public class LabelAdapter extends MeiBaseAdapter<TagEntity> {
     private boolean isSelected(String id) {
         for (TagEntity tag : selectedTags) {
             if (tag.id.equals(id)) {
+                mCurrentSelectedTag = tag;
                 return true;
             }
         }
         return false;
+    }
+
+    public void setMaxSelectNum(int maxSelectNum) {
+        this.maxSelectNum = maxSelectNum;
     }
 
     public List<TagEntity> getSelectedTags() {

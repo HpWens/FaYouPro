@@ -17,12 +17,12 @@
         android:textColor="@color/color_333333"
         android:textSize="14sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/checkbox"
+        app:layout_constraintRight_toLeftOf="@+id/iv_select"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/contract_template" />
 
     <CheckBox
-        android:id="@+id/checkbox"
+        android:id="@+id/iv_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"

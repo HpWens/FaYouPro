@@ -10,5 +10,6 @@ public class TagEntity implements Serializable {
     public String version;
     public String tagName;
     public boolean deleted;
+    public String name;
 
 }
