@@ -176,6 +176,8 @@ public class Constant {
 
         String TYPE = "type";
 
+        String TAGS = "tags";
+
         String PRE_TYPE = "pre_type";
 
         String COLLECT_TYPE = "collect_type";

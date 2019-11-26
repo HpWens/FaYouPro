@@ -33,6 +33,7 @@ public class ColumnEntity implements Serializable, Parcelable {
     public String id = "";
     // 辅助字段
     public JudgeEntity judgeEntity;
+    public String tags;
 
     public ColumnEntity() {
     }

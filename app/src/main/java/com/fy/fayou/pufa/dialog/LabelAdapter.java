@@ -19,6 +19,8 @@ public class LabelAdapter extends MeiBaseAdapter<TagEntity> {
 
     private int maxSelectNum = 5;
 
+    private boolean isSingleSelect;
+
     private TagEntity mCurrentSelectedTag;
 
     public LabelAdapter() {
@@ -34,11 +36,19 @@ public class LabelAdapter extends MeiBaseAdapter<TagEntity> {
             if (isSelected(item.id)) {
                 if (mCurrentSelectedTag != null) selectedTags.remove(mCurrentSelectedTag);
             } else {
-                if (selectedTags.size() >= maxSelectNum) {
-                    Toast.makeText(mContext, "标签最多只能选择" + maxSelectNum + "个", Toast.LENGTH_SHORT).show();
-                    return;
+                if (isSingleSelect) {
+                    if (!selectedTags.isEmpty()) {
+                        selectedTags.clear();
+                        notifyDataSetChanged();
+                    }
+                    selectedTags.add(item);
+                } else {
+                    if (selectedTags.size() >= maxSelectNum) {
+                        Toast.makeText(mContext, "标签最多只能选择" + maxSelectNum + "个", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    selectedTags.add(item);
                 }
-                selectedTags.add(item);
             }
             notifyItemChanged(helper.getAdapterPosition());
         });
@@ -56,6 +66,7 @@ public class LabelAdapter extends MeiBaseAdapter<TagEntity> {
 
     public void setMaxSelectNum(int maxSelectNum) {
         this.maxSelectNum = maxSelectNum;
+        isSingleSelect = maxSelectNum == 1;
     }
 
     public List<TagEntity> getSelectedTags() {

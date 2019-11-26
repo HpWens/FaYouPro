@@ -5,8 +5,10 @@ import android.support.annotation.NonNull;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.contract.bean.TemplateEntity;
+import com.fy.fayou.utils.KtTimeUtils;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 
 import java.util.ArrayList;
@@ -15,8 +17,11 @@ public class TemplateAdapter extends MeiBaseAdapter<TemplateEntity> {
 
     public static final int MADE_TEMPLATE = 2;
 
-    public TemplateAdapter() {
+    private int collectType;
+
+    public TemplateAdapter(int collectType) {
         super(R.layout.item_contract_template, new ArrayList<>());
+        this.collectType = collectType;
     }
 
     @Override
@@ -24,7 +29,8 @@ public class TemplateAdapter extends MeiBaseAdapter<TemplateEntity> {
         helper.setText(R.id.tv_num, item.termsNumber + " 条")
                 .setText(R.id.tv_type, "")
                 .setText(R.id.tv_name, getNonEmpty(item.title))
-                .setText(R.id.tv_time, "发布时间：" + getNonEmpty(item.createTime))
+                .setText(R.id.tv_type, getNonEmpty(item.title))
+                .setText(R.id.tv_time, "发布时间：" + KtTimeUtils.INSTANCE.getYMDTime(item.expiryDate))
                 .setText(R.id.tv_count, "下载次数：" + item.download + "次");
 
         helper.itemView.setOnClickListener(v -> {
@@ -34,6 +40,8 @@ public class TemplateAdapter extends MeiBaseAdapter<TemplateEntity> {
                         .withString(Constant.Param.ID, item.id)
                         .withString(Constant.Param.NAME, item.title)
                         .navigation();
+            } else {
+                ARoute.jumpH5(getNonEmpty(item.toUrl), true, item.id, collectType);
             }
         });
     }

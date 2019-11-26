@@ -163,7 +163,9 @@ public class ReviewFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.comment_layout:
-                showBottomCommentDialog("", articleId, "", 0);
+                if (UserService.getInstance().checkLoginAndJump()) {
+                    showBottomCommentDialog("", articleId, "", 0);
+                }
                 break;
             case R.id.iv_back:
                 hideBehavior();

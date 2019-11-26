@@ -29,4 +29,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pb_web_base"></WebView>
 
+    <ImageView
+        android:id="@+id/iv_related"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="64dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/detail_h5_related"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"></ImageView>
+
 </android.support.constraint.ConstraintLayout>

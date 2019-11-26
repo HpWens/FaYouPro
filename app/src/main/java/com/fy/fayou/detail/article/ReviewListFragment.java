@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiResult;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.detail.adapter.ReviewAdapter;
 import com.fy.fayou.detail.bean.CommentBean;
 import com.fy.fayou.utils.ParseUtils;
@@ -75,7 +76,9 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
         return mAdapter = new ReviewAdapter(new ReviewAdapter.OnClickListener() {
             @Override
             public void onPraise(View v, int pos, CommentBean item) {
-                requestPraise(item.id, pos, item);
+                if (UserService.getInstance().checkLoginAndJump()) {
+                    requestPraise(item.id, pos, item);
+                }
             }
 
             @Override

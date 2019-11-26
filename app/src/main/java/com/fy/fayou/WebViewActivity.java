@@ -13,14 +13,21 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.detail.bean.DetailBean;
+import com.fy.fayou.detail.bean.LawBean;
 import com.fy.fayou.detail.dialog.BottomShareDialog;
+import com.fy.fayou.detail.dialog.RelatedDialog;
+import com.fy.fayou.legal.bean.LegalEntity;
+import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.zhouyou.http.EasyHttp;
@@ -29,7 +36,9 @@ import com.zhouyou.http.exception.ApiException;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +62,8 @@ public class WebViewActivity extends BaseActivity {
     WebView webBase;
     @BindView(R.id.pb_web_base)
     ProgressBar pbWebBase;
+    @BindView(R.id.iv_related)
+    ImageView ivRelated;
 
     private long mBackPressed;
     private String webPath = "http://www.baidu.com";
@@ -91,6 +102,11 @@ public class WebViewActivity extends BaseActivity {
     @Override
     protected void initData() {
 
+        if (type == ARoute.JUDGE_TYPE || type == ARoute.GUIDE_TYPE
+                || type == ARoute.LEGAL_TYPE || type == ARoute.JUDICIAL_TYPE) {
+            ivRelated.setVisibility(View.VISIBLE);
+        }
+
         if (!TextUtils.isEmpty(url)) {
             webPath = url;
         }
@@ -98,7 +114,7 @@ public class WebViewActivity extends BaseActivity {
         WebSettings webSettings = webBase.getSettings();
         if (Build.VERSION.SDK_INT >= 19) {
             // 加载缓存否则网络
-            webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            // webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         }
 
         if (Build.VERSION.SDK_INT >= 19) {
@@ -194,6 +210,172 @@ public class WebViewActivity extends BaseActivity {
         if (type != ARoute.ARTICLE_TYPE) {
             // 请求浏览记录
             requestScanRecord();
+        }
+
+        ivRelated.setOnClickListener(v -> {
+            requestRelated();
+        });
+    }
+
+    /**
+     * 请求关联接口
+     */
+    private void requestRelated() {
+        switch (type) {
+            case ARoute.LEGAL_TYPE:
+                requestLegalRelated();
+                break;
+            case ARoute.JUDICIAL_TYPE:
+                requestJudicialRelated();
+                break;
+            case ARoute.GUIDE_TYPE:
+                requestCaseRelated();
+                break;
+            case ARoute.JUDGE_TYPE:
+                requestJudgeRelated();
+                break;
+        }
+    }
+
+    /**
+     * 请求司法解释关联
+     */
+    private void requestJudicialRelated() {
+        EasyHttp.get(ApiUrl.GET_JUDICIAL_RELATED)
+                .params("judicialInterpretationId", id)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                        ParseUtils.handlerApiError(e, error -> {
+                            Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+                        });
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (s.equals("[]")) {
+                            Toast.makeText(mContext, "无关联数据", Toast.LENGTH_SHORT).show();
+                        } else {
+
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 获取法律法规关联
+     */
+    private void requestLegalRelated() {
+        EasyHttp.get(ApiUrl.GET_LEGAL_RELATED)
+                .params("bookId", id)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (s.equals("[]")) {
+                            Toast.makeText(mContext, "无关联数据", Toast.LENGTH_SHORT).show();
+                        } else {
+                            List<LegalEntity> data = ParseUtils.parseListData(s, LegalEntity.class);
+
+                            List<LawBean> list = new ArrayList<>();
+                            LawBean lawBean = new LawBean();
+                            lawBean.name = "司法解释";
+                            list.add(lawBean);
+
+                            for (LegalEntity entity : data) {
+                                lawBean = new LawBean();
+                                lawBean.collectType = ARoute.JUDICIAL_TYPE;
+                                lawBean.name = entity.title;
+                                lawBean.itemType = 1;
+                                lawBean.url = entity.toUrl;
+                                lawBean.id = entity.id;
+                                list.add(lawBean);
+                            }
+
+                            new RelatedDialog(mContext, list).show();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 请求指导性意见关联
+     */
+    private void requestCaseRelated() {
+        EasyHttp.get(ApiUrl.GET_CASE_RELATED)
+                .params("caseId", id)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        parseCaseAndJudgeData(s, "判决文书", ARoute.JUDGE_TYPE);
+                    }
+                });
+    }
+
+    /**
+     * 请求裁判文书关联
+     */
+    private void requestJudgeRelated() {
+        EasyHttp.get(ApiUrl.GET_JUDGE_RELATED)
+                .params("judgementId", id)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        parseCaseAndJudgeData(s, "指导性意见", ARoute.GUIDE_TYPE);
+                    }
+                });
+    }
+
+    /**
+     * @param s
+     */
+    private void parseCaseAndJudgeData(String s, String relatedTitle, int collectType) {
+        if (!TextUtils.isEmpty(s)) {
+            DetailBean bean = ParseUtils.parseData(s, DetailBean.class);
+            List<LawBean> list = new ArrayList<>();
+            if (bean.lawsUrl != null && !bean.lawsUrl.isEmpty()) {
+                LawBean lawBean = new LawBean();
+                lawBean.name = "法条";
+                list.add(lawBean);
+
+                for (LawBean lb : bean.lawsUrl) {
+                    lawBean = new LawBean();
+                    lawBean.collectType = ARoute.LEGAL_TYPE;
+                    lawBean.name = lb.name;
+                    lawBean.itemType = 1;
+                    lawBean.url = lb.url;
+                    lawBean.id = TextUtils.isEmpty(lb.url) ? "" : lb.url.substring(lb.url.lastIndexOf("/"));
+                    list.add(lawBean);
+                }
+            }
+
+            if (!TextUtils.isEmpty(bean.bindedId)) {
+                LawBean lawBean = new LawBean();
+                lawBean.name = relatedTitle;
+                list.add(lawBean);
+
+                lawBean = new LawBean();
+                lawBean.collectType = collectType;
+                lawBean.itemType = 1;
+                lawBean.name = bean.title;
+                lawBean.id = bean.bindedId;
+                lawBean.url = bean.bindedUrl;
+                list.add(lawBean);
+            }
+
+            new RelatedDialog(mContext, list).show();
+
         }
     }
 

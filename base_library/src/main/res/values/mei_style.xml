@@ -8,6 +8,7 @@
         <item name="android:paddingBottom">@dimen/mei_16_dp</item>
         <item name="android:paddingTop">@dimen/mei_16_dp</item>
         <item name="android:text">?attr/meiTextEmpty</item>
+        <item name="android:textSize">@dimen/mei_14_sp</item>
         <item name="android:textColor">?attr/meiColorTextGray</item>
     </style>
 

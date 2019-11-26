@@ -12,11 +12,14 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:textColor="@color/color_333333"
         android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="指导案例112号：阿斯特克有限公司申请设立
+海事赔偿责任限制基金案指导案例112号：阿斯特克有限公司申请设立
 海事赔偿责任限制基金案" />
 
     <TextView

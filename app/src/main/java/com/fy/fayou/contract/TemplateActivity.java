@@ -81,6 +81,9 @@ public class TemplateActivity extends BaseActivity {
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
                             ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
+                            for (ColumnEntity column : columns) {
+                                column.tags = tags;
+                            }
                             if (mAdapter == null) {
                                 viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.TEMPLATE, collectType));
                                 tab.setViewPager(viewpager);
@@ -110,6 +113,8 @@ public class TemplateActivity extends BaseActivity {
                     if (!data.isEmpty()) {
                         tvRight.setText(data.get(0).name);
                         requestColumn(data.get(0).id);
+                    } else {
+                        requestColumn("");
                     }
                     dia.dismiss();
                 }, mTagListData);

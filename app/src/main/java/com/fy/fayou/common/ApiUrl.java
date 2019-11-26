@@ -231,5 +231,19 @@ public class ApiUrl {
     // 查询后获取横栏，带计数
     public static final String GET_JUDGE_FILTER_CATEGORY = "/api-popularize/public/judgement/selectJudgementRail";
 
+    // 查询文章内容
+    public static final String GET_JUDGE_RELATED = "/api-popularize/public/judgement/cheackJudgementBindById";
+
+
+    // 获取直到意见绑定信息
+    public static final String GET_CASE_RELATED = "/api-popularize/public/case/cheackCaseBindById";
+
+
+    //根据司法解释获取关联的法律法规
+    public static final String GET_LEGAL_RELATED = "/api-lawsRegulations/public/judicialInterpretation/findByBook";
+
+
+    //根据司法解释获取关联的法律法规
+    public static final String GET_JUDICIAL_RELATED = "/api-lawsRegulations/public/legalProvisions/getByJudicialInterpretation";
 
 }

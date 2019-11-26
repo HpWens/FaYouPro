@@ -19,5 +19,6 @@ public class TemplateEntity {
     public int type;
     public String createTime;
     public String toUrl;
+    public String file;
 
 }
