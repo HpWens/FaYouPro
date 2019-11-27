@@ -3,10 +3,13 @@ package com.fy.fayou.contract.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.fy.fayou.contract.adapter.ExpandableItemAdapter;
 
-public class Level1Item implements MultiItemEntity, Parcelable {
+import java.io.Serializable;
+import java.util.List;
+
+public class Level1Item extends AbstractExpandableItem implements MultiItemEntity, Parcelable, Serializable {
 
     public String id;
     public String parent;
@@ -18,6 +21,13 @@ public class Level1Item implements MultiItemEntity, Parcelable {
 
     // 辅助布局
     public boolean isLast;
+
+    public String templeteId;
+    public String parentId;
+    public int level = 1;
+    public List<Level1Item> termsList;
+    public int childIndex = -1;
+    public Level1Item parentLevel;
 
     public Level1Item() {
     }
@@ -46,7 +56,7 @@ public class Level1Item implements MultiItemEntity, Parcelable {
 
     @Override
     public int getItemType() {
-        return ExpandableItemAdapter.TYPE_LEVEL_1;
+        return level;
     }
 
     @Override
@@ -63,5 +73,10 @@ public class Level1Item implements MultiItemEntity, Parcelable {
         dest.writeString(content);
         dest.writeByte((byte) (isSelect ? 1 : 0));
         dest.writeByte((byte) (isLast ? 1 : 0));
+    }
+
+    @Override
+    public int getLevel() {
+        return level;
     }
 }

@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
 import com.fy.fayou.bean.UserInfo;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.utils.GlideOption;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.vondear.rxtool.RxImageTool;
@@ -51,6 +52,12 @@ public class FollowAdapter extends MeiBaseAdapter<UserInfo> {
                 .apply(GlideOption.getAvatarOption(width, height))
                 .into(ivAvatar);
 
+        helper.getView(R.id.tv_name).setOnClickListener(v -> {
+            ARoute.jumpUserCenter(item.id);
+        });
+        ivAvatar.setOnClickListener(v -> {
+            ARoute.jumpUserCenter(item.id);
+        });
     }
 
     public interface OnItemListener {

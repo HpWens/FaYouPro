@@ -15,6 +15,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
@@ -31,6 +32,7 @@ import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.DownloadProgressCallBack;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
@@ -64,6 +66,8 @@ public class WebViewActivity extends BaseActivity {
     ProgressBar pbWebBase;
     @BindView(R.id.iv_related)
     ImageView ivRelated;
+    @BindView(R.id.tv_count)
+    TextView tvCount;
 
     private long mBackPressed;
     private String webPath = "http://www.baidu.com";
@@ -105,6 +109,10 @@ public class WebViewActivity extends BaseActivity {
         if (type == ARoute.JUDGE_TYPE || type == ARoute.GUIDE_TYPE
                 || type == ARoute.LEGAL_TYPE || type == ARoute.JUDICIAL_TYPE) {
             ivRelated.setVisibility(View.VISIBLE);
+        }
+
+        if (type == ARoute.TEMPLATE_TYPE) {
+            requestDownLoadCount();
         }
 
         if (!TextUtils.isEmpty(url)) {
@@ -215,6 +223,58 @@ public class WebViewActivity extends BaseActivity {
         ivRelated.setOnClickListener(v -> {
             requestRelated();
         });
+
+        tvCount.setOnClickListener(v -> {
+            requestDownLoadUrl();
+        });
+    }
+
+    /**
+     * 请求下载
+     */
+    private void requestDownLoadUrl() {
+        EasyHttp.downLoad(ApiUrl.GET_DOWNLOAD_URL + "?id=" + id +
+                "&title=合同&type=2&informationOfParties=&signingClause=&contractTermIds=" + url.substring(url.lastIndexOf("ids=") + 4))
+                .execute(new DownloadProgressCallBack<String>() {
+                    @Override
+                    public void update(long bytesRead, long contentLength, boolean done) {
+                    }
+
+                    @Override
+                    public void onComplete(String path) {
+                        Toast.makeText(mContext, "下载成功，期待分享", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onStart() {
+                    }
+
+                    @Override
+                    public void onError(ApiException e) {
+                        Toast.makeText(mContext, "下载失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    /**
+     * 获取下载次数
+     */
+    private void requestDownLoadCount() {
+        EasyHttp.get(ApiUrl.GET_DOWNLOAD_COUNT)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            String count = ParseUtils.parseJSONObject(s, "limit");
+                            tvCount.setText("你的下载次数剩余" + count + "次");
+                            tvCount.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
     }
 
     /**
@@ -256,7 +316,23 @@ public class WebViewActivity extends BaseActivity {
                         if (s.equals("[]")) {
                             Toast.makeText(mContext, "无关联数据", Toast.LENGTH_SHORT).show();
                         } else {
-
+                            List<LawBean> data = ParseUtils.parseListData(s, LawBean.class);
+                            if (!data.isEmpty()) {
+                                List<LawBean> list = new ArrayList<>();
+                                LawBean lawBean = new LawBean();
+                                lawBean.name = "法律法规";
+                                list.add(lawBean);
+                                for (LawBean entity : data) {
+                                    lawBean = new LawBean();
+                                    lawBean.collectType = ARoute.LEGAL_TYPE;
+                                    lawBean.name = entity.name;
+                                    lawBean.itemType = 1;
+                                    lawBean.url = entity.toUrl;
+                                    lawBean.id = entity.id;
+                                    list.add(lawBean);
+                                }
+                                new RelatedDialog(mContext, list).show();
+                            }
                         }
                     }
                 });

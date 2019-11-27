@@ -9,6 +9,7 @@ public class LawBean implements Serializable, MultiItemEntity {
     public String id;
     public String name;
     public String url;
+    public String toUrl;
     public int collectType;
     public int itemType = 0;
 

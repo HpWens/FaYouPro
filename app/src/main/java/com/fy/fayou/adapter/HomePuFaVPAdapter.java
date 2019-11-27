@@ -21,7 +21,7 @@ public class HomePuFaVPAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(final int i) {
-        return RecommendFragment.newInstance();
+        return RecommendFragment.newInstance(mTags.get(i).id, false);
 //        if (i == 0) {
 //            return NewsFragment.newInstance();
 //        } else if (i == 1) {

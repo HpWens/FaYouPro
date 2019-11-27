@@ -4,18 +4,22 @@ import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.contract.adapter.ExpandableItemAdapter;
-import com.fy.fayou.contract.bean.Level0Item;
 import com.fy.fayou.contract.bean.Level1Item;
+import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.base.BaseActivity;
+import com.meis.base.mei.status.ViewState;
 import com.meis.base.mei.utils.Eyes;
 import com.vondear.rxtool.RxImageTool;
 import com.zhouyou.http.EasyHttp;
@@ -27,6 +31,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 @Route(path = "/contract/filter")
 public class FilterActivity extends BaseActivity {
@@ -35,6 +40,8 @@ public class FilterActivity extends BaseActivity {
     public String id = "";
     @Autowired
     public String name = "";
+    @Autowired
+    public String url = "";
 
     @BindView(R.id.recycler)
     RecyclerView recycler;
@@ -53,8 +60,7 @@ public class FilterActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-
-        list = generateData();
+        setState(ViewState.LOADING);
         adapter = new ExpandableItemAdapter(list);
         recycler.setLayoutManager(new LinearLayoutManager(mContext));
         recycler.setAdapter(adapter);
@@ -64,11 +70,13 @@ public class FilterActivity extends BaseActivity {
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
                 int pos = parent.getChildAdapterPosition(view);
-                List<MultiItemEntity> list = adapter.getData();
-                if (pos >= 0 && pos < list.size() && list.get(pos) instanceof Level1Item) {
-                    Level1Item lv1 = (Level1Item) list.get(pos);
-                    if (lv1.isLast) {
-                        outRect.bottom = RxImageTool.dp2px(10);
+                if (pos >= 0 && pos < adapter.getData().size()) {
+                    MultiItemEntity entity = adapter.getData().get(pos);
+                    if (entity instanceof Level1Item) {
+                        Level1Item preLevel = (Level1Item) entity;
+                        if (preLevel.childIndex == 0) {
+                            outRect.top = RxImageTool.dip2px(15);
+                        }
                     }
                 }
             }
@@ -86,14 +94,41 @@ public class FilterActivity extends BaseActivity {
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
-
+                        setState(ViewState.COMPLETED);
                     }
 
                     @Override
                     public void onSuccess(String s) {
-
+                        if (!TextUtils.isEmpty(s)) {
+                            try {
+                                List<Level1Item> data = ParseUtils.parseListData(s, Level1Item.class);
+                                for (Level1Item item : data) {
+                                    int childIndex = 0;
+                                    generateData(item, childIndex);
+                                    list.add(item);
+                                }
+                                adapter.setNewData(list);
+                            } catch (Exception e) {
+                            }
+                        }
+                        setState(ViewState.COMPLETED);
                     }
                 });
+    }
+
+    /**
+     * 递归处理
+     */
+    private void generateData(Level1Item level, int index) {
+        if (level.termsList != null && !level.termsList.isEmpty()) {
+            for (Level1Item child : level.termsList) {
+                child.childIndex = index;
+                child.parentLevel = level;
+                level.addSubItem(child);
+                index++;
+                generateData(child, index);
+            }
+        }
     }
 
     @Override
@@ -101,28 +136,34 @@ public class FilterActivity extends BaseActivity {
         return R.layout.activity_contract_filter;
     }
 
-    private ArrayList<MultiItemEntity> generateData() {
-        ArrayList<MultiItemEntity> res = new ArrayList<>();
-        int lv0Count = 6;
-        int lv1Count = 3;
-
-        String[] titleList = {"当事人信息", "第一条 合同目的的描述", "第二条 财产所有制", "第三条 特别约定", "第四条 家庭消费", "署名条款"};
-        for (int i = 0; i < lv0Count; i++) {
-            Level0Item lv0 = new Level0Item();
-            lv0.title = titleList[i];
-            for (int j = 0; j < lv1Count; j++) {
-                Level1Item lv1 = new Level1Item();
-                if (i % 2 != 0) {
-                    lv1.content = getResources().getString(R.string.contract_template);
-                    lv0.childCount = lv0Count;
-                    if (j == lv1Count - 1) {
-                        lv1.isLast = true;
-                    }
-                    lv0.addSubItem(lv1);
+    @OnClick({R.id.tv_clear, R.id.tv_down})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_clear:
+                if (adapter != null) {
+                    adapter.clearSelectedArray();
                 }
-            }
-            res.add(lv0);
+                break;
+            case R.id.tv_down:
+                List<Level1Item> data = adapter.getSelectedArray();
+                if (data.isEmpty()) {
+                    Toast.makeText(mContext, "至少选择一项条款", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                StringBuilder sb = new StringBuilder();
+                String suffix = "";
+                if (!data.isEmpty()) {
+                    for (Level1Item lv : data) {
+                        sb.append(lv.id + ",");
+                    }
+                    suffix = sb.substring(0, sb.length() - 1);
+                }
+                String h5url = url + "?ids=" + suffix;
+                // if (!TextUtils.isEmpty(url) && !TextUtils.isEmpty(suffix)) {
+                //     h5url = url.substring(0, url.lastIndexOf("/")) + "/" + suffix;
+                // }
+                ARoute.jumpH5(h5url, true, id, ARoute.TEMPLATE_TYPE);
+                break;
         }
-        return res;
     }
 }

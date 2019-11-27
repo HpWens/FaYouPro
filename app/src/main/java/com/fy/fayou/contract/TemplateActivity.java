@@ -101,9 +101,12 @@ public class TemplateActivity extends BaseActivity {
         return R.layout.activity_home_wanted;
     }
 
-    @OnClick({R.id.iv_back, R.id.tv_right})
+    @OnClick({R.id.iv_back, R.id.tv_right, R.id.iv_float_search})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_float_search:
+                ARoute.jumpSearch();
+                break;
             case R.id.iv_back:
                 finish();
                 break;

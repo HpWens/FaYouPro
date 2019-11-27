@@ -61,7 +61,9 @@ public class SearchActivity extends BaseActivity {
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
 
         recycler.setLayoutManager(new LinearLayoutManager(this));
-        recycler.setAdapter(mAdapter = new SearchAdapter());
+        recycler.setAdapter(mAdapter = new SearchAdapter((v, keyword) -> {
+            jumpSearchResult(keyword);
+        }));
 
         loadRootFragment(R.id.associate_fl, associateFragment = AssociateFragment.newInstance());
 

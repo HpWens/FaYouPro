@@ -2,11 +2,9 @@ package com.fy.fayou.contract.adapter;
 
 import android.support.annotation.NonNull;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ARoute;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.contract.bean.TemplateEntity;
 import com.fy.fayou.utils.KtTimeUtils;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
@@ -35,11 +33,7 @@ public class TemplateAdapter extends MeiBaseAdapter<TemplateEntity> {
 
         helper.itemView.setOnClickListener(v -> {
             if (item.type == MADE_TEMPLATE) {
-                ARouter.getInstance()
-                        .build(Constant.CONTRACT_FILTER)
-                        .withString(Constant.Param.ID, item.id)
-                        .withString(Constant.Param.NAME, item.title)
-                        .navigation();
+                ARoute.jumpFilter(item.id, item.title, item.toUrl);
             } else {
                 ARoute.jumpH5(getNonEmpty(item.toUrl), true, item.id, collectType);
             }

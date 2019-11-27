@@ -20,4 +20,6 @@ public class LegalEntity implements Serializable {
     public String auditorName;
     public String auditDate;
     public String url;
+
+
 }

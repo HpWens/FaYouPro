@@ -81,6 +81,18 @@ public class ParseUtils {
         return new Gson().fromJson(json, listType);
     }
 
+    public static String parseJSONObject(String json, String fieldName) {
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            if (jsonObject.has(fieldName)) {
+                return jsonObject.optString(fieldName);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public static void handlerError(ApiException apiException) {
         if (null != apiException) {
             // 未登陆

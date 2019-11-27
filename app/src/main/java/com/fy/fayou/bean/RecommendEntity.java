@@ -36,6 +36,6 @@ public class RecommendEntity implements Serializable, MultiItemEntity {
             }
             return TYPE_ARTICLE;
         }
-        return 0;
+        return TYPE_ARTICLE;
     }
 }

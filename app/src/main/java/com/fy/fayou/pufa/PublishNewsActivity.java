@@ -66,7 +66,7 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
 
             @Override
             public void onEditTextChanged() {
-                tvRight.setSelected(!mMixingHelper.isEmpty());
+                tvRight.setSelected(!mMixingHelper.isEmpty(false));
             }
         });
         SoftKeyBoardListener.setOnSoftKeyBoardChangeListener(this, this);
@@ -84,7 +84,7 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
                 finish();
                 break;
             case R.id.tv_right:
-                if (!mMixingHelper.isEmpty()) {
+                if (!mMixingHelper.isEmpty(true)) {
                     // 保存发布资讯数据
                     UserService.getInstance().savePublishNew(mMixingHelper.getData());
                     ARouter.getInstance().build(Constant.NEWS_PUBLISH_NEXT)

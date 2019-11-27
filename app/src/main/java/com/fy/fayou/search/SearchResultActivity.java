@@ -73,6 +73,10 @@ public class SearchResultActivity extends BaseActivity {
 
         // requestMenuListData();
 
+        requestResult();
+    }
+
+    private void requestResult() {
         EasyHttp.get(ApiUrl.GET_SEARCH_RESULT)
                 .params("keyword", keyword)
                 .params("userId", UserService.getInstance().getUserId())
@@ -87,6 +91,20 @@ public class SearchResultActivity extends BaseActivity {
 
                     }
                 });
+    }
+
+    @Override
+    protected int layoutResId() {
+        return R.layout.activity_search_result;
+    }
+
+    /*************************************旧版逻辑************************************/
+    public void switchContentFragment(String menu) {
+        ContentFragment fragment = ContentFragment.newInstance(menu, keyword);
+        BaseFragment baseFragment = SupportHelper.findFragment(getSupportFragmentManager(), ContentFragment.class);
+        if (baseFragment != null) {
+            baseFragment.replaceFragment(fragment, false);
+        }
     }
 
     private void requestMenuListData() {
@@ -145,18 +163,5 @@ public class SearchResultActivity extends BaseActivity {
                         }
                     }
                 });
-    }
-
-    @Override
-    protected int layoutResId() {
-        return R.layout.activity_search_result;
-    }
-
-    public void switchContentFragment(String menu) {
-        ContentFragment fragment = ContentFragment.newInstance(menu, keyword);
-        BaseFragment baseFragment = SupportHelper.findFragment(getSupportFragmentManager(), ContentFragment.class);
-        if (baseFragment != null) {
-            baseFragment.replaceFragment(fragment, false);
-        }
     }
 }

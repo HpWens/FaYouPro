@@ -68,7 +68,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/search_layout"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <FrameLayout
             android:id="@+id/fl_list_container"
@@ -83,5 +84,11 @@
             android:layout_height="match_parent"
             android:layout_weight="2.5" />
     </LinearLayout>
+
+    <include
+        layout="@layout/comm_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_layout"></include>
 
 </RelativeLayout>

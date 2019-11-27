@@ -2,7 +2,6 @@ package com.fy.fayou.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -66,19 +65,18 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
     @Override
     protected void initData() {
         super.initData();
+        if (!fixedColumn) {
+            mRecyclerView.setCanScrollVertically(true);
+        }
     }
 
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void initView() {
         if (getArguments() != null) {
             categoryId = getArguments().getString(Constant.Param.CATEGORY_ID, "");
             fixedColumn = getArguments().getBoolean(Constant.Param.FIXED_COLUMN, false);
         }
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void initView() {
         super.initView();
         mRecyclerView.setOnScrollClashListener(isScroll -> {
             if (mListener != null) {

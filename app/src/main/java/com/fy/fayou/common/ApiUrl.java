@@ -246,4 +246,11 @@ public class ApiUrl {
     //根据司法解释获取关联的法律法规
     public static final String GET_JUDICIAL_RELATED = "/api-lawsRegulations/public/legalProvisions/getByJudicialInterpretation";
 
+
+    //获取用户对合同的限制下载次数
+    public static final String GET_DOWNLOAD_COUNT = "/api-contract/admin/contract/getCanDownloadNumber";
+
+    //下载合同模板
+    public static final String GET_DOWNLOAD_URL = "/api-contract/admin/contract/download";
+
 }

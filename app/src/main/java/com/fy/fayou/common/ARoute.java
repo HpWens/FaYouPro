@@ -3,7 +3,6 @@ package com.fy.fayou.common;
 import android.app.Activity;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.fy.fayou.contract.bean.Level1Item;
 import com.fy.fayou.legal.bean.JudgeLevel1;
 
 import java.util.ArrayList;
@@ -186,13 +185,13 @@ public class ARoute {
      */
     public static final int REQUEST_CODE = 101;
 
-    public static void jumpFilter(Activity activity, String id, String title, ArrayList<Level1Item> list) {
+    public static void jumpFilter(String id, String title, String url) {
         ARouter.getInstance()
                 .build(Constant.CONTRACT_FILTER)
                 .withString(Constant.Param.ID, id)
                 .withString(Constant.Param.NAME, title)
-                .withParcelableArrayList(Constant.Param.LIST, list)
-                .navigation(activity, REQUEST_CODE);
+                .withString(Constant.Param.URL, url)
+                .navigation();
     }
 
 

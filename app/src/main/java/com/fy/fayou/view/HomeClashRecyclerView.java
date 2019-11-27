@@ -14,6 +14,7 @@ public class HomeClashRecyclerView extends RecyclerView {
     float moveX;
     float moveY;
     boolean isSelectTouch = false;
+    boolean canScrollVertically = false;
 
     private OnScrollClashListener mListener;
 
@@ -77,7 +78,16 @@ public class HomeClashRecyclerView extends RecyclerView {
 
     @Override
     public boolean canScrollVertically(int direction) {
-        return false;
+        return canScrollVertically ? super.canScrollVertically(direction) : false;
+    }
+
+    public void setCanScrollVertically(boolean canScrollVertically) {
+        this.canScrollVertically = canScrollVertically;
+    }
+
+    @Override
+    public boolean canScrollHorizontally(int direction) {
+        return super.canScrollHorizontally(direction);
     }
 
     public void setOnScrollClashListener(OnScrollClashListener listener) {

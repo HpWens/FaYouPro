@@ -135,7 +135,7 @@ public class PublishMixingHelper {
         );
     }
 
-    public boolean isEmpty() {
+    public boolean isEmpty(boolean isHint) {
         if (mAdapter == null || mAdapter.getData().isEmpty()) {
             return true;
         }
@@ -143,7 +143,7 @@ public class PublishMixingHelper {
         if (titleObj instanceof TitleEntity) {
             TitleEntity titleEntity = (TitleEntity) titleObj;
             if (TextUtils.isEmpty(titleEntity.name)) {
-                Toast.makeText(mContext, "请输入标题", Toast.LENGTH_SHORT).show();
+                if (isHint) Toast.makeText(mContext, "请输入标题", Toast.LENGTH_SHORT).show();
                 return true;
             }
         }
@@ -165,7 +165,7 @@ public class PublishMixingHelper {
         }
 
         if (isEmpty) {
-            Toast.makeText(mContext, "请输入内容", Toast.LENGTH_SHORT).show();
+            if (isHint) Toast.makeText(mContext, "请输入内容", Toast.LENGTH_SHORT).show();
             return true;
         }
 

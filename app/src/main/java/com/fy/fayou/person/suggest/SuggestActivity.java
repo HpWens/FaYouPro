@@ -50,6 +50,8 @@ public class SuggestActivity extends BaseActivity {
     EditText etContact;
     @BindView(R.id.tv_limit)
     TextView tvLimit;
+    @BindView(R.id.et_name)
+    EditText etName;
 
     private GridImageAdapter adapter;
     private List<LocalMedia> selectList = new ArrayList<>();
@@ -84,11 +86,13 @@ public class SuggestActivity extends BaseActivity {
     private void requestFeedBack(String pics) {
         String contact = etContact.getText().toString();
         String suggest = etSuggest.getText().toString();
+        String name = etName.getText().toString();
         HashMap<String, String> params = new HashMap<>();
         params.put("phone", contact);
         params.put("content", suggest);
         params.put("type", "COMMENTS");
         params.put("pics", pics);
+        params.put("name", "" + name);
         JSONObject jsonObject = new JSONObject(params);
 
         EasyHttp.post(ApiUrl.FEED_BACK)
