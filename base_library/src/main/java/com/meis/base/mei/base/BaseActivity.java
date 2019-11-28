@@ -157,6 +157,7 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
 
     @Override
     protected void onDestroy() {
+
         mDelegate.onDestroy();
         super.onDestroy();
         if (isRegisterEventBus()) {

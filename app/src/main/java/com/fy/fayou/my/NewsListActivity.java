@@ -47,7 +47,6 @@ public class NewsListActivity extends BaseActivity {
     protected void initData() {
         requestStatus();
 
-
     }
 
     private void requestStatus() {

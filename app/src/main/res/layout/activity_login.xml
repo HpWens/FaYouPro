@@ -268,7 +268,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="登录何注册即代表同意"
+                android:text="登录和注册即代表同意"
                 android:textColor="@color/color_a0a0a0"
                 android:textSize="10sp" />
 

@@ -1,9 +1,11 @@
 package com.fy.fayou;
 
 
+import android.content.Intent;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.event.ExitLoginEvent;
 import com.fy.fayou.fragment.ForumFragment;
 import com.fy.fayou.fragment.HomeFragment;
@@ -28,6 +30,20 @@ public class MainActivity extends BaseActivity {
     public static final int FOURTH = 3;
     private BottomBar mBottomBar;
     private ISupportFragment[] mFragments = new ISupportFragment[4];
+
+    // 普法类型
+    public int learnTabPos = -1;
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        learnTabPos = intent.getIntExtra(Constant.Param.POSITION, -1);
+        if (learnTabPos != -1) {
+            mBottomBar.setCurrentItem(1);
+            ((LearnFragment) mFragments[SECOND]).switchTab(learnTabPos);
+            learnTabPos = -1;
+        }
+    }
 
     @Override
     protected void initView() {

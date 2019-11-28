@@ -9,6 +9,7 @@ import com.fy.fayou.R;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.detail.bean.HeaderBean;
 import com.fy.fayou.utils.GlideOption;
+import com.fy.fayou.utils.KtTimeUtils;
 import com.meis.base.mei.adapter.ItemPresenter;
 import com.vondear.rxtool.RxImageTool;
 
@@ -30,7 +31,7 @@ public class HeaderPresenter extends ItemPresenter<HeaderBean> {
         holder.setText(R.id.tv_title, getNonEmpty(item.fullTitle))
                 .setText(R.id.tv_name, getNonEmpty(item.auditName))
                 .setText(R.id.tv_follow, item.follow ? "已关注" : "+关注")
-                .setText(R.id.tv_time, "发布于" + getNonEmpty(item.createTime));
+                .setText(R.id.tv_time, "发布于" + KtTimeUtils.INSTANCE.getYMDHMTime(item.createTime));
 
         holder.getView(R.id.tv_follow).setSelected(item.follow);
 

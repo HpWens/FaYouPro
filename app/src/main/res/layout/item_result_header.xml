@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/view_top"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_f5f5f5"
+        app:layout_constraintTop_toTopOf="parent"></View>
+
+    <android.support.v4.widget.Space
+        android:id="@+id/top_space"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_top">
+
+    </android.support.v4.widget.Space>
+
+    <ImageView
+        android:id="@+id/iv_header"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginLeft="15dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="@+id/top_space"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/top_space"></ImageView>
+
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:maxLength="16"
+        android:text="法律法规"
+        android:textColor="@color/color_333333"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/top_space"
+        app:layout_constraintLeft_toRightOf="@+id/iv_header"
+        app:layout_constraintTop_toTopOf="@+id/top_space" />
+
+
+    <TextView
+        android:id="@+id/tv_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:drawableRight="@mipmap/arrow_r"
+        android:drawablePadding="8dp"
+        android:text="更多"
+        android:textColor="@color/color_a0a0a0"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/top_space"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/top_space" />
+
+
+    <View
+        android:id="@+id/view_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_e5e5e5"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/top_space"></View>
+
+
+</android.support.constraint.ConstraintLayout>

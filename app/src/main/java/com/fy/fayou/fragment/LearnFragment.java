@@ -68,7 +68,7 @@ public class LearnFragment extends BaseFragment {
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
                             List<CategoryEntity> list = ParseUtils.parseListData(s, CategoryEntity.class);
-                            if(list.isEmpty())return;
+                            if (list.isEmpty()) return;
                             selectedPosition = 0;
                             ivPublish.setVisibility(list.get(selectedPosition).enableUserAdd ? View.VISIBLE : View.GONE);
 
@@ -97,6 +97,12 @@ public class LearnFragment extends BaseFragment {
     @Override
     protected void initData() {
 
+    }
+
+    public void switchTab(int pos) {
+        if (tab != null && tab.getTabCount() > pos && tab.getCurrentTab() != pos) {
+            tab.setCurrentTab(pos);
+        }
     }
 
     @Override

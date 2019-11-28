@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.fy.fayou.view.radius.RadiusLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginRight="10dp"
-    android:orientation="vertical"
-    app:rv_backgroundColor="@color/color_ffffff"
-    app:rv_radius="5dp">
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_e5e5e5"></View>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
         android:orientation="horizontal">
 
@@ -28,7 +27,6 @@
             android:maxLines="2"
             android:textColor="@color/color_333333"
             android:textSize="16sp"
-            android:textStyle="bold"
             tools:text="指导案例112号：阿斯特克有限公 司申请设立海事指导案例112号：阿斯特克有限公 司申请设立海事指导案例112号：阿斯特克有限公 司申请设立海事" />
 
         <ImageView
@@ -46,13 +44,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="11dp"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="15dp"
         android:ellipsize="end"
+        android:lineSpacingExtra="4dp"
         android:maxLines="2"
         android:textColor="@color/color_666666"
-        android:textSize="12sp"
+        android:textSize="11sp"
         tools:text="嘉奖、两次荣立三等功，并被省公安厅评为优秀人民警察。 那是1994年的5月，时任新篁派出所副所长的陈建祥在一次缉捕杀人犯的...动中主动请战，面对穷凶极恶的罪犯，" />
 
 </com.fy.fayou.view.radius.RadiusLinearLayout>

@@ -187,12 +187,12 @@ public class PublishNewsNextActivity extends BaseActivity {
 //        if (TextUtils.isEmpty(author)) {
 //            return true;
 //        }
-        if (mAdapter.getTags().isEmpty()) {
-            if (hint) {
-                Toast.makeText(mContext, "请添加文章标签", Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        }
+//        if (mAdapter.getTags().isEmpty()) {
+//            if (hint) {
+//                Toast.makeText(mContext, "请添加文章标签", Toast.LENGTH_SHORT).show();
+//            }
+//            return true;
+//        }
         return false;
     }
 
@@ -349,7 +349,7 @@ public class PublishNewsNextActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(String s) {
-                        Toast.makeText(mContext, "上次成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "上传成功", Toast.LENGTH_SHORT).show();
                         dismissUploadDialog(dialog);
 
                         // 清理编辑数据

@@ -61,7 +61,7 @@ public class EditUserActivity extends BaseActivity {
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
         setToolBarCenterTitle("编辑资料");
         setLeftBackListener(v -> finish()).setRightTextListener(v -> {
-            String nickName = etName.getText().toString();
+            String nickName = etName.getText().toString().trim();
             if (TextUtils.isEmpty(nickName)) {
                 Toast.makeText(mContext, "请输入昵称", Toast.LENGTH_SHORT).show();
                 return;

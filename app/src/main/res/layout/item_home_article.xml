@@ -42,7 +42,9 @@
                     android:id="@+id/tv_origin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="法报头条"
+                    tools:text="法报头条"
+                    android:maxLength="16"
+                    android:ellipsize="end"
                     android:textColor="@color/color_b2b2b2"
                     android:textSize="11sp"></TextView>
 

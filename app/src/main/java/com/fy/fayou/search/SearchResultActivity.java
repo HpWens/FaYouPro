@@ -1,5 +1,7 @@
 package com.fy.fayou.search;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,13 +13,17 @@ import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.SearchResultEvent;
+import com.fy.fayou.search.adapter.ResultAdapter;
 import com.fy.fayou.search.bean.ColumnEntity;
 import com.fy.fayou.search.bean.MenuEntity;
+import com.fy.fayou.search.bean.SearchEntity;
+import com.fy.fayou.search.bean.SearchResultEntity;
 import com.fy.fayou.search.result.ContentFragment;
 import com.fy.fayou.search.result.MenuListFragment;
 import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.base.BaseFragment;
+import com.meis.base.mei.status.ViewState;
 import com.meis.base.mei.utils.Eyes;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
@@ -26,6 +32,7 @@ import com.zhouyou.http.exception.ApiException;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +50,11 @@ public class SearchResultActivity extends BaseActivity {
     TextView tvCancel;
     @BindView(R.id.iv_close)
     ImageView ivClose;
+    @BindView(R.id.recycler)
+    RecyclerView recyclerView;
+
+    ResultAdapter adapter;
+    List<SearchResultEntity> list = new ArrayList<>();
 
     @Override
     protected void initView() {
@@ -73,6 +85,12 @@ public class SearchResultActivity extends BaseActivity {
 
         // requestMenuListData();
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter = new ResultAdapter(list, keyword));
+        adapter.setOnLoadMoreListener(() -> {
+        }, recyclerView);
+
+        setState(ViewState.LOADING);
         requestResult();
     }
 
@@ -83,12 +101,63 @@ public class SearchResultActivity extends BaseActivity {
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
-
+                        setState(ViewState.COMPLETED);
                     }
 
                     @Override
                     public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            List<SearchEntity> data = ParseUtils.parseListData(s, SearchEntity.class);
+                            list.clear();
+                            int index = 0;
+                            for (SearchEntity entity : data) {
+                                SearchResultEntity resultEntity = new SearchResultEntity();
+                                resultEntity.name = entity.name;
+                                resultEntity.columnType = entity.type;
+                                resultEntity.logo = entity.logo;
+                                resultEntity.itemType = 1;
+                                resultEntity.headerIndex = index;
 
+                                if (entity.data != null && !entity.data.isEmpty()) {
+                                    list.add(resultEntity);
+                                    // 热门视频 小视频
+                                    if (entity.type == 6) {
+                                        SearchResultEntity videoEntity = new SearchResultEntity();
+                                        videoEntity.videoList = entity.data;
+                                        videoEntity.itemType = 4;
+                                        list.add(videoEntity);
+                                    } else {
+                                        // 新闻资讯
+                                        if (entity.type == 5) {
+                                            for (SearchResultEntity sre : entity.data) {
+                                                sre.itemType = 3;
+                                                list.add(sre);
+                                            }
+                                        }
+                                        // 合同
+                                        else if (entity.type == 4) {
+                                            for (int i = 0; i < entity.data.size(); i++) {
+                                                SearchResultEntity sre = entity.data.get(i);
+                                                sre.itemType = 2;
+                                                sre.childIndex = i;
+                                                sre.isLastChild = (i == entity.data.size() - 1);
+                                                list.add(sre);
+                                            }
+                                        } else {
+                                            for (SearchResultEntity sre : entity.data) {
+                                                sre.columnType = entity.type;
+                                                list.add(sre);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                index++;
+                            }
+                            adapter.setNewData(list);
+                            adapter.loadMoreEnd();
+                            setState(ViewState.COMPLETED);
+                        }
                     }
                 });
     }

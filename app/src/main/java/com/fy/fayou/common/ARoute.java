@@ -1,6 +1,7 @@
 package com.fy.fayou.common;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.legal.bean.JudgeLevel1;
@@ -206,6 +207,25 @@ public class ARoute {
                 .build(Constant.JUDGE_FILTER)
                 .withParcelableArrayList(Constant.Param.LIST, list)
                 .navigation(activity, REQUEST_CODE);
+    }
+
+    /**
+     * 跳转到普法界面
+     *
+     * @param type
+     */
+    public static final int LEARN_NEWS_TAB = 0;
+    public static final int LEARN_HOT_VIDEO_TAB = 1;
+    public static final int LEARN_SMALL_VIDEO_TAB = 2;
+
+    public static void jumpLearnClearTask(int pos) {
+        ARouter.getInstance()
+                .build(Constant.MAIN)
+                .withInt(Constant.Param.POSITION, pos)
+                .withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        | Intent.FLAG_ACTIVITY_NEW_TASK)
+                .navigation();
     }
 
 }

@@ -68,6 +68,8 @@ public class WebViewActivity extends BaseActivity {
     ImageView ivRelated;
     @BindView(R.id.tv_count)
     TextView tvCount;
+    @BindView(R.id.view_top)
+    View viewTop;
 
     private long mBackPressed;
     private String webPath = "http://www.baidu.com";
@@ -105,13 +107,15 @@ public class WebViewActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        setToolBarCenterTitle("");
 
         if (type == ARoute.JUDGE_TYPE || type == ARoute.GUIDE_TYPE
                 || type == ARoute.LEGAL_TYPE || type == ARoute.JUDICIAL_TYPE) {
             ivRelated.setVisibility(View.VISIBLE);
+            viewTop.setVisibility(View.VISIBLE);
         }
 
-        if (type == ARoute.TEMPLATE_TYPE) {
+        if (type == ARoute.TEMPLATE_TYPE && url.contains(",")) {
             requestDownLoadCount();
         }
 

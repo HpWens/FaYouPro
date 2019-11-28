@@ -53,4 +53,12 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"></TextView>
 
+    <View
+        android:id="@+id/view_top"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_e5e5e5"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"></View>
+
 </android.support.constraint.ConstraintLayout>
