@@ -1,5 +1,6 @@
 package com.fy.fayou.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -70,13 +71,17 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
         }
     }
 
-
     @Override
-    protected void initView() {
+    public void onAttach(Activity activity) {
         if (getArguments() != null) {
             categoryId = getArguments().getString(Constant.Param.CATEGORY_ID, "");
             fixedColumn = getArguments().getBoolean(Constant.Param.FIXED_COLUMN, false);
         }
+        super.onAttach(activity);
+    }
+
+    @Override
+    protected void initView() {
         super.initView();
         mRecyclerView.setOnScrollClashListener(isScroll -> {
             if (mListener != null) {

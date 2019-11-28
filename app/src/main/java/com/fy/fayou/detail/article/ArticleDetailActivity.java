@@ -24,6 +24,7 @@ import com.fy.fayou.detail.adapter.CommentHeaderPresenter;
 import com.fy.fayou.detail.adapter.CommentPresenter;
 import com.fy.fayou.detail.adapter.FooterPresenter;
 import com.fy.fayou.detail.adapter.HeaderPresenter;
+import com.fy.fayou.detail.adapter.KtEmptyCommentPresenter;
 import com.fy.fayou.detail.adapter.PicPresenter;
 import com.fy.fayou.detail.adapter.RecommendHeaderPresenter;
 import com.fy.fayou.detail.adapter.RecommendPresenter;
@@ -31,6 +32,7 @@ import com.fy.fayou.detail.adapter.TextPresenter;
 import com.fy.fayou.detail.bean.ArticleEntity;
 import com.fy.fayou.detail.bean.CommentBean;
 import com.fy.fayou.detail.bean.CommentHeaderBean;
+import com.fy.fayou.detail.bean.EmptyCommentBean;
 import com.fy.fayou.detail.bean.FooterBean;
 import com.fy.fayou.detail.bean.HeaderBean;
 import com.fy.fayou.detail.bean.PicBean;
@@ -168,6 +170,7 @@ public class ArticleDetailActivity extends BaseActivity {
                     });
         }));
         mAdapter.addItemPresenter(new TextPresenter());
+        mAdapter.addItemPresenter(new KtEmptyCommentPresenter());
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.setAdapter(mAdapter);
         recycler.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
@@ -224,6 +227,9 @@ public class ArticleDetailActivity extends BaseActivity {
                     bean.lastIndex = (i == commentList.size() - 1);
                     mDataList.add(bean);
                 }
+            } else {
+                mDataList.add(new CommentHeaderBean());
+                mDataList.add(new EmptyCommentBean());
             }
 
             if (recommendList != null && !recommendList.isEmpty()) {

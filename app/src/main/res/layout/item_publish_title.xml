@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:hint="记录我的生活点滴"
+        android:hint="请输入标题"
         android:padding="15dp"
         android:singleLine="true"
         android:textColor="@color/color_333333"
