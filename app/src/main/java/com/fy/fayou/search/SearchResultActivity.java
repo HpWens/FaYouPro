@@ -114,6 +114,8 @@ public class SearchResultActivity extends BaseActivity {
                                 SearchResultEntity resultEntity = new SearchResultEntity();
                                 resultEntity.name = entity.name;
                                 resultEntity.columnType = entity.type;
+                                if (null != resultEntity.name && resultEntity.name.contains("小"))
+                                    resultEntity.columnType = 7;
                                 resultEntity.logo = entity.logo;
                                 resultEntity.itemType = 1;
                                 resultEntity.headerIndex = index;

@@ -259,6 +259,17 @@ public class PublishMixingHelper {
 
     }
 
+    // 获取图片数量
+    public int getPictureNumber() {
+        int number = 0;
+        for (Object obj : mAdapter.getData()) {
+            if (obj instanceof PicEntity) {
+                number++;
+            }
+        }
+        return number;
+    }
+
     public interface OnMixingListener {
         void onFocusChange(boolean focus, int position);
 

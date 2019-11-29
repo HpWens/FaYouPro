@@ -27,7 +27,9 @@ import com.fy.fayou.detail.bean.DetailBean;
 import com.fy.fayou.detail.bean.LawBean;
 import com.fy.fayou.detail.dialog.BottomShareDialog;
 import com.fy.fayou.detail.dialog.RelatedDialog;
+import com.fy.fayou.event.ReportSuccessEvent;
 import com.fy.fayou.legal.bean.LegalEntity;
+import com.fy.fayou.legal.bean.LegalRelatedBean;
 import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
@@ -36,6 +38,8 @@ import com.zhouyou.http.callback.DownloadProgressCallBack;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -74,6 +78,7 @@ public class WebViewActivity extends BaseActivity {
     private long mBackPressed;
     private String webPath = "http://www.baidu.com";
     private static final int TIME_INTERVAL = 2000;
+    private BottomShareDialog mShareDialog;
 
     @Override
     protected void initView() {
@@ -90,7 +95,7 @@ public class WebViewActivity extends BaseActivity {
     }
 
     private void showBottomDialog() {
-        showDialog(new BottomShareDialog()
+        showDialog(mShareDialog = new BottomShareDialog()
                 .setArticleId(id)
                 .setGoneReport(true)
                 .setCollectType(type)
@@ -115,8 +120,9 @@ public class WebViewActivity extends BaseActivity {
             viewTop.setVisibility(View.VISIBLE);
         }
 
-        if (type == ARoute.TEMPLATE_TYPE && url.contains(",")) {
-            requestDownLoadCount();
+        if (type == ARoute.TEMPLATE_TYPE) {
+            viewTop.setVisibility(View.VISIBLE);
+            if (url.contains(",")) requestDownLoadCount();
         }
 
         if (!TextUtils.isEmpty(url)) {
@@ -347,7 +353,7 @@ public class WebViewActivity extends BaseActivity {
      */
     private void requestLegalRelated() {
         EasyHttp.get(ApiUrl.GET_LEGAL_RELATED)
-                .params("bookId", id)
+                .params("id", id)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
@@ -355,26 +361,60 @@ public class WebViewActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(String s) {
-                        if (s.equals("[]")) {
+                        if (TextUtils.isEmpty(s)) {
                             Toast.makeText(mContext, "无关联数据", Toast.LENGTH_SHORT).show();
                         } else {
-                            List<LegalEntity> data = ParseUtils.parseListData(s, LegalEntity.class);
-
+                            LegalRelatedBean bean = ParseUtils.parseData(s, LegalRelatedBean.class);
                             List<LawBean> list = new ArrayList<>();
-                            LawBean lawBean = new LawBean();
-                            lawBean.name = "司法解释";
-                            list.add(lawBean);
-
-                            for (LegalEntity entity : data) {
-                                lawBean = new LawBean();
-                                lawBean.collectType = ARoute.JUDICIAL_TYPE;
-                                lawBean.name = entity.title;
-                                lawBean.itemType = 1;
-                                lawBean.url = entity.toUrl;
-                                lawBean.id = entity.id;
+                            if (null != bean.judicialInterpretations && !bean.judicialInterpretations.isEmpty()) {
+                                LawBean lawBean = new LawBean();
+                                lawBean.name = "司法解释";
                                 list.add(lawBean);
+                                for (LegalEntity entity : bean.judicialInterpretations) {
+                                    lawBean = new LawBean();
+                                    lawBean.collectType = ARoute.JUDICIAL_TYPE;
+                                    lawBean.name = entity.title;
+                                    lawBean.itemType = 1;
+                                    lawBean.url = entity.toUrl;
+                                    lawBean.id = entity.id;
+                                    list.add(lawBean);
+                                }
                             }
 
+                            if (null != bean.lawBindCaseAOs && !bean.lawBindCaseAOs.isEmpty()) {
+                                LawBean lawBean = new LawBean();
+                                lawBean.name = "指导性意见";
+                                list.add(lawBean);
+                                for (LegalEntity entity : bean.lawBindCaseAOs) {
+                                    lawBean = new LawBean();
+                                    lawBean.collectType = ARoute.GUIDE_TYPE;
+                                    lawBean.name = entity.name;
+                                    lawBean.itemType = 1;
+                                    lawBean.url = entity.url;
+                                    lawBean.id = entity.id;
+                                    list.add(lawBean);
+                                }
+                            }
+
+                            if (null != bean.lawBindJudgeAOs && !bean.lawBindJudgeAOs.isEmpty()) {
+                                LawBean lawBean = new LawBean();
+                                lawBean.name = "裁判文书";
+                                list.add(lawBean);
+                                for (LegalEntity entity : bean.lawBindJudgeAOs) {
+                                    lawBean = new LawBean();
+                                    lawBean.collectType = ARoute.JUDGE_TYPE;
+                                    lawBean.name = entity.name;
+                                    lawBean.itemType = 1;
+                                    lawBean.url = entity.url;
+                                    lawBean.id = entity.id;
+                                    list.add(lawBean);
+                                }
+                            }
+
+                            if (list.isEmpty()) {
+                                Toast.makeText(mContext, "无关联数据", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             new RelatedDialog(mContext, list).show();
                         }
                     }
@@ -524,5 +564,17 @@ public class WebViewActivity extends BaseActivity {
         webBase.removeAllViews();
         webBase.destroy();
         webBase = null;
+    }
+
+    @Override
+    public boolean isRegisterEventBus() {
+        return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReportSuccessEvent(ReportSuccessEvent event) {
+        if (mShareDialog != null && mShareDialog.isAdded()) {
+            mShareDialog.dismiss();
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.fy.fayou.R;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.home.bean.WantedEntity;
 import com.fy.fayou.utils.GlideOption;
+import com.fy.fayou.utils.KtTimeUtils;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class WantedAdapter extends MeiBaseAdapter<WantedEntity> {
 
         TextView tvDetail = helper.getView(R.id.tv_detail);
         TextView tvContent = helper.getView(R.id.tv_content);
-        String content = getNonEmpty(item.content);
+        String content = getNonEmpty(item.content.replaceAll("　",""));
 
         tvContent.post(() -> {
             float dWidth = tvDetail.getWidth();
@@ -34,14 +35,14 @@ public class WantedAdapter extends MeiBaseAdapter<WantedEntity> {
 
             if ((width + dWidth) >= 4 * lineWidth) {
                 int endIndex = (int) ((4 * lineWidth - dWidth) / width * content.length());
-                tvContent.setText(content.substring(0, endIndex - 4) + "...");
+                tvContent.setText(content.substring(0, endIndex - 8) + "...");
             } else {
                 tvContent.setText(content);
             }
         });
 
         helper.setText(R.id.tv_name, getNonEmpty(item.name))
-                .setText(R.id.tv_time, getNonEmpty(item.pubTime));
+                .setText(R.id.tv_time, "发布时间：" + KtTimeUtils.INSTANCE.getYMDTime(item.pubTime));
 
         ImageView ivThumb = helper.getView(R.id.iv_thumb);
 

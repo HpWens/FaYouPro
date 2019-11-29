@@ -13,11 +13,12 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="15dp"
         android:maxLines="2"
+        android:ellipsize="end"
         android:textColor="@color/color_333333"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="中美合作是大势所趋！美国豁免项中 国产品关税"></TextView>
+        tools:text="中美合作是大势所趋！美国豁免项中 国产品关税中美合作是大势所趋！美国豁免项中 国产品关税"></TextView>
 
     <ImageView
         android:id="@+id/iv_avatar"

@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -99,9 +100,15 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
     }
 
     public void startPictureSelector() {
+        int selectedPicNum = mMixingHelper.getPictureNumber();
+        int maxSelectNum = 3 - selectedPicNum;
+        if (maxSelectNum <= 0) {
+            Toast.makeText(mContext, "最多只能插入3张图片", Toast.LENGTH_SHORT).show();
+            return;
+        }
         PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofImage())
-                .maxSelectNum(9)
+                .maxSelectNum(maxSelectNum)
                 .previewImage(true)
                 .isCamera(true)
                 .glideOverride(160, 160)

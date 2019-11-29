@@ -11,6 +11,7 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomePuFaVPAdapter;
 import com.fy.fayou.bean.CategoryEntity;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
@@ -116,15 +117,23 @@ public class LearnFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick(R.id.iv_publish)
-    public void onClick() {
-        if (!UserService.getInstance().checkLoginAndJump()) return;
+    @OnClick({R.id.iv_publish, R.id.iv_search})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_publish:
+                if (!UserService.getInstance().checkLoginAndJump()) return;
 
-        if (selectedPosition == -1 || mAdapter == null) {
-            return;
+                if (selectedPosition == -1 || mAdapter == null) {
+                    return;
+                }
+                ARouter.getInstance().build(Constant.NEWS_PUBLISH)
+                        .withString(Constant.Param.CATEGORY_ID, "" + mAdapter.getTags().get(selectedPosition).id)
+                        .navigation();
+                break;
+            case R.id.iv_search:
+                ARoute.jumpSearch();
+                break;
         }
-        ARouter.getInstance().build(Constant.NEWS_PUBLISH)
-                .withString(Constant.Param.CATEGORY_ID, "" + mAdapter.getTags().get(selectedPosition).id)
-                .navigation();
+
     }
 }

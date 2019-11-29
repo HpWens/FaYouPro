@@ -1,6 +1,7 @@
 package com.fy.fayou.common;
 
 import android.app.Application;
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -315,6 +316,15 @@ public class UserService {
             }
             return data;
         }
+    }
+
+    // 是否显示学法引导
+    public boolean isShowLearnGuide(Context context) {
+        return RxSPTool.getBoolean(context, Constant.SP.LEARN_GUIDE);
+    }
+
+    public void setLearnGuide(Context context, boolean isShow) {
+        RxSPTool.putBoolean(context, Constant.SP.LEARN_GUIDE, isShow);
     }
 
 }

@@ -56,7 +56,7 @@ public class SuggestActivity extends BaseActivity {
     private GridImageAdapter adapter;
     private List<LocalMedia> selectList = new ArrayList<>();
 
-    private static final int MAX_CHAR_LIMIT = 200;
+    private static final int MAX_CHAR_LIMIT = 1000;
 
     @Override
     protected void initView() {
@@ -78,6 +78,8 @@ public class SuggestActivity extends BaseActivity {
                             Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
                         }
                     });
+                } else {
+                    requestFeedBack("");
                 }
             }
         }, "提交");
@@ -117,11 +119,18 @@ public class SuggestActivity extends BaseActivity {
             RxToast.normal("请输入问题及建议");
             return false;
         }
-        String contact = etContact.getText().toString();
-        if (TextUtils.isEmpty(contact)) {
-            RxToast.normal("请留下联系方式");
+//        String contact = etContact.getText().toString();
+//        if (TextUtils.isEmpty(contact)) {
+//            RxToast.normal("请留下联系方式");
+//            return false;
+//        }
+
+        String name = etName.getText().toString().trim();
+        if (name.length() > 15) {
+            RxToast.normal("姓名字数超过15字");
             return false;
         }
+
         return true;
     }
 

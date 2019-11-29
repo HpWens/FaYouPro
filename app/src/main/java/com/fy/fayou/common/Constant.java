@@ -131,6 +131,12 @@ public class Constant {
     // 裁判文书筛选界面
     public static final String JUDGE_FILTER = "/judge/filter";
 
+    // 板块关注
+    public static final String PLATE_FOLLOW = "/plate/follow";
+
+    // 选择板块
+    public static final String SELECT_PLATE = "/select/plate";
+
     public interface SP {
 
         String USER_INFO = "user_info_data";
@@ -143,6 +149,8 @@ public class Constant {
 
         // 城市历史
         String CITY_HISTORY = "city_history";
+
+        String LEARN_GUIDE = "city_history";
 
     }
 
@@ -175,6 +183,8 @@ public class Constant {
         String MOBILE = "mobile";
 
         String TYPE = "type";
+
+        String IS_RECOMMEND = "is_recommend";
 
         String POSITION = "position";
 

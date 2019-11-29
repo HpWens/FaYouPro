@@ -2,10 +2,13 @@ package com.fy.fayou;
 
 
 import android.content.Intent;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.ExitLoginEvent;
 import com.fy.fayou.fragment.ForumFragment;
 import com.fy.fayou.fragment.HomeFragment;
@@ -34,6 +37,8 @@ public class MainActivity extends BaseActivity {
     // 普法类型
     public int learnTabPos = -1;
 
+    private ImageView mIvGuide;
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -48,6 +53,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initView() {
         Eyes.translucentStatusBar(this, true, true);
+        mIvGuide = findViewById(R.id.iv_guide);
         ISupportFragment firstFragment = findFragment(HomeFragment.class);
         if (firstFragment == null) {
             mFragments[FIRST] = HomeFragment.newInstance();
@@ -82,6 +88,10 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onTabSelected(int position, int prePosition) {
                 showHideFragment(mFragments[position], mFragments[prePosition]);
+
+                if (position == 1 && !UserService.getInstance().isShowLearnGuide(mContext)) {
+                    mIvGuide.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -96,12 +106,17 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+
+        mIvGuide.setOnClickListener(v -> {
+            UserService.getInstance().setLearnGuide(mContext, true);
+            mIvGuide.setVisibility(View.GONE);
+        });
     }
 
     @Override
     protected void initData() {
 //        ARouter.getInstance()
-//                .build(Constant.NEWS_PUBLISH)
+//                .build(Constant.SELECT_PLATE)
 //                .withString(Constant.Param.ARTICLE_ID, "110328945139777536")
 //                .navigation();
     }

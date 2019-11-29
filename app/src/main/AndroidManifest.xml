@@ -403,6 +403,14 @@
             android:name=".legal.FilterJudgeActivity"
             android:screenOrientation="portrait"></activity>
 
+        <activity
+            android:name=".forum.activity.PlateFollowActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".forum.activity.SelectPlateActivity"
+            android:screenOrientation="portrait"></activity>
+
     </application>
 
 </manifest>

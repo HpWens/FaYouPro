@@ -193,6 +193,10 @@ public class LoginActivity extends BaseActivity {
                 etMobile.setText("");
                 break;
             case R.id.btn_login:
+                if (!RxNetTool.isAvailable(this)) {
+                    Toast.makeText(mContext, "网络连接失败，请检查网络设置", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 RxKeyboardTool.hideSoftInput(mContext);
                 if (checkMobile() && checkVerifyCode()) {
                     // 请求接口

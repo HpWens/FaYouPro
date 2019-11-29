@@ -163,6 +163,7 @@ public class ARoute {
     public static final int REPORT_COMMENT = 2;
 
     public static void jumpReport(String id, int type) {
+        if (!UserService.getInstance().checkLoginAndJump()) return;
         String reportType = type == 1 ? "ARTICLE" : "COMMENT";
         ARouter.getInstance()
                 .build(Constant.REPORT)

@@ -1,6 +1,7 @@
 package com.fy.fayou.legal.adapter;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
@@ -30,15 +31,16 @@ public class LegalAdapter extends MeiBaseAdapter<LegalEntity> {
         if (collectType == ARoute.GUIDE_TYPE || collectType == ARoute.JUDGE_TYPE) {
             helper.setText(R.id.tv_name, item.title)
                     .setText(R.id.tv_source, helper.itemView.getResources().getString(R.string.module_source, getNonEmpty(item.source)))
-                    .setText(R.id.tv_time, helper.itemView.getResources().getString(R.string.module_publish_time, item.publicDate));
+                    .setText(R.id.tv_time, TextUtils.isEmpty(item.publicDate) ? "" : helper.itemView.getResources().getString(R.string.module_publish_time, item.publicDate));
 
             helper.itemView.setOnClickListener(v -> {
                 ARoute.jumpH5(getNonEmpty(item.url), true, item.id, collectType);
             });
         } else {
+            String time = (type == 3 ? item.publishTime : item.pubTime);
             helper.setText(R.id.tv_name, getNonEmpty(type == 3 ? item.name : item.title))
                     .setText(R.id.tv_source, helper.itemView.getResources().getString(R.string.module_source, getNonEmpty(item.source)))
-                    .setText(R.id.tv_time, helper.itemView.getResources().getString(R.string.module_publish_time, KtTimeUtils.INSTANCE.getYMDTime(type == 3 ? item.publishTime : item.pubTime)));
+                    .setText(R.id.tv_time, TextUtils.isEmpty(time) ? "" : helper.itemView.getResources().getString(R.string.module_publish_time, KtTimeUtils.INSTANCE.getYMDTime(time)));
 
             helper.itemView.setOnClickListener(v -> {
                 ARoute.jumpH5(getNonEmpty(item.toUrl), true, item.id, collectType);

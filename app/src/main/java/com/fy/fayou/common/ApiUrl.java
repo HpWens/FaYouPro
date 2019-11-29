@@ -240,7 +240,7 @@ public class ApiUrl {
 
 
     //根据司法解释获取关联的法律法规
-    public static final String GET_LEGAL_RELATED = "/api-lawsRegulations/public/judicialInterpretation/findByBook";
+    public static final String GET_LEGAL_RELATED = "/api-lawsRegulations/public/legalProvisions/findRela";
 
 
     //根据司法解释获取关联的法律法规

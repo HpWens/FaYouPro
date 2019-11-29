@@ -20,6 +20,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.UploadService;
+import com.fy.fayou.event.ReportSuccessEvent;
 import com.fy.fayou.person.suggest.FullyGridLayoutManager;
 import com.fy.fayou.person.suggest.GridImageAdapter;
 import com.fy.fayou.utils.ParseUtils;
@@ -38,6 +39,7 @@ import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -152,6 +154,7 @@ public class ReportActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(String s) {
+                        EventBus.getDefault().post(new ReportSuccessEvent());
                         RxToast.normal("举报成功");
                         dialog.dismiss();
                         finish();
@@ -169,11 +172,11 @@ public class ReportActivity extends BaseActivity {
             RxToast.normal("请输入举报理由");
             return false;
         }
-        String contact = etContact.getText().toString();
-        if (TextUtils.isEmpty(contact)) {
-            RxToast.normal("请留下联系方式");
-            return false;
-        }
+//        String contact = etContact.getText().toString();
+//        if (TextUtils.isEmpty(contact)) {
+//            RxToast.normal("请留下联系方式");
+//            return false;
+//        }
         return true;
     }
 

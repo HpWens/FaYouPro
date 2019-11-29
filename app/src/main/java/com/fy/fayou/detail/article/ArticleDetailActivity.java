@@ -41,6 +41,7 @@ import com.fy.fayou.detail.bean.RecommendHeaderBean;
 import com.fy.fayou.detail.bean.TextBean;
 import com.fy.fayou.detail.dialog.BottomShareDialog;
 import com.fy.fayou.event.LoginSuccessOrExitEvent;
+import com.fy.fayou.event.ReportSuccessEvent;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.MarkDownParser;
 import com.fy.fayou.utils.ParseUtils;
@@ -105,6 +106,7 @@ public class ArticleDetailActivity extends BaseActivity {
     MeiBaseMixAdapter mAdapter;
     List<Object> mDataList = new ArrayList<>();
 
+    private BottomShareDialog mShareDialog;
     private ReviewFragment mReviewFragment;
     private List<LocalMedia> mPicMedia = new ArrayList<>();
     private int mPicIndex = 0;
@@ -447,7 +449,7 @@ public class ArticleDetailActivity extends BaseActivity {
                 break;
             case R.id.iv_more_white:
             case R.id.iv_right_more:
-                showDialog(new BottomShareDialog().setCollect(isCollect).setArticleId(articleId)
+                showDialog(mShareDialog = new BottomShareDialog().setCollect(isCollect).setArticleId(articleId)
                         .setOnItemClickListener(new BottomShareDialog.OnItemClickListener() {
                             @Override
                             public void onDismiss() {
@@ -583,5 +585,12 @@ public class ArticleDetailActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginSuccessEvent(LoginSuccessOrExitEvent event) {
         if (recycler != null) requestData();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReportSuccessEvent(ReportSuccessEvent event) {
+        if (mShareDialog != null && mShareDialog.isAdded()) {
+            mShareDialog.dismiss();
+        }
     }
 }

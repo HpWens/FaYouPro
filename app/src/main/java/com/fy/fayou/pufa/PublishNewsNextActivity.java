@@ -333,7 +333,9 @@ public class PublishNewsNextActivity extends BaseActivity {
         params.put("source", source);
         params.put("description", "");
         params.put("content", "" + sb.toString());
-        params.put("tagIdsStr", tags.substring(0, tags.length() - 1));
+        if (tags.length() > 1) {
+            params.put("tagIdsStr", tags.substring(0, tags.length() - 1));
+        }
         params.put("author", author);
         params.put("showIndex", false);
         params.put("articleType", "ARTICLE");

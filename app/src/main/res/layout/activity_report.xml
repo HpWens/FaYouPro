@@ -289,7 +289,7 @@
                 android:layout_marginRight="15dp"
                 android:background="@null"
                 android:gravity="top|left"
-                android:hint="请留下您的邮箱/手机号码/QQ号"
+                android:hint="请留下您的邮箱/手机号码/QQ号（选填）"
                 android:paddingLeft="15dp"
                 android:paddingTop="20dp"
                 android:textColor="@color/color_333333"

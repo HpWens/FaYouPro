@@ -23,4 +23,13 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="@dimen/bottom_bar_height"
         android:background="@drawable/actionbar_shadow_up" />
+
+    <ImageView
+        android:id="@+id/iv_guide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@mipmap/learn_guide_1"
+        android:visibility="gone"></ImageView>
+
 </FrameLayout>

@@ -24,7 +24,7 @@ public class TemplateAdapter extends MeiBaseAdapter<TemplateEntity> {
 
     @Override
     protected void convert(@NonNull BaseViewHolder helper, TemplateEntity item) {
-        helper.setText(R.id.tv_num, item.termsNumber + " 条")
+        helper.setText(R.id.tv_num, item.type == MADE_TEMPLATE ? (item.termsNumber + " 条") : "")
                 .setText(R.id.tv_type, "")
                 .setText(R.id.tv_name, getNonEmpty(item.title))
                 .setText(R.id.tv_type, getNonEmpty(item.title))

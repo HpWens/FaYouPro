@@ -48,7 +48,7 @@
                     android:background="@null"
                     android:gravity="top|left"
                     android:hint="请输入您的问题及建议"
-                    android:maxLength="200"
+                    android:maxLength="1000"
                     android:minLines="4"
                     android:textColor="@color/color_333333"
                     android:textColorHint="@color/color_d2d2d2"
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|bottom"
                     android:layout_marginRight="15dp"
-                    android:text="0/200"
+                    android:text="0/1000"
                     android:textColor="@color/color_d2d2d2"
                     android:textSize="12sp"></TextView>
 
@@ -119,6 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
+                android:maxLength="15"
                 android:text="姓名"
                 android:textColor="@color/color_333333"
                 android:textSize="14sp"></TextView>
@@ -183,7 +184,7 @@
                 android:layout_marginRight="15dp"
                 android:background="@null"
                 android:gravity="top|left"
-                android:hint="请留下您的邮箱/手机号码/QQ号"
+                android:hint="请留下您的邮箱/手机号码/QQ号（选填）"
                 android:paddingLeft="15dp"
                 android:paddingTop="20dp"
                 android:textColor="@color/color_333333"

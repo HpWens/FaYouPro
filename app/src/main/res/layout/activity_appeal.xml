@@ -151,7 +151,7 @@
         android:layout_marginRight="60dp"
         android:background="@drawable/bg_btn_login_selected"
         android:enabled="true"
-        android:text="开始申诉"
+        android:text="联系客服"
         android:textColor="@color/color_ffffff"
         android:textSize="16dp" />
 

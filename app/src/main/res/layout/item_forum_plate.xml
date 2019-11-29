@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_thumb"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:src="@color/color_ed4040"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:maxLength="16"
+        android:text="美国法律法规"
+        android:textColor="@color/color_333333"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/iv_thumb"
+        app:layout_constraintTop_toTopOf="@+id/iv_thumb" />
+
+    <TextView
+        android:id="@+id/tv_follow_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="11dp"
+        android:maxLength="16"
+        android:text="39w人关注"
+        android:textColor="@color/color_a0a0a0"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/iv_thumb"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+    <TextView
+        android:id="@+id/tv_follow"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/my_follow_red_round"
+        android:gravity="center"
+        android:paddingLeft="12.5dp"
+        android:paddingRight="12.5dp"
+        android:text="+关注"
+        android:textColor="@color/color_ffffff"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_thumb"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_thumb"></TextView>
+
+</android.support.constraint.ConstraintLayout>
