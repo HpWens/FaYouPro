@@ -35,4 +35,5 @@ public class DetailBean implements Serializable {
     public List<LawBean> lawsUrl;
     public String bindedId;
     public String bindedUrl;
+    public String bindeTitle;
 }

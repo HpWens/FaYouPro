@@ -6,7 +6,8 @@ import android.widget.ImageView;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomeForumVPAdapter;
-import com.fy.fayou.bean.CategoryEntity;
+import com.fy.fayou.common.ARoute;
+import com.fy.fayou.forum.bean.PlateEntity;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseFragment;
 
@@ -15,6 +16,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class ForumFragment extends BaseFragment {
@@ -29,7 +31,7 @@ public class ForumFragment extends BaseFragment {
     Unbinder unbinder;
 
     HomeForumVPAdapter mAdapter;
-    List<CategoryEntity> mCategoryEntities = new ArrayList<>();
+    List<PlateEntity> mCategoryEntities = new ArrayList<>();
 
     public static ForumFragment newInstance() {
         Bundle args = new Bundle();
@@ -45,12 +47,12 @@ public class ForumFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        CategoryEntity entity = new CategoryEntity();
-        entity.categoryName = "关注";
+        PlateEntity entity = new PlateEntity();
+        entity.name = "关注";
         mCategoryEntities.add(entity);
 
-        entity = new CategoryEntity();
-        entity.categoryName = "推荐";
+        entity = new PlateEntity();
+        entity.name = "推荐";
         mCategoryEntities.add(entity);
 
 
@@ -67,5 +69,10 @@ public class ForumFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick(R.id.iv_search)
+    public void onClick() {
+        ARoute.jumpSearch();
     }
 }

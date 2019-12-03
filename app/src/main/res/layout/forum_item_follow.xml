@@ -36,7 +36,6 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginTop="12dp"
-        android:src="@color/color_ed4040"
         app:layout_constraintLeft_toLeftOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 

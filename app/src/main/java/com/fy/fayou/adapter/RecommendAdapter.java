@@ -113,10 +113,19 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                         .apply(GlideOption.getFullScreenWOption(mContext))
                         .into(jzvdStd.thumbImageView);
 
+                helper.getView(R.id.iv_praise).setSelected(item.give);
+
                 // 跳转到视频详情页
                 helper.itemView.setOnClickListener(v -> {
                     if (mListener != null) {
                         mListener.onClick(v, item);
+                    }
+                });
+
+                // 处理点赞
+                helper.getView(R.id.iv_praise).setOnClickListener(v -> {
+                    if (mListener != null) {
+                        mListener.onPraise(v, helper.getAdapterPosition(), item);
                     }
                 });
 
@@ -132,5 +141,7 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
 
     public interface OnItemListener {
         void onClick(View v, RecommendEntity item);
+
+        void onPraise(View v, int position, RecommendEntity entity);
     }
 }

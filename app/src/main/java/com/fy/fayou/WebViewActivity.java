@@ -480,7 +480,7 @@ public class WebViewActivity extends BaseActivity {
                 }
             }
 
-            if (!TextUtils.isEmpty(bean.bindedId)) {
+            if (!TextUtils.isEmpty(bean.bindedId) || "0".equals(bean.bindedId)) {
                 LawBean lawBean = new LawBean();
                 lawBean.name = relatedTitle;
                 list.add(lawBean);
@@ -488,12 +488,16 @@ public class WebViewActivity extends BaseActivity {
                 lawBean = new LawBean();
                 lawBean.collectType = collectType;
                 lawBean.itemType = 1;
-                lawBean.name = bean.title;
+                lawBean.name = bean.bindeTitle;
                 lawBean.id = bean.bindedId;
                 lawBean.url = bean.bindedUrl;
                 list.add(lawBean);
             }
 
+            if (list.isEmpty()) {
+                Toast.makeText(mContext, "无关联数据", Toast.LENGTH_SHORT).show();
+                return;
+            }
             new RelatedDialog(mContext, list).show();
 
         }

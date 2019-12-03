@@ -229,4 +229,13 @@ public class ARoute {
                 .navigation();
     }
 
+    /**
+     * 跳转到论坛关注
+     */
+    public static void jumpForumFollow() {
+        ARouter.getInstance()
+                .build(Constant.PLATE_FOLLOW)
+                .navigation();
+    }
+
 }

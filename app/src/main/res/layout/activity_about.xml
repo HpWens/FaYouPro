@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="37.5dp"
-        android:src="@mipmap/login_top_logo"></ImageView>
+        android:src="@mipmap/about_icon_logo"></ImageView>
 
     <TextView
         android:id="@+id/tv_content"

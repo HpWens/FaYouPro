@@ -12,6 +12,8 @@ public class RecommendEntity implements Serializable, MultiItemEntity {
     public static final int TYPE_ARTICLE = 0X0002;
     public static final int TYPE_VIDEO = 0X0003;
 
+    public boolean give;
+    public int gives;
     public String id;
     public String categoryName;
     public String fullTitle;

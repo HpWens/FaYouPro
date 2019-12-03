@@ -362,6 +362,7 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
     public BaseActivity setRightMoreRes(int res) {
         ImageView ivMore = getToolbarView().findViewById(R.id.iv_right_more);
         if (null != ivMore) {
+            ivMore.setVisibility(View.VISIBLE);
             ivMore.setImageResource(res);
         }
         return this;
@@ -389,6 +390,10 @@ public abstract class BaseActivity extends MeiCompatActivity implements ISupport
         if (null != text && tvRight != null && tvRight instanceof TextView) {
             ((TextView) tvRight).setText(text);
         }
+    }
+
+    public TextView getToolbarRightTextView() {
+        return getToolbarView().findViewById(R.id.tv_right);
     }
 
     public void autoFillToolBarLeftIcon() {

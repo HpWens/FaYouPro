@@ -137,6 +137,9 @@ public class Constant {
     // 选择板块
     public static final String SELECT_PLATE = "/select/plate";
 
+    // 论坛详情
+    public static final String FORUM_LIST = "/forum/list";
+
     public interface SP {
 
         String USER_INFO = "user_info_data";

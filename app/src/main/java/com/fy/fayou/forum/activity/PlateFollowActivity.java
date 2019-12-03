@@ -1,15 +1,21 @@
 package com.fy.fayou.forum.activity;
 
+import android.text.TextUtils;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomeForumVPAdapter;
-import com.fy.fayou.bean.CategoryEntity;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.forum.bean.PlateEntity;
+import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -20,7 +26,6 @@ import butterknife.ButterKnife;
 public class PlateFollowActivity extends BaseActivity {
 
     HomeForumVPAdapter mAdapter;
-    List<CategoryEntity> mCategoryEntities = new ArrayList<>();
 
     @BindView(R.id.tab)
     SlidingTabLayout tab;
@@ -39,21 +44,22 @@ public class PlateFollowActivity extends BaseActivity {
     @Override
     protected void initData() {
 
-        CategoryEntity entity = new CategoryEntity();
-        entity.categoryName = "关注";
-        mCategoryEntities.add(entity);
+        EasyHttp.get(ApiUrl.FORUM_MY_FOLLOW)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
 
-        entity = new CategoryEntity();
-        entity.categoryName = "热门";
-        mCategoryEntities.add(entity);
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            List<PlateEntity> list = ParseUtils.parseListData(s, "content", PlateEntity.class);
 
-        entity = new CategoryEntity();
-        entity.categoryName = "法律法规";
-        mCategoryEntities.add(entity);
-
-        viewpager.setAdapter(mAdapter = new HomeForumVPAdapter(getSupportFragmentManager(), mCategoryEntities, 1));
-        tab.setViewPager(viewpager);
-
+                            viewpager.setAdapter(mAdapter = new HomeForumVPAdapter(getSupportFragmentManager(), list, 1));
+                            tab.setViewPager(viewpager);
+                        }
+                    }
+                });
     }
 
     @Override

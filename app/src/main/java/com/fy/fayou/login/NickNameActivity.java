@@ -115,7 +115,17 @@ public class NickNameActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_after:
-                finish();
+                EasyHttp.post(ApiUrl.SET_DEFAULT_NICKNAME).execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        finish();
+                    }
+                });
                 break;
         }
     }

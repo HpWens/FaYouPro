@@ -3,19 +3,25 @@ package com.fy.fayou.forum.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.forum.adapter.FollowAdapter;
 import com.fy.fayou.forum.adapter.PlateAdapter;
 import com.fy.fayou.forum.bean.ForumEntity;
 import com.fy.fayou.forum.bean.PlateEntity;
+import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
+import com.meis.base.mei.status.ViewState;
+import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -54,17 +60,9 @@ public class FollowFragment extends BaseListFragment<ForumEntity> {
     @Override
     protected void initData() {
         super.initData();
-
         if (!mIsRecommendColumn) {
             mAdapter.addHeaderView(getHeaderView());
         }
-
-        List<ForumEntity> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            ForumEntity entity = new ForumEntity();
-            list.add(entity);
-        }
-        mAdapter.setNewData(list);
     }
 
     @Override
@@ -74,7 +72,17 @@ public class FollowFragment extends BaseListFragment<ForumEntity> {
 
     @Override
     protected Observable<Result<List<ForumEntity>>> getListObservable(int pageNo) {
-        return null;
+        Observable<String> observable = EasyHttp.get(!mIsRecommendColumn ? ApiUrl.FORUM_HOME_LIST : ApiUrl.FORUM_HOME_RECOMMEND_LIST)
+                .params("size", "20")
+                .params("page", (pageNo - 1) + "")
+                .execute(String.class);
+        return getListByField(observable, "content", ForumEntity.class);
+    }
+
+    @Override
+    protected void onDataLoaded(int pageNo, Result<List<ForumEntity>> result) {
+        super.onDataLoaded(pageNo, result);
+        setState(ViewState.COMPLETED);
     }
 
     @Override
@@ -98,12 +106,33 @@ public class FollowFragment extends BaseListFragment<ForumEntity> {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(mPlateAdapter = new PlateAdapter());
 
-        List<PlateEntity> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            PlateEntity entity = new PlateEntity();
-            list.add(entity);
-        }
-        mPlateAdapter.setNewData(list);
+//        mPlateAdapter.setLoadMoreView(new HorizontalLoadMoreView());
+//        mPlateAdapter.setOnLoadMoreListener(() -> {
+//        }, recyclerView);
+
+        EasyHttp.get(ApiUrl.FORUM_MY_FOLLOW)
+                .params("page", "0")
+                .params("size", "20")
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            List<PlateEntity> list = ParseUtils.parseListData(s, "content", PlateEntity.class);
+
+                            PlateEntity myPlate = new PlateEntity();
+                            myPlate.name = "我的板块";
+                            myPlate.helperIsMy = true;
+                            list.add(0, myPlate);
+
+                            mPlateAdapter.setNewData(list);
+                        }
+                    }
+                });
 
         return header;
     }

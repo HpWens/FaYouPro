@@ -253,4 +253,20 @@ public class ApiUrl {
     //下载合同模板
     public static final String GET_DOWNLOAD_URL = "/api-contract/admin/contract/download";
 
+    // 设置默认昵称
+    public static final String SET_DEFAULT_NICKNAME = "/api-user/user/setDefaultNickName";
+
+    /*************************************论坛模块***********************************************/
+    // 我的关注版块列表 全部版块一级版块
+    public static final String FORUM_MY_FOLLOW = "/api-forum/board";
+
+    // 我的关注帖子列表
+    public static final String FORUM_HOME_LIST = "/api-forum/post/attentionList";
+
+    // 论坛推荐列表分页
+    public static final String FORUM_HOME_RECOMMEND_LIST = "/api-forum/post/recommendList";
+
+    // 关注or取消关注版块
+    public static final String FORUM_FOLLOW_PLATE = "/api-forum/board/followed";
+
 }

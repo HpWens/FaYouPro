@@ -78,7 +78,8 @@ public class RecommendPresenter extends MultiItemPresenter<RecommendBean> {
                 helper.itemView.setTag("article");
                 helper.setText(R.id.tv_name, getNonEmpty(item.fullTitle))
                         .setText(R.id.tv_origin, getNonEmpty(item.source))
-                        .setText(R.id.tv_time, ParseUtils.getTime(item.createTime));
+                        .setText(R.id.tv_time, ParseUtils.getTime(item.createTime))
+                        .setGone(R.id.iv_top, item.showIndex);
 
                 ImageView ivThumb = helper.getView(R.id.iv_thumb);
                 if (TextUtils.isEmpty(item.cover)) {

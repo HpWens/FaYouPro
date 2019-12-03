@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initData() {
 //        ARouter.getInstance()
-//                .build(Constant.SELECT_PLATE)
+//                .build(Constant.FORUM_LIST)
 //                .withString(Constant.Param.ARTICLE_ID, "110328945139777536")
 //                .navigation();
     }

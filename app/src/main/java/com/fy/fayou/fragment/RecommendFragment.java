@@ -14,6 +14,7 @@ import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.OnScrollClashListener;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.HomeRefreshEvent;
 import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.view.HomeClashRecyclerView;
@@ -118,27 +119,64 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
     @Override
     protected BaseMultiAdapter<RecommendEntity> getAdapter() {
         mAdapter = new RecommendAdapter();
-        mAdapter.setOnItemListener((v, item) -> {
-            ARoute.jumpDetail(item.id, item.articleType);
+        mAdapter.setOnItemListener(new RecommendAdapter.OnItemListener() {
+            @Override
+            public void onClick(View v, RecommendEntity item) {
+                ARoute.jumpDetail(item.id, item.articleType);
 
-            // 新增浏览记录
-            HashMap<String, String> params = new HashMap<>();
-            params.put("businessId", item.id);
-            params.put("browseRecordType", item.articleType);
-            JSONObject jsonObject = new JSONObject(params);
-            EasyHttp.post(ApiUrl.MY_HISTORY)
-                    .upJson(jsonObject.toString())
-                    .execute(new SimpleCallBack<String>() {
-                        @Override
-                        public void onError(ApiException e) {
-                        }
+                // 新增浏览记录
+                HashMap<String, String> params = new HashMap<>();
+                params.put("businessId", item.id);
+                params.put("browseRecordType", item.articleType);
+                JSONObject jsonObject = new JSONObject(params);
+                EasyHttp.post(ApiUrl.MY_HISTORY)
+                        .upJson(jsonObject.toString())
+                        .execute(new SimpleCallBack<String>() {
+                            @Override
+                            public void onError(ApiException e) {
+                            }
 
-                        @Override
-                        public void onSuccess(String s) {
-                        }
-                    });
+                            @Override
+                            public void onSuccess(String s) {
+                            }
+                        });
+            }
+
+            @Override
+            public void onPraise(View v, int position, RecommendEntity entity) {
+                if (UserService.getInstance().checkLoginAndJump()) {
+                    requestPraise(entity.id, position, entity);
+                }
+            }
         });
         return mAdapter;
+    }
+
+    /**
+     * 请求点赞
+     *
+     * @param id
+     * @param item
+     */
+    private void requestPraise(String id, int position, RecommendEntity item) {
+        EasyHttp.post(ApiUrl.ARTICLE_PRAISE + item.id + "/give")
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (item.give) {
+                            item.gives -= 1;
+                        } else {
+                            item.gives += 1;
+                        }
+                        item.give = !item.give;
+                        mAdapter.notifyItemChanged(position);
+                    }
+                });
     }
 
     @Override

@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.fy.fayou.bean.CategoryEntity;
+import com.fy.fayou.forum.bean.PlateEntity;
 import com.fy.fayou.forum.fragment.FollowFragment;
 import com.fy.fayou.forum.fragment.PlateFollowFragment;
 
@@ -12,17 +12,17 @@ import java.util.List;
 
 public class HomeForumVPAdapter extends FragmentPagerAdapter {
 
-    List<CategoryEntity> mTags;
+    List<PlateEntity> mTags;
 
     // 0 论坛首页  1 板块关注
     int forumType = 0;
 
-    public HomeForumVPAdapter(FragmentManager fm, List<CategoryEntity> tags) {
+    public HomeForumVPAdapter(FragmentManager fm, List<PlateEntity> tags) {
         super(fm);
         this.mTags = tags;
     }
 
-    public HomeForumVPAdapter(FragmentManager fm, List<CategoryEntity> tags, int forumType) {
+    public HomeForumVPAdapter(FragmentManager fm, List<PlateEntity> tags, int forumType) {
         super(fm);
         mTags = tags;
         this.forumType = forumType;
@@ -33,7 +33,7 @@ public class HomeForumVPAdapter extends FragmentPagerAdapter {
         if (forumType == 0) {
             return FollowFragment.newInstance(i == 1);
         } else {
-            return PlateFollowFragment.newInstance();
+            return PlateFollowFragment.newInstance(mTags.get(i).id);
         }
     }
 
@@ -44,10 +44,10 @@ public class HomeForumVPAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mTags.get(position).categoryName;
+        return mTags.get(position).name;
     }
 
-    public List<CategoryEntity> getTags() {
+    public List<PlateEntity> getTags() {
         return mTags;
     }
 }
