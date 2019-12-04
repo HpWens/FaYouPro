@@ -480,7 +480,7 @@ public class WebViewActivity extends BaseActivity {
                 }
             }
 
-            if (!TextUtils.isEmpty(bean.bindedId) || "0".equals(bean.bindedId)) {
+            if (!TextUtils.isEmpty(bean.bindedId) && !"0".equals(bean.bindedId)) {
                 LawBean lawBean = new LawBean();
                 lawBean.name = relatedTitle;
                 list.add(lawBean);

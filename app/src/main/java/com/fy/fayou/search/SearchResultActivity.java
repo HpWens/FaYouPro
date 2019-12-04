@@ -74,7 +74,10 @@ public class SearchResultActivity extends BaseActivity {
         });
 
         tvCancel.setOnClickListener(v -> {
-            EventBus.getDefault().post(new SearchResultEvent(SearchResultEvent.RESULT_FINISH));
+//            EventBus.getDefault().post(new SearchResultEvent(SearchResultEvent.RESULT_FINISH));
+//            finish();
+
+            EventBus.getDefault().post(new SearchResultEvent(SearchResultEvent.RESULT_FOCUS));
             finish();
         });
 

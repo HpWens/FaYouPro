@@ -1,6 +1,7 @@
 package com.fy.fayou.fragment;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.flyco.tablayout.SlidingTabLayout;
@@ -71,8 +72,16 @@ public class ForumFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick(R.id.iv_search)
-    public void onClick() {
-        ARoute.jumpSearch();
+    @OnClick({R.id.iv_search, R.id.iv_publish})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_search:
+                ARoute.jumpSearch();
+                break;
+            case R.id.iv_publish:
+                ARoute.jumpPlateSelect();
+                break;
+        }
+
     }
 }

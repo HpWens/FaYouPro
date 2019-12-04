@@ -58,7 +58,7 @@
             android:layout_marginRight="60dp"
             android:background="@drawable/bg_btn_login_selected"
             android:enabled="false"
-            android:text="发送验证码"
+            android:text="下一步"
             android:textColor="@color/color_ffffff"
             android:textSize="16dp" />
     </LinearLayout>

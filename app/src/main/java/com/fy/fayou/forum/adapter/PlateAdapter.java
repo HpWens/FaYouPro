@@ -32,7 +32,7 @@ public class PlateAdapter extends MeiBaseAdapter<PlateEntity> {
             if (item.helperIsMy) {
                 ARoute.jumpForumFollow();
             } else {
-
+                ARoute.jumpPlateList(item.id);
             }
         });
     }

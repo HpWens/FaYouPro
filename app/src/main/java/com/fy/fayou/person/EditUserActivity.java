@@ -99,6 +99,7 @@ public class EditUserActivity extends BaseActivity {
         String nick = UserService.getInstance().getNickName();
         if (!TextUtils.isEmpty(nick)) {
             etName.setText(nick);
+            etName.setSelection(etName.getText().length());
         }
     }
 

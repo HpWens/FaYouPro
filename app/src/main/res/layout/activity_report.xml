@@ -233,7 +233,7 @@
                     android:layout_marginRight="15dp"
                     android:background="@null"
                     android:gravity="top|left"
-                    android:hint="描述理由请不要超出200字哦"
+                    android:hint="描述理由请不要超出2000字哦"
                     android:maxLength="200"
                     android:minLines="4"
                     android:textColor="@color/color_333333"
@@ -248,7 +248,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|bottom"
                     android:layout_marginRight="15dp"
-                    android:text="0/200"
+                    android:text="0/2000"
                     android:textColor="@color/color_d2d2d2"
                     android:textSize="12sp"></TextView>
 

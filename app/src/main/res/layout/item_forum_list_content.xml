@@ -24,8 +24,7 @@
             <ImageView
                 android:id="@+id/iv_header"
                 android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@color/color_ed4040" />
+                android:layout_height="20dp" />
 
             <TextView
                 android:id="@+id/tv_name"

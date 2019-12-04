@@ -211,10 +211,10 @@ public class ApiUrl {
     public static final String GET_SEARCH_RESULT = "/api-searchengines/public/search/searchAll";
 
     // 查找需要展示收藏的栏目
-    public static final String GET_COLLECT_CATEGORY = "/api-collect/menu/findBrowsMenu";
+    public static final String GET_HISTORY_CATEGORY = "/api-collect/menu/findBrowsMenu";
 
     // 查找需要展示浏览记录的栏目
-    public static final String GET_HISTORY_CATEGORY = "/api-collect/menu/findCollectMenu";
+    public static final String GET_COLLECT_CATEGORY = "/api-collect/menu/findCollectMenu";
 
     // 判决文书分类
     public static final String GET_JUDGE_LEVEL = "/api-popularize/public/judgementType";
@@ -269,4 +269,17 @@ public class ApiUrl {
     // 关注or取消关注版块
     public static final String FORUM_FOLLOW_PLATE = "/api-forum/board/followed";
 
+
+    // 版块详情+明星版友+置顶帖子
+    public static final String FORUM_PLATE_LIST = "/api-forum/board/";
+
+
+    // 获取版块下帖子列表分页
+    public static final String GET_FORUM_LIST = "/api-forum/post";
+
+    // 获取版块管理员列表
+    public static final String GET_STAR_PLATE_HEADER = "/api-forum/board/adminUsers";
+
+    // 获取版块明星版友列表
+    public static final String GET_STAR_PLATE_LIST = "/api-forum/board/starUsers";
 }

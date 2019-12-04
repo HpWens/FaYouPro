@@ -5,8 +5,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
+import com.fy.fayou.forum.activity.SelectPlateActivity;
 import com.fy.fayou.forum.adapter.MenuAdapter;
-import com.fy.fayou.search.bean.ColumnEntity;
+import com.fy.fayou.forum.bean.PlateEntity;
 import com.meis.base.mei.base.BaseFragment;
 
 import java.util.ArrayList;
@@ -26,10 +27,10 @@ public class MenuFragment extends BaseFragment {
     MenuAdapter adapter;
     Unbinder unbinder;
 
-    private ArrayList<ColumnEntity> mMenus;
+    private ArrayList<PlateEntity> mMenus;
     private int mCurrentPosition = -1;
 
-    public static MenuFragment newInstance(ArrayList<ColumnEntity> columns) {
+    public static MenuFragment newInstance(ArrayList<PlateEntity> columns) {
 
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_MENUS, columns);
@@ -60,9 +61,19 @@ public class MenuFragment extends BaseFragment {
 
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         recycler.setAdapter(adapter = new MenuAdapter());
+        adapter.setOnItemClickListener(position -> {
+            if (position == mCurrentPosition) {
+                return;
+            }
+            mCurrentPosition = position;
+            adapter.setItemChecked(position);
 
+            if (getActivity() instanceof SelectPlateActivity) {
+                ((SelectPlateActivity) getActivity()).switchContentFragment(mMenus.get(position).id);
+            }
+        });
         adapter.setNewData(mMenus);
-
+        adapter.setItemChecked(0);
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.fy.fayou.R;
 import com.fy.fayou.bean.TagEntity;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.UploadService;
 import com.fy.fayou.common.UserService;
@@ -351,13 +352,17 @@ public class PublishNewsNextActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(String s) {
-                        Toast.makeText(mContext, "上传成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "提交成功，等待审核", Toast.LENGTH_SHORT).show();
                         dismissUploadDialog(dialog);
 
                         // 清理编辑数据
                         UserService.getInstance().clearPublishNew();
                         // 关闭编辑页面
                         EventBus.getDefault().post(new ClosePublishNewEvent());
+
+                        // 跳转到我的资讯界面
+                        ARoute.jumpMyNews();
+
                         finish();
                     }
                 });

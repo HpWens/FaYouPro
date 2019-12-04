@@ -81,7 +81,6 @@ public class PlateFollowFragment extends BaseListFragment<PlateEntity> {
      */
     private void followPlate(int position, PlateEntity item) {
 
-        // 新增浏览记录
         HashMap<String, String> params = new HashMap<>();
         params.put("boardId", item.id);
         params.put("followed", !item.followed + "");

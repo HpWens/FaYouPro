@@ -48,6 +48,16 @@ public class GlideOption {
                 .transform(new CircleCrop());
     }
 
+    public static RequestOptions getItemOptionByWH(int width, int height) {
+        int w = RxImageTool.dp2px(width);
+        int h = RxImageTool.dp2px(height);
+        return new RequestOptions()
+                .placeholder(R.mipmap.ic_avatar_default)
+                .error(R.mipmap.ic_avatar_default)
+                .override(w, h)
+                .transform(new CenterCrop());
+    }
+
     public static RequestOptions getFullScreenWROption(Context context, int radius) {
         int w = RxDeviceTool.getScreenWidth(context) - RxImageTool.dp2px(30);
         int h = w * 9 / 16;
@@ -63,7 +73,9 @@ public class GlideOption {
     public static RequestOptions getRadiusOption(int width, int height, int radius) {
         int w = RxImageTool.dp2px(width);
         int h = RxImageTool.dp2px(height);
-        return new RequestOptions().override(w, h).transform(new CenterCrop(), new RoundedCorners(RxImageTool.dp2px(radius)));
+        return new RequestOptions()
+                .override(w, h)
+                .transform(new CenterCrop(), new RoundedCorners(RxImageTool.dp2px(radius)));
     }
 
     @SuppressLint("ResourceType")

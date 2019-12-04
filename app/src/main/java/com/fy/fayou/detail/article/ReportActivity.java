@@ -88,7 +88,7 @@ public class ReportActivity extends BaseActivity {
     private List<LocalMedia> selectList = new ArrayList<>();
     private List<CheckBox> checkList = new ArrayList<>();
 
-    private static final int MAX_CHAR_LIMIT = 200;
+    private static final int MAX_CHAR_LIMIT = 2000;
 
     @Override
     protected void initView() {
@@ -172,11 +172,11 @@ public class ReportActivity extends BaseActivity {
             RxToast.normal("请输入举报理由");
             return false;
         }
-//        String contact = etContact.getText().toString();
-//        if (TextUtils.isEmpty(contact)) {
-//            RxToast.normal("请留下联系方式");
-//            return false;
-//        }
+        String contact = etContact.getText().toString();
+        if (TextUtils.isEmpty(contact) || contact.length() < 50) {
+            RxToast.normal("联系方式不能超过50个字");
+            return false;
+        }
         return true;
     }
 

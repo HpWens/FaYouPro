@@ -140,6 +140,9 @@ public class Constant {
     // 论坛详情
     public static final String FORUM_LIST = "/forum/list";
 
+    // 明星板块
+    public static final String STAR_PLATE = "/star/plate";
+
     public interface SP {
 
         String USER_INFO = "user_info_data";
@@ -163,8 +166,8 @@ public class Constant {
     public interface QiNiu {
         String AccessKey = "cOUw3kpUgnqxLhPrQRZvwIAsTrOfOZcicNZFElCp"; // 此处填你自己的AccessKey
         String SecretKey = "ew5SxqqMY4Xxyk1MoWugSP2IEr9EfB2z1PxQSK8R"; // 此处填你自己的SecretKey
-        String BUCKET_NAME = "zhdf-prod";
-        String DOMAIN = "http://q0f8wkdot.bkt.clouddn.com/";
+        String BUCKET_NAME = "fayou-storage";
+        String DOMAIN = "http://qny.zhdfxm.com/";
     }
 
     public interface Param {

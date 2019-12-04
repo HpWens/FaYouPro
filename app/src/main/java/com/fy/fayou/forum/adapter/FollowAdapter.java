@@ -1,6 +1,7 @@
 package com.fy.fayou.forum.adapter;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +24,7 @@ public class FollowAdapter extends MeiBaseAdapter<ForumEntity> {
                 .setText(R.id.tv_name, getNonEmpty(item.author))
                 .setText(R.id.tv_content, getNonEmpty(item.description))
                 .setText(R.id.tv_plate, getNonEmpty(item.boardName))
+                .setVisible(R.id.tv_plate, !TextUtils.isEmpty(item.boardName))
                 .setText(R.id.tv_scan, item.clicks + "人看过")
                 .setText(R.id.tv_comment_num, item.comments + "评论")
                 .setText(R.id.tv_praise_num, item.gives + "点赞");

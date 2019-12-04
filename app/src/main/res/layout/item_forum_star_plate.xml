@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/iv_thumb"
@@ -21,12 +21,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="11dp"
         android:maxLength="16"
-        tools:text="美国法律法规"
         android:textColor="@color/color_333333"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:textSize="14sp"
         app:layout_constraintLeft_toRightOf="@+id/iv_thumb"
-        app:layout_constraintTop_toTopOf="@+id/iv_thumb" />
+        app:layout_constraintTop_toTopOf="@+id/iv_thumb"
+        tools:text="美国法律法规" />
 
     <TextView
         android:id="@+id/tv_follow_num"
@@ -35,10 +34,9 @@
         android:layout_marginLeft="11dp"
         android:layout_marginTop="11dp"
         android:maxLength="16"
-        android:text="0人关注"
+        android:text="发帖0 · 评论0"
         android:textColor="@color/color_a0a0a0"
         android:textSize="12sp"
-        android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@+id/iv_thumb"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 

@@ -238,4 +238,41 @@ public class ARoute {
                 .navigation();
     }
 
+    /***
+     * 板块列表
+     * @param id
+     */
+    public static void jumpPlateList(String id) {
+        ARouter.getInstance()
+                .build(Constant.FORUM_LIST)
+                .withString(Constant.Param.ID, id)
+                .navigation();
+    }
+
+    // 板块选择
+    public static void jumpPlateSelect() {
+        ARouter.getInstance()
+                .build(Constant.SELECT_PLATE)
+                .navigation();
+    }
+
+    /**
+     * 跳转到明星板块
+     *
+     * @param id
+     */
+    public static void jumpStarPlate(String id, String name) {
+        ARouter.getInstance()
+                .build(Constant.STAR_PLATE)
+                .withString(Constant.Param.ID, id)
+                .withString(Constant.Param.NAME, name)
+                .navigation();
+    }
+
+
+    // 跳转到我的资讯
+    public static void jumpMyNews() {
+        ARouter.getInstance().build(Constant.NEWS_LIST)
+                .navigation();
+    }
 }

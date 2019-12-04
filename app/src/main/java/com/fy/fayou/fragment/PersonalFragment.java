@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.fy.fayou.FYApplication;
 import com.fy.fayou.R;
 import com.fy.fayou.bean.UserInfo;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
@@ -177,8 +178,7 @@ public class PersonalFragment extends BaseFragment {
                 }
                 break;
             case R.id.my_news:
-                ARouter.getInstance().build(Constant.NEWS_LIST)
-                        .navigation();
+                ARoute.jumpMyNews();
                 break;
         }
     }

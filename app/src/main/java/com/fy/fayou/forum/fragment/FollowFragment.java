@@ -111,6 +111,7 @@ public class FollowFragment extends BaseListFragment<ForumEntity> {
 //        }, recyclerView);
 
         EasyHttp.get(ApiUrl.FORUM_MY_FOLLOW)
+                .params("parentId", "-1")
                 .params("page", "0")
                 .params("size", "20")
                 .execute(new SimpleCallBack<String>() {

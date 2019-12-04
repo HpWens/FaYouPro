@@ -50,6 +50,11 @@ public class FanFragment extends BaseListFragment<UserInfo> {
             }
 
             @Override
+            public void onUnFollow(UserInfo user, int position) {
+                cancelFollow(user, position);
+            }
+
+            @Override
             public void onJumpUserCenter(View v, String id) {
                 ARoute.jumpUserCenter(id);
             }
@@ -65,6 +70,24 @@ public class FanFragment extends BaseListFragment<UserInfo> {
                 .params("size", "20")
                 .execute(String.class);
         return getListByField(observable, "content", UserInfo.class);
+    }
+
+    // 取消关注
+    private void cancelFollow(final UserInfo user, final int position) {
+        EasyHttp.post(ApiUrl.USER_CANCEL_FOLLOW)
+                .upJson(user.id)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        user.follow = false;
+                        mAdapter.setData(position, user);
+                    }
+                });
     }
 
     // 请求关注

@@ -1,6 +1,7 @@
 package com.fy.fayou.home.adapter;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,7 +27,7 @@ public class WantedAdapter extends MeiBaseAdapter<WantedEntity> {
 
         TextView tvDetail = helper.getView(R.id.tv_detail);
         TextView tvContent = helper.getView(R.id.tv_content);
-        String content = getNonEmpty(item.content.replaceAll("　",""));
+        String content = getNonEmpty(item.content.replaceAll("　", ""));
 
         tvContent.post(() -> {
             float dWidth = tvDetail.getWidth();
@@ -43,6 +44,7 @@ public class WantedAdapter extends MeiBaseAdapter<WantedEntity> {
 
         helper.setText(R.id.tv_name, getNonEmpty(item.name))
                 .setText(R.id.tv_time, "发布时间：" + KtTimeUtils.INSTANCE.getYMDTime(item.pubTime));
+        helper.setVisible(R.id.tv_time, !TextUtils.isEmpty(item.pubTime));
 
         ImageView ivThumb = helper.getView(R.id.iv_thumb);
 

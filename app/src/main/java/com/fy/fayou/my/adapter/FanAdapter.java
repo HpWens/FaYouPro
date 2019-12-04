@@ -39,6 +39,12 @@ public class FanAdapter extends MeiBaseAdapter<UserInfo> {
             }
         });
 
+        helper.getView(R.id.tv_each_follow).setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.onUnFollow(item, helper.getAdapterPosition());
+            }
+        });
+
         ImageView ivAvatar = helper.getView(R.id.iv_avatar);
         Glide.with(helper.itemView.getContext())
                 .load(item.avatar == null ? "" : item.avatar)
@@ -53,6 +59,8 @@ public class FanAdapter extends MeiBaseAdapter<UserInfo> {
 
     public interface OnItemListener {
         void onFollow(UserInfo user, int position);
+
+        void onUnFollow(UserInfo user, int position);
 
         void onJumpUserCenter(View v, String id);
     }

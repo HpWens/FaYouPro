@@ -66,7 +66,7 @@
                     android:maxLength="16"
                     android:textColor="@color/color_b2b2b2"
                     android:textSize="11sp"
-                    tools:text="法报头条"></TextView>
+                    tools:text="法报头条法报头条法报头条法报头条法报头条法报头条法报头条法报头条"></TextView>
 
                 <TextView
                     android:id="@+id/tv_time"
@@ -75,6 +75,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="4dp"
+                    android:lines="1"
                     android:textColor="@color/color_b3b3b3"
                     android:textSize="11sp"
                     tools:text="2019-9-20">

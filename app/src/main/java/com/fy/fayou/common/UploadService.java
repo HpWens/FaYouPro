@@ -37,7 +37,7 @@ public class UploadService {
             synchronized (UploadService.class) {
                 if (singleton == null) {
                     singleton = new UploadService();
-                    uploadManager = new UploadManager(new Configuration.Builder().zone(FixedZone.zone2).build());
+                    uploadManager = new UploadManager(new Configuration.Builder().zone(FixedZone.zone0).build());
                     uploadToken = Auth.create(Constant.QiNiu.AccessKey, Constant.QiNiu.SecretKey).uploadToken(Constant.QiNiu.BUCKET_NAME);
                 }
             }

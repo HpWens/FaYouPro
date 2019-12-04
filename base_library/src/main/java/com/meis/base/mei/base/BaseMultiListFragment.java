@@ -57,6 +57,7 @@ public abstract class BaseMultiListFragment<T extends MultiItemEntity> extends B
         }
         //是否首次加载 是否每次显示加载
         if (loadOnInit() || !loadOnShow()) {
+            setState(ViewState.LOADING);
             loadPage(DataConstants.FIRST_PAGE);
         }
     }
@@ -253,4 +254,24 @@ public abstract class BaseMultiListFragment<T extends MultiItemEntity> extends B
             }
         });
     }
+
+    // 追加列表数据
+    protected Observable<Result<List<T>>> appendListByField(Observable<String> observable, final String field, final Class<T> clazz, final List<T> appendList) {
+        final Result<List<T>> result = new Result<>();
+        return observable.map(new Function<String, Result<List<T>>>() {
+            @Override
+            public Result<List<T>> apply(String s) throws Exception {
+                if (!TextUtils.isEmpty(s)) {
+                    JSONObject json = new JSONObject(s);
+                    if (json != null && field != null && json.has(field)) {
+                        List<T> list = parseListData(json.optString(field), clazz);
+                        if (list != null) list.addAll(0, appendList);
+                        result.data = list;
+                    }
+                }
+                return result;
+            }
+        });
+    }
+
 }
