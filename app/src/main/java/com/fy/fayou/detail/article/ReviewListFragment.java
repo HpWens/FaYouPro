@@ -10,12 +10,14 @@ import android.widget.Toast;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiResult;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.detail.adapter.ReviewAdapter;
 import com.fy.fayou.detail.bean.CommentBean;
 import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.adapter.BaseMultiAdapter;
 import com.meis.base.mei.base.BaseMultiListFragment;
+import com.meis.base.mei.constant.DataConstants;
 import com.meis.base.mei.entity.Result;
 import com.meis.base.mei.status.ViewState;
 import com.vondear.rxtool.RxTimeTool;
@@ -40,6 +42,9 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
     // 父评论id
     private String parentId = "0";
 
+    private boolean isForum;
+    private boolean isDesc = true;
+
     public static final String ARTICLE_ID = "article_id";
     private OnItemClickListener mListener;
 
@@ -47,13 +52,15 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
     protected void initView() {
         if (getArguments() != null) {
             articleId = getArguments().getString(ARTICLE_ID, "");
+            isForum = getArguments().getBoolean(Constant.Param.IS_FORUM, false);
         }
         super.initView();
     }
 
-    public static ReviewListFragment newInstance(String articleId) {
+    public static ReviewListFragment newInstance(String articleId, boolean isForum) {
         Bundle args = new Bundle();
         args.putString(ARTICLE_ID, articleId);
+        args.putBoolean(Constant.Param.IS_FORUM, isForum);
         ReviewListFragment fragment = new ReviewListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -73,7 +80,7 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
 
     @Override
     protected BaseMultiAdapter<CommentBean> getAdapter() {
-        return mAdapter = new ReviewAdapter(new ReviewAdapter.OnClickListener() {
+        return mAdapter = new ReviewAdapter(articleId, isForum, new ReviewAdapter.OnClickListener() {
             @Override
             public void onPraise(View v, int pos, CommentBean item) {
                 if (UserService.getInstance().checkLoginAndJump()) {
@@ -82,15 +89,20 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
             }
 
             @Override
-            public void onComment(String userName, String articleId, String parentId, int position) {
+            public void onComment(String userName, String articleId, String parentId, int position, String userId) {
                 if (mListener != null) {
-                    mListener.onClick(userName, articleId, parentId, position);
+                    mListener.onClick(userName, articleId, parentId, position, userId);
                 }
             }
 
             @Override
             public void onLoadMoreComment(List<String> excludeIds, String parentId, int position, int helperPage) {
                 requestMoreComment(excludeIds, parentId, position, helperPage);
+            }
+
+            @Override
+            public void onJumpSecondComment(String parentId, CommentBean parent) {
+                if (mListener != null) mListener.onJumpSecondReview(parentId, parent);
             }
         });
     }
@@ -143,13 +155,32 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
 
     @Override
     protected Observable<Result<List<CommentBean>>> getListObservable(int pageNo) {
-        Observable<String> observable = EasyHttp.get(ApiUrl.COMMENT_LIST)
-                .params("articleId", articleId)
-                .params("parentId", parentId)
-                .params("page", (pageNo - 1) + "")
-                .params("size", "20")
-                .execute(String.class);
+        Observable<String> observable = null;
+        if (isForum) {
+            observable = EasyHttp.get(ApiUrl.GET_FORUM_FIRST_COMMENT)
+                    .params("postId", articleId)
+                    .params("page", (pageNo - 1) + "")
+                    .params("size", "20")
+                    .params("orderBy", isDesc ? "createTimeDesc" : "createTimeAsc")
+                    .execute(String.class);
+        } else {
+            observable = EasyHttp.get(ApiUrl.COMMENT_LIST)
+                    .params("articleId", articleId)
+                    .params("parentId", parentId)
+                    .params("page", (pageNo - 1) + "")
+                    .params("size", "20")
+                    .execute(String.class);
+        }
         return getListByField(observable, "content");
+    }
+
+    public void setDesc(boolean desc) {
+        isDesc = desc;
+        loadPage(DataConstants.FIRST_PAGE);
+    }
+
+    public boolean isDesc() {
+        return isDesc;
     }
 
     @Override
@@ -177,6 +208,10 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
         return observable.map(s -> {
             if (!TextUtils.isEmpty(s)) {
                 JSONObject json = new JSONObject(s);
+                if (json.has("count")) {
+                    int count = json.optInt("count");
+                    // if (isForum) mListener.onTotalCommentNumber(count);
+                }
                 if (json != null && field != null && json.has(field)) {
                     List<CommentBean> list = ParseUtils.parseListData(json.optString(field), CommentBean.class);
                     result.data = new ArrayList<>();
@@ -200,11 +235,13 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
                             // 添加展示更多
                             CommentBean expand = new CommentBean();
                             expand.level = 2;
+                            expand.id = bean.id;
                             expand.laveCommentCount = bean.comments - childSize;
                             expand.helperChildCount = bean.comments;
                             expand.helperExpandNumber = childSize;
                             expand.helperId = bean.id;
                             expand.helperPage = 0;
+                            expand.helperParent = bean;
                             result.data.add(expand);
 
                         }
@@ -222,7 +259,7 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
      * @param item
      */
     private void requestPraise(String id, int position, CommentBean item) {
-        EasyHttp.post(ApiUrl.COMMENT_PRAISE + id)
+        EasyHttp.post((isForum ? ApiUrl.FORUM_COMMENT_PRAISE : ApiUrl.COMMENT_PRAISE) + id + (isForum ? "/give" : ""))
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
@@ -233,12 +270,21 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
 
                     @Override
                     public void onSuccess(String s) {
-                        if (item.give) {
-                            item.gives -= 1;
+                        if (isForum) {
+                            if (item.given) {
+                                item.gives -= 1;
+                            } else {
+                                item.gives += 1;
+                            }
+                            item.given = !item.given;
                         } else {
-                            item.gives += 1;
+                            if (item.give) {
+                                item.gives -= 1;
+                            } else {
+                                item.gives += 1;
+                            }
+                            item.give = !item.give;
                         }
-                        item.give = !item.give;
                         mAdapter.notifyItemChanged(position);
                     }
                 });
@@ -291,7 +337,11 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
     }
 
     public interface OnItemClickListener {
-        void onClick(String userName, String articleId, String parentId, int position);
+        void onClick(String userName, String articleId, String parentId, int position, String reUserId);
+
+        void onTotalCommentNumber(int count);
+
+        void onJumpSecondReview(String id, CommentBean parent);
     }
 
     public ReviewListFragment setOnItemClickListener(OnItemClickListener listener) {

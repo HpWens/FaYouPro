@@ -58,6 +58,9 @@ public class ReportActivity extends BaseActivity {
     @Autowired
     public String type = "";
 
+    @Autowired(name = "is_forum")
+    public boolean isForum;
+
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
     @BindView(R.id.et_suggest)
@@ -129,18 +132,22 @@ public class ReportActivity extends BaseActivity {
         HashMap<String, String> params = new HashMap<>();
         params.put("phone", contact);
         params.put("content", suggest);
-        params.put("type", "REPORT");
+        if (isForum) {
+            params.put("type", type.equals("COMMENT") ? "COMMENT" : "POST");
+        } else {
+            params.put("type", "REPORT");
+        }
         params.put("pics", pics);
         params.put("contentType", getCheckReportType());
         if (!TextUtils.isEmpty(id)) {
             params.put("transationId", id);
         }
-        if (!TextUtils.isEmpty(type)) {
+        if (!TextUtils.isEmpty(type) && !isForum) {
             params.put("feedbackTransationType", type);
         }
         JSONObject jsonObject = new JSONObject(params);
 
-        EasyHttp.post(ApiUrl.FEED_BACK)
+        EasyHttp.post(isForum ? ApiUrl.POST_FORUM_REPORT : ApiUrl.FEED_BACK)
                 .upJson(jsonObject.toString())
                 .execute(new SimpleCallBack<String>() {
 
@@ -173,7 +180,7 @@ public class ReportActivity extends BaseActivity {
             return false;
         }
         String contact = etContact.getText().toString();
-        if (TextUtils.isEmpty(contact) || contact.length() < 50) {
+        if (contact.length() > 50) {
             RxToast.normal("联系方式不能超过50个字");
             return false;
         }

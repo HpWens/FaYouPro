@@ -282,4 +282,25 @@ public class ApiUrl {
 
     // 获取版块明星版友列表
     public static final String GET_STAR_PLATE_LIST = "/api-forum/board/starUsers";
+
+    // 获取帖子详情
+    public static final String GET_FORUM_DETAIL = "/api-forum/post/";
+
+    // 帖子点赞
+    public static final String POST_FORUM_PRAISE = "/api-forum/post/";
+
+    // 帖子举报
+    public static final String POST_FORUM_REPORT = "/api-forum/report";
+
+    // 点赞评论or取消点赞评论 {id}为评论id
+    public static final String FORUM_COMMENT_PRAISE = "/api-forum/postComment/";
+
+    //获取帖子全部评论列表
+    public static final String GET_FORUM_FIRST_COMMENT = "/api-forum/postComment";
+
+    //添加帖子评论/追评
+    public static final String APPEND_FORUM_COMMENT = "/api-forum/postComment";
+
+    //获取评论详情子评列表
+    public static final String GET_FORUM_SECOND_COMMENT = "/api-forum/postComment/detailList";
 }

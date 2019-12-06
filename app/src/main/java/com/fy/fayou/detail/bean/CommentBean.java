@@ -9,6 +9,7 @@ import java.util.List;
 public class CommentBean implements Serializable, MultiItemEntity {
 
     public String id;
+    public String postId;
     public String createTime;
     public String updateTime;
     public String version;
@@ -25,6 +26,8 @@ public class CommentBean implements Serializable, MultiItemEntity {
     public String articleTitle;
     public String userAvatar;
     public boolean give;
+    // 后台点赞多个字段 nb
+    public boolean given;
     public String userId;
     public List<CommentBean> childrenList = new ArrayList<>();
 
@@ -41,6 +44,7 @@ public class CommentBean implements Serializable, MultiItemEntity {
     // 辅助页码
     public int helperPage;
     public int helperExpandNumber;
+    public CommentBean helperParent;
 
     @Override
     public int getItemType() {

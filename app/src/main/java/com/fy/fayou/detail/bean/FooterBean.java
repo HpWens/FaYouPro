@@ -11,6 +11,7 @@ public class FooterBean {
     public int gives;
     public boolean give;
     public String id;
+    public int type;
 
     public List<ArticleEntity.UserBean> giveRecords = new ArrayList<>();
 

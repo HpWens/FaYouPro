@@ -135,7 +135,7 @@ public class ArticleDetailActivity extends BaseActivity {
             public void onLook(View view) {
                 showBottomDialog();
             }
-        }));
+        }, type == Constant.Param.FORUM_TYPE));
         mAdapter.addItemPresenter(new CommentHeaderPresenter());
         mAdapter.addItemPresenter(new FooterPresenter((v, id, pos, footer) -> {
             if (UserService.getInstance().checkLoginAndJump()) {
@@ -194,7 +194,86 @@ public class ArticleDetailActivity extends BaseActivity {
             }
         });
 
-        requestData();
+        if (type == Constant.Param.FORUM_TYPE) {
+            // 论坛详情页
+            requestForumData();
+        } else {
+            // 文章视频详情页
+            requestData();
+        }
+    }
+
+    // 请求论坛详情页数据
+    private void requestForumData() {
+        EasyHttp.get(ApiUrl.GET_FORUM_DETAIL + id)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                        handlerApiError(e);
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            // 初始化数据源
+                            mDataList = new ArrayList<>();
+                            ArticleEntity articleEntity = ParseUtils.parseData(s, ArticleEntity.class);
+                            // 填充帖子数据
+                            fillingData(articleEntity, articleEntity.commentList, null);
+                            mAdapter.setNewData(mDataList);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * @param articleEntity
+     * @param commentList
+     * @param recommendList
+     */
+    private void fillingData(ArticleEntity articleEntity, List<CommentBean> commentList, List<RecommendBean> recommendList) {
+        // 填充视频
+        if (articleEntity.articleType != null && articleEntity.articleType.equals(Constant.Param.VIDEO)) {
+            jzvdStd.setUp(getNonEmpty(articleEntity.videoUrl), "");
+            jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(mContext)
+                    .load(getNonEmpty(articleEntity.cover))
+                    .apply(GlideOption.getFullScreenWOption(mContext))
+                    .into(jzvdStd.thumbImageView);
+        }
+
+        fillHeaderData(articleEntity);
+
+        fillContentData(articleEntity);
+
+        fillFooterData(articleEntity);
+
+        if (commentList != null && !commentList.isEmpty()) {
+            mDataList.add(new CommentHeaderBean());
+            for (int i = 0; i < commentList.size(); i++) {
+                CommentBean bean = commentList.get(i);
+                bean.childIndex = i;
+                bean.lastIndex = (i == commentList.size() - 1);
+                mDataList.add(bean);
+            }
+        } else {
+            mDataList.add(new CommentHeaderBean());
+            mDataList.add(new EmptyCommentBean());
+        }
+
+        if (recommendList != null && !recommendList.isEmpty()) {
+            mDataList.add(new RecommendHeaderBean());
+            for (int i = 0; i < recommendList.size(); i++) {
+                RecommendBean bean = recommendList.get(i);
+                bean.childIndex = i;
+                bean.lastIndex = (i == recommendList.size() - 1);
+                mDataList.add(bean);
+            }
+        }
+
+        // 请求是否收藏接口
+        articleId = articleEntity.id;
+        requestCollectData(articleEntity.id);
     }
 
     private void requestData() {
@@ -205,48 +284,8 @@ public class ArticleDetailActivity extends BaseActivity {
             ArticleEntity articleEntity = ParseUtils.parseData(s, ArticleEntity.class);
             List<RecommendBean> recommendList = articleEntity.recommendArticles;
 
-            // 填充视频
-            if (articleEntity.articleType.equals(Constant.Param.VIDEO)) {
-                jzvdStd.setUp(getNonEmpty(articleEntity.videoUrl), "");
-                jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                Glide.with(mContext)
-                        .load(getNonEmpty(articleEntity.cover))
-                        .apply(GlideOption.getFullScreenWOption(mContext))
-                        .into(jzvdStd.thumbImageView);
-            }
-
-            fillHeaderData(articleEntity);
-
-            fillContentData(articleEntity);
-
-            fillFooterData(articleEntity);
-
-            if (commentList != null && !commentList.isEmpty()) {
-                mDataList.add(new CommentHeaderBean());
-                for (int i = 0; i < commentList.size(); i++) {
-                    CommentBean bean = commentList.get(i);
-                    bean.childIndex = i;
-                    bean.lastIndex = (i == commentList.size() - 1);
-                    mDataList.add(bean);
-                }
-            } else {
-                mDataList.add(new CommentHeaderBean());
-                mDataList.add(new EmptyCommentBean());
-            }
-
-            if (recommendList != null && !recommendList.isEmpty()) {
-                mDataList.add(new RecommendHeaderBean());
-                for (int i = 0; i < recommendList.size(); i++) {
-                    RecommendBean bean = recommendList.get(i);
-                    bean.childIndex = i;
-                    bean.lastIndex = (i == recommendList.size() - 1);
-                    mDataList.add(bean);
-                }
-            }
-
-            // 请求是否收藏接口
-            articleId = articleEntity.id;
-            requestCollectData(articleEntity.id);
+            // 填充数据
+            fillingData(articleEntity, commentList, recommendList);
 
             return mDataList;
         }).compose(bindToLifecycle())
@@ -262,12 +301,7 @@ public class ArticleDetailActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        // cao 后台 500
-                        if (e instanceof ApiException) {
-                            ParseUtils.handlerApiError((ApiException) e, error -> {
-                                Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
-                            });
-                        }
+                        handlerApiError(e);
                     }
 
                     @Override
@@ -276,15 +310,25 @@ public class ArticleDetailActivity extends BaseActivity {
                 });
     }
 
+    private void handlerApiError(Throwable e) {
+        // cao 后台 500
+        if (e instanceof ApiException) {
+            ParseUtils.handlerApiError((ApiException) e, error -> {
+                Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
     // 添加尾部数据
     private void fillFooterData(ArticleEntity articleEntity) {
         FooterBean footerBean = new FooterBean();
         footerBean.author = articleEntity.author;
-        footerBean.source = articleEntity.source;
-        footerBean.tagNames = articleEntity.tagNames;
+        footerBean.source = getNonEmpty(articleEntity.source);
+        footerBean.tagNames = articleEntity.tagNames == null ? new ArrayList<>() : articleEntity.tagNames;
         footerBean.gives = articleEntity.gives;
         footerBean.give = articleEntity.give;
         footerBean.id = articleEntity.id;
+        footerBean.type = type;
         footerBean.giveRecords = articleEntity.giveRecords;
         mDataList.add(footerBean);
     }
@@ -323,11 +367,11 @@ public class ArticleDetailActivity extends BaseActivity {
     // 填充头部数据
     private void fillHeaderData(ArticleEntity articleEntity) {
         HeaderBean header = new HeaderBean();
-        header.fullTitle = articleEntity.fullTitle;
-        header.auditName = articleEntity.auditName;
+        header.fullTitle = type == Constant.Param.FORUM_TYPE ? articleEntity.title : articleEntity.fullTitle;
+        header.auditName = getNonEmpty(TextUtils.isEmpty(articleEntity.auditName) ? articleEntity.author : articleEntity.auditName);
         header.createTime = articleEntity.createTime;
         header.follow = articleEntity.follow;
-        header.auditId = articleEntity.auditId;
+        header.auditId = type == Constant.Param.FORUM_TYPE ? articleEntity.userId : articleEntity.auditId;
         header.auditAvatar = articleEntity.auditAvatar;
         mDataList.add(header);
     }
@@ -347,7 +391,7 @@ public class ArticleDetailActivity extends BaseActivity {
     }
 
     private void requestPraise(FooterBean footer, int position) {
-        EasyHttp.post(ApiUrl.ARTICLE_PRAISE + footer.id + "/give")
+        EasyHttp.post((type == Constant.Param.FORUM_TYPE ? ApiUrl.POST_FORUM_PRAISE : ApiUrl.ARTICLE_PRAISE) + footer.id + "/give")
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
@@ -450,6 +494,7 @@ public class ArticleDetailActivity extends BaseActivity {
             case R.id.iv_more_white:
             case R.id.iv_right_more:
                 showDialog(mShareDialog = new BottomShareDialog().setCollect(isCollect).setArticleId(articleId)
+                        .setForumType(type == Constant.Param.FORUM_TYPE)
                         .setOnItemClickListener(new BottomShareDialog.OnItemClickListener() {
                             @Override
                             public void onDismiss() {
@@ -469,7 +514,7 @@ public class ArticleDetailActivity extends BaseActivity {
 
     private void showBottomDialog() {
         if (mReviewFragment == null) {
-            loadRootFragment(R.id.fl_comment, mReviewFragment = ReviewFragment.newInstance(id));
+            loadRootFragment(R.id.fl_comment, mReviewFragment = ReviewFragment.newInstance(id, type));
             mReviewFragment.setOnReviewListener(new ReviewFragment.OnReviewListener() {
                 @Override
                 public void onDismiss() {
@@ -539,21 +584,30 @@ public class ArticleDetailActivity extends BaseActivity {
      * @param item
      */
     private void requestPraise(String id, int position, CommentBean item) {
-        EasyHttp.post(ApiUrl.COMMENT_PRAISE + id)
+        EasyHttp.post((type == Constant.Param.FORUM_TYPE ? ApiUrl.FORUM_COMMENT_PRAISE : ApiUrl.COMMENT_PRAISE) + id
+                + (type == Constant.Param.FORUM_TYPE ? "/give" : ""))
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
-
                     }
 
                     @Override
                     public void onSuccess(String s) {
-                        if (item.give) {
-                            item.gives -= 1;
+                        if (type == Constant.Param.FORUM_TYPE) {
+                            if (item.given) {
+                                item.gives -= 1;
+                            } else {
+                                item.gives += 1;
+                            }
+                            item.given = !item.given;
                         } else {
-                            item.gives += 1;
+                            if (item.give) {
+                                item.gives -= 1;
+                            } else {
+                                item.gives += 1;
+                            }
+                            item.give = !item.give;
                         }
-                        item.give = !item.give;
                         mAdapter.notifyItemChanged(position);
                     }
                 });

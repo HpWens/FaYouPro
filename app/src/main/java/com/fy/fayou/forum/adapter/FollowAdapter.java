@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.forum.bean.ForumEntity;
 import com.fy.fayou.utils.GlideOption;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
@@ -41,6 +42,10 @@ public class FollowAdapter extends MeiBaseAdapter<ForumEntity> {
                 .load(getNonEmpty(item.cover))
                 .apply(GlideOption.getRadiusOption(112, 74, 2))
                 .into(ivThumb);
+
+        helper.itemView.setOnClickListener(v -> {
+            ARoute.jumpForumDetail(item.id);
+        });
 
     }
 }

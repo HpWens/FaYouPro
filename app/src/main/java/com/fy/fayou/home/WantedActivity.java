@@ -26,6 +26,7 @@ import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,8 +66,12 @@ public class WantedActivity extends BaseActivity {
     }
 
     private void requestColumn(String position) {
+        HashMap<String, String> hm = new HashMap<>();
+        if (!TextUtils.isEmpty(position)) {
+            hm.put("position", position);
+        }
         EasyHttp.get(ApiUrl.CRIMINAL_COLUMN)
-                .params("position", position)
+                .params(hm)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

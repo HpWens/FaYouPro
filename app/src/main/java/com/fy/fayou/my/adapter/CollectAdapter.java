@@ -37,6 +37,8 @@ public class CollectAdapter extends MeiBaseAdapter<CollectEntity> {
 
         holder.setText(R.id.tv_title, getNonEmpty(item.title))
                 .setText(R.id.tv_time, KtTimeUtils.INSTANCE.getYMDTime(isCollect ? item.createTime : item.businessTime));
+
+
     }
 }
 

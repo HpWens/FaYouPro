@@ -15,8 +15,11 @@ public class CommentPresenter extends ItemPresenter<CommentBean> {
 
     OnClickListener mListener;
 
-    public CommentPresenter(OnClickListener listener) {
+    boolean isForum;
+
+    public CommentPresenter(OnClickListener listener, boolean isForum) {
         mListener = listener;
+        this.isForum = isForum;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class CommentPresenter extends ItemPresenter<CommentBean> {
                 .setText(R.id.tv_praise_num, item.gives + "")
                 .setGone(R.id.tv_look, item.lastIndex);
 
-        holder.getView(R.id.iv_praise).setSelected(item.give);
+        holder.getView(R.id.iv_praise).setSelected(isForum ? item.given : item.give);
 
         ImageView ivAvatar = holder.getView(R.id.iv_avatar);
         Glide.with(holder.itemView.getContext())

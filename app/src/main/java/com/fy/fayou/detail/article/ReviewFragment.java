@@ -5,12 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
+import com.fy.fayou.detail.bean.CommentBean;
 import com.fy.fayou.detail.dialog.BottomCommentDialog;
 import com.meis.base.mei.base.BaseFragment;
 import com.zhouyou.http.EasyHttp;
@@ -19,6 +22,8 @@ import com.zhouyou.http.exception.ApiException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +40,8 @@ public class ReviewFragment extends BaseFragment {
     TextView tvPublish;
     @BindView(R.id.tv_send)
     TextView tvSend;
+    @BindView(R.id.iv_sort)
+    ImageView ivSort;
 
     // 文章id
     private String articleId;
@@ -42,6 +49,9 @@ public class ReviewFragment extends BaseFragment {
     private String parentId;
 
     private int totalComment = 0;
+
+    // 是否论坛
+    private boolean isForum;
 
     public static final String ARTICLE_ID = "article_id";
     public static final String PARENT_ID = "parent_id";
@@ -52,9 +62,15 @@ public class ReviewFragment extends BaseFragment {
     private OnReviewListener mListener;
     private ReviewListFragment mReviewListFragment;
 
-    public static ReviewFragment newInstance(String articleId) {
+    /**
+     * 二级评论
+     */
+    private SecondReviewFragment mSecondReviewFragment;
+
+    public static ReviewFragment newInstance(String articleId, int type) {
         Bundle args = new Bundle();
         args.putString(ARTICLE_ID, articleId);
+        args.putInt(Constant.Param.TYPE, type);
         ReviewFragment fragment = new ReviewFragment();
         fragment.setArguments(args);
         return fragment;
@@ -64,6 +80,7 @@ public class ReviewFragment extends BaseFragment {
     protected void initView() {
         if (getArguments() != null) {
             articleId = getArguments().getString(ARTICLE_ID, "");
+            isForum = (getArguments().getInt(Constant.Param.TYPE) == 2);
         }
         unbinder = ButterKnife.bind(this, getView());
 
@@ -107,20 +124,46 @@ public class ReviewFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+
+        ivSort.setVisibility(isForum ? View.VISIBLE : View.GONE);
+
         // 请求评论总数量
         requestCount();
 
-        loadRootFragment(R.id.fl_recycler, mReviewListFragment = ReviewListFragment.newInstance(articleId)
-                .setOnItemClickListener((userName, articleId, parentId, position) -> {
-                    if (UserService.getInstance().checkLoginAndJump()) {
-                        showBottomCommentDialog(userName, articleId, parentId, position);
+        loadRootFragment(R.id.fl_recycler, mReviewListFragment = ReviewListFragment.newInstance(articleId, isForum)
+                .setOnItemClickListener(new ReviewListFragment.OnItemClickListener() {
+                    @Override
+                    public void onClick(String userName, String articleId, String parentId, int position, String reUserId) {
+                        if (UserService.getInstance().checkLoginAndJump()) {
+                            showBottomCommentDialog(userName, articleId, parentId, position, reUserId);
+                        }
+                    }
+
+                    @Override
+                    public void onTotalCommentNumber(int count) {
+                        tvTotal.setText(getResources().getString(R.string.comment_count, totalComment = count));
+                    }
+
+                    @Override
+                    public void onJumpSecondReview(String id, CommentBean parent) {
+                        showSecondReviewDialog(id, parent);
                     }
                 }));
+
+        ivSort.setOnClickListener(v -> {
+            if (mReviewListFragment != null) {
+                mReviewListFragment.setDesc(!mReviewListFragment.isDesc());
+            }
+        });
     }
 
     private void requestCount() {
-        EasyHttp.get(ApiUrl.COMMENT_COUNT)
-                .params("articleId", articleId)
+        HashMap<String, String> hm = new HashMap<>();
+        if (!isForum) {
+            hm.put("articleId", articleId);
+        }
+        EasyHttp.get(isForum ? (ApiUrl.GET_FORUM_DETAIL + articleId + "/comments") : ApiUrl.COMMENT_COUNT)
+                .params(hm)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
@@ -137,6 +180,7 @@ public class ReviewFragment extends BaseFragment {
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                tvTotal.setText("全部评论" + s + "条");
                             }
                         }
                     }
@@ -164,7 +208,7 @@ public class ReviewFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.comment_layout:
                 if (UserService.getInstance().checkLoginAndJump()) {
-                    showBottomCommentDialog("", articleId, "", 0);
+                    showBottomCommentDialog("", articleId, "", 0, "");
                 }
                 break;
             case R.id.iv_back:
@@ -180,20 +224,43 @@ public class ReviewFragment extends BaseFragment {
      * @param articleId
      * @param parentId
      */
-    private void showBottomCommentDialog(String userName, String articleId, String parentId, int position) {
-        showDialog(new BottomCommentDialog().setParams(userName, articleId, parentId, position).setOnPublishListener((isParent, pos, entity) -> {
-            // 更新列表评论
-            if (mReviewListFragment != null) {
-                mReviewListFragment.updateData(isParent, pos, entity);
-            }
-            totalComment += 1;
-            tvTotal.setText(getResources().getString(R.string.comment_count, totalComment));
-        }));
+    private void showBottomCommentDialog(String userName, String articleId, String parentId, int position, String reUserId) {
+        showDialog(new BottomCommentDialog().setParams(userName, articleId, parentId, position)
+                .setForum(isForum)
+                .setReUserId(reUserId)
+                .setOnPublishListener((isParent, pos, entity) -> {
+                    // 更新列表评论
+                    if (mReviewListFragment != null) {
+                        mReviewListFragment.updateData(isParent, pos, entity);
+                    }
+                    totalComment += 1;
+                    tvTotal.setText(getResources().getString(R.string.comment_count, totalComment));
+                }));
     }
 
     public interface OnReviewListener {
         void onDismiss();
 
         void onSlide(float ratio);
+    }
+
+    /**
+     * 初始化二级评论
+     *
+     * @param id
+     */
+    public void showSecondReviewDialog(String id, CommentBean parent) {
+        loadRootFragment(R.id.fl_second_comment, mSecondReviewFragment = SecondReviewFragment.newInstance(id, parent));
+        tvTotal.postDelayed(() -> {
+            showSecondReviewFragment();
+        }, 200);
+    }
+
+    /**
+     * 显示二级评论
+     */
+    public void showSecondReviewFragment() {
+        if (mSecondReviewFragment == null) return;
+        mSecondReviewFragment.showBehavior();
     }
 }

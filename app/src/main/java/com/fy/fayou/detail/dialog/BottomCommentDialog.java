@@ -40,13 +40,16 @@ public class BottomCommentDialog extends BaseDialog {
     private String articleId = "";
     private String parentId = "";
 
+    private boolean isForum;
+    private String reUserId;
+
     private OnPublishListener mListener;
 
     public BottomCommentDialog setParams(String userName, String articleId, String parentId, int position) {
         this.position = position;
         this.userName = userName;
         this.articleId = articleId;
-        if (articleId.equals("0")) {
+        if (articleId != null && articleId.equals("0")) {
             this.articleId = "";
         }
         this.parentId = parentId;
@@ -54,6 +57,16 @@ public class BottomCommentDialog extends BaseDialog {
     }
 
     public BottomCommentDialog() {
+    }
+
+    public BottomCommentDialog setReUserId(String reUserId) {
+        this.reUserId = reUserId;
+        return this;
+    }
+
+    public BottomCommentDialog setForum(boolean forum) {
+        isForum = forum;
+        return this;
     }
 
     @Override
@@ -99,12 +112,15 @@ public class BottomCommentDialog extends BaseDialog {
     private void requestPublishComment() {
         String content = mEtHint.getText().toString().trim();
         HashMap<String, String> params = new HashMap<>();
-        params.put("articleId", articleId);
+        params.put(isForum ? "postId" : "articleId", articleId);
         params.put("content", content);
         params.put("parentId", parentId);
+        if (isForum && !TextUtils.isEmpty(reUserId)) {
+            params.put("reUserId", reUserId);
+        }
         JSONObject jsonObject = new JSONObject(params);
 
-        EasyHttp.post(ApiUrl.PUBLISH_COMMENT)
+        EasyHttp.post(isForum ? ApiUrl.APPEND_FORUM_COMMENT : ApiUrl.PUBLISH_COMMENT)
                 .upJson(jsonObject.toString())
                 .execute(new SimpleCallBack<String>() {
                     @Override

@@ -2,17 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/tv_expand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="84dp"
+        android:drawablePadding="7dp"
         android:paddingBottom="15dp"
         android:text="@string/expand_comment"
         android:textColor="@color/color_ed4040"
         android:textSize="12sp"
         android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_second_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="84dp"
+        android:drawableRight="@mipmap/icon_more_second_comment"
+        android:drawablePadding="7dp"
+        android:paddingBottom="15dp"
+        android:text="共0条回复"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/color_ed4040"
+        android:textSize="12sp"
+        android:visibility="gone"></TextView>
 
 </LinearLayout>

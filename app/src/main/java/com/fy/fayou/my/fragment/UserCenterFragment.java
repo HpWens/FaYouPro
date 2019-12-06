@@ -171,6 +171,9 @@ public class UserCenterFragment extends BaseFragment {
                 .into(ivAvatar);
 
         tvFollow.setText(isFollow ? "已关注" : "+关注");
+
+        tvTopFollow.setBackgroundResource(isFollow ? R.drawable.my_unfollow_round : R.drawable.my_follow_red_round);
+        tvTopFollow.setTextColor(getActivity().getResources().getColor(isFollow ? R.color.color_d2d2d2 : R.color.color_ffffff));
         tvTopFollow.setText(isFollow ? "已关注" : "+关注");
 
         tvTopName.setText(getNonEmpty(user.nickName));
@@ -198,6 +201,9 @@ public class UserCenterFragment extends BaseFragment {
                         isFollow = !isFollow;
 
                         tvFollow.setText(isFollow ? "已关注" : "+关注");
+                        
+                        tvTopFollow.setBackgroundResource(isFollow ? R.drawable.my_unfollow_round : R.drawable.my_follow_red_round);
+                        tvTopFollow.setTextColor(getActivity().getResources().getColor(isFollow ? R.color.color_d2d2d2 : R.color.color_ffffff));
                         tvTopFollow.setText(isFollow ? "已关注" : "+关注");
                     }
                 });

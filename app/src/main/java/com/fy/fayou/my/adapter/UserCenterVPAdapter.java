@@ -22,7 +22,7 @@ public class UserCenterVPAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int i) {
         if (i == 0) {
-            return RecommendFragment.newInstance().setOnScrollClashListener(isScroll -> {
+            return RecommendFragment.newInstance("", false, true).setOnScrollClashListener(isScroll -> {
                 if (mListener != null) mListener.onScroll(isScroll);
             });
         }

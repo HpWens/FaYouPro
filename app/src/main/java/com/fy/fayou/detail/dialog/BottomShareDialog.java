@@ -40,11 +40,18 @@ public class BottomShareDialog extends BaseDialog {
     // 是否隐藏举报栏目
     boolean isGoneReport = false;
 
+    boolean isForumType = false;
+
     OnItemClickListener mListener;
 
     int collectType = ARoute.ARTICLE_TYPE;
 
     public BottomShareDialog() {
+    }
+
+    public BottomShareDialog setForumType(boolean forumType) {
+        isForumType = forumType;
+        return this;
     }
 
     public BottomShareDialog setCollect(boolean collect) {
@@ -108,7 +115,7 @@ public class BottomShareDialog extends BaseDialog {
         });
 
         mIvReport.setOnClickListener(v -> {
-            ARoute.jumpReport(articleId, isReportArticle ? ARoute.REPORT_ARTICLE : ARoute.REPORT_COMMENT);
+            ARoute.jumpReport(articleId, isReportArticle ? ARoute.REPORT_ARTICLE : ARoute.REPORT_COMMENT, isForumType);
         });
 
         mReportLayout.setVisibility(!isGoneReport ? View.VISIBLE : View.GONE);

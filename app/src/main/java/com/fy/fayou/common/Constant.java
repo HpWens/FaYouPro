@@ -212,14 +212,20 @@ public class Constant {
 
         String CATEGORY_ID = "category_id";
 
+        String USER_CENTER = "user_center";
+
+        String VIDEO = "VIDEO";
+
+        String IS_FORUM = "is_forum";
+
+        String BEAN = "bean";
+
         int RESULT_CODE = 200;
 
         int TEMPLATE_FILTER_RESULT = 201;
 
-        String VIDEO = "VIDEO";
-
         int VIDEO_TYPE = 1;
         int ARTICLE_TYPE = 0;
-
+        int FORUM_TYPE = 2;
     }
 }

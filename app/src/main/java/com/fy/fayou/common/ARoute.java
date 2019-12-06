@@ -162,14 +162,19 @@ public class ARoute {
     public static final int REPORT_ARTICLE = 1;
     public static final int REPORT_COMMENT = 2;
 
-    public static void jumpReport(String id, int type) {
+    public static void jumpReport(String id, int type, boolean isForum) {
         if (!UserService.getInstance().checkLoginAndJump()) return;
         String reportType = type == 1 ? "ARTICLE" : "COMMENT";
         ARouter.getInstance()
                 .build(Constant.REPORT)
                 .withString(Constant.Param.ID, id)
+                .withBoolean(Constant.Param.IS_FORUM, isForum)
                 .withString(Constant.Param.TYPE, reportType)
                 .navigation();
+    }
+
+    public static void jumpReport(String id, int type) {
+        jumpReport(id, type, false);
     }
 
     /**
@@ -273,6 +278,20 @@ public class ARoute {
     // 跳转到我的资讯
     public static void jumpMyNews() {
         ARouter.getInstance().build(Constant.NEWS_LIST)
+                .navigation();
+    }
+
+
+    /**
+     * 跳转到帖子详情
+     *
+     * @param id
+     */
+    public static void jumpForumDetail(String id) {
+        ARouter.getInstance()
+                .build(Constant.DETAIL_ARTICLE)
+                .withString(Constant.Param.ARTICLE_ID, id)
+                .withInt(Constant.Param.TYPE, Constant.Param.FORUM_TYPE)
                 .navigation();
     }
 }

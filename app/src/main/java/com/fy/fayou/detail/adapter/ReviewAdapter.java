@@ -31,11 +31,16 @@ public class ReviewAdapter extends BaseMultiAdapter<CommentBean> {
     public static final int TYPE_LEVEL_2 = 2;
 
     private OnClickListener mListener;
+    private String articleId;
+
+    private boolean isForum;
 
     private float rawX, rawY;
 
-    public ReviewAdapter(OnClickListener listener) {
+    public ReviewAdapter(String articleId, boolean isForum, OnClickListener listener) {
         super(new ArrayList<>());
+        this.isForum = isForum;
+        this.articleId = articleId;
         mListener = listener;
         addItemType(TYPE_LEVEL_0, R.layout.item_comment_level0);
         addItemType(TYPE_LEVEL_1, R.layout.item_comment_level1);
@@ -72,7 +77,7 @@ public class ReviewAdapter extends BaseMultiAdapter<CommentBean> {
                         .setText(R.id.tv_time, ParseUtils.getTime(item.createTime));
 
                 ImageView ivPraise = helper.getView(R.id.iv_praise);
-                ivPraise.setSelected(item.give);
+                ivPraise.setSelected(isForum ? item.given : item.give);
                 ivPraise.setOnClickListener(v -> {
                     // 请求点赞
                     mListener.onPraise(v, helper.getAdapterPosition(), item);
@@ -97,7 +102,9 @@ public class ReviewAdapter extends BaseMultiAdapter<CommentBean> {
                 break;
             case TYPE_LEVEL_2:
                 TextView tvExpand = helper.getView(R.id.tv_expand);
-                if (item.laveCommentCount > 0) {
+                helper.setGone(R.id.tv_second_comment, isForum)
+                        .setText(R.id.tv_second_comment, "共" + item.helperChildCount + "条回复");
+                if (!isForum && item.laveCommentCount > 0) {
                     tvExpand.setVisibility(View.VISIBLE);
                     tvExpand.setText(tvExpand.getResources().getString(R.string.expand_comment, item.laveCommentCount));
                 } else {
@@ -109,6 +116,10 @@ public class ReviewAdapter extends BaseMultiAdapter<CommentBean> {
                         List<String> ids = getHelperIds(item.helperId, helper.getAdapterPosition(), item.helperChildCount);
                         mListener.onLoadMoreComment(ids, item.helperId, helper.getAdapterPosition(), item.helperPage);
                     }
+                });
+                helper.getView(R.id.tv_second_comment).setOnClickListener(v -> {
+                    if (mListener != null)
+                        mListener.onJumpSecondComment(item.id, item.helperParent);
                 });
                 break;
             default:
@@ -139,7 +150,11 @@ public class ReviewAdapter extends BaseMultiAdapter<CommentBean> {
     }
 
     private void clickComment(@NonNull BaseViewHolder helper, CommentBean item) {
-        mListener.onComment(item.userName, item.articleId, item.id, helper.getAdapterPosition());
+        if (isForum) {
+            mListener.onComment(item.userName, articleId, item.id, helper.getAdapterPosition(), item.userId);
+        } else {
+            mListener.onComment(item.userName, item.articleId, item.id, helper.getAdapterPosition(), item.userId);
+        }
     }
 
     private void showPop(Context context, View view, CommentBean item, @NonNull BaseViewHolder helper) {
@@ -183,10 +198,10 @@ public class ReviewAdapter extends BaseMultiAdapter<CommentBean> {
             TextView tvReport = contentView.findViewById(R.id.tv_report);
             TextView tvReport2 = contentView.findViewById(R.id.tv_report2);
             tvReport.setOnClickListener(v -> {
-                ARoute.jumpReport(item.id, ARoute.REPORT_COMMENT);
+                ARoute.jumpReport(item.id, ARoute.REPORT_COMMENT, isForum);
             });
             tvReport2.setOnClickListener(v -> {
-                ARoute.jumpReport(item.id, ARoute.REPORT_COMMENT);
+                ARoute.jumpReport(item.id, ARoute.REPORT_COMMENT, isForum);
             });
 
         }
@@ -209,8 +224,18 @@ public class ReviewAdapter extends BaseMultiAdapter<CommentBean> {
     public interface OnClickListener {
         void onPraise(View v, int position, CommentBean comment);
 
-        void onComment(String userName, String articleId, String parentId, int position);
+        /**
+         * @param userName
+         * @param articleId
+         * @param parentId
+         * @param position
+         * @param userId    用于论坛ID
+         */
+        void onComment(String userName, String articleId, String parentId, int position, String userId);
 
         void onLoadMoreComment(List<String> excludeIds, String parentId, int position, int helperPage);
+
+        // 跳转到二级评论
+        void onJumpSecondComment(String parentId, CommentBean parent);
     }
 }

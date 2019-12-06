@@ -169,7 +169,7 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
-                setToolBarCenterTitle(title);
+                setToolBarCenterTitle(type == ARoute.TEMPLATE_TYPE ? "合同详情" : title);
             }
 
             @Override

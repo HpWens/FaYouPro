@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.detail.bean.FooterBean;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.view.flow.FlowLayout;
@@ -33,11 +34,13 @@ public class FooterPresenter extends ItemPresenter<FooterBean> {
     public void convert(BaseViewHolder holder, FooterBean item) {
         holder.setText(R.id.tv_origin, "来源：" + getNonEmpty(item.source))
                 .setText(R.id.tv_author, "原作者：" + getNonEmpty(item.author))
-                .setText(R.id.tv_praise_num, item.gives + "人点赞");
+                .setText(R.id.tv_praise_num, item.gives + "人点赞")
+                .setGone(R.id.source_layout, item.type != Constant.Param.FORUM_TYPE)
+                .setGone(R.id.flow_tag, item.type != Constant.Param.FORUM_TYPE);
 
         LinearLayout priseLayout = holder.getView(R.id.praise_layout);
 
-        if (!isEmpty(item.giveRecords)) {
+        if (!isEmpty(item.giveRecords) && item.type != Constant.Param.FORUM_TYPE) {
             priseLayout.setVisibility(View.VISIBLE);
             CircleImageView firstIv = holder.getView(R.id.iv_avatar_first);
             CircleImageView secondIv = holder.getView(R.id.iv_avatar_second);

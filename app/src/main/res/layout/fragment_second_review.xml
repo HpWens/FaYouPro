@@ -26,19 +26,6 @@
                 android:layout_marginTop="27dp"
                 android:background="@drawable/detail_review_shape">
 
-                <ImageView
-                    android:id="@+id/iv_sort"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/tv_total"
-                    android:layout_alignBottom="@+id/tv_total"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:scaleType="centerInside"
-                    android:src="@mipmap/detail_comment_sort_ic"
-                    android:visibility="gone">
-
-                </ImageView>
 
                 <TextView
                     android:id="@+id/tv_total"
@@ -47,7 +34,7 @@
                     android:layout_centerInParent="true"
                     android:paddingTop="14dp"
                     android:paddingBottom="14dp"
-                    android:text="@string/comment_count"
+                    android:text="评论详情"
                     android:textColor="@color/color_333333"
                     android:textSize="14sp" />
 
@@ -65,10 +52,15 @@
 
             </RelativeLayout>
 
-            <FrameLayout
-                android:id="@+id/fl_recycler"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></FrameLayout>
+                android:layout_height="1px"
+                android:background="@color/color_e5e5e5"></View>
+
+            <include
+                layout="@layout/comm_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></include>
 
         </LinearLayout>
 
@@ -119,7 +111,7 @@
             android:background="@drawable/actionbar_shadow_up" />
 
         <FrameLayout
-            android:id="@+id/fl_second_comment"
+            android:id="@+id/fl_three_comment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></FrameLayout>
 

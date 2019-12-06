@@ -47,18 +47,25 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
 
     private boolean fixedColumn = false;
 
+    private boolean isUserCenter = false;
+
     public static RecommendFragment newInstance() {
         return newInstance("");
     }
 
     public static RecommendFragment newInstance(String categoryId) {
-        return newInstance(categoryId, false);
+        return newInstance(categoryId, false, false);
     }
 
     public static RecommendFragment newInstance(String categoryId, boolean fixedColumn) {
+        return newInstance(categoryId, fixedColumn, false);
+    }
+
+    public static RecommendFragment newInstance(String categoryId, boolean fixedColumn, boolean isUserCenter) {
         Bundle args = new Bundle();
         args.putString(Constant.Param.CATEGORY_ID, categoryId);
         args.putBoolean(Constant.Param.FIXED_COLUMN, fixedColumn);
+        args.putBoolean(Constant.Param.USER_CENTER, isUserCenter);
         RecommendFragment fragment = new RecommendFragment();
         fragment.setArguments(args);
         return fragment;
@@ -77,6 +84,7 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
         if (getArguments() != null) {
             categoryId = getArguments().getString(Constant.Param.CATEGORY_ID, "");
             fixedColumn = getArguments().getBoolean(Constant.Param.FIXED_COLUMN, false);
+            isUserCenter = getArguments().getBoolean(Constant.Param.USER_CENTER, false);
         }
         super.onAttach(activity);
     }
@@ -181,10 +189,15 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
 
     @Override
     protected Observable<Result<List<RecommendEntity>>> getListObservable(int pageNo) {
+        HashMap<String, String> hm = new HashMap<>();
+        hm.put("page", (pageNo - 1) + "");
+        hm.put("size", "20");
+        hm.put("categoryId", categoryId);
+        if (isUserCenter) {
+            hm.put("userId", UserService.getInstance().getUserId());
+        }
         Observable<String> observable = EasyHttp.get(ApiUrl.HOME_ARTICLE)
-                .params("page", (pageNo - 1) + "")
-                .params("size", "20")
-                .params("categoryId", categoryId)
+                .params(hm)
                 .execute(String.class);
         return getListByField(observable, "content", RecommendEntity.class);
     }
