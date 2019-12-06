@@ -40,6 +40,7 @@ import com.fy.fayou.detail.bean.RecommendBean;
 import com.fy.fayou.detail.bean.RecommendHeaderBean;
 import com.fy.fayou.detail.bean.TextBean;
 import com.fy.fayou.detail.dialog.BottomShareDialog;
+import com.fy.fayou.event.ListPraiseEvent;
 import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.event.ReportSuccessEvent;
 import com.fy.fayou.utils.GlideOption;
@@ -54,6 +55,7 @@ import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
@@ -80,6 +82,10 @@ public class ArticleDetailActivity extends BaseActivity {
     // 类型 0 文章 1 视频
     @Autowired(name = "type")
     public int type;
+
+    // 记录列表位置
+    @Autowired(name = "position")
+    public int list_position;
 
     @BindView(R.id.rl_article_navigation)
     RelativeLayout rlArticleNavigation;
@@ -426,6 +432,9 @@ public class ArticleDetailActivity extends BaseActivity {
                         }
                         footer.give = !footer.give;
                         mAdapter.notifyItemChanged(position);
+
+                        // 发送事件改变点赞状态
+                        EventBus.getDefault().post(new ListPraiseEvent(id, list_position, footer.give));
                     }
                 });
     }

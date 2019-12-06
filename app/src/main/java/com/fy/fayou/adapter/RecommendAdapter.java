@@ -66,7 +66,7 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                                 ARoute.jumpH5("http://fayou-h5.zhdfxm.com/myCountry");
                             }
                         } else {
-                            mListener.onClick(v, item);
+                            mListener.onClick(v, helper.getAdapterPosition(), item);
                         }
                     }
                 });
@@ -77,7 +77,8 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
 
                 helper.setText(R.id.tv_name, getNonEmpty(item.fullTitle))
                         .setText(R.id.tv_origin, getNonEmpty(item.source))
-                        .setText(R.id.tv_time, ParseUtils.getTime(item.createTime));
+                        .setText(R.id.tv_time, ParseUtils.getTime(item.createTime))
+                        .setGone(R.id.tv_origin, !TextUtils.isEmpty(item.source));
 
                 ImageView ivThumb = helper.getView(R.id.iv_thumb);
                 if (TextUtils.isEmpty(item.cover)) {
@@ -93,7 +94,7 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                 // 跳转到文章详情页
                 helper.itemView.setOnClickListener(v -> {
                     if (mListener != null) {
-                        mListener.onClick(v, item);
+                        mListener.onClick(v, helper.getAdapterPosition(), item);
                     }
                 });
 
@@ -118,7 +119,7 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                 // 跳转到视频详情页
                 helper.itemView.setOnClickListener(v -> {
                     if (mListener != null) {
-                        mListener.onClick(v, item);
+                        mListener.onClick(v, helper.getAdapterPosition(), item);
                     }
                 });
 
@@ -140,7 +141,7 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
     }
 
     public interface OnItemListener {
-        void onClick(View v, RecommendEntity item);
+        void onClick(View v, int position, RecommendEntity item);
 
         void onPraise(View v, int position, RecommendEntity entity);
     }

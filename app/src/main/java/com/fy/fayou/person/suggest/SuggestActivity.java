@@ -107,7 +107,7 @@ public class SuggestActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(String s) {
-                        RxToast.normal("意见反馈成功");
+                        RxToast.normal("已收到你的意见反馈，法友会因你变得更好");
                         finish();
                     }
                 });

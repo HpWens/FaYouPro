@@ -34,6 +34,7 @@ import com.zhouyou.http.exception.ApiException;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -55,6 +56,8 @@ public class SearchActivity extends BaseActivity {
     FlowAdapter mFlowAdapter;
     AssociateFragment associateFragment;
 
+    private static final int HISTORY_COUNT = 5;
+
     @Override
     protected void initView() {
         ButterKnife.bind(this);
@@ -75,7 +78,12 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void addHeaderView() {
-        List<String> list = UserService.getInstance().getHistorySearch();
+        List<String> list = new ArrayList<>();
+        List<String> historyList = UserService.getInstance().getHistorySearch();
+        int size = historyList.size() >= HISTORY_COUNT ? HISTORY_COUNT : historyList.size();
+        for (int i = 0; i < size; i++) {
+            list.add(historyList.get(i));
+        }
         if (list != null && !list.isEmpty()) {
             if (mAdapter.getHeaderLayoutCount() == 0) {
                 mAdapter.addHeaderView(getHeaderView());

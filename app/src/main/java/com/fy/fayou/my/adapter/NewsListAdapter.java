@@ -47,7 +47,7 @@ public class NewsListAdapter extends MeiBaseAdapter<NewsEntity> {
 
         helper.setGone(R.id.line_view, !TextUtils.isEmpty(item.auditRemark))
                 .setGone(R.id.tv_season, !TextUtils.isEmpty(item.auditRemark))
-                .setText(R.id.tv_season, getNonEmpty(item.auditRemark));
+                .setText(R.id.tv_season, "未通过原因：" + getNonEmpty(item.auditRemark));
 
         ImageView ivCover = helper.getView(R.id.iv_cover);
 

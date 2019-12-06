@@ -119,7 +119,6 @@ public class SecondReviewFragment extends BaseMultiListFragment<CommentBean> {
         super.initData();
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -133,9 +133,14 @@ public class ARoute {
      * @param type
      */
     public static void jumpDetail(String id, String type) {
+        jumpDetail(id, 0, type);
+    }
+
+    public static void jumpDetail(String id, int position, String type) {
         ARouter.getInstance()
                 .build(Constant.DETAIL_ARTICLE)
                 .withString(Constant.Param.ARTICLE_ID, id)
+                .withInt(Constant.Param.POSITION, position)
                 .withInt(Constant.Param.TYPE, type.equals(Constant.Param.VIDEO) ?
                         Constant.Param.VIDEO_TYPE : Constant.Param.ARTICLE_TYPE)
                 .navigation();

@@ -145,6 +145,12 @@ public class PublishMixingHelper {
             if (TextUtils.isEmpty(titleEntity.name)) {
                 if (isHint) Toast.makeText(mContext, "请输入标题", Toast.LENGTH_SHORT).show();
                 return true;
+            } else {
+                if (titleEntity.name.length() > 51) {
+                    if (isHint)
+                        Toast.makeText(mContext, "超出字数限制" + (titleEntity.name.length() - 51) + "个字", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
             }
         }
 
@@ -168,6 +174,7 @@ public class PublishMixingHelper {
             if (isHint) Toast.makeText(mContext, "请输入内容", Toast.LENGTH_SHORT).show();
             return true;
         }
+
 
         return false;
     }

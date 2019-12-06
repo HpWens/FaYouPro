@@ -122,7 +122,8 @@ public class WebViewActivity extends BaseActivity {
 
         if (type == ARoute.TEMPLATE_TYPE) {
             viewTop.setVisibility(View.VISIBLE);
-            if (url.contains(",")) requestDownLoadCount();
+            //if (url.contains(","))
+            requestDownLoadCount();
         }
 
         if (!TextUtils.isEmpty(url)) {

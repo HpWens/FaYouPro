@@ -16,6 +16,7 @@ import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.OnScrollClashListener;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.HomeRefreshEvent;
+import com.fy.fayou.event.ListPraiseEvent;
 import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.view.HomeClashRecyclerView;
 import com.meis.base.mei.adapter.BaseMultiAdapter;
@@ -129,8 +130,8 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
         mAdapter = new RecommendAdapter();
         mAdapter.setOnItemListener(new RecommendAdapter.OnItemListener() {
             @Override
-            public void onClick(View v, RecommendEntity item) {
-                ARoute.jumpDetail(item.id, item.articleType);
+            public void onClick(View v, int position, RecommendEntity item) {
+                ARoute.jumpDetail(item.id, position, item.articleType);
 
                 // 新增浏览记录
                 HashMap<String, String> params = new HashMap<>();
@@ -289,6 +290,22 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
             mRecyclerView.scrollToPosition(0);
         }
         loadPage(DataConstants.FIRST_PAGE);
+    }
+
+    /**
+     * 列表点赞事件
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPraiseEvent(ListPraiseEvent event) {
+        if (mAdapter != null) {
+            if (event.position >= 0 && mAdapter.getData().size() > event.position
+                    && mAdapter.getData().get(event.position).id.equals(event.id)) {
+                mAdapter.getData().get(event.position).give = event.isPraise;
+                mAdapter.notifyItemChanged(event.position);
+            }
+        }
     }
 
 }

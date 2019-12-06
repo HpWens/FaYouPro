@@ -1,5 +1,6 @@
 package com.fy.fayou.detail.adapter;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,7 +37,8 @@ public class FooterPresenter extends ItemPresenter<FooterBean> {
                 .setText(R.id.tv_author, "原作者：" + getNonEmpty(item.author))
                 .setText(R.id.tv_praise_num, item.gives + "人点赞")
                 .setGone(R.id.source_layout, item.type != Constant.Param.FORUM_TYPE)
-                .setGone(R.id.flow_tag, item.type != Constant.Param.FORUM_TYPE);
+                .setGone(R.id.flow_tag, item.type != Constant.Param.FORUM_TYPE)
+                .setGone(R.id.tv_origin, !TextUtils.isEmpty(item.source));
 
         LinearLayout priseLayout = holder.getView(R.id.praise_layout);
 
