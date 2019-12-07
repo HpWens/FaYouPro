@@ -57,58 +57,12 @@
                 android:layout_height="1px"
                 android:background="@color/color_e5e5e5"></View>
 
-            <include
-                layout="@layout/comm_recycler"
+            <FrameLayout
+                android:id="@+id/fl_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></include>
+                android:layout_height="match_parent"></FrameLayout>
 
         </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/comment_layout"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/color_ffffff"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_publish"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/bottom_comment_shape"
-                android:gravity="center_vertical"
-                android:paddingLeft="12dp"
-                android:text="发表评论"
-                android:textColor="@color/color_d2d2d2"
-                android:textSize="14sp"></TextView>
-
-            <TextView
-                android:id="@+id/tv_send"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_vertical"
-                android:text="发布"
-                android:textColor="@color/color_d2d2d2"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/bottom_bar_height"
-            android:background="@drawable/actionbar_shadow_up" />
 
     </RelativeLayout>
 

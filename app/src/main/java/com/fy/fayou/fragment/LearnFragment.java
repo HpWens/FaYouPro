@@ -6,14 +6,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomePuFaVPAdapter;
 import com.fy.fayou.bean.CategoryEntity;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
@@ -126,9 +124,9 @@ public class LearnFragment extends BaseFragment {
                 if (selectedPosition == -1 || mAdapter == null) {
                     return;
                 }
-                ARouter.getInstance().build(Constant.NEWS_PUBLISH)
-                        .withString(Constant.Param.CATEGORY_ID, "" + mAdapter.getTags().get(selectedPosition).id)
-                        .navigation();
+
+                ARoute.jumpPublishNews(mAdapter.getTags().get(selectedPosition).id + "");
+
                 break;
             case R.id.iv_search:
                 ARoute.jumpSearch();

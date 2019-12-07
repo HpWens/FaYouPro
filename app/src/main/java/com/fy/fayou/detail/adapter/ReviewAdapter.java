@@ -153,7 +153,7 @@ public class ReviewAdapter extends BaseMultiAdapter<CommentBean> {
         if (isForum) {
             mListener.onComment(item.userName, articleId, item.id, helper.getAdapterPosition(), item.userId);
         } else {
-            mListener.onComment(item.userName, item.articleId, item.id, helper.getAdapterPosition(), item.userId);
+            mListener.onComment(item.userName, item.articleId, item.id, helper.getAdapterPosition(), "");
         }
     }
 

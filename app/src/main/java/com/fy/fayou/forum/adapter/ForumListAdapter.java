@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.forum.bean.ForumEntity;
 import com.fy.fayou.utils.GlideOption;
 import com.meis.base.mei.adapter.BaseMultiAdapter;
@@ -41,6 +42,10 @@ public class ForumListAdapter extends BaseMultiAdapter<ForumEntity> {
                         .setText(R.id.tv_scan_num, item.clicks + "人看过")
                         .setText(R.id.tv_comment_num, item.comments + "评论")
                         .setText(R.id.tv_praise_num, item.gives + "点赞");
+
+                helper.itemView.setOnClickListener(v -> {
+                    ARoute.jumpForumDetail(item.id);
+                });
                 break;
             case 1:
                 helper.setText(R.id.tv_content, getNonEmpty(item.title));

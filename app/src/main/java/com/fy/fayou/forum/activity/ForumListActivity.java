@@ -14,6 +14,8 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.event.ForumNewTabEvent;
+import com.fy.fayou.event.ForumSuccessEvent;
 import com.fy.fayou.forum.adapter.ForumListVPAdapter;
 import com.fy.fayou.forum.bean.PlateEntity;
 import com.fy.fayou.utils.GlideOption;
@@ -26,6 +28,9 @@ import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -40,6 +45,9 @@ public class ForumListActivity extends BaseActivity {
 
     @Autowired(name = "id")
     public String id = "";
+
+    @Autowired(name = "position")
+    public int position = 0;
 
     public String plateName = "";
 
@@ -80,7 +88,7 @@ public class ForumListActivity extends BaseActivity {
         setRightMoreRes(R.mipmap.forum_publish_black_ic).setLeftBackListener(v -> {
             finish();
         }).setRightMoreListener(v -> {
-
+            ARoute.jumpPublishFromPlateList(id);
         });
     }
 
@@ -143,6 +151,7 @@ public class ForumListActivity extends BaseActivity {
 
         viewpager.setAdapter(mAdapter = new ForumListVPAdapter(getSupportFragmentManager(), id, mTitles, entity.indexPostList));
         tab.setViewPager(viewpager);
+        if (position != 0) tab.setCurrentTab(position);
         mAdapter.setOnScrollClashListener(isScroll -> viewpager.setScroll(isScroll));
     }
 
@@ -189,4 +198,25 @@ public class ForumListActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    public boolean isRegisterEventBus() {
+        return true;
+    }
+
+    /**
+     * 发帖成功
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onForumSuccessEvent(ForumSuccessEvent event) {
+        if (event != null && event.fromType == ARoute.FORM_PLATE_LIST) {
+            if (mAdapter != null && tab != null && tab.getTabCount() > 1) {
+                tab.setCurrentTab(1);
+                EventBus.getDefault().post(new ForumNewTabEvent());
+            }
+        }
+    }
+
 }

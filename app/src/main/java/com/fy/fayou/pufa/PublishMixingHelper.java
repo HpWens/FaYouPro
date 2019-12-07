@@ -142,7 +142,7 @@ public class PublishMixingHelper {
         Object titleObj = mAdapter.getData().get(0);
         if (titleObj instanceof TitleEntity) {
             TitleEntity titleEntity = (TitleEntity) titleObj;
-            if (TextUtils.isEmpty(titleEntity.name)) {
+            if (TextUtils.isEmpty(titleEntity.name) || titleEntity.name.trim().equals("")) {
                 if (isHint) Toast.makeText(mContext, "请输入标题", Toast.LENGTH_SHORT).show();
                 return true;
             } else {

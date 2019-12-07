@@ -58,7 +58,11 @@ public class ParseUtils {
 
     public static <T> List<T> parseListData(String json, Class<T> clazz) {
         Type listType = new ParameterizedTypeImpl(List.class, new Class[]{clazz});
-        return new Gson().fromJson(json, listType);
+        try {
+            return new Gson().fromJson(json, listType);
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
     public static <T> List<T> parseListData(String json, String field, Class<T> clazz) {

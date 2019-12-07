@@ -12,11 +12,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.SearchResultEvent;
 import com.fy.fayou.search.adapter.FlowAdapter;
@@ -43,6 +44,9 @@ import butterknife.ButterKnife;
 @Route(path = "/home/search")
 public class SearchActivity extends BaseActivity {
 
+    @Autowired(name = "is_forum")
+    public boolean isForum = false;
+
     @BindView(R.id.et_search)
     EditText etSearch;
     @BindView(R.id.tv_cancel)
@@ -61,6 +65,7 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void initView() {
         ButterKnife.bind(this);
+        ARouter.getInstance().inject(this);
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
 
         recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -143,9 +148,7 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void jumpSearchResult(String key) {
-        ARouter.getInstance().build(Constant.HOME_RESULT_SEARCH)
-                .withString(Constant.Param.KEYWORD, key)
-                .navigation();
+        ARoute.jumpSearchResult(key, isForum);
 
         // 保存历史记录
         UserService.getInstance().addHistorySearch(key);

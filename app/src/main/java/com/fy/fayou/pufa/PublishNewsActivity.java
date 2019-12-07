@@ -12,9 +12,11 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.ClosePublishNewEvent;
+import com.fy.fayou.event.ForumSuccessEvent;
 import com.fy.fayou.utils.SoftKeyBoardListener;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -23,6 +25,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -37,6 +40,12 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
 
     @Autowired(name = "category_id")
     public String categoryId = "";
+
+    @Autowired(name = "is_forum")
+    public boolean isForum = false;
+
+    @Autowired(name = "type")
+    public int formType = 0;
 
     @BindView(R.id.recycler)
     RecyclerView recycler;
@@ -71,6 +80,10 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
             }
         });
         SoftKeyBoardListener.setOnSoftKeyBoardChangeListener(this, this);
+
+        if (isForum) {
+            tvRight.setText("发帖");
+        }
     }
 
     @Override
@@ -86,6 +99,20 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
                 break;
             case R.id.tv_right:
                 if (!mMixingHelper.isEmpty(true)) {
+
+                    if (isForum) {
+                        KtPublishForumHelper helper = new KtPublishForumHelper();
+                        helper.handlerArrayData(mContext, categoryId, mMixingHelper.getData(), () -> {
+                            Toast.makeText(mContext, "发帖成功", Toast.LENGTH_SHORT).show();
+                            EventBus.getDefault().post(new ForumSuccessEvent(formType));
+                            // 跳转到刑法列表-最新发帖
+                            if (formType != ARoute.FORM_PLATE_LIST) {
+                                ARoute.jumpPlateList(categoryId, 1);
+                            }
+                            finish();
+                        });
+                        return;
+                    }
                     // 保存发布资讯数据
                     UserService.getInstance().savePublishNew(mMixingHelper.getData());
                     ARouter.getInstance().build(Constant.NEWS_PUBLISH_NEXT)

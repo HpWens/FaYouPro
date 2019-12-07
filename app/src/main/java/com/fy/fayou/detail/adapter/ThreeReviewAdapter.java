@@ -27,15 +27,18 @@ public class ThreeReviewAdapter extends MeiBaseAdapter<CommentBean> {
 
     private OnClickListener mListener;
 
-    public ThreeReviewAdapter(OnClickListener listener) {
+    private Context mCtx;
+
+    public ThreeReviewAdapter(Context ctx, OnClickListener listener) {
         super(R.layout.item_comment_level0);
+        mCtx = ctx;
         mListener = listener;
     }
 
     @Override
     protected void convert(@NonNull BaseViewHolder helper, CommentBean item) {
         helper.getView(R.id.tv_content).setOnLongClickListener(v -> {
-                    showPop(mContext, v, item, helper);
+                    showPop(mCtx, v, item, helper);
                     return false;
                 }
         );
@@ -138,7 +141,7 @@ public class ThreeReviewAdapter extends MeiBaseAdapter<CommentBean> {
 
     private void clickComment(@NonNull BaseViewHolder helper, CommentBean item) {
         if (mListener != null) {
-            mListener.onComment(item.userName, item.postId, item.id, helper.getAdapterPosition(), item.userId);
+            mListener.onComment(item.userName, item.postId, helper.getAdapterPosition(), item.userId);
         }
     }
 
@@ -157,10 +160,9 @@ public class ThreeReviewAdapter extends MeiBaseAdapter<CommentBean> {
         /**
          * @param userName
          * @param articleId
-         * @param parentId
          * @param position
          * @param userId    用于论坛ID
          */
-        void onComment(String userName, String articleId, String parentId, int position, String userId);
+        void onComment(String userName, String articleId, int position, String userId);
     }
 }

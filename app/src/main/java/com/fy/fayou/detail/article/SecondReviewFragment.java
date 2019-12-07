@@ -4,41 +4,25 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fy.fayou.R;
-import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
-import com.fy.fayou.detail.adapter.SecondReviewAdapter;
 import com.fy.fayou.detail.bean.CommentBean;
 import com.fy.fayou.detail.dialog.BottomCommentDialog;
-import com.fy.fayou.utils.ParseUtils;
-import com.meis.base.mei.adapter.BaseMultiAdapter;
-import com.meis.base.mei.base.BaseMultiListFragment;
-import com.meis.base.mei.entity.Result;
-import com.meis.base.mei.status.ViewState;
-import com.zhouyou.http.EasyHttp;
-import com.zhouyou.http.callback.SimpleCallBack;
-import com.zhouyou.http.exception.ApiException;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.meis.base.mei.base.BaseFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import io.reactivex.Observable;
 
-public class SecondReviewFragment extends BaseMultiListFragment<CommentBean> {
+public class SecondReviewFragment extends BaseFragment {
 
     private String id;
     private CommentBean parent;
@@ -47,8 +31,6 @@ public class SecondReviewFragment extends BaseMultiListFragment<CommentBean> {
     TextView tvTotal;
     @BindView(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.recycler)
-    RecyclerView recycler;
     @BindView(R.id.tv_publish)
     TextView tvPublish;
     @BindView(R.id.tv_send)
@@ -62,7 +44,8 @@ public class SecondReviewFragment extends BaseMultiListFragment<CommentBean> {
 
     Unbinder unbinder;
     private BottomSheetBehavior mBehavior;
-    private SecondReviewAdapter mAdapter;
+    private ThreeReviewFragment mThreeReviewFragment;
+    private SecondReviewListFragment mSecondReviewListFragment;
 
     public static SecondReviewFragment newInstance(String id, CommentBean bean) {
         Bundle args = new Bundle();
@@ -73,6 +56,7 @@ public class SecondReviewFragment extends BaseMultiListFragment<CommentBean> {
         return fragment;
     }
 
+
     @Override
     protected void initView() {
         unbinder = ButterKnife.bind(this, getView());
@@ -80,7 +64,6 @@ public class SecondReviewFragment extends BaseMultiListFragment<CommentBean> {
             id = getArguments().getString(Constant.Param.ID, "0");
             parent = (CommentBean) getArguments().getSerializable(Constant.Param.BEAN);
         }
-        super.initView();
 
         mBehavior = BottomSheetBehavior.from(behaviorLayout);
         mBehavior.setPeekHeight(0);
@@ -116,7 +99,18 @@ public class SecondReviewFragment extends BaseMultiListFragment<CommentBean> {
 
     @Override
     protected void initData() {
-        super.initData();
+        loadRootFragment(R.id.fl_container, mSecondReviewListFragment = SecondReviewListFragment.newInstance(id, parent)
+                .setOnItemClickListener(new SecondReviewListFragment.OnItemClickListener() {
+                    @Override
+                    public void onClick(String userName, String articleId, String parentId, int position, String reUserId) {
+                        showBottomCommentDialog(userName, articleId, parentId, position, reUserId);
+                    }
+
+                    @Override
+                    public void onJumpThreeReview(String userId, String reUserId) {
+                        showThreeReviewDialog(parent.id, userId, reUserId);
+                    }
+                }));
     }
 
     @Override
@@ -125,61 +119,25 @@ public class SecondReviewFragment extends BaseMultiListFragment<CommentBean> {
         unbinder.unbind();
     }
 
-    @Override
-    protected RecyclerView getRecyclerView() {
-        recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        return recycler;
+
+    /**
+     * 初始化三级评论
+     *
+     * @param parentId
+     */
+    public void showThreeReviewDialog(String parentId, String userId, String reUserId) {
+        loadRootFragment(R.id.fl_three_comment, mThreeReviewFragment = ThreeReviewFragment.newInstance(parentId, reUserId, userId));
+        ivBack.postDelayed(() -> {
+            showThreeReviewFragment();
+        }, 200);
     }
 
-    @Override
-    protected BaseMultiAdapter<CommentBean> getAdapter() {
-        return mAdapter = new SecondReviewAdapter(new ArrayList<>(), new SecondReviewAdapter.OnClickListener() {
-            @Override
-            public void onPraise(View v, int position, CommentBean comment) {
-                if (UserService.getInstance().checkLoginAndJump()) {
-                    requestPraise(comment.id, position, comment);
-                }
-            }
-
-            @Override
-            public void onComment(String userName, String articleId, String parentId, int position, String reUserId) {
-                showBottomCommentDialog(userName, articleId, parentId, position, reUserId);
-            }
-
-            @Override
-            public void onJumpThreeComment(String parentId) {
-
-            }
-        });
-    }
-
-    @Override
-    protected Observable<Result<List<CommentBean>>> getListObservable(int pageNo) {
-        Observable<String> observable = EasyHttp.get(ApiUrl.GET_FORUM_SECOND_COMMENT)
-                .params("parentId", id)
-                .params("page", (pageNo - 1) + "")
-                .params("size", "20")
-                .execute(String.class);
-        return getListByField(observable, "content", CommentBean.class);
-    }
-
-    @Override
-    protected void onDataLoaded(int pageNo, Result<List<CommentBean>> result) {
-        super.onDataLoaded(pageNo, result);
-        if (pageNo == 1) {
-            parent.level = 1;
-            mAdapter.addData(0, parent);
-        }
-    }
-
-    @Override
-    public boolean canLoadMore() {
-        return true;
-    }
-
-    @Override
-    public boolean canPullToRefresh() {
-        return false;
+    /**
+     * 显示三级评论
+     */
+    public void showThreeReviewFragment() {
+        if (mThreeReviewFragment == null) return;
+        mThreeReviewFragment.showBehavior();
     }
 
     @Override
@@ -194,39 +152,12 @@ public class SecondReviewFragment extends BaseMultiListFragment<CommentBean> {
                 hideBehavior();
                 break;
             case R.id.tv_publish:
-                break;
             case R.id.tv_send:
+                if (UserService.getInstance().checkLoginAndJump()) {
+                    showBottomCommentDialog("", parent.postId, id, 0, parent.userId);
+                }
                 break;
         }
-    }
-
-    /**
-     * 请求点赞
-     *
-     * @param id
-     * @param item
-     */
-    private void requestPraise(String id, int position, CommentBean item) {
-        EasyHttp.post(ApiUrl.FORUM_COMMENT_PRAISE + id + "/give")
-                .execute(new SimpleCallBack<String>() {
-                    @Override
-                    public void onError(ApiException e) {
-                        ParseUtils.handlerApiError(e, error -> {
-                            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-                        });
-                    }
-
-                    @Override
-                    public void onSuccess(String s) {
-                        if (item.given) {
-                            item.gives -= 1;
-                        } else {
-                            item.gives += 1;
-                        }
-                        item.given = !item.given;
-                        mAdapter.notifyItemChanged(position);
-                    }
-                });
     }
 
     /**
@@ -242,18 +173,10 @@ public class SecondReviewFragment extends BaseMultiListFragment<CommentBean> {
                 .setReUserId(reUserId)
                 .setOnPublishListener((isParent, pos, entity) -> {
                     // 更新列表评论
-                    updateData(entity);
+                    if (mSecondReviewListFragment != null) {
+                        mSecondReviewListFragment.updateData(entity);
+                    }
                 }));
-    }
-
-    // 更新数据
-    public void updateData(CommentBean entity) {
-        if (mAdapter == null) return;
-        if (mAdapter.getData().isEmpty()) setState(ViewState.COMPLETED);
-        int pos = mAdapter.getData().size() > 0 ? 1 : 0;
-        mAdapter.getData().add(pos, entity);
-        mAdapter.notifyItemInserted(pos);
-        recycler.smoothScrollToPosition(pos);
     }
 
     @Override

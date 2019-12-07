@@ -303,4 +303,18 @@ public class ApiUrl {
 
     //获取评论详情子评列表
     public static final String GET_FORUM_SECOND_COMMENT = "/api-forum/postComment/detailList";
+
+    // 会话列表
+    public static final String GET_FORUM_THREE_COMMENT = "/api-forum/postComment/conversationList";
+
+    // 消息列表-删除
+    public static final String DELETE_MESSAGE = "/message/delete";
+
+    // 发帖
+    public static final String POST_FORUM = "/api-forum/post";
+
+    // 帖子搜索结果
+    public static final String GET_FORUM_SEARCH_RESULT = "/api-searchengines/public/forumpost/getPreviewData";
+
+
 }

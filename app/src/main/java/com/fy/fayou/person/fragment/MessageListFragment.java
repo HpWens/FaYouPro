@@ -13,11 +13,11 @@ import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
 import com.vondear.rxtool.RxImageTool;
-import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
-import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.zhouyou.http.EasyHttp;
+import com.zhouyou.http.callback.SimpleCallBack;
+import com.zhouyou.http.exception.ApiException;
 
 import java.util.List;
 
@@ -49,16 +49,26 @@ public class MessageListFragment extends BaseListFragment<MessageEntity> {
                     .setHeight(RxImageTool.dp2px(70));
             rightMenu.addMenuItem(addItem);
         });
-        recycler.setOnItemMenuClickListener(new OnItemMenuClickListener() {
-            @Override
-            public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
-                menuBridge.closeMenu();
-                // 左侧还是右侧菜单：
-                int direction = menuBridge.getDirection();
-                // 菜单在Item中的Position：
-                int menuPosition = menuBridge.getPosition();
+        recycler.setOnItemMenuClickListener((menuBridge, adapterPosition) -> {
+            menuBridge.closeMenu();
+            // 左侧还是右侧菜单：
+            int direction = menuBridge.getDirection();
+            // 菜单在Item中的Position：
+            int menuPosition = menuBridge.getPosition();
 
-            }
+            EasyHttp.delete(ApiUrl.DELETE_MESSAGE)
+                    .params("messageId", mAdapter.getData().get(adapterPosition).id)
+                    .execute(new SimpleCallBack<String>() {
+                        @Override
+                        public void onError(ApiException e) {
+                        }
+
+                        @Override
+                        public void onSuccess(String s) {
+
+                        }
+                    });
+
         });
         return recycler;
     }

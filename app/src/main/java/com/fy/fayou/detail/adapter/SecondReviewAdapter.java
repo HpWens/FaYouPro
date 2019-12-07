@@ -30,14 +30,17 @@ public class SecondReviewAdapter extends BaseMultiAdapter<CommentBean> {
 
     private OnClickListener mListener;
 
+    private Context mCtx;
+
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
-    public SecondReviewAdapter(List<CommentBean> data, OnClickListener listener) {
+    public SecondReviewAdapter(Context ctx, List<CommentBean> data, OnClickListener listener) {
         super(data);
+        this.mCtx = ctx;
         this.mListener = listener;
         addItemType(1, R.layout.item_second_comment_header);
         addItemType(0, R.layout.item_second_comment);
@@ -48,7 +51,7 @@ public class SecondReviewAdapter extends BaseMultiAdapter<CommentBean> {
         super.convert(helper, item);
 
         helper.getView(R.id.tv_content).setOnLongClickListener(v -> {
-                    showPop(mContext, v, item, helper);
+                    showPop(mCtx, v, item, helper);
                     return false;
                 }
         );
@@ -96,10 +99,10 @@ public class SecondReviewAdapter extends BaseMultiAdapter<CommentBean> {
             helper.setText(R.id.tv_rename, getNonEmpty(item.reUserName))
                     .setGone(R.id.tv_rename, !TextUtils.isEmpty(item.reUserName))
                     .setGone(R.id.tv_reply, !TextUtils.isEmpty(item.reUserName))
-                    .setGone(R.id.tv_scan, item.comments > 0);
+                    .setGone(R.id.tv_scan, isVisibleScan(item.reUserId));
 
             helper.getView(R.id.tv_scan).setOnClickListener(v -> {
-                mListener.onJumpThreeComment(item.id);
+                mListener.onJumpThreeComment(item.userId, item.reUserId);
             });
         }
 
@@ -107,6 +110,16 @@ public class SecondReviewAdapter extends BaseMultiAdapter<CommentBean> {
             helper.setText(R.id.tv_count, "相关回复共" + item.comments + "条");
         }
 
+    }
+
+    private boolean isVisibleScan(String reUserId) {
+        if (TextUtils.isEmpty(reUserId)) return false;
+        if (getData().size() > 0) {
+            if (!getData().get(0).userId.equals(reUserId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void showPop(Context context, View view, CommentBean item, @NonNull BaseViewHolder helper) {
@@ -166,7 +179,7 @@ public class SecondReviewAdapter extends BaseMultiAdapter<CommentBean> {
 
     private void clickComment(@NonNull BaseViewHolder helper, CommentBean item) {
         if (mListener != null) {
-            mListener.onComment(item.userName, item.postId, item.id, helper.getAdapterPosition(), item.userId);
+            mListener.onComment(item.userName, helper.getAdapterPosition(), item.userId);
         }
     }
 
@@ -184,15 +197,13 @@ public class SecondReviewAdapter extends BaseMultiAdapter<CommentBean> {
 
         /**
          * @param userName
-         * @param articleId
-         * @param parentId
          * @param position
-         * @param userId    用于论坛ID
+         * @param userId   用于论坛ID
          */
-        void onComment(String userName, String articleId, String parentId, int position, String userId);
+        void onComment(String userName, int position, String userId);
 
 
-        // 跳转到二级评论
-        void onJumpThreeComment(String parentId);
+        // 跳转到三级评论
+        void onJumpThreeComment(String userId, String reUserId);
     }
 }

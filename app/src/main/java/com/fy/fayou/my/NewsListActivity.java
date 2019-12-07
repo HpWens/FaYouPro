@@ -11,6 +11,7 @@ import com.fy.fayou.my.adapter.NewsListVPAdapter;
 import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseActivity;
+import com.meis.base.mei.status.ViewState;
 import com.meis.base.mei.utils.Eyes;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
@@ -45,8 +46,8 @@ public class NewsListActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        setState(ViewState.EMPTY);
         requestStatus();
-
     }
 
     private void requestStatus() {
@@ -66,6 +67,8 @@ public class NewsListActivity extends BaseActivity {
                                 entity.num = 0;
                                 entity.auditStatus = "ALL";
                                 list.add(0, entity);
+
+                                setState(ViewState.COMPLETED);
                             }
                             viewpager.setAdapter(mAdapter = new NewsListVPAdapter(getSupportFragmentManager(), list, NewsListVPAdapter.NEWS_TYPE));
                             tab.setViewPager(viewpager);

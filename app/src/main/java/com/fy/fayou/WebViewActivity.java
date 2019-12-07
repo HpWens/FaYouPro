@@ -467,7 +467,7 @@ public class WebViewActivity extends BaseActivity {
             List<LawBean> list = new ArrayList<>();
             if (bean.lawsUrl != null && !bean.lawsUrl.isEmpty()) {
                 LawBean lawBean = new LawBean();
-                lawBean.name = "法条";
+                lawBean.name = "法律法规";
                 list.add(lawBean);
 
                 for (LawBean lb : bean.lawsUrl) {
@@ -476,7 +476,7 @@ public class WebViewActivity extends BaseActivity {
                     lawBean.name = lb.name;
                     lawBean.itemType = 1;
                     lawBean.url = lb.url;
-                    lawBean.id = TextUtils.isEmpty(lb.url) ? "" : lb.url.substring(lb.url.lastIndexOf("/"));
+                    lawBean.id = TextUtils.isEmpty(lb.url) ? "" : lb.url.substring(lb.url.lastIndexOf("/") + 1);
                     list.add(lawBean);
                 }
             }

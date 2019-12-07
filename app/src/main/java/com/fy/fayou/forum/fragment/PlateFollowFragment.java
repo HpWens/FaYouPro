@@ -3,6 +3,7 @@ package com.fy.fayou.forum.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 
 import com.fy.fayou.R;
@@ -56,6 +57,7 @@ public class PlateFollowFragment extends BaseListFragment<PlateEntity> {
     protected RecyclerView getRecyclerView() {
         mRecyclerView = findViewById(R.id.recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         return mRecyclerView;
     }
 

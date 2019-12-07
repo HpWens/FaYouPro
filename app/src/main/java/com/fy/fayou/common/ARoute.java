@@ -186,7 +186,25 @@ public class ARoute {
      * 跳转到搜索页
      */
     public static void jumpSearch() {
-        ARouter.getInstance().build(Constant.HOME_SEARCH).navigation();
+        jumpSearch(false);
+    }
+
+    public static void jumpSearch(boolean isForum) {
+        ARouter.getInstance()
+                .build(Constant.HOME_SEARCH)
+                .withBoolean(Constant.Param.IS_FORUM, isForum)
+                .navigation();
+    }
+
+    /**
+     * @param keyword
+     * @param isForum
+     */
+    public static void jumpSearchResult(String keyword, boolean isForum) {
+        ARouter.getInstance().build(Constant.HOME_RESULT_SEARCH)
+                .withString(Constant.Param.KEYWORD, keyword)
+                .withBoolean(Constant.Param.IS_FORUM, isForum)
+                .navigation();
     }
 
     /**
@@ -253,9 +271,14 @@ public class ARoute {
      * @param id
      */
     public static void jumpPlateList(String id) {
+        jumpPlateList(id, 0);
+    }
+
+    public static void jumpPlateList(String id, int tabPos) {
         ARouter.getInstance()
                 .build(Constant.FORUM_LIST)
                 .withString(Constant.Param.ID, id)
+                .withInt(Constant.Param.POSITION, tabPos)
                 .navigation();
     }
 
@@ -297,6 +320,39 @@ public class ARoute {
                 .build(Constant.DETAIL_ARTICLE)
                 .withString(Constant.Param.ARTICLE_ID, id)
                 .withInt(Constant.Param.TYPE, Constant.Param.FORUM_TYPE)
+                .navigation();
+    }
+
+    /**
+     * @param categoryId 栏目ID
+     */
+    public static void jumpPublishNews(String categoryId) {
+        ARouter.getInstance().build(Constant.NEWS_PUBLISH)
+                .withString(Constant.Param.CATEGORY_ID, categoryId)
+                .navigation();
+    }
+
+    /**
+     * @param boardId  板块ID
+     * @param formType 入口类型 默认0 论坛首页  1 板块列表
+     */
+
+    public static final int FORM_FORUM_HOME = 0;
+    public static final int FORM_PLATE_LIST = 1;
+
+    public static void jumpPublishFromForumHome(String boardId) {
+        jumpPublishForum(boardId, FORM_FORUM_HOME);
+    }
+
+    public static void jumpPublishFromPlateList(String boardId) {
+        jumpPublishForum(boardId, FORM_PLATE_LIST);
+    }
+
+    public static void jumpPublishForum(String boardId, int formType) {
+        ARouter.getInstance().build(Constant.NEWS_PUBLISH)
+                .withString(Constant.Param.CATEGORY_ID, boardId)
+                .withBoolean(Constant.Param.IS_FORUM, true)
+                .withInt(Constant.Param.TYPE, formType)
                 .navigation();
     }
 }

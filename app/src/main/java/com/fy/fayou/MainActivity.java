@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.ExitLoginEvent;
@@ -116,10 +115,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        ARouter.getInstance()
-                .build(Constant.DETAIL_ARTICLE)
-                .withString(Constant.Param.ARTICLE_ID, "110328945139777536")
-                .navigation();
+//        ARouter.getInstance()
+//                .build(Constant.DETAIL_ARTICLE)
+//                .withString(Constant.Param.ARTICLE_ID, "110328945139777536")
+//                .navigation();
     }
 
 

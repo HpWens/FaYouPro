@@ -8,13 +8,18 @@ import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.OnScrollClashListener;
+import com.fy.fayou.event.ForumNewTabEvent;
 import com.fy.fayou.forum.adapter.ForumListAdapter;
 import com.fy.fayou.forum.bean.ForumEntity;
 import com.fy.fayou.view.HomeClashRecyclerView;
 import com.meis.base.mei.adapter.BaseMultiAdapter;
 import com.meis.base.mei.base.BaseMultiListFragment;
+import com.meis.base.mei.constant.DataConstants;
 import com.meis.base.mei.entity.Result;
 import com.zhouyou.http.EasyHttp;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +65,7 @@ public class ForumListFragment extends BaseMultiListFragment<ForumEntity> {
     protected RecyclerView getRecyclerView() {
         mRecyclerView = findViewById(R.id.recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         return mRecyclerView;
     }
 
@@ -113,4 +119,23 @@ public class ForumListFragment extends BaseMultiListFragment<ForumEntity> {
     protected boolean loadOnShow() {
         return false;
     }
+
+    @Override
+    public boolean isRegisterEventBus() {
+        return true;
+    }
+
+    /**
+     * 发帖成功
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onForumNewTabEvent(ForumNewTabEvent event) {
+        if (event != null && mTabPosition == 1 && mAdapter != null) {
+            mRecyclerView.scrollToPosition(0);
+            loadPage(DataConstants.FIRST_PAGE);
+        }
+    }
+
 }

@@ -81,14 +81,16 @@ public class MarkDownParser {
 
         String[] array;
 
-        if (json.contains("\n")) {
-            array = json.split("\n");
-        } else {
-            array = json.split(" ");
-        }
+//         if (json.contains("\n")) {
+//             array = json.split("\n");
+//         } else {
+//             array = json.split(" ");
+//         }
+
+        array = json.split("\n");
 
         for (String str : array) {
-            if(!TextUtils.isEmpty(str)){
+            if (!TextUtils.isEmpty(str)) {
                 mdList.add(str);
             }
         }

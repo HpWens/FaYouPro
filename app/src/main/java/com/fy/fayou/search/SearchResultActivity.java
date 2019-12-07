@@ -44,6 +44,9 @@ public class SearchResultActivity extends BaseActivity {
     @Autowired
     public String keyword = "";
 
+    @Autowired(name = "is_forum")
+    public boolean isForum = false;
+
     @BindView(R.id.et_search)
     TextView tVSearch;
     @BindView(R.id.tv_cancel)
@@ -98,7 +101,7 @@ public class SearchResultActivity extends BaseActivity {
     }
 
     private void requestResult() {
-        EasyHttp.get(ApiUrl.GET_SEARCH_RESULT)
+        EasyHttp.get(isForum ? ApiUrl.GET_FORUM_SEARCH_RESULT : ApiUrl.GET_SEARCH_RESULT)
                 .params("keyword", keyword)
                 .params("userId", UserService.getInstance().getUserId())
                 .execute(new SimpleCallBack<String>() {

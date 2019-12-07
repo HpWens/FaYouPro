@@ -14,15 +14,18 @@ public class UserCenterVPAdapter extends FragmentPagerAdapter {
 
     private OnScrollClashListener mListener;
 
-    public UserCenterVPAdapter(FragmentManager fm, String[] titles) {
+    private String mUserId;
+
+    public UserCenterVPAdapter(FragmentManager fm, String[] titles, String userId) {
         super(fm);
+        this.mUserId = userId;
         this.mTitles = titles;
     }
 
     @Override
     public Fragment getItem(int i) {
         if (i == 0) {
-            return RecommendFragment.newInstance("", false, true).setOnScrollClashListener(isScroll -> {
+            return RecommendFragment.newInstance("", false, true, mUserId).setOnScrollClashListener(isScroll -> {
                 if (mListener != null) mListener.onScroll(isScroll);
             });
         }

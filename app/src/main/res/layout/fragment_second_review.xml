@@ -57,10 +57,10 @@
                 android:layout_height="1px"
                 android:background="@color/color_e5e5e5"></View>
 
-            <include
-                layout="@layout/comm_recycler"
+            <FrameLayout
+                android:id="@+id/fl_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></include>
+                android:layout_height="match_parent"></FrameLayout>
 
         </LinearLayout>
 

@@ -50,23 +50,26 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
 
     private boolean isUserCenter = false;
 
+    private String userId = "";
+
     public static RecommendFragment newInstance() {
         return newInstance("");
     }
 
     public static RecommendFragment newInstance(String categoryId) {
-        return newInstance(categoryId, false, false);
+        return newInstance(categoryId, false, false, "");
     }
 
     public static RecommendFragment newInstance(String categoryId, boolean fixedColumn) {
-        return newInstance(categoryId, fixedColumn, false);
+        return newInstance(categoryId, fixedColumn, false, "");
     }
 
-    public static RecommendFragment newInstance(String categoryId, boolean fixedColumn, boolean isUserCenter) {
+    public static RecommendFragment newInstance(String categoryId, boolean fixedColumn, boolean isUserCenter, String userId) {
         Bundle args = new Bundle();
         args.putString(Constant.Param.CATEGORY_ID, categoryId);
         args.putBoolean(Constant.Param.FIXED_COLUMN, fixedColumn);
         args.putBoolean(Constant.Param.USER_CENTER, isUserCenter);
+        args.putString(Constant.Param.USER_ID, userId);
         RecommendFragment fragment = new RecommendFragment();
         fragment.setArguments(args);
         return fragment;
@@ -86,6 +89,7 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
             categoryId = getArguments().getString(Constant.Param.CATEGORY_ID, "");
             fixedColumn = getArguments().getBoolean(Constant.Param.FIXED_COLUMN, false);
             isUserCenter = getArguments().getBoolean(Constant.Param.USER_CENTER, false);
+            userId = getArguments().getString(Constant.Param.USER_ID, "0");
         }
         super.onAttach(activity);
     }
@@ -195,7 +199,7 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
         hm.put("size", "20");
         hm.put("categoryId", categoryId);
         if (isUserCenter) {
-            hm.put("userId", UserService.getInstance().getUserId());
+            hm.put("userId", userId);
         }
         Observable<String> observable = EasyHttp.get(ApiUrl.HOME_ARTICLE)
                 .params(hm)

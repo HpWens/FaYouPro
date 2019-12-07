@@ -5,7 +5,9 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.event.ForumSuccessEvent;
 import com.fy.fayou.forum.bean.PlateEntity;
 import com.fy.fayou.forum.fragment.MenuContentFragment;
 import com.fy.fayou.forum.fragment.MenuFragment;
@@ -16,6 +18,9 @@ import com.meis.base.mei.utils.Eyes;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +37,8 @@ public class SelectPlateActivity extends BaseActivity {
     @BindView(R.id.tv_plate)
     TextView tvPlate;
 
+    private String boardId = "";
+
     @Override
     protected void initView() {
         ButterKnife.bind(this);
@@ -39,7 +46,9 @@ public class SelectPlateActivity extends BaseActivity {
         setToolBarCenterTitle("选择板块").setLeftBackListener(v -> {
             finish();
         }).setRightTextListener(v -> {
-
+            if (!TextUtils.isEmpty(boardId)) {
+                ARoute.jumpPublishFromForumHome(boardId);
+            }
         }, "下一步");
         getToolbarRightTextView().setTextColor(getResources().getColor(R.color.color_8f_ed4040));
     }
@@ -91,9 +100,30 @@ public class SelectPlateActivity extends BaseActivity {
         if (null != selectedArray) {
             if (selectedArray.isEmpty()) {
                 tvPlate.setText("");
+                boardId = "";
+                getToolbarRightTextView().setTextColor(getResources().getColor(R.color.color_8f_ed4040));
             } else {
                 tvPlate.setText(selectedArray.get(0).name);
+                boardId = selectedArray.get(0).id;
+                getToolbarRightTextView().setTextColor(getResources().getColor(R.color.color_ed4040));
             }
+        }
+    }
+
+    @Override
+    public boolean isRegisterEventBus() {
+        return true;
+    }
+
+    /**
+     * 发帖成功
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onForumSuccessEvent(ForumSuccessEvent event) {
+        if (event != null) {
+            finish();
         }
     }
 }

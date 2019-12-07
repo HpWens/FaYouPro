@@ -76,7 +76,7 @@ public class ForumFragment extends BaseFragment {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_search:
-                ARoute.jumpSearch();
+                ARoute.jumpSearch(true);
                 break;
             case R.id.iv_publish:
                 ARoute.jumpPlateSelect();

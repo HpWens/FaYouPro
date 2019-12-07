@@ -11,6 +11,7 @@ import com.fy.fayou.my.adapter.NewsListVPAdapter;
 import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseActivity;
+import com.meis.base.mei.status.ViewState;
 import com.meis.base.mei.utils.Eyes;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
@@ -41,6 +42,7 @@ public class HistoryActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        setState(ViewState.EMPTY);
         // 请求栏目分类
         requestCategoryTag();
     }
@@ -62,6 +64,7 @@ public class HistoryActivity extends BaseActivity {
                             List<CategoryEntity> list = ParseUtils.parseListData(s, CategoryEntity.class);
                             viewpager.setAdapter(mAdapter = new NewsListVPAdapter(getSupportFragmentManager(), list, NewsListVPAdapter.HISTORY_TYPE));
                             tab.setViewPager(viewpager);
+                            if (!list.isEmpty()) setState(ViewState.COMPLETED);
                         }
                     }
                 });
