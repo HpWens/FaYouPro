@@ -10,6 +10,8 @@ import android.view.View;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
+import com.fy.fayou.event.LoginSuccessOrExitEvent;
+import com.fy.fayou.event.RefreshFollowPlateEvent;
 import com.fy.fayou.forum.adapter.FollowAdapter;
 import com.fy.fayou.forum.adapter.PlateAdapter;
 import com.fy.fayou.forum.bean.ForumEntity;
@@ -17,11 +19,15 @@ import com.fy.fayou.forum.bean.PlateEntity;
 import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
+import com.meis.base.mei.constant.DataConstants;
 import com.meis.base.mei.entity.Result;
 import com.meis.base.mei.status.ViewState;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -112,6 +118,12 @@ public class FollowFragment extends BaseListFragment<ForumEntity> {
 //        mPlateAdapter.setOnLoadMoreListener(() -> {
 //        }, recyclerView);
 
+        requestHeaderData();
+
+        return header;
+    }
+
+    private void requestHeaderData() {
         EasyHttp.get(ApiUrl.FORUM_MY_FOLLOW)
                 .params("parentId", "-1")
                 .params("page", "0")
@@ -136,8 +148,33 @@ public class FollowFragment extends BaseListFragment<ForumEntity> {
                         }
                     }
                 });
+    }
 
-        return header;
+    @Override
+    public boolean isRegisterEventBus() {
+        return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoginSuccessEvent(LoginSuccessOrExitEvent event) {
+        // 登陆成功后刷新-关注tab
+        if (mAdapter != null && !mIsRecommendColumn) {
+            requestHeaderData();
+            loadPage(DataConstants.FIRST_PAGE);
+        }
+    }
+
+    /**
+     * 刷新关注的板块
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefreshFollowPlateEvent(RefreshFollowPlateEvent event) {
+        // 登陆成功后刷新-关注tab
+        if (mPlateAdapter != null && !mIsRecommendColumn) {
+            requestHeaderData();
+        }
     }
 
 }

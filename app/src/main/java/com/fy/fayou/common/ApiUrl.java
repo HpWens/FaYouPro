@@ -316,5 +316,21 @@ public class ApiUrl {
     // 帖子搜索结果
     public static final String GET_FORUM_SEARCH_RESULT = "/api-searchengines/public/forumpost/getPreviewData";
 
+    // 更多板块
+    public static final String GET_MORE_BOARD = "/api-forum/board/keyword";
+
+    // 搜索 更多帖子
+    public static final String GET_MORE_POST = "/api-searchengines/public/forumpost/search";
+
+    // 搜索 更多帖子
+    public static final String GET_MORE_POST_MORE = "  /api-searchengines/public/forumpost/loadMore";
+
+
+    // 我的帖子
+    public static final String GET_MY_POST = "/api-forum/post/mine";
+
+
+    // 用户帖子
+    public static final String GET_USER_POST = "/api-forum/post/others";
 
 }

@@ -1,6 +1,7 @@
 package com.fy.fayou.fragment;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -8,6 +9,7 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomeForumVPAdapter;
 import com.fy.fayou.common.ARoute;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.forum.bean.PlateEntity;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseFragment;
@@ -59,6 +61,26 @@ public class ForumFragment extends BaseFragment {
 
         viewpager.setAdapter(mAdapter = new HomeForumVPAdapter(getChildFragmentManager(), mCategoryEntities));
         tab.setViewPager(viewpager);
+
+        // 跳转到关注TAB登陆验证
+        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (i == 0) {
+                    UserService.getInstance().checkLoginAndJump();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
     }
 
     @Override
@@ -70,6 +92,15 @@ public class ForumFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!UserService.getInstance().isLogin()) {
+            // 未登录显示推荐
+            tab.setCurrentTab(1);
+        }
     }
 
     @OnClick({R.id.iv_search, R.id.iv_publish})

@@ -7,6 +7,7 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.forum.adapter.PlateFollowAdapter;
@@ -71,7 +72,7 @@ public class PlateFollowFragment extends BaseListFragment<PlateEntity> {
 
             @Override
             public void onItem(View view, PlateEntity item) {
-
+                ARoute.jumpPlateList(item.id);
             }
         });
         return mAdapter;

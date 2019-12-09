@@ -20,4 +20,8 @@ public class SearchEntity implements Serializable {
     public String logo;
     public List<SearchResultEntity> data;
 
+    // 帖子
+    public List<SearchResultEntity> forumPostListAOList;
+    public List<SearchResultEntity> forumBoardListAOList;
+
 }

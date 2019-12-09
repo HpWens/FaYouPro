@@ -3,15 +3,18 @@ package com.fy.fayou.search;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.SearchResultEvent;
 import com.fy.fayou.search.adapter.ResultAdapter;
 import com.fy.fayou.search.bean.ColumnEntity;
@@ -23,8 +26,8 @@ import com.fy.fayou.search.result.MenuListFragment;
 import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.base.BaseFragment;
-import com.meis.base.mei.status.ViewState;
 import com.meis.base.mei.utils.Eyes;
+import com.vondear.rxtool.RxDeviceTool;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
@@ -55,6 +58,10 @@ public class SearchResultActivity extends BaseActivity {
     ImageView ivClose;
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
+    @BindView(R.id.loading_layout)
+    LinearLayout mLoadingLayout;
+    @BindView(R.id.empty_layout)
+    FrameLayout mEmptyLayout;
 
     ResultAdapter adapter;
     List<SearchResultEntity> list = new ArrayList<>();
@@ -96,78 +103,142 @@ public class SearchResultActivity extends BaseActivity {
         adapter.setOnLoadMoreListener(() -> {
         }, recyclerView);
 
-        setState(ViewState.LOADING);
+        mLoadingLayout.setVisibility(View.VISIBLE);
         requestResult();
     }
 
     private void requestResult() {
         EasyHttp.get(isForum ? ApiUrl.GET_FORUM_SEARCH_RESULT : ApiUrl.GET_SEARCH_RESULT)
                 .params("keyword", keyword)
-                .params("userId", UserService.getInstance().getUserId())
+                .params("userId", RxDeviceTool.getDeviceIdIMEI(mContext))
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
-                        setState(ViewState.COMPLETED);
+                        mLoadingLayout.setVisibility(View.GONE);
+                        mEmptyLayout.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
-                            List<SearchEntity> data = ParseUtils.parseListData(s, SearchEntity.class);
-                            list.clear();
-                            int index = 0;
-                            for (SearchEntity entity : data) {
-                                SearchResultEntity resultEntity = new SearchResultEntity();
-                                resultEntity.name = entity.name;
-                                resultEntity.columnType = entity.type;
-                                if (null != resultEntity.name && resultEntity.name.contains("小"))
-                                    resultEntity.columnType = 7;
-                                resultEntity.logo = entity.logo;
-                                resultEntity.itemType = 1;
-                                resultEntity.headerIndex = index;
 
-                                if (entity.data != null && !entity.data.isEmpty()) {
-                                    list.add(resultEntity);
-                                    // 热门视频 小视频
-                                    if (entity.type == 6) {
-                                        SearchResultEntity videoEntity = new SearchResultEntity();
-                                        videoEntity.videoList = entity.data;
-                                        videoEntity.itemType = 4;
-                                        list.add(videoEntity);
-                                    } else {
-                                        // 新闻资讯
-                                        if (entity.type == 5) {
-                                            for (SearchResultEntity sre : entity.data) {
-                                                sre.itemType = 3;
-                                                list.add(sre);
-                                            }
-                                        }
-                                        // 合同
-                                        else if (entity.type == 4) {
-                                            for (int i = 0; i < entity.data.size(); i++) {
-                                                SearchResultEntity sre = entity.data.get(i);
-                                                sre.itemType = 2;
-                                                sre.childIndex = i;
-                                                sre.isLastChild = (i == entity.data.size() - 1);
-                                                list.add(sre);
-                                            }
-                                        } else {
-                                            for (SearchResultEntity sre : entity.data) {
-                                                sre.columnType = entity.type;
-                                                list.add(sre);
-                                            }
-                                        }
-                                    }
-                                }
-
-                                index++;
+                            if (isForum) {
+                                handlerForumData(s);
+                            } else {
+                                handlerModuleData(s);
                             }
+
                             adapter.setNewData(list);
                             adapter.loadMoreEnd();
-                            setState(ViewState.COMPLETED);
+
+                            mLoadingLayout.setVisibility(View.GONE);
+
+                            if (list.isEmpty()) {
+                                mEmptyLayout.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 });
+    }
+
+    /**
+     * @param s
+     */
+    private void handlerForumData(String s) {
+        SearchEntity entity = ParseUtils.parseData(s, SearchEntity.class);
+        list.clear();
+        if (entity != null) {
+            // 板块
+            if (entity.forumBoardListAOList != null && !entity.forumBoardListAOList.isEmpty()) {
+                SearchResultEntity resultEntity = new SearchResultEntity();
+                resultEntity.name = "板块";
+                resultEntity.itemType = ResultAdapter.TYPE_HEADER;
+                resultEntity.columnType = ARoute.BOARD_TYPE;
+
+                list.add(resultEntity);
+
+                for (int i = 0; i < entity.forumBoardListAOList.size(); i++) {
+                    SearchResultEntity search = entity.forumBoardListAOList.get(i);
+                    search.itemType = ResultAdapter.TYPE_ITEM_BOARD;
+                    search.isLastChild = (i == entity.forumBoardListAOList.size() - 1);
+                    list.add(search);
+                }
+
+            }
+
+            // 帖子
+            if (entity.forumPostListAOList != null && !entity.forumPostListAOList.isEmpty()) {
+
+                SearchResultEntity resultEntity = new SearchResultEntity();
+                resultEntity.name = "帖子";
+                resultEntity.headerIndex = 1;
+                resultEntity.itemType = ResultAdapter.TYPE_HEADER;
+                resultEntity.columnType = ARoute.POST_TYPE;
+
+                list.add(resultEntity);
+
+                for (SearchResultEntity search : entity.forumPostListAOList) {
+                    search.itemType = ResultAdapter.TYPE_ITEM_POST;
+                    list.add(search);
+                }
+            }
+        }
+    }
+
+    /**
+     * 处理六大模块数据
+     *
+     * @param s
+     */
+    private void handlerModuleData(String s) {
+        List<SearchEntity> data = ParseUtils.parseListData(s, SearchEntity.class);
+        list.clear();
+        int index = 0;
+        for (SearchEntity entity : data) {
+            SearchResultEntity resultEntity = new SearchResultEntity();
+            resultEntity.name = entity.name;
+            resultEntity.columnType = entity.type;
+            if (null != resultEntity.name && resultEntity.name.contains("小"))
+                resultEntity.columnType = 7;
+            resultEntity.logo = entity.logo;
+            resultEntity.itemType = 1;
+            resultEntity.headerIndex = index;
+
+            if (entity.data != null && !entity.data.isEmpty()) {
+                list.add(resultEntity);
+                // 热门视频 小视频
+                if (entity.type == 6) {
+                    SearchResultEntity videoEntity = new SearchResultEntity();
+                    videoEntity.videoList = entity.data;
+                    videoEntity.itemType = 4;
+                    list.add(videoEntity);
+                } else {
+                    // 新闻资讯
+                    if (entity.type == 5) {
+                        for (SearchResultEntity sre : entity.data) {
+                            sre.itemType = 3;
+                            list.add(sre);
+                        }
+                    }
+                    // 合同
+                    else if (entity.type == 4) {
+                        for (int i = 0; i < entity.data.size(); i++) {
+                            SearchResultEntity sre = entity.data.get(i);
+                            sre.itemType = 2;
+                            sre.childIndex = i;
+                            sre.isLastChild = (i == entity.data.size() - 1);
+                            list.add(sre);
+                        }
+                    } else {
+                        for (SearchResultEntity sre : entity.data) {
+                            sre.columnType = entity.type;
+                            list.add(sre);
+                        }
+                    }
+                }
+            }
+            index++;
+        }
     }
 
     @Override

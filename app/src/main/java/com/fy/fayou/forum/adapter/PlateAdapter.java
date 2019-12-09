@@ -13,6 +13,7 @@ import com.meis.base.mei.adapter.MeiBaseAdapter;
 
 public class PlateAdapter extends MeiBaseAdapter<PlateEntity> {
 
+
     public PlateAdapter() {
         super(R.layout.item_forum_home_plate);
     }

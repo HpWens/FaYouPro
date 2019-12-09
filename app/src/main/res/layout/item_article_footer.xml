@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
-            android:text="5012个点赞"
+            android:text="0个点赞"
             android:textColor="@color/color_b2b2b2"
             android:textSize="12sp"></TextView>
 

@@ -24,7 +24,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginLeft="15dp"
-        android:src="@mipmap/personal_header_bg"
+        android:src="@mipmap/ic_avatar_default"
         app:civ_border_color="@color/color_d2d2d2"
         app:civ_border_width="3dp"
         app:layout_constraintBottom_toBottomOf="@+id/header_bg"

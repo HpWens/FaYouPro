@@ -144,6 +144,10 @@ public class Constant {
     // 明星板块
     public static final String STAR_PLATE = "/star/plate";
 
+    // 更多板块 更多帖子
+    public static final String MORE_BOARD = "/more/board";
+    public static final String MORE_POST = "/more/post";
+
     public interface SP {
 
         String USER_INFO = "user_info_data";
@@ -224,6 +228,8 @@ public class Constant {
         String BEAN = "bean";
 
         int RESULT_CODE = 200;
+
+        int REQUEST_CODE = 100;
 
         int TEMPLATE_FILTER_RESULT = 201;
 

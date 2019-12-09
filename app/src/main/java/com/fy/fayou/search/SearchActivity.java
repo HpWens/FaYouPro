@@ -115,11 +115,11 @@ public class SearchActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(s) && ivClean.getVisibility() == View.GONE) {
+                if (!TextUtils.isEmpty(s.toString().trim()) && ivClean.getVisibility() == View.GONE) {
                     ivClean.setVisibility(View.VISIBLE);
                     tvSearch.setText("搜索");
                     tvSearch.setTextColor(Color.parseColor("#A0A0A0"));
-                } else if (TextUtils.isEmpty(s)) {
+                } else if (TextUtils.isEmpty(s.toString().trim())) {
                     ivClean.setVisibility(View.GONE);
                     tvSearch.setText("取消");
                     tvSearch.setTextColor(Color.parseColor("#D2D2D2"));
@@ -129,7 +129,7 @@ public class SearchActivity extends BaseActivity {
 
         etSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                jumpSearchResult(etSearch.getText().toString());
+                jumpSearchResult(etSearch.getText().toString().trim());
             }
             return false;
         });
@@ -190,6 +190,21 @@ public class SearchActivity extends BaseActivity {
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
                             List<SearchEntity> list = ParseUtils.parseListData(s, SearchEntity.class);
+                            if (list.isEmpty()) {
+                                // 法律，电信诈骗，婚姻法，合同法
+                                SearchEntity defaultEntity = new SearchEntity();
+                                defaultEntity.keyword = "法律";
+                                list.add(defaultEntity);
+                                defaultEntity = new SearchEntity();
+                                defaultEntity.keyword = "电信诈骗";
+                                list.add(defaultEntity);
+                                defaultEntity = new SearchEntity();
+                                defaultEntity.keyword = "婚姻法";
+                                list.add(defaultEntity);
+                                defaultEntity = new SearchEntity();
+                                defaultEntity.keyword = "合同法";
+                                list.add(defaultEntity);
+                            }
                             mAdapter.setNewData(list);
                         }
                     }

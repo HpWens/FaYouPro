@@ -133,8 +133,16 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
                         if (!TextUtils.isEmpty(s)) {
                             List<SearchEntity> list = ParseUtils.parseListData(s, SearchEntity.class);
                             List<String> hintList = new ArrayList<>();
-                            for (SearchEntity entity : list) {
-                                hintList.add(entity.keyword);
+                            if (list.isEmpty()) {
+                                // 法律，电信诈骗，婚姻法，合同法
+                                hintList.add("法律");
+                                hintList.add("电信诈骗");
+                                hintList.add("婚姻法");
+                                hintList.add("合同法");
+                            } else {
+                                for (SearchEntity entity : list) {
+                                    hintList.add(entity.keyword);
+                                }
                             }
                             initSwitcher(hintList);
                         }

@@ -57,6 +57,8 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
     TextView tvRight;
     @BindView(R.id.bottom_layout)
     FrameLayout bottomLayout;
+    @BindView(R.id.tv_center_title)
+    TextView tvCenterTitle;
 
     @Override
     protected void initView() {
@@ -84,6 +86,8 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
         if (isForum) {
             tvRight.setText("发帖");
         }
+
+        tvCenterTitle.setText(isForum ? "发表帖子" : "发布资讯");
     }
 
     @Override

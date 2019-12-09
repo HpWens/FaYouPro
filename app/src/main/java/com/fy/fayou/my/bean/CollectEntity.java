@@ -13,6 +13,6 @@ public class CollectEntity implements Serializable {
     public String createTime;
     public String collectType;
     public String browseRecordType;
-
+    public String h5Url;
 
 }

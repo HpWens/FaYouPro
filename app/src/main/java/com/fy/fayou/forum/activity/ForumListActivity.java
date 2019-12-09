@@ -125,7 +125,7 @@ public class ForumListActivity extends BaseActivity {
 
         tvName.setText(getNonEmpty(plateName = entity.name));
         tvDesc.setText(getNonEmpty(entity.description));
-        tvFollowNum.setText(entity.comments + "讨论" + entity.follows + "关注");
+        tvFollowNum.setText(entity.comments + "讨论·" + entity.follows + "关注");
 
         switchFollowStyle(entity.followed);
 

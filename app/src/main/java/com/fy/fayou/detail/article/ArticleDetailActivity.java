@@ -378,7 +378,7 @@ public class ArticleDetailActivity extends BaseActivity {
         header.createTime = articleEntity.createTime;
         header.follow = articleEntity.follow;
         header.auditId = type == Constant.Param.FORUM_TYPE ? articleEntity.userId : articleEntity.auditId;
-        header.auditAvatar = articleEntity.auditAvatar;
+        header.auditAvatar = TextUtils.isEmpty(articleEntity.auditAvatar) ? articleEntity.authorAvatar : articleEntity.auditAvatar;
         mDataList.add(header);
     }
 

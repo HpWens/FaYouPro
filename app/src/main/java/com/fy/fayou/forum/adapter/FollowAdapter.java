@@ -26,6 +26,7 @@ public class FollowAdapter extends MeiBaseAdapter<ForumEntity> {
                 .setText(R.id.tv_content, getNonEmpty(item.description))
                 .setText(R.id.tv_plate, getNonEmpty(item.boardName))
                 .setVisible(R.id.tv_plate, !TextUtils.isEmpty(item.boardName))
+                .setGone(R.id.iv_thumb, !TextUtils.isEmpty(item.cover))
                 .setText(R.id.tv_scan, item.clicks + "人看过")
                 .setText(R.id.tv_comment_num, item.comments + "评论")
                 .setText(R.id.tv_praise_num, item.gives + "点赞");

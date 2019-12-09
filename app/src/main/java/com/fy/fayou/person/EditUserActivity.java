@@ -265,9 +265,9 @@ public class EditUserActivity extends BaseActivity {
 
     private RequestOptions getAvatarOption() {
         return new RequestOptions()
-                .placeholder(R.color.color_e5e5e5)
+                .placeholder(R.mipmap.ic_avatar_default)
                 //异常占位图(当加载异常的时候出现的图片)
-                .error(R.color.color_e5e5e5)
+                .error(R.mipmap.ic_avatar_default)
                 .transform(new CircleCrop())
                 //禁止Glide硬盘缓存缓存
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);

@@ -5,18 +5,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.fy.fayou.R;
+import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.forum.bean.ForumEntity;
 import com.fy.fayou.my.adapter.PostAdapter;
-import com.fy.fayou.my.bean.PostEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
+import com.zhouyou.http.EasyHttp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
 
-public class PostFragment extends BaseListFragment<PostEntity> {
+public class PostFragment extends BaseListFragment<ForumEntity> {
 
     RecyclerView mRecyclerView;
     PostAdapter mAdapter;
@@ -36,14 +37,16 @@ public class PostFragment extends BaseListFragment<PostEntity> {
     }
 
     @Override
-    protected MeiBaseAdapter<PostEntity> getAdapter() {
+    protected MeiBaseAdapter<ForumEntity> getAdapter() {
         mAdapter = new PostAdapter();
         return mAdapter;
     }
 
     @Override
-    protected Observable<Result<List<PostEntity>>> getListObservable(int pageNo) {
-        return null;
+    protected Observable<Result<List<ForumEntity>>> getListObservable(int pageNo) {
+        Observable<String> observable = EasyHttp.get(ApiUrl.GET_MY_POST)
+                .execute(String.class);
+        return getListByField(observable, "content", ForumEntity.class);
     }
 
     @Override
@@ -64,13 +67,11 @@ public class PostFragment extends BaseListFragment<PostEntity> {
     @Override
     protected void initData() {
         super.initData();
-
-        List<PostEntity> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            PostEntity entity = new PostEntity();
-            list.add(entity);
-        }
-
-        mAdapter.setNewData(list);
     }
+
+    @Override
+    protected boolean loadOnShow() {
+        return false;
+    }
+
 }

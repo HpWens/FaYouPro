@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.forum.adapter.StarPlateAdapter;
@@ -84,7 +85,7 @@ public class StarPlateFragment extends BaseListFragment<PlateEntity> {
 
             @Override
             public void onItem(View view, PlateEntity item) {
-
+                ARoute.jumpUserCenter(item.userId);
             }
         });
     }
@@ -136,7 +137,7 @@ public class StarPlateFragment extends BaseListFragment<PlateEntity> {
 
             @Override
             public void onItem(View view, PlateEntity item) {
-
+                ARoute.jumpUserCenter(item.userId);
             }
         }));
 
@@ -159,6 +160,11 @@ public class StarPlateFragment extends BaseListFragment<PlateEntity> {
                         if (!TextUtils.isEmpty(s)) {
                             List<PlateEntity> list = ParseUtils.parseListData(s, "content", PlateEntity.class);
                             mHeaderAdapter.setNewData(list);
+
+                            if (list.isEmpty()) {
+                                header.findViewById(R.id.tv_host).setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.GONE);
+                            }
                         }
                     }
                 });

@@ -49,6 +49,9 @@ public class ForumListAdapter extends BaseMultiAdapter<ForumEntity> {
                 break;
             case 1:
                 helper.setText(R.id.tv_content, getNonEmpty(item.title));
+                helper.itemView.setOnClickListener(v -> {
+                    ARoute.jumpForumDetail(item.id);
+                });
                 break;
         }
     }

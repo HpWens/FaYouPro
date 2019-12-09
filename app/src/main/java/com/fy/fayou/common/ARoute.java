@@ -2,6 +2,7 @@ package com.fy.fayou.common;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.legal.bean.JudgeLevel1;
@@ -54,6 +55,12 @@ public class ARoute {
 
     // 8 全网通缉
     public static final int WANTED_TYPE = 8;
+
+    // 9 板块类型
+    public static final int BOARD_TYPE = 9;
+
+    // 10 帖子类型
+    public static final int POST_TYPE = 10;
 
     public static void jumpModule(int type) {
         switch (type) {
@@ -355,4 +362,48 @@ public class ARoute {
                 .withInt(Constant.Param.TYPE, formType)
                 .navigation();
     }
+
+    // 跟多板块 更多帖子
+    public static void jumpMoreBoard(String keyword) {
+        ARouter.getInstance().build(Constant.MORE_BOARD)
+                .withString(Constant.Param.KEYWORD, keyword)
+                .navigation();
+    }
+
+    public static void jumpMorePost(String keyword) {
+        ARouter.getInstance().build(Constant.MORE_POST)
+                .withString(Constant.Param.KEYWORD, keyword)
+                .navigation();
+    }
+
+
+    // 历史记录 我的收藏 跳转到详情界面
+    public static void jumpDetail(String browseRecordType, String id, String h5Url) {
+        if (TextUtils.isEmpty(browseRecordType)) return;
+        switch (browseRecordType) {
+            case "CASE":
+                jumpH5(h5Url, true, id, ARoute.GUIDE_TYPE);
+                break;
+            case "LEGAL":
+                jumpH5(h5Url, true, id, ARoute.LEGAL_TYPE);
+                break;
+            case "JUDICIAL":
+                jumpH5(h5Url, true, id, ARoute.JUDICIAL_TYPE);
+                break;
+            case "JUDGE":
+                jumpH5(h5Url, true, id, ARoute.JUDGE_TYPE);
+                break;
+            case "CONTRACT":
+                jumpH5(h5Url, true, id, ARoute.TEMPLATE_TYPE);
+                break;
+            case "CRIMINAL":
+                jumpH5(h5Url, true, id, ARoute.WANTED_TYPE);
+                break;
+            case "ARTICLE":
+            case "VIDEO":
+                jumpDetail(id, browseRecordType);
+                break;
+        }
+    }
+
 }

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.my.bean.CollectEntity;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.KtTimeUtils;
@@ -38,7 +39,9 @@ public class CollectAdapter extends MeiBaseAdapter<CollectEntity> {
         holder.setText(R.id.tv_title, getNonEmpty(item.title))
                 .setText(R.id.tv_time, KtTimeUtils.INSTANCE.getYMDTime(isCollect ? item.createTime : item.businessTime));
 
-
+        holder.itemView.setOnClickListener(v -> {
+            ARoute.jumpDetail(TextUtils.isEmpty(item.browseRecordType) ? item.collectType : item.browseRecordType, item.businessId, item.h5Url);
+        });
     }
 }
 

@@ -7,6 +7,7 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomeForumVPAdapter;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.event.RefreshFollowPlateEvent;
 import com.fy.fayou.forum.bean.PlateEntity;
 import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
@@ -15,6 +16,8 @@ import com.meis.base.mei.utils.Eyes;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -37,6 +40,8 @@ public class PlateFollowActivity extends BaseActivity {
         ButterKnife.bind(this);
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
         setLeftBackListener(v -> {
+            // 刷新关注板块
+            EventBus.getDefault().post(new RefreshFollowPlateEvent());
             finish();
         });
     }
@@ -65,5 +70,12 @@ public class PlateFollowActivity extends BaseActivity {
     @Override
     protected int layoutResId() {
         return R.layout.activity_forum_plate;
+    }
+
+    @Override
+    public void onBackPressedSupport() {
+        // 刷新关注板块
+        EventBus.getDefault().post(new RefreshFollowPlateEvent());
+        super.onBackPressedSupport();
     }
 }

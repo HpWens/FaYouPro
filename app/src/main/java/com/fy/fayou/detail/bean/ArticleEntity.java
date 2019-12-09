@@ -25,6 +25,7 @@ public class ArticleEntity implements Serializable {
     public boolean give;
     public boolean follow;
     public String author;
+    public String authorAvatar;
     public String auditName;
     public String title;
     public String auditId;

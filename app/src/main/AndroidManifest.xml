@@ -419,6 +419,14 @@
             android:name=".forum.activity.StarPlateActivity"
             android:screenOrientation="portrait"></activity>
 
+        <activity
+            android:name=".forum.activity.MoreBoardActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".forum.activity.MorePostActivity"
+            android:screenOrientation="portrait"></activity>
+
     </application>
 
 </manifest>

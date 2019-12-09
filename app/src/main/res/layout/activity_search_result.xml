@@ -91,4 +91,17 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/search_layout"></include>
 
+    <include
+        layout="@layout/mei_base_loading_stub"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_layout"></include>
+
+    <include
+        layout="@layout/mei_base_empty_stub"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_layout"
+        android:visibility="gone"></include>
+
 </RelativeLayout>

@@ -54,6 +54,15 @@ public class SearchResultEntity implements Serializable, MultiItemEntity {
     public String upTime;
     public List<SearchResultEntity> videoList;
 
+    // 帖子
+    public String userId;
+    public String authorAvatar;
+    public int clicks;
+    public int comments;
+    public String boardName;
+    public String description;
+    public int gives;
+
     public int childIndex;
     public boolean isLastChild;
 

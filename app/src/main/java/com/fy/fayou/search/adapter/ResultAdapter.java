@@ -33,6 +33,10 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
     public static final int TYPE_ITEM_NEWS = 3;
     public static final int TYPE_ITEM_VIDEO = 4;
 
+    public static final int TYPE_ITEM_BOARD = 5;
+    public static final int TYPE_ITEM_POST = 6;
+
+
     private String keyword;
 
     /**
@@ -49,6 +53,8 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
         addItemType(TYPE_ITEM_TEMPLATE, R.layout.item_contract_template);
         addItemType(TYPE_ITEM_NEWS, R.layout.item_home_article);
         addItemType(TYPE_ITEM_VIDEO, R.layout.item_search_video_recy);
+        addItemType(TYPE_ITEM_BOARD, R.layout.item_search_board);
+        addItemType(TYPE_ITEM_POST, R.layout.forum_item_follow);
     }
 
     private int getCollectType(int columnType) {
@@ -76,11 +82,22 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
             case TYPE_HEADER:
                 helper.setGone(R.id.view_top, item.headerIndex != 0)
                         .setText(R.id.tv_name, item.name)
-                        .setGone(R.id.view_bottom, item.columnType == 4 || item.columnType == 6 || item.columnType == 5);
+                        .setGone(R.id.view_bottom, item.columnType == 4
+                                || item.columnType == 6
+                                || item.columnType == 5
+                                || item.columnType == ARoute.BOARD_TYPE
+                                || item.columnType == ARoute.POST_TYPE);
 
-                Glide.with(mContext)
-                        .load(getNonEmpty(item.logo))
-                        .into((ImageView) helper.getView(R.id.iv_header));
+                ImageView ivHeaderView = helper.getView(R.id.iv_header);
+                if (item.columnType == ARoute.BOARD_TYPE) {
+                    ivHeaderView.setImageResource(R.mipmap.search_header_board_ic);
+                } else if (item.columnType == ARoute.POST_TYPE) {
+                    ivHeaderView.setImageResource(R.mipmap.search_header_post_ic);
+                } else {
+                    Glide.with(mContext)
+                            .load(getNonEmpty(item.logo))
+                            .into((ivHeaderView));
+                }
 
                 helper.getView(R.id.tv_more).setOnClickListener(v -> {
                     if (item.columnType == 5) {
@@ -89,6 +106,10 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
                         ARoute.jumpLearnClearTask(ARoute.LEARN_HOT_VIDEO_TAB);
                     } else if (item.columnType == 7) {
                         ARoute.jumpLearnClearTask(ARoute.LEARN_SMALL_VIDEO_TAB);
+                    } else if (item.columnType == ARoute.BOARD_TYPE) {
+                        ARoute.jumpMoreBoard(keyword);
+                    } else if (item.columnType == ARoute.POST_TYPE) {
+                        ARoute.jumpMorePost(keyword);
                     } else {
                         ARoute.jumpModule(getCollectType(item.columnType));
                     }
@@ -161,6 +182,51 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
                 if (item.videoList != null && !item.videoList.isEmpty()) {
                     adapter.setNewData(item.videoList);
                 }
+                break;
+            case TYPE_ITEM_BOARD:
+
+                ImageView ivLogo = helper.getView(R.id.iv_thumb);
+                Glide.with(mContext)
+                        .load(getNonEmpty(item.logo))
+                        .apply(GlideOption.getRadiusOption(50, 50, 2))
+                        .into(ivLogo);
+
+                helper.setText(R.id.tv_name, getForeSpan(keyword, getNonEmpty(item.name)))
+                        .setText(R.id.tv_desc, getForeSpan(keyword, getNonEmpty(item.description)))
+                        .setVisible(R.id.view_bottom, !item.isLastChild);
+
+                helper.itemView.setOnClickListener(v -> {
+                    ARoute.jumpPlateList(item.id);
+                });
+
+                break;
+            case TYPE_ITEM_POST:
+                helper.setText(R.id.tv_title, getNonEmpty(item.title))
+                        .setText(R.id.tv_name, getNonEmpty(item.author))
+                        .setText(R.id.tv_content, getNonEmpty(item.description))
+                        .setText(R.id.tv_plate, getNonEmpty(item.boardName))
+                        .setVisible(R.id.tv_plate, !TextUtils.isEmpty(item.boardName))
+                        .setGone(R.id.iv_thumb, !TextUtils.isEmpty(item.cover))
+                        .setText(R.id.tv_scan, item.clicks + "人看过")
+                        .setText(R.id.tv_comment_num, item.comments + "评论")
+                        .setText(R.id.tv_praise_num, item.gives + "点赞");
+
+
+                ImageView ivHeader = helper.getView(R.id.iv_header);
+                Glide.with(mContext)
+                        .load(getNonEmpty(item.authorAvatar))
+                        .apply(GlideOption.getItemCircleOption(20, 20))
+                        .into(ivHeader);
+
+                ImageView ivPostThumb = helper.getView(R.id.iv_thumb);
+                Glide.with(mContext)
+                        .load(getNonEmpty(item.cover))
+                        .apply(GlideOption.getRadiusOption(112, 74, 2))
+                        .into(ivPostThumb);
+
+                helper.itemView.setOnClickListener(v -> {
+                    ARoute.jumpForumDetail(item.id);
+                });
                 break;
         }
     }

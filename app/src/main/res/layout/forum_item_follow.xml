@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tv_title"
@@ -14,11 +14,11 @@
         android:layout_marginRight="15dp"
         android:ellipsize="end"
         android:maxLines="2"
-        tools:text="你怎么看待这件事116人跨国电信诈骗团伙被解压回国?"
         android:textColor="@color/color_333333"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="你怎么看待这件事116人跨国电信诈骗团伙被解压回国?" />
 
     <ImageView
         android:id="@+id/iv_thumb"
@@ -44,12 +44,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        tools:text="给我一把刀"
         android:textColor="@color/color_666666"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_header"
         app:layout_constraintLeft_toRightOf="@+id/iv_header"
-        app:layout_constraintTop_toTopOf="@+id/iv_header" />
+        app:layout_constraintTop_toTopOf="@+id/iv_header"
+        tools:text="给我一把刀" />
 
     <TextView
         android:id="@+id/tv_content"
@@ -59,12 +59,12 @@
         android:layout_marginRight="15dp"
         android:ellipsize="end"
         android:maxLines="2"
-        tools:text="在今天十月份，以陈福伟、文师、王凌宇为首的大型诈骗犯罪集团，在菲律宾等...在今天十月份，以陈福伟、文师、王凌宇为首的大型诈骗犯罪集团，在菲律宾等..."
         android:textColor="@color/color_a0a0a0"
         android:textSize="12sp"
         app:layout_constraintLeft_toLeftOf="@+id/tv_title"
         app:layout_constraintRight_toLeftOf="@+id/iv_thumb"
-        app:layout_constraintTop_toBottomOf="@+id/iv_header" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_header"
+        tools:text="在今天十月份，以陈福伟、文师、王凌宇为首的大型诈骗犯罪集团，在菲律宾等...在今天十月份，以陈福伟、文师、王凌宇为首的大型诈骗犯罪集团，在菲律宾等..." />
 
     <android.support.constraint.Barrier
         android:id="@+id/barrier"
@@ -79,53 +79,54 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
         android:paddingLeft="8dp"
         android:paddingTop="4dp"
         android:paddingRight="8dp"
         android:paddingBottom="4dp"
-        tools:text="版块名称"
         android:textColor="@color/color_666666"
         android:textSize="11sp"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_title"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/barrier"
         app:rv_backgroundColor="@color/color_f5f5f5"
-        app:rv_radius="2dp" />
+        app:rv_radius="2dp"
+        tools:text="版块名称" />
 
     <TextView
-        android:id="@+id/tv_scan"
+        android:id="@+id/tv_praise_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:text="0K人看过"
+        tools:text="0K人看过"
         android:textColor="@color/color_666666"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_plate"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_title"
         app:layout_constraintTop_toTopOf="@+id/tv_plate" />
 
     <TextView
         android:id="@+id/tv_comment_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="12dp"
-        android:text="0 评论"
+        android:layout_marginLeft="12dp"
+        tools:text="0 评论"
         android:textColor="@color/color_666666"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_plate"
-        app:layout_constraintRight_toLeftOf="@+id/tv_scan"
+        app:layout_constraintLeft_toRightOf="@+id/tv_praise_num"
         app:layout_constraintTop_toTopOf="@+id/tv_plate" />
 
 
     <TextView
-        android:id="@+id/tv_praise_num"
+        android:id="@+id/tv_scan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:text="0 点赞"
+        tools:text="0 点赞"
         android:textColor="@color/color_666666"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_plate"
-        app:layout_constraintRight_toLeftOf="@+id/tv_comment_num"
+        app:layout_constraintLeft_toRightOf="@+id/tv_comment_num"
         app:layout_constraintTop_toTopOf="@+id/tv_plate" />
 
     <View

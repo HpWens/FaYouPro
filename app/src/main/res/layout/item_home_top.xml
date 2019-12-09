@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="15dp"
+        android:ellipsize="end"
         android:lines="1"
         android:text="#我和我的祖国#"
         android:textColor="@color/color_333333"
@@ -40,28 +41,33 @@
         app:layout_constraintRight_toLeftOf="@+id/fl_video"
         app:layout_constraintTop_toTopOf="@+id/fl_video" />
 
-    <TextView
-        android:id="@+id/tv_origin"
+    <LinearLayout
+        android:id="@+id/desc_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:text="法友"
-        android:textColor="@color/color_b2b2b2"
-        android:textSize="11sp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/fl_video"
-        app:layout_constraintLeft_toLeftOf="parent"></TextView>
+        app:layout_constraintLeft_toLeftOf="parent">
 
-    <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="3分钟前"
-        android:textColor="@color/color_b2b2b2"
-        android:textSize="11sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_origin"
-        app:layout_constraintLeft_toRightOf="@+id/tv_origin"></TextView>
+        <TextView
+            android:id="@+id/tv_origin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="法友"
+            android:textColor="@color/color_b2b2b2"
+            android:textSize="11sp"></TextView>
 
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3分钟前"
+            android:textColor="@color/color_b2b2b2"
+            android:textSize="11sp"></TextView>
+
+    </LinearLayout>
 
     <View
         android:layout_width="0dp"

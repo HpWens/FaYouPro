@@ -5,8 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.fy.fayou.common.OnScrollClashListener;
-import com.fy.fayou.fragment.ColumnFragment;
 import com.fy.fayou.fragment.RecommendFragment;
+import com.fy.fayou.my.fragment.UserCenterPostFragment;
 
 public class UserCenterVPAdapter extends FragmentPagerAdapter {
 
@@ -29,7 +29,7 @@ public class UserCenterVPAdapter extends FragmentPagerAdapter {
                 if (mListener != null) mListener.onScroll(isScroll);
             });
         }
-        return ColumnFragment.newInstance().setOnScrollClashListener(isScroll -> {
+        return UserCenterPostFragment.newInstance(mUserId).setOnScrollClashListener(isScroll -> {
             if (mListener != null) mListener.onScroll(isScroll);
         });
     }

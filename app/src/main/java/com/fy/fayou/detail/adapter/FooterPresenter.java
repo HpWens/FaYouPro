@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.detail.bean.FooterBean;
 import com.fy.fayou.utils.GlideOption;
@@ -38,7 +39,10 @@ public class FooterPresenter extends ItemPresenter<FooterBean> {
                 .setText(R.id.tv_praise_num, item.gives + "人点赞")
                 .setGone(R.id.source_layout, item.type != Constant.Param.FORUM_TYPE)
                 .setGone(R.id.flow_tag, item.type != Constant.Param.FORUM_TYPE)
-                .setGone(R.id.tv_origin, !TextUtils.isEmpty(item.source));
+                .setGone(R.id.tv_origin, !TextUtils.isEmpty(item.source))
+                .setGone(R.id.source_layout, !TextUtils.isEmpty(item.source + item.author))
+                .setGone(R.id.tv_author, !TextUtils.isEmpty(item.author));
+
 
         LinearLayout priseLayout = holder.getView(R.id.praise_layout);
 
@@ -66,6 +70,13 @@ public class FooterPresenter extends ItemPresenter<FooterBean> {
 
         } else {
             priseLayout.setVisibility(View.GONE);
+
+            if (item.type == Constant.Param.FORUM_TYPE && item.gives > 0) {
+                priseLayout.getChildAt(0).setVisibility(View.GONE);
+                priseLayout.getChildAt(1).setVisibility(View.GONE);
+                priseLayout.getChildAt(2).setVisibility(View.GONE);
+                priseLayout.setVisibility(View.VISIBLE);
+            }
         }
 
         FlowLayout tagLayout = holder.getView(R.id.flow_tag);
@@ -74,6 +85,9 @@ public class FooterPresenter extends ItemPresenter<FooterBean> {
             for (String tag : item.tagNames) {
                 View tagView = View.inflate(holder.itemView.getContext(), R.layout.item_detail_tag, null);
                 RadiusTextView tvTag = tagView.findViewById(R.id.tv_tag);
+                tvTag.setOnClickListener(v -> {
+                    ARoute.jumpSearchResult(tag, item.type == Constant.Param.FORUM_TYPE);
+                });
                 tvTag.setText(tag);
                 tagLayout.addView(tagView);
             }

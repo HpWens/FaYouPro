@@ -45,7 +45,7 @@
                             android:id="@+id/iv_header"
                             android:layout_width="60dp"
                             android:layout_height="60dp"
-                            android:src="@color/color_ed4040" />
+                            android:scaleType="centerCrop" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -68,8 +68,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
-                                android:lines="1"
-                                android:text="版块介绍介绍，主要用来学习美国法律知版块介绍"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                tools:text="版块介绍介绍，主要用来学习美国法律知版块介绍版块介绍介绍，主要用来学习美国法律知版块介绍版块介绍介绍，主要用来学习美国法律知版块介绍版块介绍介绍，主要用来学习美国法律知版块介绍"
                                 android:textColor="@color/color_a0a0a0"
                                 android:textSize="12sp" />
 

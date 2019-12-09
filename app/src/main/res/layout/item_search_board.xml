@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_thumb"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:src="@mipmap/ic_avatar_default"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="15dp"
+        android:lines="1"
+        android:textColor="@color/color_333333"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/iv_thumb"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_thumb"
+        tools:text="美国法律法规美国法律法规美国法律法规美国法律法规美国法律法规美国法律法规美国法律法规美国法律法规" />
+
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginRight="15dp"
+        android:lines="1"
+        android:textColor="@color/color_a0a0a0"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@+id/iv_thumb"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"
+        tools:text="版块介绍介绍，主要用来学习美国法律知版块介绍...版块介绍介绍，主要用来学习美国法律知版块介绍...版块介绍介绍，主要用来学习美国法律知版块介绍..." />
+
+    <View
+        android:id="@+id/view_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/iv_thumb"></View>
+
+</android.support.constraint.ConstraintLayout>
