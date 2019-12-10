@@ -22,6 +22,9 @@ import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -48,6 +51,8 @@ public class PersonalFragment extends BaseFragment {
     TextView tvPraise;
     @BindView(R.id.tv_phone)
     TextView tvPhone;
+    @BindView(R.id.tv_mes_num)
+    TextView tvMesNum;
 
 
     public static PersonalFragment newInstance() {
@@ -93,7 +98,31 @@ public class PersonalFragment extends BaseFragment {
                     }
                 }
             });
+
+            requestUnReadNum();
         }
+    }
+
+    private void requestUnReadNum() {
+        EasyHttp.get(ApiUrl.MESSAGE_UNREAD_NUMBER)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        try {
+                            JSONObject json = new JSONObject(s);
+                            if (json.has("num")) {
+                                int num = json.optInt("num");
+                                tvMesNum.setText(num > 99 ? "99+" : (num + ""));
+                                tvMesNum.setVisibility(num > 0 ? View.VISIBLE : View.GONE);
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+                });
     }
 
     private void fillingData(UserInfo user) {

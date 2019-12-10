@@ -65,7 +65,6 @@ public class ForumListFragment extends BaseMultiListFragment<ForumEntity> {
     protected RecyclerView getRecyclerView() {
         mRecyclerView = findViewById(R.id.recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         return mRecyclerView;
     }
 

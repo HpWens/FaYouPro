@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.fy.fayou.FYApplication;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
@@ -27,7 +28,6 @@ import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.base.BaseFragment;
 import com.meis.base.mei.utils.Eyes;
-import com.vondear.rxtool.RxDeviceTool;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
@@ -110,7 +110,7 @@ public class SearchResultActivity extends BaseActivity {
     private void requestResult() {
         EasyHttp.get(isForum ? ApiUrl.GET_FORUM_SEARCH_RESULT : ApiUrl.GET_SEARCH_RESULT)
                 .params("keyword", keyword)
-                .params("userId", RxDeviceTool.getDeviceIdIMEI(mContext))
+                .params("userId", ((FYApplication) getApplication()).getUUID())
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

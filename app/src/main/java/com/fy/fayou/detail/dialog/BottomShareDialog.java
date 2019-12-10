@@ -165,7 +165,7 @@ public class BottomShareDialog extends BaseDialog {
     private void requestCollect(String articleId) {
         HashMap<String, String> params = new HashMap<>();
         params.put("businessId", articleId);
-        params.put("collectType", ARoute.getCollectType(collectType));
+        params.put("collectType", isForumType ? "FORUM" : ARoute.getCollectType(collectType));
         JSONObject jsonObject = new JSONObject(params);
 
         EasyHttp.post(ApiUrl.MY_COLLECT)

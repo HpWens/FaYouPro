@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.vondear.rxtool.RxImageTool;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -85,6 +87,9 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
 
         if (isForum) {
             tvRight.setText("发帖");
+            tvRight.setTextColor(getResources().getColor(R.color.color_ffffff));
+            tvRight.setBackgroundResource(R.drawable.news_submit_selector);
+            ((ViewGroup.MarginLayoutParams) tvRight.getLayoutParams()).rightMargin = RxImageTool.dp2px(15);
         }
 
         tvCenterTitle.setText(isForum ? "发表帖子" : "发布资讯");

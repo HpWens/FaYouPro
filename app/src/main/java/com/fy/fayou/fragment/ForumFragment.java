@@ -10,9 +10,13 @@ import com.fy.fayou.R;
 import com.fy.fayou.adapter.HomeForumVPAdapter;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.UserService;
+import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.forum.bean.PlateEntity;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseFragment;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,6 +117,19 @@ public class ForumFragment extends BaseFragment {
                 ARoute.jumpPlateSelect();
                 break;
         }
-
     }
+
+    @Override
+    public boolean isRegisterEventBus() {
+        return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoginSuccessEvent(LoginSuccessOrExitEvent event) {
+        // 登陆成功后刷新-关注tab
+        if (tab != null) {
+            tab.setCurrentTab(0);
+        }
+    }
+
 }

@@ -406,4 +406,20 @@ public class ARoute {
         }
     }
 
+    /**
+     * 跳转到邮箱登录
+     */
+    public static void jumpEmailLogin() {
+        ARouter.getInstance().build(Constant.EMAIL_LOGIN)
+                .navigation();
+    }
+
+    /**
+     * 跳转到手机登录
+     */
+    public static void jumpPhoneLogin() {
+        ARouter.getInstance().build(Constant.LOGIN)
+                .navigation();
+    }
+
 }

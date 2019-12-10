@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.fy.fayou.FYApplication;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
@@ -13,7 +14,6 @@ import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.constant.DataConstants;
 import com.meis.base.mei.entity.Result;
-import com.vondear.rxtool.RxDeviceTool;
 import com.zhouyou.http.EasyHttp;
 
 import java.util.List;
@@ -59,7 +59,7 @@ public class MorePostFragment extends BaseListFragment<ForumEntity> {
     protected Observable<Result<List<ForumEntity>>> getListObservable(int pageNo) {
         Observable<String> observable = EasyHttp.get(pageNo == DataConstants.FIRST_PAGE ? ApiUrl.GET_MORE_POST : ApiUrl.GET_MORE_POST_MORE)
                 .params("keyword", mKeyword)
-                .params("userId", RxDeviceTool.getDeviceIdIMEI(getContext()))
+                .params("userId", ((FYApplication) getActivity().getApplication()).getUUID())
                 .execute(String.class);
         return getListByField(observable, "data", ForumEntity.class);
     }

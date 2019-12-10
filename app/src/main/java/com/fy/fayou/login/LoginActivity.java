@@ -186,7 +186,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     @OnClick({R.id.iv_clean_phone, R.id.btn_login, R.id.again_send
-            , R.id.iv_wechat, R.id.iv_qq, R.id.iv_weibo, R.id.tv_protocol})
+            , R.id.iv_wechat, R.id.iv_qq, R.id.iv_weibo, R.id.tv_protocol, R.id.tv_email_login})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_clean_phone:
@@ -219,6 +219,10 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.tv_protocol:
                 ARoute.jumpH5("http://fayou-h5.zhdfxm.com/privacy");
+                break;
+            case R.id.tv_email_login:
+                ARoute.jumpEmailLogin();
+                finish();
                 break;
         }
     }

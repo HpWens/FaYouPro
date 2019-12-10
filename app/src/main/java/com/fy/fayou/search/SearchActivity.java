@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -148,6 +149,10 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void jumpSearchResult(String key) {
+        if (TextUtils.isEmpty(key)) {
+            Toast.makeText(mContext, "请输入搜索内容", Toast.LENGTH_SHORT).show();
+            return;
+        }
         ARoute.jumpSearchResult(key, isForum);
 
         // 保存历史记录

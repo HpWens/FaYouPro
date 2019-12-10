@@ -40,7 +40,7 @@ public class FooterPresenter extends ItemPresenter<FooterBean> {
                 .setGone(R.id.source_layout, item.type != Constant.Param.FORUM_TYPE)
                 .setGone(R.id.flow_tag, item.type != Constant.Param.FORUM_TYPE)
                 .setGone(R.id.tv_origin, !TextUtils.isEmpty(item.source))
-                .setGone(R.id.source_layout, !TextUtils.isEmpty(item.source + item.author))
+                .setGone(R.id.source_layout, item.type == Constant.Param.FORUM_TYPE ? false : !TextUtils.isEmpty(item.source + item.author))
                 .setGone(R.id.tv_author, !TextUtils.isEmpty(item.author));
 
 

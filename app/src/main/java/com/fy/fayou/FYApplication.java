@@ -10,8 +10,10 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.bean.UserInfo;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
+import com.fy.fayou.utils.AppUtils;
 import com.google.gson.Gson;
 import com.meis.base.mei.BaseApplication;
+import com.vondear.rxtool.RxSPTool;
 import com.vondear.rxtool.RxTool;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.cache.converter.SerializableDiskConverter;
@@ -27,6 +29,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FYApplication extends BaseApplication {
 
+    private static final String UUID = "uuid";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -40,6 +44,19 @@ public class FYApplication extends BaseApplication {
         initEasyHttp();
 
         initPush();
+
+        initUUID();
+    }
+
+    private void initUUID() {
+        String uuid = RxSPTool.getString(this, UUID);
+        if (TextUtils.isEmpty(uuid)) {
+            RxSPTool.putString(this, UUID, new AppUtils(this).getUniqueID());
+        }
+    }
+
+    public String getUUID() {
+        return RxSPTool.getString(this, UUID);
     }
 
     private void initPush() {

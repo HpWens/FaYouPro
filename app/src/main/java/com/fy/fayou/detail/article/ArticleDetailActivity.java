@@ -176,6 +176,7 @@ public class ArticleDetailActivity extends BaseActivity {
                         public void onSuccess(String s) {
                         }
                     });
+            finish();
         }));
         mAdapter.addItemPresenter(new TextPresenter());
         mAdapter.addItemPresenter(new KtEmptyCommentPresenter());
@@ -547,7 +548,7 @@ public class ArticleDetailActivity extends BaseActivity {
     private void requestCollect(String articleId) {
         HashMap<String, String> params = new HashMap<>();
         params.put("businessId", articleId);
-        params.put("collectType", "ARTICLE");
+        params.put("collectType", isForum() ? "FORUM" : "ARTICLE");
         JSONObject jsonObject = new JSONObject(params);
 
         EasyHttp.post(ApiUrl.MY_COLLECT)
@@ -564,6 +565,11 @@ public class ArticleDetailActivity extends BaseActivity {
                         ivCollect.setSelected(isCollect);
                     }
                 });
+    }
+
+    // 是否论坛
+    private boolean isForum() {
+        return type == Constant.Param.FORUM_TYPE;
     }
 
     /**

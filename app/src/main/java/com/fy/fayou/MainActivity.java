@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initData() {
 //        ARouter.getInstance()
-//                .build(Constant.DETAIL_ARTICLE)
+//                .build(Constant.EMAIL_LOGIN)
 //                .withString(Constant.Param.ARTICLE_ID, "110328945139777536")
 //                .navigation();
     }

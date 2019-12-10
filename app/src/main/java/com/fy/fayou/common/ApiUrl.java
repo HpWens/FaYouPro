@@ -333,4 +333,13 @@ public class ApiUrl {
     // 用户帖子
     public static final String GET_USER_POST = "/api-forum/post/others";
 
+
+    // 邮箱登录
+    public static final String EMAIL_LOGIN = "/api-user/login/mailbox";
+
+
+    // 未读消息
+    public static final String MESSAGE_UNREAD_NUMBER = "/api-message/message/unReaderNum";
+
+
 }

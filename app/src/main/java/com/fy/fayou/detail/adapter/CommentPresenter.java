@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.detail.bean.CommentBean;
 import com.fy.fayou.utils.GlideOption;
 import com.meis.base.mei.adapter.ItemPresenter;
@@ -17,7 +18,7 @@ public class CommentPresenter extends ItemPresenter<CommentBean> {
 
     boolean isForum;
 
-    public CommentPresenter(OnClickListener listener, boolean isForum) {
+    public CommentPresenter(OnClickListener listener, boolean isForum) {*****
         mListener = listener;
         this.isForum = isForum;
     }
@@ -49,6 +50,14 @@ public class CommentPresenter extends ItemPresenter<CommentBean> {
 
         holder.getView(R.id.tv_look).setOnClickListener(v -> {
             mListener.onLook(v);
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            mListener.onLook(v);
+        });
+
+        ivAvatar.setOnClickListener(v -> {
+            ARoute.jumpUserCenter(item.userId);
         });
     }
 

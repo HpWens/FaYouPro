@@ -148,6 +148,9 @@ public class Constant {
     public static final String MORE_BOARD = "/more/board";
     public static final String MORE_POST = "/more/post";
 
+    // 邮箱登录
+    public static final String EMAIL_LOGIN = "/email/login";
+
     public interface SP {
 
         String USER_INFO = "user_info_data";
@@ -234,7 +237,9 @@ public class Constant {
         int TEMPLATE_FILTER_RESULT = 201;
 
         int VIDEO_TYPE = 1;
+
         int ARTICLE_TYPE = 0;
+
         int FORUM_TYPE = 2;
     }
 }
