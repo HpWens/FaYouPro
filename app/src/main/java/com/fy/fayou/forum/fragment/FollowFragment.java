@@ -144,7 +144,7 @@ public class FollowFragment extends BaseListFragment<ForumEntity> {
                             myPlate.helperIsMy = true;
                             list.add(0, myPlate);
 
-                            mPlateAdapter.setNewData(list);
+                            if (mPlateAdapter != null) mPlateAdapter.setNewData(list);
                         }
                     }
                 });
@@ -177,4 +177,9 @@ public class FollowFragment extends BaseListFragment<ForumEntity> {
         }
     }
 
+    @Override
+    public void onRefreshing() {
+        super.onRefreshing();
+        requestHeaderData();
+    }
 }

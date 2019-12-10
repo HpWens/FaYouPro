@@ -18,7 +18,7 @@ public class CommentPresenter extends ItemPresenter<CommentBean> {
 
     boolean isForum;
 
-    public CommentPresenter(OnClickListener listener, boolean isForum) {*****
+    public CommentPresenter(OnClickListener listener, boolean isForum) {
         mListener = listener;
         this.isForum = isForum;
     }
