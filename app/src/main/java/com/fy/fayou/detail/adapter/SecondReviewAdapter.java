@@ -32,16 +32,19 @@ public class SecondReviewAdapter extends BaseMultiAdapter<CommentBean> {
 
     private Context mCtx;
 
+    private String mUserId;
+
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
-    public SecondReviewAdapter(Context ctx, List<CommentBean> data, OnClickListener listener) {
+    public SecondReviewAdapter(Context ctx, String userId, List<CommentBean> data, OnClickListener listener) {
         super(data);
         this.mCtx = ctx;
         this.mListener = listener;
+        this.mUserId = userId;
         addItemType(1, R.layout.item_second_comment_header);
         addItemType(0, R.layout.item_second_comment);
     }
@@ -97,8 +100,8 @@ public class SecondReviewAdapter extends BaseMultiAdapter<CommentBean> {
 
         if (item.getItemType() == 0) {
             helper.setText(R.id.tv_rename, getNonEmpty(item.reUserName))
-                    .setGone(R.id.tv_rename, !TextUtils.isEmpty(item.reUserName))
-                    .setGone(R.id.tv_reply, !TextUtils.isEmpty(item.reUserName))
+                    .setGone(R.id.tv_rename, !TextUtils.isEmpty(item.reUserName) && !item.reUserId.equals(mUserId))
+                    .setGone(R.id.tv_reply, !TextUtils.isEmpty(item.reUserName) && !item.reUserId.equals(mUserId))
                     .setGone(R.id.tv_scan, isVisibleScan(item.reUserId));
 
             helper.getView(R.id.tv_scan).setOnClickListener(v -> {

@@ -161,21 +161,8 @@ public class ArticleDetailActivity extends BaseActivity {
             ARoute.jumpDetail(item.id, item.articleType);
 
             // 新增浏览记录
-            HashMap<String, String> params = new HashMap<>();
-            params.put("businessId", item.id);
-            params.put("browseRecordType", item.articleType);
-            JSONObject jsonObject = new JSONObject(params);
-            EasyHttp.post(ApiUrl.MY_HISTORY)
-                    .upJson(jsonObject.toString())
-                    .execute(new SimpleCallBack<String>() {
-                        @Override
-                        public void onError(ApiException e) {
-                        }
+            requestAddHistory(item.id, item.articleType);
 
-                        @Override
-                        public void onSuccess(String s) {
-                        }
-                    });
             finish();
         }));
         mAdapter.addItemPresenter(new TextPresenter());
@@ -204,10 +191,31 @@ public class ArticleDetailActivity extends BaseActivity {
         if (type == Constant.Param.FORUM_TYPE) {
             // 论坛详情页
             requestForumData();
+
+            requestAddHistory(id, "FORUM");
         } else {
             // 文章视频详情页
             requestData();
         }
+    }
+
+    private void requestAddHistory(String id, String type) {
+        // 新增浏览记录
+        HashMap<String, String> params = new HashMap<>();
+        params.put("businessId", id);
+        params.put("browseRecordType", type);
+        JSONObject jsonObject = new JSONObject(params);
+        EasyHttp.post(ApiUrl.MY_HISTORY)
+                .upJson(jsonObject.toString())
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                    }
+                });
     }
 
     // 请求论坛详情页数据

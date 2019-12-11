@@ -308,7 +308,7 @@ public class ApiUrl {
     public static final String GET_FORUM_THREE_COMMENT = "/api-forum/postComment/conversationList";
 
     // 消息列表-删除
-    public static final String DELETE_MESSAGE = "/message/delete";
+    public static final String DELETE_MESSAGE = "/api-message/message/delete";
 
     // 发帖
     public static final String POST_FORUM = "/api-forum/post";

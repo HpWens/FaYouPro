@@ -88,6 +88,7 @@ public class ARoute {
     /**
      * 获取到收藏类型
      * ARTICLE（普法里面的视频和图片，都传这个),合同 （ CONTRACT）  通缉 （ CRIMINAL）    司法解释 （ JUDICIAL）  法律法规（LEGAL）裁判文书（JUDGE） 案例 （ CASE）
+     * 文章ARTICLE,视频 VIDEO, 合同CONTRACT,通缉CRIMINAL,司法解释 JUDICIAL,法律法规 LEGAL,裁判文书 JUDGE,案例CASE,论坛FORUM
      *
      * @param moduleType
      * @return

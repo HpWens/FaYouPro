@@ -1,2 +1,2 @@
-include ':app', ':base_library', ':picture_library', ':ucrop', ':FlycoTabLayout_Lib'
+include ':app', ':base_library', ':picture_library', ':ucrop', ':FlycoTabLayout_Lib', ':socialhelper'
 rootProject.name='FaYouPro'

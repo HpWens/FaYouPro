@@ -1,6 +1,7 @@
 package com.fy.fayou.login;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.NestedScrollView;
@@ -34,6 +35,7 @@ import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.utils.RegexUtils;
+import com.fy.fayou.utils.SocialUtil;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.vondear.rxtool.RxAnimationTool;
@@ -43,6 +45,10 @@ import com.vondear.rxtool.view.RxToast;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
+
+import net.arvin.socialhelper.SocialHelper;
+import net.arvin.socialhelper.callback.SocialLoginCallback;
+import net.arvin.socialhelper.entities.ThirdInfoEntity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
@@ -54,7 +60,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 @Route(path = "/fy/login")
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements SocialLoginCallback {
 
     @Autowired(name = "origin")
     public int jumpOrigin = 0;
@@ -87,6 +93,8 @@ public class LoginActivity extends BaseActivity {
     LinearLayout service;
     @BindView(R.id.root)
     RelativeLayout root;
+
+    private SocialHelper socialHelper;
 
     private int screenHeight = 0;//屏幕高度
     private int keyHeight = 0; //软件盘弹起后所占高度
@@ -178,6 +186,8 @@ public class LoginActivity extends BaseActivity {
                 service.setVisibility(View.VISIBLE);
             }
         });
+
+        socialHelper = SocialUtil.INSTANCE.socialHelper;
     }
 
     @Override
@@ -214,8 +224,9 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.iv_wechat:
             case R.id.iv_qq:
+                break;
             case R.id.iv_weibo:
-                Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show();
+                socialHelper.loginWX(this, this);
                 break;
             case R.id.tv_protocol:
                 ARoute.jumpH5("http://fayou-h5.zhdfxm.com/privacy");
@@ -311,5 +322,32 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
 
+    }
+
+    @Override
+    public void loginSuccess(ThirdInfoEntity info) {
+
+    }
+
+    @Override
+    public void socialError(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (socialHelper != null) {
+            socialHelper.clear();
+        }
+    }
+
+    //用处：qq登录和分享回调，以及微博登录回调
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (socialHelper != null) {//qq分享如果选择留在qq，通过home键退出，再进入app则不会有回调
+            socialHelper.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

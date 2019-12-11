@@ -3,6 +3,7 @@ package com.fy.fayou.pufa;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -162,6 +163,15 @@ public class PublishNewsActivity extends BaseActivity implements SoftKeyBoardLis
                     // 图片选择
                     List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
                     mMixingHelper.addMultiPicture(mMixingHelper.covertStringArray(selectList));
+
+                    // 下一步高亮
+                    int size = mMixingHelper.getData().size();
+                    if (size > 0 && mMixingHelper.getData().get(0) instanceof TitleEntity) {
+                        TitleEntity titleEntity = (TitleEntity) mMixingHelper.getData().get(0);
+                        if (!TextUtils.isEmpty(titleEntity.name)) {
+                            tvRight.setSelected(true);
+                        }
+                    }
                     break;
             }
         }

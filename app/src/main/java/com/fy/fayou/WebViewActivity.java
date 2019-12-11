@@ -43,6 +43,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -246,6 +247,7 @@ public class WebViewActivity extends BaseActivity {
     private void requestDownLoadUrl() {
         EasyHttp.downLoad(ApiUrl.GET_DOWNLOAD_URL + "?id=" + id +
                 "&title=合同&type=2&informationOfParties=&signingClause=&contractTermIds=" + url.substring(url.lastIndexOf("ids=") + 4))
+                .saveName(new Date().getTime() + ".docx")
                 .execute(new DownloadProgressCallBack<String>() {
                     @Override
                     public void update(long bytesRead, long contentLength, boolean done) {

@@ -123,8 +123,11 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
 
                 helper.itemView.setOnClickListener(v -> {
                     if (!TextUtils.isEmpty(item.toUrl)) {
-                        String id = item.toUrl.substring(item.toUrl.lastIndexOf("/"));
-                        ARoute.jumpH5(item.toUrl, true, id, getCollectType(item.columnType));
+                        try {
+                            String id = item.toUrl.substring(item.toUrl.lastIndexOf("/") + 1);
+                            ARoute.jumpH5(item.toUrl, true, id, getCollectType(item.columnType));
+                        } catch (Exception e) {
+                        }
                     }
                 });
 

@@ -92,6 +92,7 @@ dependencies {
     implementation project(':picture_library')
     implementation project(':FlycoTabLayout_Lib')
     implementation project(path: ':ucrop')
+    implementation project(':socialhelper')
     //noinspection GradleCompatible
     implementation 'com.android.support:support-v4:28.0.0'
     //noinspection GradleCompatible

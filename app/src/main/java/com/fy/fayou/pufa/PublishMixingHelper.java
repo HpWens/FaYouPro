@@ -79,6 +79,7 @@ public class PublishMixingHelper {
                     }
                 }
 
+                listener.onEditTextChanged();
             }
 
             @Override

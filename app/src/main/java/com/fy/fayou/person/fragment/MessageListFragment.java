@@ -19,6 +19,9 @@ import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -56,8 +59,12 @@ public class MessageListFragment extends BaseListFragment<MessageEntity> {
             // 菜单在Item中的Position：
             int menuPosition = menuBridge.getPosition();
 
+            HashMap<String, String> params = new HashMap<>();
+            params.put("messageId", mAdapter.getData().get(adapterPosition).id);
+            JSONObject jsonObject = new JSONObject(params);
+
             EasyHttp.delete(ApiUrl.DELETE_MESSAGE)
-                    .params("messageId", mAdapter.getData().get(adapterPosition).id)
+                    .upJson(jsonObject.toString())
                     .execute(new SimpleCallBack<String>() {
                         @Override
                         public void onError(ApiException e) {
@@ -65,7 +72,8 @@ public class MessageListFragment extends BaseListFragment<MessageEntity> {
 
                         @Override
                         public void onSuccess(String s) {
-
+                            mAdapter.notifyItemRemoved(adapterPosition);
+                            mAdapter.getData().remove(adapterPosition);
                         }
                     });
 

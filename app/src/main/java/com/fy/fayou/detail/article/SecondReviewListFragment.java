@@ -63,7 +63,7 @@ public class SecondReviewListFragment extends BaseMultiListFragment<CommentBean>
 
     @Override
     protected BaseMultiAdapter<CommentBean> getAdapter() {
-        return mAdapter = new SecondReviewAdapter(getActivity(), new ArrayList<>(), new SecondReviewAdapter.OnClickListener() {
+        return mAdapter = new SecondReviewAdapter(getActivity(), parent.userId, new ArrayList<>(), new SecondReviewAdapter.OnClickListener() {
             @Override
             public void onPraise(View v, int position, CommentBean comment) {
                 if (UserService.getInstance().checkLoginAndJump()) {

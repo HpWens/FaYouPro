@@ -50,11 +50,13 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                     } else {
                         ivCover.setImageResource(R.mipmap.ic_home_top_1);
                     }
+                    helper.setVisible(R.id.fl_video, true);
                 } else {
                     Glide.with(mContext)
                             .load(getNonEmpty(item.cover))
                             .apply(GlideOption.getItemOption(112, 74))
                             .into(ivCover);
+                    helper.setVisible(R.id.fl_video, !TextUtils.isEmpty(item.cover));
                 }
 
                 // 跳转到详情页

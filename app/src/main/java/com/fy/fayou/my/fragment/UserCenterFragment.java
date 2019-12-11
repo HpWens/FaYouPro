@@ -15,6 +15,7 @@ import com.fy.fayou.R;
 import com.fy.fayou.bean.UserInfo;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.my.adapter.UserCenterVPAdapter;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.ParseUtils;
@@ -132,7 +133,9 @@ public class UserCenterFragment extends BaseFragment {
                 break;
             case R.id.tv_top_follow:
             case R.id.tv_follow:
-                requestFollowOrCancel();
+                if (UserService.getInstance().checkLoginAndJump()) {
+                    requestFollowOrCancel();
+                }
                 break;
         }
     }
