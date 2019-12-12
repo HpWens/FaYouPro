@@ -61,6 +61,7 @@ public class RecommendPresenter extends MultiItemPresenter<RecommendBean> {
                 JzvdStd jzvdStd = helper.getView(R.id.video_player);
                 jzvdStd.titleTextView.setVisibility(View.INVISIBLE);
 
+                jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 jzvdStd.setUp(getNonEmpty(item.videoUrl), getNonEmpty(item.fullTitle));
                 Glide.with(helper.itemView.getContext())
                         .load(getNonEmpty(item.cover))

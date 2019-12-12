@@ -56,7 +56,7 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                             .load(getNonEmpty(item.cover))
                             .apply(GlideOption.getItemOption(112, 74))
                             .into(ivCover);
-                    helper.setVisible(R.id.fl_video, !TextUtils.isEmpty(item.cover));
+                    helper.setGone(R.id.fl_video, !TextUtils.isEmpty(item.cover));
                 }
 
                 // 跳转到详情页
@@ -111,6 +111,7 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                 JzvdStd jzvdStd = helper.getView(R.id.video_player);
                 jzvdStd.titleTextView.setVisibility(View.INVISIBLE);
 
+                jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 jzvdStd.setUp(getNonEmpty(item.videoUrl), getNonEmpty(item.fullTitle));
                 Glide.with(mContext)
                         .load(getNonEmpty(item.cover))

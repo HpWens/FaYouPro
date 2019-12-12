@@ -113,6 +113,8 @@ public class ArticleDetailActivity extends BaseActivity {
     List<Object> mDataList = new ArrayList<>();
 
     private BottomShareDialog mShareDialog;
+    private String mShareUrl;
+    private String mShareContent;
     private ReviewFragment mReviewFragment;
     private List<LocalMedia> mPicMedia = new ArrayList<>();
     private int mPicIndex = 0;
@@ -247,6 +249,9 @@ public class ArticleDetailActivity extends BaseActivity {
      * @param recommendList
      */
     private void fillingData(ArticleEntity articleEntity, List<CommentBean> commentList, List<RecommendBean> recommendList) {
+        // 分享url
+        mShareUrl = articleEntity.shareUrl;
+
         // 填充视频
         if (articleEntity.articleType != null && articleEntity.articleType.equals(Constant.Param.VIDEO)) {
             jzvdStd.setUp(getNonEmpty(articleEntity.videoUrl), "");
@@ -382,7 +387,7 @@ public class ArticleDetailActivity extends BaseActivity {
     // 填充头部数据
     private void fillHeaderData(ArticleEntity articleEntity) {
         HeaderBean header = new HeaderBean();
-        header.fullTitle = type == Constant.Param.FORUM_TYPE ? articleEntity.title : articleEntity.fullTitle;
+        mShareContent = header.fullTitle = type == Constant.Param.FORUM_TYPE ? articleEntity.title : articleEntity.fullTitle;
         header.auditName = getNonEmpty(TextUtils.isEmpty(articleEntity.auditName) ? articleEntity.author : articleEntity.auditName);
         header.createTime = articleEntity.createTime;
         header.follow = articleEntity.follow;
@@ -508,11 +513,30 @@ public class ArticleDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_share:
+                showDialog(mShareDialog = new BottomShareDialog()
+                        .setCollectType(ARoute.ARTICLE_TYPE)
+                        .setShareUrl(mShareUrl)
+                        .setShareContent(mShareContent)
+                        .setGoneOpera(true)
+                        .setOnItemClickListener(new BottomShareDialog.OnItemClickListener() {
+                            @Override
+                            public void onDismiss() {
+                                transMask.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onCollect(boolean isCollect) {
+                            }
+                        }));
+                transMask.setVisibility(View.VISIBLE);
                 break;
             case R.id.iv_more_white:
             case R.id.iv_right_more:
-                showDialog(mShareDialog = new BottomShareDialog().setCollect(isCollect).setArticleId(articleId)
+                showDialog(mShareDialog = new BottomShareDialog()
+                        .setCollect(isCollect).setArticleId(articleId)
                         .setForumType(type == Constant.Param.FORUM_TYPE)
+                        .setShareUrl(mShareUrl)
+                        .setShareContent(mShareContent)
                         .setOnItemClickListener(new BottomShareDialog.OnItemClickListener() {
                             @Override
                             public void onDismiss() {

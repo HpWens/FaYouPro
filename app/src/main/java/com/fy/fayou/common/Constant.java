@@ -151,6 +151,9 @@ public class Constant {
     // 邮箱登录
     public static final String EMAIL_LOGIN = "/email/login";
 
+    // 更多搜索结果
+    public static final String MORE_SEARCH_RESULT = "/more/search_result";
+
     public interface SP {
 
         String USER_INFO = "user_info_data";
@@ -229,6 +232,8 @@ public class Constant {
         String IS_FORUM = "is_forum";
 
         String BEAN = "bean";
+
+        String FILE_PATH = "file_path";
 
         int RESULT_CODE = 200;
 

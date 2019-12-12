@@ -40,6 +40,7 @@
         android:lines="1"
         android:textColor="@color/color_a0a0a0"
         android:textSize="12sp"
+        android:ellipsize="end"
         app:layout_constraintLeft_toRightOf="@+id/iv_thumb"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_name"

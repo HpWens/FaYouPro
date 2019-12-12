@@ -54,8 +54,11 @@ public class ResetPhoneActivity extends BaseActivity {
         String formatMobile = "";
         if (!TextUtils.isEmpty(mobile)) {
             formatMobile = "+86" + RxDataTool.hideMobilePhone4(mobile);
+            tvHint.setText(getString(R.string.mobile_bind_hint, formatMobile));
+        } else {
+            tvHint.setText(getString(R.string.empty_mobile_bind_hint));
         }
-        tvHint.setText(getString(R.string.mobile_bind_hint, formatMobile));
+
         etMobile.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

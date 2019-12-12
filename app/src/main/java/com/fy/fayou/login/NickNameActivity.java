@@ -20,6 +20,7 @@ import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.UploadService;
 import com.fy.fayou.common.UserService;
+import com.fy.fayou.utils.ParseUtils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -139,7 +140,7 @@ public class NickNameActivity extends BaseActivity {
         }
     }
 
-    private void requestNick(String avatar, String nick, RxDialog loadDialog) {
+    private void requestNick(String avatar, String nick, final RxDialog loadDialog) {
         HashMap<String, String> params = new HashMap<>();
         params.put("nickName", nick);
         params.put("avatar", avatar);
@@ -151,7 +152,10 @@ public class NickNameActivity extends BaseActivity {
 
                     @Override
                     public void onError(ApiException e) {
-                        loadDialog.dismiss();
+                        ParseUtils.handlerApiError(e, error -> {
+                            Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+                        });
+                        if (loadDialog != null && loadDialog.isShowing()) loadDialog.dismiss();
                     }
 
                     @Override
@@ -187,6 +191,7 @@ public class NickNameActivity extends BaseActivity {
                 .previewImage(true)
                 .isCamera(true)
                 .glideOverride(160, 160)
+                .compress(true)
                 .previewEggs(true)
                 .isGif(true)
                 .forResult(PictureConfig.CHOOSE_REQUEST);

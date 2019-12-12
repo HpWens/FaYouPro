@@ -114,7 +114,9 @@ public class ForumFragment extends BaseFragment {
                 ARoute.jumpSearch(true);
                 break;
             case R.id.iv_publish:
-                ARoute.jumpPlateSelect();
+                if (UserService.getInstance().checkLoginAndJump()) {
+                    ARoute.jumpPlateSelect();
+                }
                 break;
         }
     }

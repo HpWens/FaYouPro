@@ -253,6 +253,7 @@
                 android:scaleType="centerInside"
                 android:src="@mipmap/login_wechat"></ImageView>
 
+
             <ImageView
                 android:id="@+id/iv_qq"
                 android:layout_width="wrap_content"

@@ -223,10 +223,11 @@ public class LoginActivity extends BaseActivity implements SocialLoginCallback {
                 }
                 break;
             case R.id.iv_wechat:
+                socialHelper.loginWX(this, this);
+                break;
             case R.id.iv_qq:
                 break;
             case R.id.iv_weibo:
-                socialHelper.loginWX(this, this);
                 break;
             case R.id.tv_protocol:
                 ARoute.jumpH5("http://fayou-h5.zhdfxm.com/privacy");
@@ -299,34 +300,78 @@ public class LoginActivity extends BaseActivity implements SocialLoginCallback {
 
                     @Override
                     public void onSuccess(String s) {
-                        UserBean userBean = ParseUtils.parseData(s, UserBean.class);
-                        if (userBean != null && userBean.user != null) {
-                            UserInfo userInfo = userBean.user;
-                            userInfo.token = userBean.token;
-                            UserService.getInstance().saveUser(userInfo);
-                            // 第一步添加token
-                            if (getApplication() instanceof FYApplication) {
-                                ((FYApplication) getApplication()).addEasyTokenHeader();
-                            }
-
-                            // 发送登录成功事件
-                            EventBus.getDefault().post(new LoginSuccessOrExitEvent());
-
-                            // 判定是否设置昵称
-                            if (TextUtils.isEmpty(userInfo.nickName)) {
-                                ARouter.getInstance().build(Constant.CREATE_NICKNAME).navigation();
-                            }
-
-                            finish();
-                        }
+                        handlerLoginData(s);
                     }
                 });
 
     }
 
+    /**
+     * @param s
+     */
+    private void handlerLoginData(String s) {
+        UserBean userBean = ParseUtils.parseData(s, UserBean.class);
+        if (userBean != null && userBean.user != null) {
+            UserInfo userInfo = userBean.user;
+            userInfo.token = userBean.token;
+            UserService.getInstance().saveUser(userInfo);
+            // 第一步添加token
+            if (getApplication() instanceof FYApplication) {
+                ((FYApplication) getApplication()).addEasyTokenHeader();
+            }
+
+            // 发送登录成功事件
+            EventBus.getDefault().post(new LoginSuccessOrExitEvent());
+
+            // 判定是否设置昵称
+            if (TextUtils.isEmpty(userInfo.nickName)) {
+                ARouter.getInstance().build(Constant.CREATE_NICKNAME).navigation();
+            }
+
+            finish();
+        }
+    }
+
     @Override
     public void loginSuccess(ThirdInfoEntity info) {
+        if (info.getPlatform().equals(ThirdInfoEntity.PLATFORM_WX)) {
+            requestWXLogin(info);
+        }
+    }
 
+    // 微信登陆
+    private void requestWXLogin(ThirdInfoEntity info) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("unionId", info.getUnionId());
+        params.put("openId", info.getOpenId());
+        params.put("nickname", info.getNickname());
+        params.put("sex", info.getSex().equals("M") ? "0" : "1");
+        params.put("avatar", info.getAvatar());
+        params.put("platform", info.getPlatform());
+        JSONObject jsonObject = new JSONObject(params);
+        EasyHttp.post(ApiUrl.WECHAT_LOGIN)
+                .upJson(jsonObject.toString())
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        handlerLoginData(s);
+                    }
+                });
+    }
+
+    private String toString(ThirdInfoEntity info) {
+        return "登录信息 = {" +
+                "unionId='" + info.getUnionId() + '\'' +
+                ", openId='" + info.getOpenId() + '\'' +
+                ", nickname='" + info.getNickname() + '\'' +
+                ", sex='" + info.getSex() + '\'' +
+                ", avatar='" + info.getAvatar() + '\'' +
+                ", platform='" + info.getPlatform() + '\'' +
+                '}';
     }
 
     @Override

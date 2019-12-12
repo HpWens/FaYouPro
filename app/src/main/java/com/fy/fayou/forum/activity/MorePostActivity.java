@@ -30,6 +30,7 @@ public class MorePostActivity extends BaseActivity {
     protected void initData() {
 
         findViewById(R.id.top_line).setVisibility(View.GONE);
+        findViewById(R.id.top_space_line).setVisibility(View.VISIBLE);
 
         if (findFragment(MorePostFragment.class) == null) {
             loadRootFragment(R.id.fl_container, MorePostFragment.newInstance(keyword));

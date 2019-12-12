@@ -172,6 +172,7 @@
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".search.SearchResultActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/NoAnimation"
             android:windowSoftInputMode="adjustPan"></activity>
@@ -430,6 +431,11 @@
 
         <activity
             android:name=".forum.activity.MorePostActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".search.MoreSearchResultActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"></activity>
 
         <!--qq配置开始-->

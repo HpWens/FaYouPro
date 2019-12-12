@@ -9,6 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"></View>
 
+    <View
+        android:id="@+id/top_space_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_e5e5e5"
+        android:visibility="gone"></View>
+
     <FrameLayout
         android:id="@+id/fl_container"
         android:layout_width="match_parent"

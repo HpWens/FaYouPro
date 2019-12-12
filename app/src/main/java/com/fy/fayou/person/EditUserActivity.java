@@ -205,7 +205,10 @@ public class EditUserActivity extends BaseActivity {
         media.setPath(avatarPath);
         List<LocalMedia> list = new ArrayList<>();
         list.add(media);
-        PictureSelector.create(this).themeStyle(R.style.picture_default_style).openExternalPreview(0, list);
+        PictureSelector.create(this)
+                .themeStyle(R.style.picture_default_style)
+                .compress(true)
+                .openExternalPreview(0, list);
     }
 
     private void initUCrop(Uri uri) {

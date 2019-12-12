@@ -19,6 +19,7 @@ public final class WXShareEntity extends ShareEntity {
     public static final int TYPE_MUSIC = 2;
     public static final int TYPE_VIDEO = 3;
     public static final int TYPE_WEB = 4;
+    public static final int TYPE_FILE = 5;
 
     public static final String KEY_WX_TITLE = "key_wx_title";
     public static final String KEY_WX_SUMMARY = "key_wx_summary";
@@ -28,6 +29,7 @@ public final class WXShareEntity extends ShareEntity {
     public static final String KEY_WX_MUSIC_URL = "key_wx_music_url";
     public static final String KEY_WX_VIDEO_URL = "key_wx_video_url";
     public static final String KEY_WX_WEB_URL = "key_wx_web_url";
+    public static final String KEY_WX_FILE_PATH = "key_wx_file_path";
 
     private WXShareEntity(int type) {
         super(type);
@@ -56,6 +58,19 @@ public final class WXShareEntity extends ShareEntity {
         ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
         addParams(entity.params, KEY_WX_TYPE, TYPE_IMG);
         addParams(entity.params, KEY_WX_IMG_LOCAL, imgUrl);
+        return entity;
+    }
+
+    /**
+     * @param isTimeLine
+     * @param filePath
+     * @return
+     */
+    public static ShareEntity createFileInfo(@ParamsRequired boolean isTimeLine, @ParamsRequired String filePath, int imgRes, String title, String summary) {
+        ShareEntity entity = new ShareEntity(isTimeLine ? TYPE_PYQ : TYPE_WX);
+        addParams(entity.params, KEY_WX_TYPE, TYPE_FILE);
+        addParams(entity.params, KEY_WX_FILE_PATH, filePath);
+        addTitleSummaryAndThumb(entity.params, title, summary, imgRes);
         return entity;
     }
 

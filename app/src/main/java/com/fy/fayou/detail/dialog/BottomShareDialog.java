@@ -2,6 +2,7 @@ package com.fy.fayou.detail.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
@@ -11,27 +12,37 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.utils.ParseUtils;
+import com.fy.fayou.utils.SocialUtil;
 import com.meis.base.mei.base.BaseDialog;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import net.arvin.socialhelper.SocialHelper;
+import net.arvin.socialhelper.callback.SocialShareCallback;
+import net.arvin.socialhelper.entities.ShareEntity;
+import net.arvin.socialhelper.entities.WXShareEntity;
+
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class BottomShareDialog extends BaseDialog {
+public class BottomShareDialog extends BaseDialog implements SocialShareCallback {
 
     ImageView mIvReport;
     ImageView mIvCollect;
     ImageView mIvNight;
     LinearLayout mReportLayout;
+    LinearLayout mOperaLayout;
+    // 分享
+    ImageView mIvWXShare;
 
     boolean isCollect;
     String articleId;
@@ -40,13 +51,49 @@ public class BottomShareDialog extends BaseDialog {
     // 是否隐藏举报栏目
     boolean isGoneReport = false;
 
+    // 是否隐藏操作栏
+    boolean isGoneOpera = false;
+
     boolean isForumType = false;
 
     OnItemClickListener mListener;
 
     int collectType = ARoute.ARTICLE_TYPE;
 
+    private SocialHelper socialHelper;
+
+    // 分享地址
+    private String mShareUrl;
+    // 分享摘要
+    private String mShareContent;
+    // 是否分享文件
+    private boolean mIsShareFile;
+
     public BottomShareDialog() {
+    }
+
+    public BottomShareDialog setShareFile(boolean shareFile) {
+        mIsShareFile = shareFile;
+        return this;
+    }
+
+    public BottomShareDialog setShareContent(String shareContent) {
+        mShareContent = shareContent;
+        return this;
+    }
+
+    public BottomShareDialog setShareUrl(String shareUrl) {
+        mShareUrl = shareUrl;
+        return this;
+    }
+
+    public boolean isGoneOpera() {
+        return isGoneOpera;
+    }
+
+    public BottomShareDialog setGoneOpera(boolean goneOpera) {
+        isGoneOpera = goneOpera;
+        return this;
     }
 
     public BottomShareDialog setForumType(boolean forumType) {
@@ -101,6 +148,10 @@ public class BottomShareDialog extends BaseDialog {
         mIvCollect = findViewById(R.id.iv_collect);
         mIvNight = findViewById(R.id.iv_night);
         mReportLayout = findViewById(R.id.report_layout);
+        mOperaLayout = findViewById(R.id.opera_layout);
+        mIvWXShare = findViewById(R.id.iv_wx_share);
+
+        socialHelper = SocialUtil.INSTANCE.socialHelper;
 
         mIvCollect.setImageResource(isCollect ? R.mipmap.detail_share_collect_selected : R.mipmap.detail_share_collect);
 
@@ -118,8 +169,13 @@ public class BottomShareDialog extends BaseDialog {
             ARoute.jumpReport(articleId, isReportArticle ? ARoute.REPORT_ARTICLE : ARoute.REPORT_COMMENT, isForumType);
         });
 
+        mIvWXShare.setOnClickListener(v -> {
+            socialHelper.shareWX(getActivity(), createWXShareEntity(), this);
+        });
+
         mReportLayout.setVisibility(!isGoneReport ? View.VISIBLE : View.GONE);
 
+        mOperaLayout.setVisibility(isGoneOpera ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -187,10 +243,45 @@ public class BottomShareDialog extends BaseDialog {
                 });
     }
 
+    private ShareEntity createWXShareEntity() {
+        if (mIsShareFile) {
+            return WXShareEntity.createFileInfo(false, mShareUrl, R.mipmap.ic_launcher, "法友", mShareContent);
+        }
+        return WXShareEntity.createWebPageInfo(false, mShareUrl, R.mipmap.ic_launcher, "法友", mShareContent);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (socialHelper != null) {
+            socialHelper.clear();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (socialHelper != null) {
+            //qq分享如果选择留在qq，通过home键退出，再进入app则不会有回调
+            socialHelper.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
     @Override
     public void onDismiss(DialogInterface dialog) {
         if (mListener != null) mListener.onDismiss();
         super.onDismiss(dialog);
+    }
+
+    @Override
+    public void shareSuccess(int type) {
+        Toast.makeText(getActivity(), "分享成功", Toast.LENGTH_SHORT).show();
+        dismiss();
+    }
+
+    @Override
+    public void socialError(String msg) {
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 
     public interface OnItemClickListener {

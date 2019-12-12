@@ -1,5 +1,6 @@
 package com.fy.fayou.search;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -39,6 +40,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jzvd.Jzvd;
 import me.yokeyword.fragmentation.SupportHelper;
 
 @Route(path = "/home/result_search")
@@ -102,9 +104,41 @@ public class SearchResultActivity extends BaseActivity {
         recyclerView.setAdapter(adapter = new ResultAdapter(list, keyword));
         adapter.setOnLoadMoreListener(() -> {
         }, recyclerView);
+        recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                if (view.getTag() != null && view.getTag().toString().equals("video")) {
+                    Jzvd jzvd = view.findViewById(R.id.video_player);
+                    if (jzvd != null && Jzvd.CURRENT_JZVD != null &&
+                            jzvd.jzDataSource.containsTheUrl(Jzvd.CURRENT_JZVD.jzDataSource.getCurrentUrl())) {
+                        if (Jzvd.CURRENT_JZVD != null && Jzvd.CURRENT_JZVD.screen != Jzvd.SCREEN_FULLSCREEN) {
+                            Jzvd.releaseAllVideos();
+                        }
+                    }
+                }
+            }
+        });
 
         mLoadingLayout.setVisibility(View.VISIBLE);
         requestResult();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Jzvd.releaseAllVideos();
+    }
+
+    @Override
+    public void onBackPressedSupport() {
+        if (Jzvd.backPress()) {
+            return;
+        }
+        super.onBackPressedSupport();
     }
 
     private void requestResult() {
@@ -171,7 +205,7 @@ public class SearchResultActivity extends BaseActivity {
 
                 SearchResultEntity resultEntity = new SearchResultEntity();
                 resultEntity.name = "帖子";
-                resultEntity.headerIndex = 1;
+                resultEntity.headerIndex = list.isEmpty() ? 0 : 1;
                 resultEntity.itemType = ResultAdapter.TYPE_HEADER;
                 resultEntity.columnType = ARoute.POST_TYPE;
 
@@ -202,7 +236,7 @@ public class SearchResultActivity extends BaseActivity {
                 resultEntity.columnType = 7;
             resultEntity.logo = entity.logo;
             resultEntity.itemType = 1;
-            resultEntity.headerIndex = index;
+            resultEntity.headerIndex = list.isEmpty() ? 0 : index;
 
             if (entity.data != null && !entity.data.isEmpty()) {
                 list.add(resultEntity);
@@ -213,10 +247,16 @@ public class SearchResultActivity extends BaseActivity {
                     videoEntity.itemType = 4;
                     list.add(videoEntity);
                 } else {
-                    // 新闻资讯
+                    // 普法天地 文章 + 视频
                     if (entity.type == 5) {
                         for (SearchResultEntity sre : entity.data) {
-                            sre.itemType = 3;
+                            if (sre.articleType != null && sre.articleType.equals("VIDEO")) {
+                                // 视频
+                                sre.itemType = ResultAdapter.TYPE_ITEM_PF_VIDEO;
+                            } else {
+                                // 文章
+                                sre.itemType = 3;
+                            }
                             list.add(sre);
                         }
                     }
@@ -230,6 +270,7 @@ public class SearchResultActivity extends BaseActivity {
                             list.add(sre);
                         }
                     } else {
+                        //  0法律      1司法解释      2指导性意见      3合同模板
                         for (SearchResultEntity sre : entity.data) {
                             sre.columnType = entity.type;
                             list.add(sre);
@@ -240,6 +281,7 @@ public class SearchResultActivity extends BaseActivity {
             index++;
         }
     }
+
 
     @Override
     protected int layoutResId() {

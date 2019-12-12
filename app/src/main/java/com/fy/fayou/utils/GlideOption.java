@@ -67,7 +67,11 @@ public class GlideOption {
     public static RequestOptions getFullScreenWOption(Context context) {
         int w = RxDeviceTool.getScreenWidth(context) - RxImageTool.dp2px(30);
         int h = w * 9 / 16;
-        return new RequestOptions().override(w, h).centerCrop();
+        return new RequestOptions()
+                .placeholder(R.mipmap.base_net_error)
+                .error(R.mipmap.base_net_error)
+                .override(w, h)
+                .centerCrop();
     }
 
     public static RequestOptions getRadiusOption(int width, int height, int radius) {

@@ -54,7 +54,11 @@ public class WantedAdapter extends MeiBaseAdapter<WantedEntity> {
                 .into(ivThumb);
 
         helper.itemView.setOnClickListener(v -> {
-            ARoute.jumpH5(item.toUrl);
+            try {
+                String id = item.toUrl.substring(item.toUrl.lastIndexOf("/") + 1);
+                ARoute.jumpH5(item.toUrl, false, id, ARoute.WANTED_TYPE);
+            } catch (Exception e) {
+            }
         });
 
     }

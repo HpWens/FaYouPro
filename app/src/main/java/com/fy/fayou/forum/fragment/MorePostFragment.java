@@ -12,7 +12,6 @@ import com.fy.fayou.forum.adapter.MorePostAdapter;
 import com.fy.fayou.forum.bean.ForumEntity;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
-import com.meis.base.mei.constant.DataConstants;
 import com.meis.base.mei.entity.Result;
 import com.zhouyou.http.EasyHttp;
 
@@ -57,9 +56,12 @@ public class MorePostFragment extends BaseListFragment<ForumEntity> {
 
     @Override
     protected Observable<Result<List<ForumEntity>>> getListObservable(int pageNo) {
-        Observable<String> observable = EasyHttp.get(pageNo == DataConstants.FIRST_PAGE ? ApiUrl.GET_MORE_POST : ApiUrl.GET_MORE_POST_MORE)
+        Observable<String> observable = EasyHttp.get(ApiUrl.GET_MORE_SEARCH_RESULT)
                 .params("keyword", mKeyword)
                 .params("userId", ((FYApplication) getActivity().getApplication()).getUUID())
+                .params("size", "20")
+                .params("mode", pageNo == 1 ? "0" : "1")
+                .params("module", 7 + "")
                 .execute(String.class);
         return getListByField(observable, "data", ForumEntity.class);
     }

@@ -341,5 +341,14 @@ public class ApiUrl {
     // 未读消息
     public static final String MESSAGE_UNREAD_NUMBER = "/api-message/message/unReaderNum";
 
+    // 未读消息
+    public static final String WECHAT_LOGIN = "/api-user/login/wechat";
+
+    // 典型模块下载次数
+    public static final String TYPICAL_TEMPLATE_DOWNLOAD_COUNT = "/api-contract/admin/contract/downloadTypical";
+
+
+    // 单模块检索
+    public static final String GET_MORE_SEARCH_RESULT = "/api-searchengines/public/search/single";
 
 }

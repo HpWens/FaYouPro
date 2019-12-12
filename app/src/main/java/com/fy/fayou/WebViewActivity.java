@@ -1,5 +1,6 @@
 package com.fy.fayou;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -23,6 +24,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.detail.bean.DetailBean;
 import com.fy.fayou.detail.bean.LawBean;
 import com.fy.fayou.detail.dialog.BottomShareDialog;
@@ -31,8 +33,12 @@ import com.fy.fayou.event.ReportSuccessEvent;
 import com.fy.fayou.legal.bean.LegalEntity;
 import com.fy.fayou.legal.bean.LegalRelatedBean;
 import com.fy.fayou.utils.ParseUtils;
+import com.fy.fayou.utils.download.DownloadInfo;
+import com.fy.fayou.utils.download.DownloadManager;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.vondear.rxtool.view.RxToast;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.DownloadProgressCallBack;
 import com.zhouyou.http.callback.SimpleCallBack;
@@ -49,6 +55,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 @Route(path = "/fy/webview")
 public class WebViewActivity extends BaseActivity {
@@ -64,6 +72,9 @@ public class WebViewActivity extends BaseActivity {
 
     @Autowired(name = "type")
     public int type = ARoute.ARTICLE_TYPE;
+
+    @Autowired(name = "file_path")
+    public String filePath = "";
 
     @BindView(R.id.web_base)
     WebView webBase;
@@ -81,6 +92,15 @@ public class WebViewActivity extends BaseActivity {
     private static final int TIME_INTERVAL = 2000;
     private BottomShareDialog mShareDialog;
 
+    private int templateDownloadCount = 0;
+
+    // 分享摘要
+    private String mShareContent;
+
+    private String mShareFilePath;
+    // 是否分享文件
+    private boolean mIsShareFile = false;
+
     @Override
     protected void initView() {
         ButterKnife.bind(this);
@@ -90,6 +110,7 @@ public class WebViewActivity extends BaseActivity {
         setLeftBackListener(v -> finish());
         if (isDetail) {
             setRightMoreListener(v -> {
+                mIsShareFile = false;
                 showBottomDialog();
             });
         }
@@ -100,6 +121,10 @@ public class WebViewActivity extends BaseActivity {
                 .setArticleId(id)
                 .setGoneReport(true)
                 .setCollectType(type)
+                .setShareFile(mIsShareFile)
+                .setGoneOpera(mIsShareFile)
+                .setShareUrl(mIsShareFile ? mShareFilePath : url)
+                .setShareContent(mShareContent)
                 .setOnItemClickListener(new BottomShareDialog.OnItemClickListener() {
                     @Override
                     public void onDismiss() {
@@ -171,7 +196,7 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
-                setToolBarCenterTitle(type == ARoute.TEMPLATE_TYPE ? "合同详情" : title);
+                setToolBarCenterTitle(mShareContent = (type == ARoute.TEMPLATE_TYPE ? "合同详情" : title));
             }
 
             @Override
@@ -237,7 +262,18 @@ public class WebViewActivity extends BaseActivity {
         });
 
         tvCount.setOnClickListener(v -> {
-            requestDownLoadUrl();
+            mIsShareFile = true;
+            new RxPermissions(this).request(new String[]{
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    , Manifest.permission.READ_EXTERNAL_STORAGE})
+                    .subscribe(aBoolean -> {
+                        if (aBoolean) {
+                            requestDownLoadUrl();
+                        } else {
+                            RxToast.error("请允许文件读写权限~");
+                            startActivity(getAppDetailSettingIntent(this));
+                        }
+                    });
         });
     }
 
@@ -245,26 +281,107 @@ public class WebViewActivity extends BaseActivity {
      * 请求下载
      */
     private void requestDownLoadUrl() {
-        EasyHttp.downLoad(ApiUrl.GET_DOWNLOAD_URL + "?id=" + id +
-                "&title=合同&type=2&informationOfParties=&signingClause=&contractTermIds=" + url.substring(url.lastIndexOf("ids=") + 4))
-                .saveName(new Date().getTime() + ".docx")
-                .execute(new DownloadProgressCallBack<String>() {
-                    @Override
-                    public void update(long bytesRead, long contentLength, boolean done) {
-                    }
+        if (templateDownloadCount <= 0) {
+            Toast.makeText(mContext, "你的下载次数不足", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String loadUrl = filePath;
+        boolean isMade;
+        if (isMade = url.contains(",")) {
+            try {
+                loadUrl = Constant.BASE_URL + ApiUrl.GET_DOWNLOAD_URL + "?id=" + id +
+                        "&title=合同&type=2&informationOfParties=&signingClause=&contractTermIds=" + url.substring(url.lastIndexOf("ids=") + 4);
+            } catch (Exception e) {
+            }
+        }
+        final boolean finalIsMade = isMade;
 
-                    @Override
-                    public void onComplete(String path) {
-                        Toast.makeText(mContext, "下载成功，期待分享", Toast.LENGTH_SHORT).show();
-                    }
+        if (finalIsMade) {
+            EasyHttp.downLoad(loadUrl)
+                    .saveName(new Date().getTime() + ".doc")
+                    .execute(new DownloadProgressCallBack<String>() {
+                        @Override
+                        public void update(long bytesRead, long contentLength, boolean done) {
+                        }
 
-                    @Override
-                    public void onStart() {
-                    }
+                        @Override
+                        public void onComplete(String path) {
+                            if (finalIsMade) {
+                                templateDownloadCount -= 1;
+                                if (templateDownloadCount <= 0) templateDownloadCount = 0;
+                                tvCount.setText("你的下载次数剩余" + templateDownloadCount + "次");
+                            }
+                            Toast.makeText(mContext, "下载成功，期待分享", Toast.LENGTH_SHORT).show();
+                            if (!finalIsMade) {
+                                requestTypicalCount();
+                            }
 
+                            mShareFilePath = path;
+
+                            showBottomDialog();
+                        }
+
+                        @Override
+                        public void onStart() {
+                        }
+
+                        @Override
+                        public void onError(ApiException e) {
+                            Toast.makeText(mContext, "下载失败", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            return;
+        }
+
+        DownloadManager.getInstance().download(loadUrl, new Observer<DownloadInfo>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(DownloadInfo downloadInfo) {
+                mShareFilePath = downloadInfo.getFilePath();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(mContext, "下载失败", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+                if (finalIsMade) {
+                    templateDownloadCount -= 1;
+                    if (templateDownloadCount <= 0) templateDownloadCount = 0;
+                    tvCount.setText("你的下载次数剩余" + templateDownloadCount + "次");
+                }
+                //Toast.makeText(mContext, "下载成功，期待分享", Toast.LENGTH_SHORT).show();
+                if (!finalIsMade) {
+                    requestTypicalCount();
+                }
+
+                showBottomDialog();
+            }
+        });
+    }
+
+    // 记录典型模板下载次数
+    private void requestTypicalCount() {
+        EasyHttp.get(ApiUrl.TYPICAL_TEMPLATE_DOWNLOAD_COUNT)
+                .params("contractId", id)
+                .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
-                        Toast.makeText(mContext, "下载失败", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        try {
+                            templateDownloadCount = Integer.parseInt(s);
+                        } catch (Exception e) {
+                            templateDownloadCount -= 1;
+                        }
+                        tvCount.setText("你的下载次数剩余" + templateDownloadCount + "次");
                     }
                 });
     }
@@ -274,6 +391,7 @@ public class WebViewActivity extends BaseActivity {
      */
     private void requestDownLoadCount() {
         EasyHttp.get(ApiUrl.GET_DOWNLOAD_COUNT)
+                .params("contractId", id)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
@@ -283,6 +401,10 @@ public class WebViewActivity extends BaseActivity {
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
                             String count = ParseUtils.parseJSONObject(s, "limit");
+                            try {
+                                templateDownloadCount = Integer.parseInt(count);
+                            } catch (Exception e) {
+                            }
                             tvCount.setText("你的下载次数剩余" + count + "次");
                             tvCount.setVisibility(View.VISIBLE);
                         }

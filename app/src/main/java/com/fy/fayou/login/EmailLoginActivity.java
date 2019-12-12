@@ -1,6 +1,7 @@
 package com.fy.fayou.login;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.support.v4.widget.NestedScrollView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -30,6 +31,7 @@ import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.utils.RegexUtils;
+import com.fy.fayou.utils.SocialUtil;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.vondear.rxtool.RxAnimationTool;
@@ -39,6 +41,10 @@ import com.vondear.rxtool.view.RxToast;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
+
+import net.arvin.socialhelper.SocialHelper;
+import net.arvin.socialhelper.callback.SocialLoginCallback;
+import net.arvin.socialhelper.entities.ThirdInfoEntity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
@@ -50,7 +56,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 @Route(path = "/email/login")
-public class EmailLoginActivity extends BaseActivity {
+public class EmailLoginActivity extends BaseActivity implements SocialLoginCallback {
 
     @Autowired(name = "origin")
     public int jumpOrigin = 0;
@@ -87,6 +93,8 @@ public class EmailLoginActivity extends BaseActivity {
     private int screenHeight = 0;//屏幕高度
     private int keyHeight = 0; //软件盘弹起后所占高度
     private float scale = 0.6f; //logo缩放比例
+
+    private SocialHelper socialHelper;
 
     @Override
     protected void initView() {
@@ -189,6 +197,8 @@ public class EmailLoginActivity extends BaseActivity {
                 service.setVisibility(View.VISIBLE);
             }
         });
+
+        socialHelper = SocialUtil.INSTANCE.socialHelper;
     }
 
     @Override
@@ -218,6 +228,8 @@ public class EmailLoginActivity extends BaseActivity {
                 }
                 break;
             case R.id.iv_wechat:
+                socialHelper.loginWX(this, this);
+                break;
             case R.id.iv_qq:
             case R.id.iv_weibo:
                 Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show();
@@ -297,28 +309,88 @@ public class EmailLoginActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(String s) {
-                        UserBean userBean = ParseUtils.parseData(s, UserBean.class);
-                        if (userBean != null && userBean.user != null) {
-                            UserInfo userInfo = userBean.user;
-                            userInfo.token = userBean.token;
-                            UserService.getInstance().saveUser(userInfo);
-                            // 第一步添加token
-                            if (getApplication() instanceof FYApplication) {
-                                ((FYApplication) getApplication()).addEasyTokenHeader();
-                            }
-
-                            // 发送登录成功事件
-                            EventBus.getDefault().post(new LoginSuccessOrExitEvent());
-
-                            // 判定是否设置昵称
-                            if (TextUtils.isEmpty(userInfo.nickName)) {
-                                ARouter.getInstance().build(Constant.CREATE_NICKNAME).navigation();
-                            }
-
-                            finish();
-                        }
+                        handlerLoginData(s);
                     }
                 });
 
+    }
+
+    /**
+     * @param s
+     */
+    private void handlerLoginData(String s) {
+        UserBean userBean = ParseUtils.parseData(s, UserBean.class);
+        if (userBean != null && userBean.user != null) {
+            UserInfo userInfo = userBean.user;
+            userInfo.token = userBean.token;
+            UserService.getInstance().saveUser(userInfo);
+            // 第一步添加token
+            if (getApplication() instanceof FYApplication) {
+                ((FYApplication) getApplication()).addEasyTokenHeader();
+            }
+
+            // 发送登录成功事件
+            EventBus.getDefault().post(new LoginSuccessOrExitEvent());
+
+            // 判定是否设置昵称
+            if (TextUtils.isEmpty(userInfo.nickName)) {
+                ARouter.getInstance().build(Constant.CREATE_NICKNAME).navigation();
+            }
+
+            finish();
+        }
+    }
+
+    @Override
+    public void loginSuccess(ThirdInfoEntity info) {
+        if (info.getPlatform().equals(ThirdInfoEntity.PLATFORM_WX)) {
+            requestWXLogin(info);
+        }
+    }
+
+    // 微信登陆
+    private void requestWXLogin(ThirdInfoEntity info) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("unionId", info.getUnionId());
+        params.put("openId", info.getOpenId());
+        params.put("nickname", info.getNickname());
+        params.put("sex", info.getSex().equals("M") ? "0" : "1");
+        params.put("avatar", info.getAvatar());
+        params.put("platform", info.getPlatform());
+        JSONObject jsonObject = new JSONObject(params);
+        EasyHttp.post(ApiUrl.WECHAT_LOGIN)
+                .upJson(jsonObject.toString())
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        handlerLoginData(s);
+                    }
+                });
+    }
+
+    @Override
+    public void socialError(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (socialHelper != null) {
+            socialHelper.clear();
+        }
+    }
+
+    //用处：qq登录和分享回调，以及微博登录回调
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (socialHelper != null) {//qq分享如果选择留在qq，通过home键退出，再进入app则不会有回调
+            socialHelper.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

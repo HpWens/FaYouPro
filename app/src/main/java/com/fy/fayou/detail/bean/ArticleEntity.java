@@ -33,6 +33,7 @@ public class ArticleEntity implements Serializable {
     public String videoUrl;
     public String auditAvatar;
     public List<String> tagNames;
+    public String shareUrl;
 
     public static class UserBean {
         public String userId;

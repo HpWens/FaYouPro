@@ -155,15 +155,20 @@ public class ARoute {
     }
 
     public static void jumpH5(String url) {
-        jumpH5(url, false, "", ARoute.ARTICLE_TYPE);
+        jumpH5(url, false, "", ARoute.ARTICLE_TYPE, "");
     }
 
     public static void jumpH5(String url, boolean isShowMore, String id, int collectType) {
+        jumpH5(url, isShowMore, id, collectType, "");
+    }
+
+    public static void jumpH5(String url, boolean isShowMore, String id, int collectType, String filePath) {
         ARouter.getInstance()
                 .build(Constant.COMMON_WEB_VIEW)
                 .withString(Constant.Param.URL, url)
                 .withBoolean(Constant.Param.DETAIL, isShowMore)
                 .withString(Constant.Param.ID, id)
+                .withString(Constant.Param.FILE_PATH, filePath)
                 .withInt(Constant.Param.TYPE, collectType)
                 .navigation();
     }
@@ -404,6 +409,9 @@ public class ARoute {
             case "VIDEO":
                 jumpDetail(id, browseRecordType);
                 break;
+            case "FORUM":
+                jumpForumDetail(id);
+                break;
         }
     }
 
@@ -420,6 +428,16 @@ public class ARoute {
      */
     public static void jumpPhoneLogin() {
         ARouter.getInstance().build(Constant.LOGIN)
+                .navigation();
+    }
+
+
+    // 跳转到更多搜索结果
+    public static void jumpMoreSearchResult(int type, String keyword) {
+        ARouter.getInstance()
+                .build(Constant.MORE_SEARCH_RESULT)
+                .withInt(Constant.Param.TYPE, type)
+                .withString(Constant.Param.KEYWORD, keyword)
                 .navigation();
     }
 

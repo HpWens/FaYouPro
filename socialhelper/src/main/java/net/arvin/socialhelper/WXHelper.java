@@ -18,6 +18,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXFileObject;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXMusicObject;
@@ -250,6 +251,9 @@ final class WXHelper implements ISocial, INeedLoginResult {
             case WXShareEntity.TYPE_WEB:
                 success = addWeb(req, msg, params);
                 break;
+            case WXShareEntity.TYPE_FILE:
+                success = addFile(req, msg, params);
+                break;
         }
         if (!success) {
             return null;
@@ -321,6 +325,15 @@ final class WXHelper implements ISocial, INeedLoginResult {
         if (addTitleSummaryAndThumb(msg, params)) return false;
 
         req.transaction = SocialUtil.buildTransaction("webpage");
+        return true;
+    }
+
+    private boolean addFile(SendMessageToWX.Req req, WXMediaMessage msg, Bundle params) {
+        WXFileObject wxFileObject = new WXFileObject();
+        wxFileObject.filePath = params.getString(WXShareEntity.KEY_WX_FILE_PATH);
+        msg.mediaObject = wxFileObject;
+        if (addTitleSummaryAndThumb(msg, params)) return false;
+        req.transaction = SocialUtil.buildTransaction("file");
         return true;
     }
 

@@ -25,6 +25,8 @@ import com.vondear.rxtool.RxImageTool;
 
 import java.util.List;
 
+import cn.jzvd.JzvdStd;
+
 public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
 
     public static final int TYPE_HEADER = 1;
@@ -35,6 +37,8 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
 
     public static final int TYPE_ITEM_BOARD = 5;
     public static final int TYPE_ITEM_POST = 6;
+
+    public static final int TYPE_ITEM_PF_VIDEO = 7;
 
 
     private String keyword;
@@ -55,6 +59,7 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
         addItemType(TYPE_ITEM_VIDEO, R.layout.item_search_video_recy);
         addItemType(TYPE_ITEM_BOARD, R.layout.item_search_board);
         addItemType(TYPE_ITEM_POST, R.layout.forum_item_follow);
+        addItemType(TYPE_ITEM_PF_VIDEO, R.layout.item_home_video);
     }
 
     private int getCollectType(int columnType) {
@@ -100,19 +105,29 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
                 }
 
                 helper.getView(R.id.tv_more).setOnClickListener(v -> {
-                    if (item.columnType == 5) {
-                        ARoute.jumpLearnClearTask(ARoute.LEARN_NEWS_TAB);
-                    } else if (item.columnType == 6) {
-                        ARoute.jumpLearnClearTask(ARoute.LEARN_HOT_VIDEO_TAB);
-                    } else if (item.columnType == 7) {
-                        ARoute.jumpLearnClearTask(ARoute.LEARN_SMALL_VIDEO_TAB);
+//                    if (item.columnType == 5) {
+//                        ARoute.jumpLearnClearTask(ARoute.LEARN_NEWS_TAB);
+//                    } else if (item.columnType == 6) {
+//                        ARoute.jumpLearnClearTask(ARoute.LEARN_HOT_VIDEO_TAB);
+//                    } else if (item.columnType == 7) {
+//                        ARoute.jumpLearnClearTask(ARoute.LEARN_SMALL_VIDEO_TAB);
+//                    } else if (item.columnType == ARoute.BOARD_TYPE) {
+//                        ARoute.jumpMoreBoard(keyword);
+//                    } else if (item.columnType == ARoute.POST_TYPE) {
+//                        ARoute.jumpMorePost(keyword);
+//                    } else {
+//                        ARoute.jumpModule(getCollectType(item.columnType));
+//                    }
+
+
+                    if (item.columnType == ARoute.POST_TYPE) {
+                        ARoute.jumpMorePost(keyword);
                     } else if (item.columnType == ARoute.BOARD_TYPE) {
                         ARoute.jumpMoreBoard(keyword);
-                    } else if (item.columnType == ARoute.POST_TYPE) {
-                        ARoute.jumpMorePost(keyword);
                     } else {
-                        ARoute.jumpModule(getCollectType(item.columnType));
+                        ARoute.jumpMoreSearchResult(getModuleType(item.columnType), keyword);
                     }
+
                 });
 
                 break;
@@ -231,7 +246,62 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
                     ARoute.jumpForumDetail(item.id);
                 });
                 break;
+
+            case TYPE_ITEM_PF_VIDEO:
+                helper.itemView.setTag("video");
+                helper.setText(R.id.tv_name, getNonEmpty(item.title))
+                        .setText(R.id.tv_origin, getNonEmpty(item.source))
+                        .setText(R.id.tv_time, ParseUtils.getTime(item.createTime))
+                        .setGone(R.id.iv_praise, false);
+
+                JzvdStd jzvdStd = helper.getView(R.id.video_player);
+                jzvdStd.titleTextView.setVisibility(View.INVISIBLE);
+
+                jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                jzvdStd.setUp(getNonEmpty(item.videoUrl), getNonEmpty(item.title));
+                Glide.with(mContext)
+                        .load(getNonEmpty(item.cover))
+                        .apply(GlideOption.getFullScreenWOption(mContext))
+                        .into(jzvdStd.thumbImageView);
+
+                // 跳转到视频详情页
+                helper.itemView.setOnClickListener(v -> {
+                    ARoute.jumpDetail(item.newsInfoId, item.articleType);
+                });
+                break;
         }
+    }
+
+    /**
+     * * 模块标识      * 1 法律      * 2 司法解释      * 3 裁判文书      * 4 指导性案例      * 5 合同模板      * 6 普法天地  * 7论坛帖子
+     *
+     * @param itemType
+     * @return
+     */
+    private int getModuleType(int itemType) {
+        int type = 1;
+        switch (itemType) {
+            case 0:
+                type = 1;
+                break;
+            case 1:
+                type = 2;
+                break;
+            case 2:
+                type = 4;
+                break;
+            case 3:
+                type = 3;
+                break;
+            case 4:
+                type = 5;
+                break;
+            case 5:
+                type = 6;
+                break;
+
+        }
+        return type;
     }
 
     /**

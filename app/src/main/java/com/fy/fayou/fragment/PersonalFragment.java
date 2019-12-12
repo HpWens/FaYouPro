@@ -17,7 +17,6 @@ import com.fy.fayou.common.UserService;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.base.BaseFragment;
-import com.vondear.rxtool.RxDataTool;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
@@ -131,7 +130,7 @@ public class PersonalFragment extends BaseFragment {
         tvAttention.setText(user.followings + "");
         tvFan.setText(user.followers + "");
         tvPraise.setText(user.gives + "");
-        tvPhone.setText(user.mobile == null ? "" : RxDataTool.hideMobilePhone4(user.mobile));
+        tvPhone.setText(user.mobile == null ? "" : hideMobilePhone4(user.mobile));
 
         if (!TextUtils.isEmpty(user.avatar)) {
             Glide.with(getActivity()).
@@ -140,6 +139,13 @@ public class PersonalFragment extends BaseFragment {
                     thumbnail(0.5f).
                     into(ivHeader);
         }
+    }
+
+    private String hideMobilePhone4(String mobile_phone) {
+        if (mobile_phone.length() != 11) {
+            return "";
+        }
+        return mobile_phone.substring(0, 3) + "****" + mobile_phone.substring(7, 11);
     }
 
     @Override

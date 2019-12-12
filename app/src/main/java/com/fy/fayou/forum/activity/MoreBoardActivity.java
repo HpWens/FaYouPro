@@ -29,6 +29,7 @@ public class MoreBoardActivity extends BaseActivity {
     @Override
     protected void initData() {
         findViewById(R.id.top_line).setVisibility(View.GONE);
+        findViewById(R.id.top_space_line).setVisibility(View.VISIBLE);
 
         if (findFragment(MoreBoardFragment.class) == null) {
             loadRootFragment(R.id.fl_container, MoreBoardFragment.newInstance(keyword));
