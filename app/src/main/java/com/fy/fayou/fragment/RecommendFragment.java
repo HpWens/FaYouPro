@@ -88,7 +88,7 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
     public void onAttach(Activity activity) {
         if (getArguments() != null) {
             categoryId = getArguments().getString(Constant.Param.CATEGORY_ID, "");
-            fixedColumn = getArguments().getBoolean(Constant.Param.FIXED_COLUMN, false);
+            // fixedColumn = getArguments().getBoolean(Constant.Param.FIXED_COLUMN, false);
             isUserCenter = getArguments().getBoolean(Constant.Param.USER_CENTER, false);
             userId = getArguments().getString(Constant.Param.USER_ID, "0");
         }
@@ -213,7 +213,7 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
     protected void onDataLoaded(int pageNo, Result<List<RecommendEntity>> result) {
         super.onDataLoaded(pageNo, result);
 
-        // 新增全网通缉（神一样的设计）
+        // 新增全网通缉
         if (fixedColumn && pageNo == 1) {
             RecommendEntity entity = new RecommendEntity();
             entity.showIndex = true;

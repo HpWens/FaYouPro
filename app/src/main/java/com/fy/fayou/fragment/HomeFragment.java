@@ -243,7 +243,7 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
                 ARoute.jumpModule(ARoute.TEMPLATE_TYPE);
                 break;
             case R.id.iv_column5:
-                ARoute.jumpModule(ARoute.BOOKS_TYPE);
+                ARoute.jumpWanted();
                 break;
             case R.id.tab_top_spacing:
                 break;

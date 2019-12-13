@@ -162,7 +162,7 @@ public class FilterActivity extends BaseActivity {
                 // if (!TextUtils.isEmpty(url) && !TextUtils.isEmpty(suffix)) {
                 //     h5url = url.substring(0, url.lastIndexOf("/")) + "/" + suffix;
                 // }
-                ARoute.jumpH5(h5url, true, id, ARoute.TEMPLATE_TYPE);
+                ARoute.jumpH5(h5url, true, id, ARoute.TEMPLATE_TYPE, name);
                 break;
         }
     }

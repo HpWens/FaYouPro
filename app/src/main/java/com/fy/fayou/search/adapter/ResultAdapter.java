@@ -132,15 +132,15 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
 
                 break;
             case TYPE_ITEM:
-
-                helper.setText(R.id.tv_title, getForeSpan(keyword, getNonEmpty(TextUtils.isEmpty(item.title) ? item.name : item.title)))
+                String title = getNonEmpty(TextUtils.isEmpty(item.title) ? item.name : item.title);
+                helper.setText(R.id.tv_title, getForeSpan(keyword, title))
                         .setText(R.id.tv_content, getForeSpan(keyword, getNonEmpty(item.content)));
 
                 helper.itemView.setOnClickListener(v -> {
                     if (!TextUtils.isEmpty(item.toUrl)) {
                         try {
                             String id = item.toUrl.substring(item.toUrl.lastIndexOf("/") + 1);
-                            ARoute.jumpH5(item.toUrl, true, id, getCollectType(item.columnType));
+                            ARoute.jumpH5(item.toUrl, true, id, getCollectType(item.columnType), title);
                         } catch (Exception e) {
                         }
                     }
@@ -154,10 +154,15 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
                         .setText(R.id.tv_type, getNonEmpty(item.title))
                         .setText(R.id.tv_time, "发布时间：" + KtTimeUtils.INSTANCE.getYMDTime(item.expiryDate))
                         .setText(R.id.tv_count, "下载次数：" + item.download + "次")
-                        .setVisible(R.id.view_bottom, !item.isLastChild);
+                        .setVisible(R.id.view_bottom, !item.isLastChild)
+                        .setGone(R.id.tv_num, !item.type.equals("1"));
 
                 helper.itemView.setOnClickListener(v -> {
-                    ARoute.jumpH5(getNonEmpty(item.toUrl), true, item.id, ARoute.TEMPLATE_TYPE);
+                    if (!item.type.equals("1")) {
+                        ARoute.jumpFilter(item.id, item.title, item.toUrl);
+                        return;
+                    }
+                    ARoute.jumpH5(getNonEmpty(item.toUrl), true, item.id, ARoute.TEMPLATE_TYPE, getNonEmpty(item.title));
                 });
                 break;
             case TYPE_ITEM_NEWS:

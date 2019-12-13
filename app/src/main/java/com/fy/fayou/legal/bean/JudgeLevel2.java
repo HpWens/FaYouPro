@@ -13,6 +13,9 @@ public class JudgeLevel2 extends AbstractExpandableItem implements MultiItemEnti
     public String name = "";
     public boolean hasChald;
 
+    // 辅助字段 保存最顶级名称
+    public String topLevelName;
+
     // 辅助字段
     public boolean isSelected = false;
     public int level = 2;
@@ -26,6 +29,7 @@ public class JudgeLevel2 extends AbstractExpandableItem implements MultiItemEnti
         parent = in.readString();
         name = in.readString();
         hasChald = in.readByte() != 0;
+        topLevelName = in.readString();
         isSelected = in.readByte() != 0;
         level = in.readInt();
         itemType = in.readInt();
@@ -67,6 +71,7 @@ public class JudgeLevel2 extends AbstractExpandableItem implements MultiItemEnti
         dest.writeString(parent);
         dest.writeString(name);
         dest.writeByte((byte) (hasChald ? 1 : 0));
+        dest.writeString(topLevelName);
         dest.writeByte((byte) (isSelected ? 1 : 0));
         dest.writeInt(level);
         dest.writeInt(itemType);

@@ -38,7 +38,7 @@ public class TemplateAdapter extends MeiBaseAdapter<TemplateEntity> {
                 if (item.file != null && !item.file.startsWith("http://")) {
                     item.file = "http://" + item.file;
                 }
-                ARoute.jumpH5(getNonEmpty(item.toUrl), true, item.id, collectType, item.file);
+                ARoute.jumpH5(getNonEmpty(item.toUrl), true, item.id, collectType, item.file, getNonEmpty(item.title));
             }
         });
     }

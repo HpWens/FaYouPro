@@ -86,11 +86,12 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
         if (mCollectType == ARoute.GUIDE_TYPE) {
             // 新增浏览记录
             HashMap<String, String> params = new HashMap<>();
-            params.put("caseType", type);
+            params.put("cardType", type);
             params.put("size", "20");
+            params.put("type", "0");
             params.put("page", (pageNo - 1) + "");
             JSONObject jsonObject = new JSONObject(params);
-            observable = EasyHttp.post(ApiUrl.FIND_GUIDE_LIST)
+            observable = EasyHttp.post(ApiUrl.GET_CASE_LIST)
                     .upJson(jsonObject.toString())
                     .execute(String.class);
         } else if (mCollectType == ARoute.JUDGE_TYPE) {

@@ -35,6 +35,8 @@ public class ColumnEntity implements Serializable, Parcelable {
     public JudgeEntity judgeEntity;
     public String tags;
 
+    public String card_type;
+
     public ColumnEntity() {
     }
 

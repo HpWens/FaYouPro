@@ -33,7 +33,7 @@ public class RelatedAdapter extends BaseMultiAdapter<LawBean> {
         } else {
             helper.setText(R.id.tv_name, getNonEmpty(item.name));
             helper.itemView.setOnClickListener(v -> {
-                ARoute.jumpH5(getNonEmpty(item.url), true, item.id, item.collectType);
+                ARoute.jumpH5(getNonEmpty(item.url), true, item.id, item.collectType, getNonEmpty(item.name));
             });
         }
     }

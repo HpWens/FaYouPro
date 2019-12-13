@@ -189,6 +189,7 @@ public class FilterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
                             for (JudgeLevel2 level2 : list) {
                                 level2.level = itemType;
                                 level2.itemType = itemType;
+                                level2.topLevelName = level.topLevelName;
                                 level2.helperIndex = level.helperIndex;
                                 level.addSubItem(level2);
                             }
@@ -219,6 +220,7 @@ public class FilterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
                                 level2.level = TYPE_LEVEL_2;
                                 level2.helperId = level.id;
                                 level2.itemType = TYPE_LEVEL_2;
+                                level2.topLevelName = level.name;
                                 level2.helperIndex = level.helperIndex;
                                 level.addSubItem(level2);
                             }

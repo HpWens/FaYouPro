@@ -56,6 +56,7 @@ public class LegalActivity extends BaseActivity {
 
     WantedVPAdapter mAdapter;
 
+    private static final String CLIENT_TAG = "手机";
 
     @Override
     protected void initView() {
@@ -102,7 +103,43 @@ public class LegalActivity extends BaseActivity {
 
     // 请求指导性栏目
     private void requestGuideColumn() {
-        EasyHttp.get(ApiUrl.GET_GUIDE_LIST)
+        EasyHttp.get(ApiUrl.GET_CASE_CATEGORY)
+                .params("type", "0")
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
+                            viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.GUIDE, moduleType));
+                            tab.setViewPager(viewpager);
+                        }
+                    }
+                });
+
+//        EasyHttp.get(ApiUrl.GET_GUIDE_LIST)
+//                .execute(new SimpleCallBack<String>() {
+//                    @Override
+//                    public void onError(ApiException e) {
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(String s) {
+//                        if (!TextUtils.isEmpty(s)) {
+//                            ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
+//                            viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.GUIDE, moduleType));
+//                            tab.setViewPager(viewpager);
+//                        }
+//                    }
+//                });
+    }
+
+    private void requestGuideCategory(String id) {
+        EasyHttp.get(ApiUrl.GET_CASE_TOP_CATEGORY)
+                .params("id", id)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
@@ -171,9 +208,26 @@ public class LegalActivity extends BaseActivity {
             } else {
                 String[] ids = new String[]{"0", "0", "0", "0", "0", "0", parentId};
                 for (JudgeLevel2 lv : list) {
-                    if (ids.length > lv.helperIndex) {
-                        ids[lv.helperIndex] = lv.id;
+//                    if (ids.length > lv.helperIndex) {
+//                        ids[lv.helperIndex] = lv.id;
+//                    }
+
+                    if (!TextUtils.isEmpty(lv.topLevelName)) {
+                        if (lv.topLevelName.contains("案由")) {
+                            ids[0] = lv.id;
+                        } else if (lv.topLevelName.contains("法院")) {
+                            ids[1] = lv.id;
+                        } else if (lv.topLevelName.contains("地域")) {
+                            ids[2] = lv.id;
+                        } else if (lv.topLevelName.contains("裁判")) {
+                            ids[3] = lv.id;
+                        } else if (lv.topLevelName.contains("审判")) {
+                            ids[4] = lv.id;
+                        } else if (lv.topLevelName.contains("文书")) {
+                            ids[5] = lv.id;
+                        }
                     }
+
                 }
                 StringBuilder sb = new StringBuilder();
                 JudgeEntity judgeEntity = new JudgeEntity();
@@ -189,21 +243,27 @@ public class LegalActivity extends BaseActivity {
     /**********************************************裁判文书接口**********************************************/
     private void setJudgeEntity(int index, String id, JudgeEntity judge) {
         switch (index) {
+            // 案由
             case 0:
                 judge.typeReason = id;
                 break;
+            // 法院
             case 1:
                 judge.typeCourtClass = id;
                 break;
+            // 地域
             case 2:
                 judge.typeZone = id;
                 break;
+            // 裁判
             case 3:
                 judge.typeSpnf = id;
                 break;
+            // 审判
             case 4:
                 judge.typeSpcx = id;
                 break;
+            // 文书
             case 5:
                 judge.typeBookType = id;
                 break;

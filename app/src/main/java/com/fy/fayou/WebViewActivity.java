@@ -25,10 +25,12 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.detail.bean.DetailBean;
 import com.fy.fayou.detail.bean.LawBean;
 import com.fy.fayou.detail.dialog.BottomShareDialog;
 import com.fy.fayou.detail.dialog.RelatedDialog;
+import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.event.ReportSuccessEvent;
 import com.fy.fayou.legal.bean.LegalEntity;
 import com.fy.fayou.legal.bean.LegalRelatedBean;
@@ -76,6 +78,9 @@ public class WebViewActivity extends BaseActivity {
     @Autowired(name = "file_path")
     public String filePath = "";
 
+    @Autowired(name = "title")
+    public String shareTitle = "";
+
     @BindView(R.id.web_base)
     WebView webBase;
     @BindView(R.id.pb_web_base)
@@ -93,9 +98,6 @@ public class WebViewActivity extends BaseActivity {
     private BottomShareDialog mShareDialog;
 
     private int templateDownloadCount = 0;
-
-    // 分享摘要
-    private String mShareContent;
 
     private String mShareFilePath;
     // 是否分享文件
@@ -124,7 +126,7 @@ public class WebViewActivity extends BaseActivity {
                 .setShareFile(mIsShareFile)
                 .setGoneOpera(mIsShareFile)
                 .setShareUrl(mIsShareFile ? mShareFilePath : url)
-                .setShareContent(mShareContent)
+                .setShareContent(shareTitle)
                 .setOnItemClickListener(new BottomShareDialog.OnItemClickListener() {
                     @Override
                     public void onDismiss() {
@@ -196,7 +198,9 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
-                setToolBarCenterTitle(mShareContent = (type == ARoute.TEMPLATE_TYPE ? "合同详情" : title));
+                String toolbarTitle = (type == ARoute.TEMPLATE_TYPE ? "合同详情" : title);
+                if (TextUtils.isEmpty(shareTitle)) shareTitle = toolbarTitle;
+                setToolBarCenterTitle(toolbarTitle);
             }
 
             @Override
@@ -262,6 +266,9 @@ public class WebViewActivity extends BaseActivity {
         });
 
         tvCount.setOnClickListener(v -> {
+            if (!UserService.getInstance().checkLoginAndJump()) {
+                return;
+            }
             mIsShareFile = true;
             new RxPermissions(this).request(new String[]{
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -395,6 +402,8 @@ public class WebViewActivity extends BaseActivity {
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
+                        tvCount.setText("请登录后进行下载");
+                        tvCount.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -673,7 +682,7 @@ public class WebViewActivity extends BaseActivity {
 
     @Override
     public void onBackPressedSupport() {
-        if (webBase.canGoBack()) {
+        if (webBase.canGoBack() && type != ARoute.TEMPLATE_TYPE) {
             webBase.goBack();
         } else {
             super.onBackPressedSupport();
@@ -706,4 +715,10 @@ public class WebViewActivity extends BaseActivity {
             mShareDialog.dismiss();
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoginSuccessOrExitEvent(LoginSuccessOrExitEvent event) {
+        if (tvCount != null) requestDownLoadCount();
+    }
+
 }

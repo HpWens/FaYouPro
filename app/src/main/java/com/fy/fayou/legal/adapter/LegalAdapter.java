@@ -34,16 +34,17 @@ public class LegalAdapter extends MeiBaseAdapter<LegalEntity> {
                     .setText(R.id.tv_time, TextUtils.isEmpty(item.publicDate) ? "" : helper.itemView.getResources().getString(R.string.module_publish_time, item.publicDate));
 
             helper.itemView.setOnClickListener(v -> {
-                ARoute.jumpH5(getNonEmpty(item.url), true, item.id, collectType);
+                ARoute.jumpH5(getNonEmpty(item.url), true, item.id, collectType, getNonEmpty(item.title));
             });
         } else {
             String time = (type == 3 ? item.publishTime : item.pubTime);
-            helper.setText(R.id.tv_name, getNonEmpty(type == 3 ? item.name : item.title))
+            String title = getNonEmpty(type == 3 ? item.name : item.title);
+            helper.setText(R.id.tv_name, title)
                     .setText(R.id.tv_source, helper.itemView.getResources().getString(R.string.module_source, getNonEmpty(item.source)))
                     .setText(R.id.tv_time, TextUtils.isEmpty(time) ? "" : helper.itemView.getResources().getString(R.string.module_publish_time, KtTimeUtils.INSTANCE.getYMDTime(time)));
 
             helper.itemView.setOnClickListener(v -> {
-                ARoute.jumpH5(getNonEmpty(item.toUrl), true, item.id, collectType);
+                ARoute.jumpH5(getNonEmpty(item.toUrl), true, item.id, collectType, title);
             });
         }
     }

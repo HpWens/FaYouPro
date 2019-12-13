@@ -96,24 +96,24 @@
         android:id="@+id/tv_praise_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="0K人看过"
         android:textColor="@color/color_666666"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_plate"
         app:layout_constraintLeft_toLeftOf="@+id/tv_title"
-        app:layout_constraintTop_toTopOf="@+id/tv_plate" />
+        app:layout_constraintTop_toTopOf="@+id/tv_plate"
+        tools:text="0K人看过" />
 
     <TextView
         android:id="@+id/tv_comment_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
-        tools:text="0 评论"
         android:textColor="@color/color_666666"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_plate"
         app:layout_constraintLeft_toRightOf="@+id/tv_praise_num"
-        app:layout_constraintTop_toTopOf="@+id/tv_plate" />
+        app:layout_constraintTop_toTopOf="@+id/tv_plate"
+        tools:text="0 评论" />
 
 
     <TextView
@@ -122,12 +122,12 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        tools:text="0 点赞"
         android:textColor="@color/color_666666"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_plate"
         app:layout_constraintLeft_toRightOf="@+id/tv_comment_num"
-        app:layout_constraintTop_toTopOf="@+id/tv_plate" />
+        app:layout_constraintTop_toTopOf="@+id/tv_plate"
+        tools:text="0 点赞" />
 
     <View
         android:layout_width="match_parent"
@@ -137,5 +137,19 @@
         android:layout_marginRight="15dp"
         android:background="@color/color_e5e5e5"
         app:layout_constraintTop_toBottomOf="@+id/tv_plate"></View>
+
+    <ImageView
+        android:id="@+id/iv_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="6dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="6dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_small_light_close"
+        android:visibility="gone"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
 
 </android.support.constraint.ConstraintLayout>

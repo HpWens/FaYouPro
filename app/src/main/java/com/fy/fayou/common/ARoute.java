@@ -158,17 +158,18 @@ public class ARoute {
         jumpH5(url, false, "", ARoute.ARTICLE_TYPE, "");
     }
 
-    public static void jumpH5(String url, boolean isShowMore, String id, int collectType) {
-        jumpH5(url, isShowMore, id, collectType, "");
+    public static void jumpH5(String url, boolean isShowMore, String id, int collectType, String title) {
+        jumpH5(url, isShowMore, id, collectType, "", title);
     }
 
-    public static void jumpH5(String url, boolean isShowMore, String id, int collectType, String filePath) {
+    public static void jumpH5(String url, boolean isShowMore, String id, int collectType, String filePath, String title) {
         ARouter.getInstance()
                 .build(Constant.COMMON_WEB_VIEW)
                 .withString(Constant.Param.URL, url)
                 .withBoolean(Constant.Param.DETAIL, isShowMore)
                 .withString(Constant.Param.ID, id)
                 .withString(Constant.Param.FILE_PATH, filePath)
+                .withString(Constant.Param.TITLE, title)
                 .withInt(Constant.Param.TYPE, collectType)
                 .navigation();
     }
@@ -384,26 +385,26 @@ public class ARoute {
 
 
     // 历史记录 我的收藏 跳转到详情界面
-    public static void jumpDetail(String browseRecordType, String id, String h5Url) {
+    public static void jumpDetail(String browseRecordType, String id, String h5Url, String title) {
         if (TextUtils.isEmpty(browseRecordType)) return;
         switch (browseRecordType) {
             case "CASE":
-                jumpH5(h5Url, true, id, ARoute.GUIDE_TYPE);
+                jumpH5(h5Url, true, id, ARoute.GUIDE_TYPE, title);
                 break;
             case "LEGAL":
-                jumpH5(h5Url, true, id, ARoute.LEGAL_TYPE);
+                jumpH5(h5Url, true, id, ARoute.LEGAL_TYPE, title);
                 break;
             case "JUDICIAL":
-                jumpH5(h5Url, true, id, ARoute.JUDICIAL_TYPE);
+                jumpH5(h5Url, true, id, ARoute.JUDICIAL_TYPE, title);
                 break;
             case "JUDGE":
-                jumpH5(h5Url, true, id, ARoute.JUDGE_TYPE);
+                jumpH5(h5Url, true, id, ARoute.JUDGE_TYPE, title);
                 break;
             case "CONTRACT":
-                jumpH5(h5Url, true, id, ARoute.TEMPLATE_TYPE);
+                jumpH5(h5Url, true, id, ARoute.TEMPLATE_TYPE, title);
                 break;
             case "CRIMINAL":
-                jumpH5(h5Url, true, id, ARoute.WANTED_TYPE);
+                jumpH5(h5Url, true, id, ARoute.WANTED_TYPE, title);
                 break;
             case "ARTICLE":
             case "VIDEO":

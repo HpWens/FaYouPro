@@ -60,7 +60,11 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
             return TemplateFragment.newInstance(mColumns.get(i).type, mColumns.get(i).tags, mCollectType);
         } else if (mType == LEGAL || mType == JUDICIAL || mType == GUIDE || mType == JUDGE) {
             String id = mColumns.get(i).type;
-            if (mType == GUIDE || mType == JUDGE) id = mColumns.get(i).id;
+            if (mType == GUIDE) {
+                id = mColumns.get(i).card_type;
+            } else if (mType == JUDGE) {
+                id = mColumns.get(i).id;
+            }
             return LegalFragment.newInstance(mType, id, mCollectType, mType == JUDGE ? mColumns.get(i).judgeEntity : null);
         }
         return WantedFragment.newInstance(mColumns.get(i).type, "", "");

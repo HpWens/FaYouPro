@@ -197,6 +197,8 @@ public class Constant {
 
         String DETAIL = "detail";
 
+        String TITLE = "title";
+
         String MOBILE = "mobile";
 
         String TYPE = "type";

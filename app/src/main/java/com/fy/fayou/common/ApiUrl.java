@@ -351,4 +351,15 @@ public class ApiUrl {
     // 单模块检索
     public static final String GET_MORE_SEARCH_RESULT = "/api-searchengines/public/search/single";
 
+    /**************************************1.1版本改动*******************************************************/
+    // 获取树形菜单
+    public static final String GET_CASE_TOP_CATEGORY = "/api-popularize/public/caseType";
+
+    // 横栏计数获取
+    public static final String GET_CASE_CATEGORY = "/api-popularize/public/case/selectCaseRail";
+
+    // 案例列表
+    public static final String GET_CASE_LIST = "/api-popularize/public/case/selectCaseForPub";
+
+
 }
