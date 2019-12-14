@@ -39,6 +39,7 @@ public class BottomShareDialog extends BaseDialog implements SocialShareCallback
     ImageView mIvReport;
     ImageView mIvCollect;
     ImageView mIvNight;
+    ImageView mIvWXFriendShare;
     LinearLayout mReportLayout;
     LinearLayout mOperaLayout;
     // 分享
@@ -150,6 +151,7 @@ public class BottomShareDialog extends BaseDialog implements SocialShareCallback
         mReportLayout = findViewById(R.id.report_layout);
         mOperaLayout = findViewById(R.id.opera_layout);
         mIvWXShare = findViewById(R.id.iv_wx_share);
+        mIvWXFriendShare = findViewById(R.id.iv_wx_friend_share);
 
         socialHelper = SocialUtil.INSTANCE.socialHelper;
 
@@ -170,12 +172,18 @@ public class BottomShareDialog extends BaseDialog implements SocialShareCallback
         });
 
         mIvWXShare.setOnClickListener(v -> {
-            socialHelper.shareWX(getActivity(), createWXShareEntity(), this);
+            socialHelper.shareWX(getActivity(), createWXShareEntity(false), this);
+        });
+
+        mIvWXFriendShare.setOnClickListener(v -> {
+            socialHelper.shareWX(getActivity(), createWXShareEntity(true), this);
         });
 
         mReportLayout.setVisibility(!isGoneReport ? View.VISIBLE : View.GONE);
 
         mOperaLayout.setVisibility(isGoneOpera ? View.GONE : View.VISIBLE);
+
+        mIvWXFriendShare.setVisibility(mIsShareFile ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -243,11 +251,11 @@ public class BottomShareDialog extends BaseDialog implements SocialShareCallback
                 });
     }
 
-    private ShareEntity createWXShareEntity() {
+    private ShareEntity createWXShareEntity(boolean isTimeLine) {
         if (mIsShareFile) {
-            return WXShareEntity.createFileInfo(false, mShareUrl, R.mipmap.ic_launcher, "法友", mShareContent);
+            return WXShareEntity.createFileInfo(isTimeLine, mShareUrl, R.mipmap.ic_launcher, "法友", mShareContent);
         }
-        return WXShareEntity.createWebPageInfo(false, mShareUrl, R.mipmap.ic_launcher, "法友", mShareContent);
+        return WXShareEntity.createWebPageInfo(isTimeLine, mShareUrl, R.mipmap.ic_launcher, "法友", mShareContent);
     }
 
     @Override

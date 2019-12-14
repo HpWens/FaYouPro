@@ -165,7 +165,7 @@ public class UserService {
         return true;
     }
 
-    // 保存历史记录
+    // 全局搜索保存历史记录
     public void saveHistorySearch(String record) {
         ACache.get(mContext).put(Constant.SP.SEARCH_HISTORY, record);
     }
@@ -198,6 +198,52 @@ public class UserService {
         saveHistorySearch("");
     }
 
+    // 六大模块搜索-根据六大模块保存历史记录
+    public void saveHistorySearch(String keyword, int type) {
+        ACache.get(mContext).put(Constant.SP.SEARCH_HISTORY + type, keyword);
+    }
+
+    /**
+     * 获取历史搜索
+     *
+     * @param type 模块类型
+     * @return
+     */
+    public List<String> getHistorySearch(int type) {
+        String data = ACache.get(mContext).getAsString(Constant.SP.SEARCH_HISTORY + type);
+        if (TextUtils.isEmpty(data)) {
+            return new ArrayList<>();
+        } else {
+            return ParseUtils.parseListData(data, String.class);
+        }
+    }
+
+    /**
+     * 添加搜索历史
+     *
+     * @param key
+     */
+    public void addHistorySearch(String key, int type) {
+        List<String> data = getHistorySearch(type);
+        if (data != null) {
+            if (data.isEmpty()) {
+                data.add(key);
+            } else {
+                if (data.contains(key)) {
+                    data.remove(key);
+                }
+                data.add(0, key);
+            }
+            saveHistorySearch(new Gson().toJson(data), type);
+        }
+    }
+
+    /**
+     * 清空搜索历史
+     */
+    public void clearHistorySearch(int type) {
+        saveHistorySearch("", type);
+    }
 
     // 分类保持 历史记录
 

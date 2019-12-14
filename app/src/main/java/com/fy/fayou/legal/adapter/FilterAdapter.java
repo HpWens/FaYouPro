@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
 import com.fy.fayou.legal.bean.JudgeLevel1;
 import com.fy.fayou.legal.bean.JudgeLevel2;
@@ -38,14 +39,17 @@ public class FilterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
     private ArrayList<JudgeLevel2> selectedArray = new ArrayList<>();
     private OnCheckListener listener;
 
+    private int moduleType;
+
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
-    public FilterAdapter(List<MultiItemEntity> data) {
+    public FilterAdapter(List<MultiItemEntity> data, int type) {
         super(data);
+        this.moduleType = type;
         addItemType(TYPE_LEVEL_1, R.layout.item_filter_lv1);
         addItemType(TYPE_LEVEL_2, R.layout.item_filter_lv2);
         addItemType(TYPE_LEVEL_3, R.layout.item_filter_lv2);
@@ -175,7 +179,7 @@ public class FilterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
      * @param position
      */
     private void requestColumn2(JudgeLevel2 level, int itemType, int position) {
-        EasyHttp.get(ApiUrl.GET_JUDGE_LEVEL)
+        EasyHttp.get(getDomainUrl())
                 .params("id", "" + level.id)
                 .execute(new SimpleCallBack<String>() {
                     @Override
@@ -203,7 +207,7 @@ public class FilterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
      * @param level
      */
     private void requestColumn(JudgeLevel1 level, int position) {
-        EasyHttp.get(ApiUrl.GET_JUDGE_LEVEL)
+        EasyHttp.get(getDomainUrl())
                 .params("id", "" + level.id)
                 .execute(new SimpleCallBack<String>() {
                     @Override
@@ -228,6 +232,21 @@ public class FilterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
                         }
                     }
                 });
+    }
+
+    /**
+     * 获取域名
+     *
+     * @return
+     */
+    private String getDomainUrl() {
+        switch (moduleType) {
+            case ARoute.GUIDE_TYPE:
+                return ApiUrl.GET_GUIDE_LEAVE;
+            case ARoute.JUDGE_TYPE:
+                return ApiUrl.GET_JUDGE_LEVEL;
+        }
+        return ApiUrl.GET_JUDGE_LEVEL;
     }
 
     public interface OnCheckListener {

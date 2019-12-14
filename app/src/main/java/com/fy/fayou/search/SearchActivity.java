@@ -1,5 +1,6 @@
 package com.fy.fayou.search;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.event.SearchResultEvent;
 import com.fy.fayou.search.adapter.FlowAdapter;
@@ -47,6 +49,9 @@ public class SearchActivity extends BaseActivity {
 
     @Autowired(name = "is_forum")
     public boolean isForum = false;
+
+    @Autowired(name = "type")
+    public int type;
 
     @BindView(R.id.et_search)
     EditText etSearch;
@@ -85,7 +90,7 @@ public class SearchActivity extends BaseActivity {
 
     private void addHeaderView() {
         List<String> list = new ArrayList<>();
-        List<String> historyList = UserService.getInstance().getHistorySearch();
+        List<String> historyList = type == 0 ? UserService.getInstance().getHistorySearch() : UserService.getInstance().getHistorySearch(type);
         int size = historyList.size() >= HISTORY_COUNT ? HISTORY_COUNT : historyList.size();
         for (int i = 0; i < size; i++) {
             list.add(historyList.get(i));
@@ -101,7 +106,15 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void initData() {
 
-        requestHot();
+        // 全网通缉不展示热搜
+        if (type != ARoute.WANTED_TYPE) {
+            requestHot();
+        }
+
+        // 全网通缉提示
+        if (type == ARoute.WANTED_TYPE) {
+            etSearch.setHint("输入通缉人姓名，可以仅输入部分");
+        }
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -153,10 +166,27 @@ public class SearchActivity extends BaseActivity {
             Toast.makeText(mContext, "请输入搜索内容", Toast.LENGTH_SHORT).show();
             return;
         }
-        ARoute.jumpSearchResult(key, isForum);
 
         // 保存历史记录
-        UserService.getInstance().addHistorySearch(key);
+        if (type == 0) {
+            UserService.getInstance().addHistorySearch(key);
+        } else {
+            UserService.getInstance().addHistorySearch(key, type);
+        }
+
+        // 全网通缉
+        if (type == ARoute.WANTED_TYPE) {
+            Intent intent = new Intent();
+            intent.putExtra(Constant.Param.KEYWORD, key);
+            setResult(ARoute.WANTED_RESULT_CODE, intent);
+            finish();
+            return;
+        }
+
+        // 跳转到结果页
+        ARoute.jumpSearchResult(key, isForum);
+
+        // 更新头部
         addHeaderView();
     }
 
@@ -175,7 +205,11 @@ public class SearchActivity extends BaseActivity {
             jumpSearchResult(key);
         }));
         header.findViewById(R.id.iv_clear).setOnClickListener(v -> {
-            UserService.getInstance().clearHistorySearch();
+            if (type == 0) {
+                UserService.getInstance().clearHistorySearch();
+            } else {
+                UserService.getInstance().clearHistorySearch(type);
+            }
             mAdapter.removeAllHeaderView();
         });
         return header;
@@ -184,7 +218,7 @@ public class SearchActivity extends BaseActivity {
     private void requestHot() {
         EasyHttp.get(ApiUrl.HOT_SEARCH)
                 .params("page", "0")
-                .params("size", "20")
+                .params("size", "10")
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

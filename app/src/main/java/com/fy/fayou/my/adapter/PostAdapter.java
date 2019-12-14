@@ -24,8 +24,15 @@ import java.util.ArrayList;
 
 public class PostAdapter extends MeiBaseAdapter<ForumEntity> {
 
-    public PostAdapter() {
+    private boolean mIsUserCenter;
+
+    public PostAdapter(boolean isUserCenter) {
         super(R.layout.forum_item_follow, new ArrayList<>());
+        mIsUserCenter = isUserCenter;
+    }
+
+    public PostAdapter() {
+        this(false);
     }
 
     @Override
@@ -39,7 +46,7 @@ public class PostAdapter extends MeiBaseAdapter<ForumEntity> {
                 .setText(R.id.tv_scan, item.clicks + "人看过")
                 .setText(R.id.tv_comment_num, item.comments + "评论")
                 .setText(R.id.tv_praise_num, item.gives + "点赞")
-                .setGone(R.id.iv_delete, true);
+                .setGone(R.id.iv_delete, mIsUserCenter);
 
         ViewGroup.MarginLayoutParams titleLp = (ViewGroup.MarginLayoutParams) helper.getView(R.id.tv_title).getLayoutParams();
         titleLp.topMargin = RxImageTool.dp2px(28);

@@ -51,6 +51,10 @@ public class WantedActivity extends BaseActivity {
 
     private static final int CITY_REQUEST_CODE = 101;
 
+    // 搜索条件
+    private String mFindPosition;
+    private String mFindName;
+
     @Override
     protected void initView() {
         ButterKnife.bind(this);
@@ -62,13 +66,16 @@ public class WantedActivity extends BaseActivity {
     @Override
     protected void initData() {
         // 请求栏目
-        requestColumn("");
+        requestColumn("", "");
     }
 
-    private void requestColumn(String position) {
+    private void requestColumn(String position, String name) {
         HashMap<String, String> hm = new HashMap<>();
         if (!TextUtils.isEmpty(position)) {
             hm.put("position", position);
+        }
+        if (!TextUtils.isEmpty(name)) {
+            hm.put("name", name);
         }
         EasyHttp.get(ApiUrl.CRIMINAL_COLUMN)
                 .params(hm)
@@ -82,8 +89,10 @@ public class WantedActivity extends BaseActivity {
                         if (!TextUtils.isEmpty(s)) {
                             ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
                             if (columns.isEmpty()) return;
+                            // 赋值筛选条件
                             for (ColumnEntity entity : columns) {
                                 entity.position = position;
+                                entity.name = name;
                             }
                             if (mAdapter == null) {
                                 viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.WANTED, collectType));
@@ -112,7 +121,7 @@ public class WantedActivity extends BaseActivity {
                 ARouter.getInstance().build(Constant.CITY_SELECT).navigation(mContext, CITY_REQUEST_CODE);
                 break;
             case R.id.iv_float_search:
-                ARoute.jumpSearch();
+                ARoute.jumpSearch(this, ARoute.WANTED_TYPE);
                 break;
         }
     }
@@ -122,8 +131,11 @@ public class WantedActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constant.Param.RESULT_CODE) {
             String city = data.getStringExtra(Constant.Param.CITY_NAME);
-            tvRight.setText(city);
-            requestColumn(city);
+            tvRight.setText(mFindPosition = city);
+            requestColumn(city, mFindName);
+        } else if (resultCode == ARoute.WANTED_RESULT_CODE) {
+            mFindName = data.getStringExtra(Constant.Param.KEYWORD);
+            requestColumn(mFindPosition, mFindName);
         }
     }
 }

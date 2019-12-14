@@ -66,7 +66,7 @@ public class UserCenterPostFragment extends BaseListFragment<ForumEntity> {
 
     @Override
     protected MeiBaseAdapter<ForumEntity> getAdapter() {
-        return mAdapter = new PostAdapter();
+        return mAdapter = new PostAdapter(false);
     }
 
     @Override

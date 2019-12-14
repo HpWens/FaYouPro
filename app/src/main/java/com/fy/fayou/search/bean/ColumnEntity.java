@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class ColumnEntity implements Serializable, Parcelable {
 
-    // 栏目名称
+    // 栏目名称  全网通缉筛选条件
     public String name = "";
 
     // 栏目副标题

@@ -16,6 +16,9 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
+/**
+ * 联想词列表页面
+ */
 public class AssociateFragment extends BaseListFragment<SearchEntity> {
 
     RecyclerView recyclerView;

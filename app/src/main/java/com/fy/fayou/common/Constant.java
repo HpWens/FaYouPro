@@ -241,7 +241,9 @@ public class Constant {
 
         int REQUEST_CODE = 100;
 
-        int TEMPLATE_FILTER_RESULT = 201;
+        int JUDGE_RESULT_CODE = 201;
+
+        int GUIDE_RESULT_CODE = 202;
 
         int VIDEO_TYPE = 1;
 

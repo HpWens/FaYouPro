@@ -361,5 +361,7 @@ public class ApiUrl {
     // 案例列表
     public static final String GET_CASE_LIST = "/api-popularize/public/case/selectCaseForPub";
 
+    // 案例筛选树形
+    public static final String GET_GUIDE_LEAVE = "/api-popularize/public/caseType";
 
 }

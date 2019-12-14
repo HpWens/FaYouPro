@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,10 +54,10 @@ public class LegalActivity extends BaseActivity {
     HomeViewpager viewpager;
     @BindView(R.id.iv_float_search)
     ImageView ivFloatSearch;
+    @BindView(R.id.fl_empty)
+    FrameLayout emptyLayout;
 
     WantedVPAdapter mAdapter;
-
-    private static final String CLIENT_TAG = "手机";
 
     @Override
     protected void initView() {
@@ -76,8 +77,8 @@ public class LegalActivity extends BaseActivity {
                 break;
             case ARoute.GUIDE_TYPE:
                 tvCenterTitle.setText("指导性意见");
-                //tvRight.setText("全国");
-                //tvRight.setVisibility(View.VISIBLE);
+                tvRight.setText("筛选");
+                tvRight.setVisibility(View.VISIBLE);
                 break;
             case ARoute.JUDGE_TYPE:
                 tvCenterTitle.setText("裁判文书");
@@ -93,7 +94,8 @@ public class LegalActivity extends BaseActivity {
         }
         // 请求栏目1法律法规2司法解释3指导性意见
         if (moduleType == ARoute.GUIDE_TYPE) {
-            requestGuideColumn();
+            requestGuideColumn("0");
+            requestGuideCategory("0");
         } else if (moduleType == ARoute.JUDGE_TYPE) {
             requestJudgeCategory();
         } else {
@@ -101,10 +103,12 @@ public class LegalActivity extends BaseActivity {
         }
     }
 
+
+    /***********************************请求指导性意见栏目**********************************************************/
     // 请求指导性栏目
-    private void requestGuideColumn() {
+    private void requestGuideColumn(String id) {
         EasyHttp.get(ApiUrl.GET_CASE_CATEGORY)
-                .params("type", "0")
+                .params("type", id)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
@@ -114,8 +118,14 @@ public class LegalActivity extends BaseActivity {
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
                             ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
-                            viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.GUIDE, moduleType));
-                            tab.setViewPager(viewpager);
+                            if (mAdapter == null) {
+                                viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.GUIDE, moduleType));
+                                tab.setViewPager(viewpager);
+                            } else {
+                                mAdapter.setNewData(columns);
+                                tab.setViewPager(viewpager);
+                            }
+                            emptyLayout.setVisibility(columns.isEmpty() ? View.VISIBLE : View.GONE);
                         }
                     }
                 });
@@ -137,6 +147,11 @@ public class LegalActivity extends BaseActivity {
 //                });
     }
 
+    /**
+     * 请求指导性意见手机端栏目
+     *
+     * @param id 为0获取顶级栏目
+     */
     private void requestGuideCategory(String id) {
         EasyHttp.get(ApiUrl.GET_CASE_TOP_CATEGORY)
                 .params("id", id)
@@ -148,14 +163,17 @@ public class LegalActivity extends BaseActivity {
                     @Override
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
-                            ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
-                            viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.GUIDE, moduleType));
-                            tab.setViewPager(viewpager);
+                            filterList = ParseUtils.parseArrayListData(s, JudgeLevel1.class);
                         }
                     }
                 });
     }
 
+
+    /***********************************请求模块栏目**********************************************************/
+    /**
+     * @param type
+     */
     private void requestColumn(final int type) {
         EasyHttp.get(ApiUrl.LEGAL_FIND_LIST)
                 .params("type", type + "")
@@ -170,74 +188,10 @@ public class LegalActivity extends BaseActivity {
                             ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
                             viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, type == ARoute.LEGAL_TYPE ? WantedVPAdapter.LEGAL : WantedVPAdapter.JUDICIAL, moduleType));
                             tab.setViewPager(viewpager);
+                            emptyLayout.setVisibility(columns.isEmpty() ? View.VISIBLE : View.GONE);
                         }
                     }
                 });
-    }
-
-    @Override
-    protected int layoutResId() {
-        return R.layout.activity_home_wanted;
-    }
-
-    @OnClick({R.id.iv_back, R.id.tv_right, R.id.iv_float_search})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back:
-                finish();
-                break;
-            case R.id.tv_right:
-                ARoute.jumpJudgeFilter(this, filterList);
-                break;
-            case R.id.iv_float_search:
-                ARoute.jumpSearch();
-                break;
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Constant.Param.RESULT_CODE) {
-            String city = data.getStringExtra(Constant.Param.CITY_NAME);
-            tvRight.setText(city);
-        } else if (resultCode == Constant.Param.TEMPLATE_FILTER_RESULT) {
-            ArrayList<JudgeLevel2> list = data.getParcelableArrayListExtra(Constant.Param.LIST);
-            if (list == null || list.isEmpty()) {
-                requestJudgeCategory();
-            } else {
-                String[] ids = new String[]{"0", "0", "0", "0", "0", "0", parentId};
-                for (JudgeLevel2 lv : list) {
-//                    if (ids.length > lv.helperIndex) {
-//                        ids[lv.helperIndex] = lv.id;
-//                    }
-
-                    if (!TextUtils.isEmpty(lv.topLevelName)) {
-                        if (lv.topLevelName.contains("案由")) {
-                            ids[0] = lv.id;
-                        } else if (lv.topLevelName.contains("法院")) {
-                            ids[1] = lv.id;
-                        } else if (lv.topLevelName.contains("地域")) {
-                            ids[2] = lv.id;
-                        } else if (lv.topLevelName.contains("裁判")) {
-                            ids[3] = lv.id;
-                        } else if (lv.topLevelName.contains("审判")) {
-                            ids[4] = lv.id;
-                        } else if (lv.topLevelName.contains("文书")) {
-                            ids[5] = lv.id;
-                        }
-                    }
-
-                }
-                StringBuilder sb = new StringBuilder();
-                JudgeEntity judgeEntity = new JudgeEntity();
-                for (int i = 0; i < ids.length; i++) {
-                    sb.append(ids[i] + ",");
-                    setJudgeEntity(i, ids[i], judgeEntity);
-                }
-                requestFilterCategory(judgeEntity, sb.subSequence(0, sb.length() - 1).toString());
-            }
-        }
     }
 
     /**********************************************裁判文书接口**********************************************/
@@ -300,6 +254,7 @@ public class LegalActivity extends BaseActivity {
                                 tab.setViewPager(viewpager);
                                 tab.setCurrentTab(0);
                             }
+                            emptyLayout.setVisibility(columns.isEmpty() ? View.VISIBLE : View.GONE);
                         }
                     }
                 });
@@ -307,6 +262,9 @@ public class LegalActivity extends BaseActivity {
 
     private ArrayList<JudgeLevel1> filterList = new ArrayList<>();
 
+    /**
+     * 请求裁判文书顶级栏目
+     */
     private void requestJudgeCategory() {
         EasyHttp.get(ApiUrl.GET_JUDGE_LEVEL)
                 .params("id", "0")
@@ -321,7 +279,7 @@ public class LegalActivity extends BaseActivity {
                             filterList = ParseUtils.parseArrayListData(s, JudgeLevel1.class);
                             String id = "";
                             for (JudgeLevel1 level : filterList) {
-                                if (!TextUtils.isEmpty(level.name) && level.name.equals(getString(R.string.judge_category_sign))) {
+                                if (!TextUtils.isEmpty(level.name) && level.name.contains(getString(R.string.judge_category_sign))) {
                                     parentId = id = level.id;
                                     break;
                                 }
@@ -336,6 +294,11 @@ public class LegalActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * 请求裁判文书手机端栏目
+     *
+     * @param id
+     */
     private void requestJudgeCategory(String id) {
         EasyHttp.get(ApiUrl.GET_JUDGE_CATEGORY)
                 .params("id", "" + id)
@@ -355,9 +318,83 @@ public class LegalActivity extends BaseActivity {
                                 mAdapter.setNewData(columns);
                                 tab.setViewPager(viewpager);
                             }
+                            emptyLayout.setVisibility(columns.isEmpty() ? View.VISIBLE : View.GONE);
                         }
                     }
                 });
+    }
+
+    @Override
+    protected int layoutResId() {
+        return R.layout.activity_home_wanted;
+    }
+
+    @OnClick({R.id.iv_back, R.id.tv_right, R.id.iv_float_search})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
+            case R.id.tv_right:
+                ARoute.jumpJudgeFilter(this, moduleType, filterList);
+                break;
+            case R.id.iv_float_search:
+                ARoute.jumpSearch();
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constant.Param.RESULT_CODE) {
+            String city = data.getStringExtra(Constant.Param.CITY_NAME);
+            tvRight.setText(city);
+        } else if (resultCode == Constant.Param.JUDGE_RESULT_CODE) {
+            ArrayList<JudgeLevel2> list = data.getParcelableArrayListExtra(Constant.Param.LIST);
+            if (list == null || list.isEmpty()) {
+                requestJudgeCategory();
+            } else {
+                String[] ids = new String[]{"0", "0", "0", "0", "0", "0", parentId};
+                for (JudgeLevel2 lv : list) {
+
+//                    if (ids.length > lv.helperIndex) {
+//                        ids[lv.helperIndex] = lv.id;
+//                    }
+
+                    if (!TextUtils.isEmpty(lv.topLevelName)) {
+                        if (lv.topLevelName.contains("案由")) {
+                            ids[0] = lv.id;
+                        } else if (lv.topLevelName.contains("法院")) {
+                            ids[1] = lv.id;
+                        } else if (lv.topLevelName.contains("地域")) {
+                            ids[2] = lv.id;
+                        } else if (lv.topLevelName.contains("裁判")) {
+                            ids[3] = lv.id;
+                        } else if (lv.topLevelName.contains("审判")) {
+                            ids[4] = lv.id;
+                        } else if (lv.topLevelName.contains("文书")) {
+                            ids[5] = lv.id;
+                        }
+                    }
+
+                }
+                StringBuilder sb = new StringBuilder();
+                JudgeEntity judgeEntity = new JudgeEntity();
+                for (int i = 0; i < ids.length; i++) {
+                    sb.append(ids[i] + ",");
+                    setJudgeEntity(i, ids[i], judgeEntity);
+                }
+                requestFilterCategory(judgeEntity, sb.subSequence(0, sb.length() - 1).toString());
+            }
+        } else if (resultCode == Constant.Param.GUIDE_RESULT_CODE) {
+            ArrayList<JudgeLevel2> list = data.getParcelableArrayListExtra(Constant.Param.LIST);
+            String id = "0";
+            if (null != list && !list.isEmpty()) {
+                id = list.get(0).id;
+            }
+            requestGuideColumn(id);
+        }
     }
 
 }

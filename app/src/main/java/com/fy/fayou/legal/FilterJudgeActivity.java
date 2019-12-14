@@ -14,6 +14,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.fy.fayou.R;
+import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.Constant;
 import com.fy.fayou.legal.adapter.FilterAdapter;
 import com.fy.fayou.legal.bean.JudgeLevel1;
@@ -35,6 +36,9 @@ public class FilterJudgeActivity extends BaseActivity {
 
     @Autowired(name = "list")
     public ArrayList<JudgeLevel1> firstLevel = new ArrayList<>();
+
+    @Autowired(name = "type")
+    public int type;
 
     @BindView(R.id.recycler)
     RecyclerView recycler;
@@ -58,7 +62,7 @@ public class FilterJudgeActivity extends BaseActivity {
     @Override
     protected void initData() {
         getFirstLevelData();
-        adapter = new FilterAdapter(list);
+        adapter = new FilterAdapter(list, type);
         recycler.setLayoutManager(new LinearLayoutManager(mContext));
         recycler.setAdapter(adapter);
 
@@ -84,6 +88,14 @@ public class FilterJudgeActivity extends BaseActivity {
             addFilterArray(array);
 
         });
+
+        // 指导性意见 & 数据一项 默认展开
+        if (type == ARoute.GUIDE_TYPE && list.size() == 1) {
+            recycler.post(() -> {
+                View firstChild = recycler.getChildAt(0);
+                if (firstChild != null) firstChild.performClick();
+            });
+        }
     }
 
     private void addFilterArray(List<JudgeLevel2> array) {
@@ -111,7 +123,7 @@ public class FilterJudgeActivity extends BaseActivity {
         int index = 0;
 
         for (JudgeLevel1 level : firstLevel) {
-            if (!level.name.equals(getString(R.string.judge_category_sign))) {
+            if (!level.name.contains(getString(R.string.judge_category_sign))) {
                 level.helperIndex = index;
                 list.add(level);
                 index++;
@@ -138,7 +150,7 @@ public class FilterJudgeActivity extends BaseActivity {
                 if (!adapter.getSelectedArray().isEmpty()) {
                     data.putParcelableArrayListExtra(Constant.Param.LIST, adapter.getSelectedArray());
                 }
-                setResult(Constant.Param.TEMPLATE_FILTER_RESULT, data);
+                setResult(type == ARoute.JUDGE_TYPE ? Constant.Param.JUDGE_RESULT_CODE : Constant.Param.GUIDE_RESULT_CODE, data);
                 finish();
 
                 break;

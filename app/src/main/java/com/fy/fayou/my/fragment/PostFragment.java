@@ -38,7 +38,7 @@ public class PostFragment extends BaseListFragment<ForumEntity> {
 
     @Override
     protected MeiBaseAdapter<ForumEntity> getAdapter() {
-        mAdapter = new PostAdapter();
+        mAdapter = new PostAdapter(true);
         return mAdapter;
     }
 

@@ -51,4 +51,21 @@
         android:layout_marginBottom="25dp"
         android:src="@mipmap/home_float_search"></ImageView>
 
+    <FrameLayout
+        android:id="@+id/fl_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_layout"
+        android:background="@color/color_ffffff"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_empty"
+            style="@style/MeiEmptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
 </RelativeLayout>

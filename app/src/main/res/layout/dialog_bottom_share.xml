@@ -34,16 +34,28 @@
                 android:src="@mipmap/login_wechat"></ImageView>
 
             <ImageView
+                android:id="@+id/iv_wx_friend_share"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:src="@mipmap/login_weibo"></ImageView>
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_wx_friend_share"
+                android:visibility="visible"></ImageView>
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@mipmap/login_qq"></ImageView>
+                android:src="@mipmap/login_weibo"
+                android:visibility="gone"></ImageView>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@mipmap/login_qq"
+                android:visibility="invisible"></ImageView>
 
         </LinearLayout>
 

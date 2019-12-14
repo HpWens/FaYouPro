@@ -75,6 +75,7 @@
         android:id="@+id/line_view"
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_marginTop="15dp"
         android:background="@color/color_e5e5e5"
         android:visibility="gone"></View>
 

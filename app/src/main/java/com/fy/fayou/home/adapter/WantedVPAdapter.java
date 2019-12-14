@@ -70,6 +70,7 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
         return WantedFragment.newInstance(mColumns.get(i).type, "", "");
     }
 
+
     @Override
     public long getItemId(int position) {
         return mColumns.get(position).hashCode();

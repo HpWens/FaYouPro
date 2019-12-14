@@ -14,7 +14,7 @@
     <string name="module_publish_time" translatable="false">发布时间：%1$s</string>
     <string name="comment_count" translatable="false">全部评论%1$d条</string>
     <string name="expand_comment" translatable="false">展开其他%1$d条评论</string>
-    <string name="judge_category_sign" translatable="false">手机端标签页</string>
+    <string name="judge_category_sign" translatable="false">手机端标签</string>
     <string name="forum_star_plate_comment_num" translatable="false">发帖%1$d · 评论%2$d</string>
 
     <string-array name="array_menu">

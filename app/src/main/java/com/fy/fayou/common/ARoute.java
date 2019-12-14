@@ -222,6 +222,19 @@ public class ARoute {
     }
 
     /**
+     * @param resultCode
+     * @param formType
+     */
+    public static final int WANTED_RESULT_CODE = 202;
+
+    public static void jumpSearch(Activity activity, int formType) {
+        ARouter.getInstance()
+                .build(Constant.HOME_SEARCH)
+                .withInt(Constant.Param.TYPE, formType)
+                .navigation(activity, REQUEST_CODE);
+    }
+
+    /**
      * 跳转到筛选界面
      *
      * @param id
@@ -243,11 +256,13 @@ public class ARoute {
      * 跳转到裁判文书筛选界面
      *
      * @param activity
+     * @param type     模块类型
      * @param list
      */
-    public static void jumpJudgeFilter(Activity activity, ArrayList<JudgeLevel1> list) {
+    public static void jumpJudgeFilter(Activity activity, int type, ArrayList<JudgeLevel1> list) {
         ARouter.getInstance()
                 .build(Constant.JUDGE_FILTER)
+                .withInt(Constant.Param.TYPE, type)
                 .withParcelableArrayList(Constant.Param.LIST, list)
                 .navigation(activity, REQUEST_CODE);
     }
