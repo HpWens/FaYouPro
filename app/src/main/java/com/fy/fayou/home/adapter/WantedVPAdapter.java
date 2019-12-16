@@ -65,7 +65,9 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
             } else if (mType == JUDGE) {
                 id = mColumns.get(i).id;
             }
-            return LegalFragment.newInstance(mType, id, mCollectType, mType == JUDGE ? mColumns.get(i).judgeEntity : null);
+            return LegalFragment.newInstance(mType, id, mCollectType,
+                    mType == JUDGE ? mColumns.get(i).judgeEntity : null,
+                    mType == GUIDE ? mColumns.get(i).type : "");
         }
         return WantedFragment.newInstance(mColumns.get(i).type, "", "");
     }

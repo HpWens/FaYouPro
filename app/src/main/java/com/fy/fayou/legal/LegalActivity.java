@@ -76,7 +76,7 @@ public class LegalActivity extends BaseActivity {
                 tvCenterTitle.setText("司法解释");
                 break;
             case ARoute.GUIDE_TYPE:
-                tvCenterTitle.setText("指导性意见");
+                tvCenterTitle.setText("意见案例");
                 tvRight.setText("筛选");
                 tvRight.setVisibility(View.VISIBLE);
                 break;
@@ -118,6 +118,13 @@ public class LegalActivity extends BaseActivity {
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
                             ArrayList<ColumnEntity> columns = ParseUtils.parseArrayListData(s, ColumnEntity.class);
+                            // 遍历添加type
+                            if (!id.equals("0")) {
+                                for (ColumnEntity entity : columns) {
+                                    entity.type = id;
+                                }
+                            }
+                            // 更新数据
                             if (mAdapter == null) {
                                 viewpager.setAdapter(mAdapter = new WantedVPAdapter(getSupportFragmentManager(), columns, WantedVPAdapter.GUIDE, moduleType));
                                 tab.setViewPager(viewpager);

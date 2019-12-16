@@ -213,6 +213,8 @@ public class Constant {
 
         String COLLECT_TYPE = "collect_type";
 
+        String GUIDE_ID = "guide_id";
+
         String KEYWORD = "keyword";
 
         String CITY_NAME = "city_name";
