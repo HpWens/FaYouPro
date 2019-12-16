@@ -28,6 +28,7 @@ public class RecommendEntity implements Serializable, MultiItemEntity {
     public String videoUrl;
 
     public int fixedMode = 1;
+    public int clicks;
 
     @Override
     public int getItemType() {

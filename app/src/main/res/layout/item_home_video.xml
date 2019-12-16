@@ -113,6 +113,18 @@
 
     </TextView>
 
+    <TextView
+        android:id="@+id/tv_scan_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="0 阅"
+        android:textColor="@color/color_b3b3b3"
+        android:textSize="11sp"
+        android:visibility="gone"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_origin"
+        app:layout_constraintLeft_toRightOf="@+id/tv_time"></TextView>
+
 
     <ImageView
         android:id="@+id/iv_praise"

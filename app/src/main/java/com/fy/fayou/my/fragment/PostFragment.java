@@ -11,6 +11,7 @@ import com.fy.fayou.my.adapter.PostAdapter;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
+import com.meis.base.mei.status.ViewState;
 import com.zhouyou.http.EasyHttp;
 
 import java.util.List;
@@ -39,6 +40,9 @@ public class PostFragment extends BaseListFragment<ForumEntity> {
     @Override
     protected MeiBaseAdapter<ForumEntity> getAdapter() {
         mAdapter = new PostAdapter(true);
+        mAdapter.setOnEmptyListener(() -> {
+            setState(ViewState.EMPTY);
+        });
         return mAdapter;
     }
 

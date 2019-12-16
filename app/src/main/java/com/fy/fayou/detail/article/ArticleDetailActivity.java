@@ -238,6 +238,9 @@ public class ArticleDetailActivity extends BaseActivity {
                             // 填充帖子数据
                             fillingData(articleEntity, articleEntity.commentList, null);
                             mAdapter.setNewData(mDataList);
+                        } else {
+                            Toast.makeText(mContext, "该帖子已被删除", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     }
                 });
@@ -317,6 +320,10 @@ public class ArticleDetailActivity extends BaseActivity {
                     @Override
                     public void onNext(List<Object> objects) {
                         mAdapter.setNewData(objects);
+                        if (objects.isEmpty()) {
+                            Toast.makeText(mContext, type == 1 ? "该视频已被删除" : "该文章已被删除", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
                     }
 
                     @Override

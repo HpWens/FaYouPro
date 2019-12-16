@@ -41,7 +41,9 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                 helper.setText(R.id.tv_name, getNonEmpty(item.fullTitle))
                         .setText(R.id.tv_origin, getNonEmpty(item.source))
                         .setText(R.id.tv_time, ParseUtils.getTime(item.createTime))
-                        .setGone(R.id.tv_origin, !TextUtils.isEmpty(item.source));
+                        .setGone(R.id.tv_origin, !TextUtils.isEmpty(item.source))
+                        .setText(R.id.tv_scan_num, item.clicks + "")
+                        .setGone(R.id.tv_scan_num, item.clicks >= 0);
 
                 ImageView ivCover = helper.getView(R.id.fl_video);
                 if (TextUtils.isEmpty(item.id)) {
@@ -81,7 +83,9 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                 helper.setText(R.id.tv_name, getNonEmpty(item.fullTitle))
                         .setText(R.id.tv_origin, getNonEmpty(item.source))
                         .setText(R.id.tv_time, ParseUtils.getTime(item.createTime))
-                        .setGone(R.id.tv_origin, !TextUtils.isEmpty(item.source));
+                        .setGone(R.id.tv_origin, !TextUtils.isEmpty(item.source))
+                        .setText(R.id.tv_scan_num, item.clicks + "")
+                        .setGone(R.id.tv_scan_num, item.clicks >= 0);
 
                 ImageView ivThumb = helper.getView(R.id.iv_thumb);
                 if (TextUtils.isEmpty(item.cover)) {
@@ -106,7 +110,9 @@ public class RecommendAdapter extends BaseMultiAdapter<RecommendEntity> {
                 helper.itemView.setTag("video");
                 helper.setText(R.id.tv_name, getNonEmpty(item.fullTitle))
                         .setText(R.id.tv_origin, getNonEmpty(item.source))
-                        .setText(R.id.tv_time, ParseUtils.getTime(item.createTime));
+                        .setText(R.id.tv_time, ParseUtils.getTime(item.createTime))
+                        .setText(R.id.tv_scan_num, item.clicks + "")
+                        .setGone(R.id.tv_scan_num, item.clicks >= 0);
 
                 JzvdStd jzvdStd = helper.getView(R.id.video_player);
                 jzvdStd.titleTextView.setVisibility(View.INVISIBLE);

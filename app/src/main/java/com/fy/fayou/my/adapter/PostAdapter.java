@@ -98,8 +98,21 @@ public class PostAdapter extends MeiBaseAdapter<ForumEntity> {
                         notifyItemRemoved(position);
                         getData().remove(position);
                         dialog.dismiss();
+                        if (getData().isEmpty()) {
+                            if (mListener != null) mListener.onEmpty();
+                        }
                     }
                 });
+    }
+
+    private OnEmptyListener mListener;
+
+    public interface OnEmptyListener {
+        void onEmpty();
+    }
+
+    public void setOnEmptyListener(OnEmptyListener listener) {
+        mListener = listener;
     }
 
 }

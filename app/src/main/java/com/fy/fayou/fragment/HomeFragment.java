@@ -122,7 +122,7 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
     private void requestHot() {
         EasyHttp.get(ApiUrl.HOT_SEARCH)
                 .params("page", "0")
-                .params("size", "20")
+                .params("size", "10")
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

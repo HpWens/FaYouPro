@@ -64,10 +64,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
                     android:ellipsize="end"
-                    android:maxLength="16"
+                    android:maxLength="10"
                     android:textColor="@color/color_b2b2b2"
                     android:textSize="11sp"
-                    tools:text="法报头条法报头条法报头条法报头条法报头条法报头条法报头条法报头条"></TextView>
+                    tools:text="法报头条"></TextView>
 
                 <TextView
                     android:id="@+id/tv_time"
@@ -82,6 +82,18 @@
 
                 </TextView>
 
+                <TextView
+                    android:id="@+id/tv_scan_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:lines="1"
+                    android:textColor="@color/color_b3b3b3"
+                    android:textSize="11sp"
+                    android:visibility="gone"
+                    tools:text="100000 阅">
+
+                </TextView>
 
             </LinearLayout>
 
