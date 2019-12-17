@@ -121,6 +121,7 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
             observable = EasyHttp.get(preType == 3 ? ApiUrl.FIND_LEGAL_LIST : ApiUrl.FIND_JUDICIAL_LIST)
                     .params("type", type)
                     .params("size", "20")
+                    .params("platform", "app")
                     .params("page", (pageNo - 1) + "")
                     .execute(String.class);
         }

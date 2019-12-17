@@ -23,6 +23,9 @@ public class FirstLaunchActivity extends BaseActivity {
     LaunchAdapter mAdapter;
     GallerySnapHelper mSnapHelper;
 
+    // 第一版 3  第二版 5
+    private static final int LAUNCH_PIC_COUNT = 5;
+
     @Override
     protected void initView() {
         Eyes.translucentStatusBar(this, true, false);
@@ -32,9 +35,9 @@ public class FirstLaunchActivity extends BaseActivity {
     protected void initData() {
 
         List<LaunchEntity> data = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < LAUNCH_PIC_COUNT; i++) {
             LaunchEntity entity = new LaunchEntity();
-            entity.itemType = i;
+            // entity.itemType = i;
             data.add(entity);
         }
 

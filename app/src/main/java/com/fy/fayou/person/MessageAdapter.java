@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
-import com.fy.fayou.common.ARoute;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
@@ -33,9 +32,9 @@ public class MessageAdapter extends MeiBaseAdapter<MessageEntity> {
                 .setText(R.id.tv_info, getNonEmpty(item.messageContent))
                 .setText(R.id.tv_time, ParseUtils.getTime(item.createTime));
 
-        ivHeader.setOnClickListener(v -> {
-            ARoute.jumpUserCenter(item.id);
-        });
+//        ivHeader.setOnClickListener(v -> {
+//            ARoute.jumpUserCenter(item.id);
+//        });
 
     }
 }

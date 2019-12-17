@@ -42,7 +42,7 @@
 # If single-type injection is used, that is, no interface is defined to implement IProvider, the following rules need to be added to protect the implementation
 # -keep class * implements com.alibaba.android.arouter.facade.template.IProvider
 
--keep public class * implements androidx.versionedparcelable.VersionedParcelable
+# -keep public class * implements androidx.versionedparcelable.VersionedParcelable
 
 -dontoptimize
 -dontpreverify
@@ -115,9 +115,9 @@
    java.lang.Object readResolve();
 }
 
--keep class * extends android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
-}
+#-keep class * extends android.os.Parcelable {
+#    public static final android.os.Parcelable$Creator *;
+#}
 
 -keepclasseswithmembernames class * {
     native <methods>;
@@ -184,7 +184,7 @@
 #####################记录生成的日志数据,gradle build时在本项目根目录输出################
 
 #apk 包内所有 class 的内部结构
--dump class_files.txt
+# -dump class_files.txt
 #未混淆的类和成员
 -printseeds seeds.txt
 #列出从 apk 中删除的代码
@@ -264,12 +264,6 @@
 -keepclasseswithmembernames class * {
     native <methods>;
 }
-
-#保持 Parcelable 不被混淆
--keep class * implements android.os.Parcelable {
-  public static final android.os.Parcelable$Creator *;
-}
-#----------------------------------------------------------------------------
 
 #---------------------------------webview------------------------------------
 -keepclassmembers class fqcn.of.javascript.interface.for.webview {
