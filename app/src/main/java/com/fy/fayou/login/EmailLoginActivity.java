@@ -35,6 +35,7 @@ import com.fy.fayou.utils.SocialUtil;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
 import com.vondear.rxtool.RxAnimationTool;
+import com.vondear.rxtool.RxEncryptTool;
 import com.vondear.rxtool.RxKeyboardTool;
 import com.vondear.rxtool.RxNetTool;
 import com.vondear.rxtool.view.RxToast;
@@ -95,6 +96,8 @@ public class EmailLoginActivity extends BaseActivity implements SocialLoginCallb
     private float scale = 0.6f; //logo缩放比例
 
     private SocialHelper socialHelper;
+
+    private static final String PASS_ENCRYPT_SUFFIX = "zhdfxm";
 
     @Override
     protected void initView() {
@@ -291,7 +294,9 @@ public class EmailLoginActivity extends BaseActivity implements SocialLoginCallb
     private void requestLogin(String email, String password) {
         HashMap<String, String> params = new HashMap<>();
         params.put("emailAddr", email);
-        params.put("password", password);
+        // password+"zhdfxm"
+        // 用这个字符串，算md5,再传到后端
+        params.put("password", RxEncryptTool.encryptMD5ToString(password + PASS_ENCRYPT_SUFFIX).toLowerCase());
         JSONObject jsonObject = new JSONObject(params);
 
         EasyHttp.post(ApiUrl.EMAIL_LOGIN)
