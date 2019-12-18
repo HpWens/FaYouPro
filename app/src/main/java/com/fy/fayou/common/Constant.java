@@ -5,6 +5,8 @@ public class Constant {
     public static final String BASE_URL = "http://118.31.76.141:9506";
     //public static final String BASE_URL = "http://192.168.1.21";
 
+    public static final String TEST_URL = "http://api.zhdfxm.com";
+
     public static final String BASE_URL2 = "http://192.168.1.191:8080";
     public static final String BASE_URL3 = "http://192.168.1.166:8082";
     public static final String BASE_URL4 = "http://192.168.1.166:8081";

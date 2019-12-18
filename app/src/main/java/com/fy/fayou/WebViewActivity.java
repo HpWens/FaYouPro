@@ -13,6 +13,7 @@ import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -26,7 +27,6 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.common.ARoute;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.detail.bean.DetailBean;
 import com.fy.fayou.detail.bean.LawBean;
@@ -252,8 +252,28 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                Toast.makeText(mContext, "改内容已下架", Toast.LENGTH_SHORT).show();
-                finish();
+                handlerHttpError();
+            }
+
+            @Override
+            public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+                super.onReceivedHttpError(view, request, errorResponse);
+                if (type == ARoute.TEMPLATE_TYPE && !url.contains(",")) {
+                    EasyHttp.get(ApiUrl.GET_CONTRACT_EXIST)
+                            .params("contractTemplateId", id)
+                            .execute(new SimpleCallBack<String>() {
+                                @Override
+                                public void onError(ApiException e) {
+                                }
+
+                                @Override
+                                public void onSuccess(String s) {
+                                    if (TextUtils.isEmpty(s)) handlerHttpError();
+                                }
+                            });
+                } else {
+                    handlerHttpError();
+                }
             }
         });
         webBase.setDownloadListener((paramAnonymousString1, paramAnonymousString2, paramAnonymousString3, paramAnonymousString4, paramAnonymousLong) -> {
@@ -294,6 +314,14 @@ public class WebViewActivity extends BaseActivity {
     }
 
     /**
+     * 处理网页错误
+     */
+    private void handlerHttpError() {
+        Toast.makeText(mContext, "改内容已下架", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    /**
      * 请求下载
      */
     private void requestDownLoadUrl() {
@@ -305,7 +333,7 @@ public class WebViewActivity extends BaseActivity {
         boolean isMade;
         if (isMade = url.contains(",")) {
             try {
-                loadUrl = Constant.BASE_URL + ApiUrl.GET_DOWNLOAD_URL + "?id=" + id +
+                loadUrl = ApiUrl.GET_DOWNLOAD_URL + "?id=" + id +
                         "&title=合同&type=2&informationOfParties=&signingClause=&contractTermIds=" + url.substring(url.lastIndexOf("ids=") + 4);
             } catch (Exception e) {
             }

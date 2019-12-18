@@ -68,7 +68,8 @@ public class PersonalFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        tvExit.setVisibility(((FYApplication) getActivity().getApplication()).isDebug() ? View.VISIBLE : View.GONE);
+        tvExit.setVisibility(((FYApplication) getActivity().getApplication()).isTestEnvironment() ? View.VISIBLE : View.GONE);
+
     }
 
     @Override

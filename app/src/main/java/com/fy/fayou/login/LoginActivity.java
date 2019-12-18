@@ -230,7 +230,7 @@ public class LoginActivity extends BaseActivity implements SocialLoginCallback {
             case R.id.iv_weibo:
                 break;
             case R.id.tv_protocol:
-                ARoute.jumpH5(((FYApplication) getApplication()).isDebug() ? "http://t-fayou-h5.zhdfxm.com/privacy" : "http://fayou-h5.zhdfxm.com/privacy");
+                ARoute.jumpH5(((FYApplication) getApplication()).isTestEnvironment() ? "http://t-fayou-h5.zhdfxm.com/privacy" : "http://fayou-h5.zhdfxm.com/privacy");
                 break;
             case R.id.tv_email_login:
                 ARoute.jumpEmailLogin();

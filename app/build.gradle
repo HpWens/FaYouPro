@@ -21,6 +21,8 @@ android {
         versionCode 1
         versionName "1.0"
 
+        flavorDimensions "versionCode"
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
@@ -78,6 +80,20 @@ android {
             signingConfig signingConfigs.release
             // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    productFlavors {
+
+        //  法友线上环境
+        fayou {
+            manifestPlaceholders = ["FLAVORS_CODE": 1]
+        }
+
+        // 法友测试环境
+        zhihe {
+            manifestPlaceholders = ["FLAVORS_CODE": 2]
+        }
+
     }
 
     compileOptions {

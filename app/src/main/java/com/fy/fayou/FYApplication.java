@@ -84,7 +84,7 @@ public class FYApplication extends BaseApplication {
                 .setRetryCount(3) // 默认网络不好自动重试3次
                 .setRetryDelay(500) // 每次延时500ms重试
                 .setRetryIncreaseDelay(500) // 每次延时叠加500ms
-                .setBaseUrl(Constant.BASE_URL)
+                .setBaseUrl(getBaseUrl())
                 .setCacheDiskConverter(new SerializableDiskConverter()) // 默认缓存使用序列化转化
                 .setCacheMaxSize(50 * 1024 * 1024) // 设置缓存大小为50M
                 .setCacheVersion(1) // 缓存版本为1
@@ -153,5 +153,52 @@ public class FYApplication extends BaseApplication {
         }
         return null;
     }
+
+    /**
+     * 1 线上
+     * 2 内测
+     *
+     * @return
+     */
+    private static final int ON_LINE_MODE = 1;
+    private static final int TEST_LINE_MODE = 2;
+
+    public int getFlavorsCode() {
+        int code = ON_LINE_MODE;
+        ApplicationInfo appInfo = null;
+        try {
+            appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            code = appInfo.metaData.getInt("flavors_code");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return code;
+    }
+
+    /**
+     * 获取域名
+     *
+     * @return
+     */
+    private String getBaseUrl() {
+        int code = getFlavorsCode();
+        if (code == ON_LINE_MODE) {
+            return Constant.BASE_URL;
+        } else if (code == TEST_LINE_MODE) {
+            return Constant.TEST_URL;
+        }
+        return Constant.BASE_URL;
+    }
+
+    public boolean isTestEnvironment() {
+        int code = getFlavorsCode();
+        if (code == ON_LINE_MODE) {
+            return true;
+        } else if (code == TEST_LINE_MODE) {
+            return false;
+        }
+        return true;
+    }
+
 
 }

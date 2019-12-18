@@ -342,6 +342,7 @@ public class ArticleDetailActivity extends BaseActivity {
         if (e instanceof ApiException) {
             ParseUtils.handlerApiError((ApiException) e, error -> {
                 Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+                finish();
             });
         }
     }

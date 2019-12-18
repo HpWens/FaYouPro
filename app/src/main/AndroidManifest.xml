@@ -465,6 +465,10 @@
             android:label="@string/app_name" />
         <!--微信配置结束-->
 
+        <meta-data
+            android:name="flavors_code"
+            android:value="${FLAVORS_CODE}" />
+
     </application>
 
 </manifest>

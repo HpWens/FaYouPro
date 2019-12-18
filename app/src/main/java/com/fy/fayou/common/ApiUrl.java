@@ -364,4 +364,7 @@ public class ApiUrl {
     // 案例筛选树形
     public static final String GET_GUIDE_LEAVE = "/api-popularize/public/caseType";
 
+    // 典型模板
+    public static final String GET_CONTRACT_EXIST = "/api-contract/public/contract/findById";
+
 }
