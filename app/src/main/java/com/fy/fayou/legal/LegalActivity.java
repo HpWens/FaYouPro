@@ -108,7 +108,7 @@ public class LegalActivity extends BaseActivity {
     // 请求指导性栏目
     private void requestGuideColumn(String id) {
         EasyHttp.get(ApiUrl.GET_CASE_CATEGORY)
-                .params("type", id)
+                .params("region", id)
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

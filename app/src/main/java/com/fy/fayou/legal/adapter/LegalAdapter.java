@@ -38,7 +38,8 @@ public class LegalAdapter extends MeiBaseAdapter<LegalEntity> {
             });
         } else {
             String time = (type == 3 ? item.publishTime : item.pubTime);
-            String title = getNonEmpty(type == 3 ? item.name : item.title);
+            //String title = getNonEmpty(type == 3 ? item.name : item.title);
+            String title = getNonEmpty(TextUtils.isEmpty(item.title) ? item.name : item.title);
             helper.setText(R.id.tv_name, title)
                     .setText(R.id.tv_source, helper.itemView.getResources().getString(R.string.module_source, getNonEmpty(item.source)))
                     .setText(R.id.tv_time, TextUtils.isEmpty(time) ? "" : helper.itemView.getResources().getString(R.string.module_publish_time, KtTimeUtils.INSTANCE.getYMDTime(time)));

@@ -36,6 +36,8 @@ public class MapLocationUtils {
                     String city = aMapLocation.getCity();
                     listener.location(city);
                     locationClient.stopLocation();
+                } else {
+                    locationClient.stopLocation();
                 }
             }
         });

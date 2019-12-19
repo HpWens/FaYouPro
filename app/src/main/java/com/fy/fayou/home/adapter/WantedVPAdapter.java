@@ -90,9 +90,9 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (mType == LEGAL || mType == TEMPLATE || mType == JUDICIAL) {
+        if (mType == LEGAL || mType == TEMPLATE || mType == JUDICIAL || mType == GUIDE) {
             return mColumns.get(position).name + "(" + mColumns.get(position).number + ")";
-        } else if (mType == GUIDE || mType == JUDGE) {
+        } else if (mType == JUDGE) {
             return mColumns.get(position).name + "(" + (TextUtils.isEmpty(mColumns.get(position).count) ? "0" : mColumns.get(position).count) + ")";
         }
         return mColumns.get(position).type + "(" + mColumns.get(position).numberOfPeople + ")";

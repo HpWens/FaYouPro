@@ -46,6 +46,7 @@ public class FYApplication extends BaseApplication {
         initPush();
 
         initUUID();
+
     }
 
     private void initUUID() {
