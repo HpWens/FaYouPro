@@ -99,6 +99,13 @@
         android:layout_below="@+id/top_line"></include>
 
     <include
+        layout="@layout/comm_white_loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/comment_layout"
+        android:layout_below="@+id/top_line"></include>
+
+    <include
         layout="@layout/comm_bottom_comment"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -122,6 +129,8 @@
     <FrameLayout
         android:id="@+id/fl_comment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent">
+
+    </FrameLayout>
 
 </RelativeLayout>

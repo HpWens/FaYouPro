@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ARoute;
+import com.fy.fayou.common.UserService;
 import com.fy.fayou.detail.bean.HeaderBean;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.KtTimeUtils;
@@ -31,7 +32,8 @@ public class HeaderPresenter extends ItemPresenter<HeaderBean> {
         holder.setText(R.id.tv_title, getNonEmpty(item.fullTitle))
                 .setText(R.id.tv_name, getNonEmpty(item.auditName))
                 .setText(R.id.tv_follow, item.follow ? "已关注" : "+关注")
-                .setText(R.id.tv_time, "发布于" + KtTimeUtils.INSTANCE.getYMDHMTime(item.createTime));
+                .setText(R.id.tv_time, "发布于" + KtTimeUtils.INSTANCE.getYMDHMTime(item.createTime))
+                .setGone(R.id.tv_follow, !UserService.getInstance().getUserId().equals(item.auditId));
 
         holder.getView(R.id.tv_follow).setSelected(item.follow);
 

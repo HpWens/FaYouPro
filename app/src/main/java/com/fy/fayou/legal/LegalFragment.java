@@ -92,25 +92,30 @@ public class LegalFragment extends BaseListFragment<LegalEntity> {
         if (mCollectType == ARoute.GUIDE_TYPE) {
             // 新增浏览记录
             HashMap<String, String> params = new HashMap<>();
-            params.put("cardType", type);
+            params.put("type", type);
             params.put("size", "20");
-            params.put("type", TextUtils.isEmpty(guideFilterId) ? "0" : guideFilterId);
+            if (!TextUtils.isEmpty(guideFilterId)) {
+                params.put("region", guideFilterId);
+            }
             params.put("page", (pageNo - 1) + "");
+            params.put("platform", "app");
             JSONObject jsonObject = new JSONObject(params);
             observable = EasyHttp.post(ApiUrl.GET_CASE_LIST)
                     .upJson(jsonObject.toString())
                     .execute(String.class);
         } else if (mCollectType == ARoute.JUDGE_TYPE) {
             HashMap<String, String> params = new HashMap<>();
-            params.put("judgementType", type);
+            params.put("type", type);
             if (mJudgeEntity != null) {
                 params.put("typeReason", mJudgeEntity.typeReason);
                 params.put("typeCourtClass", mJudgeEntity.typeCourtClass);
                 params.put("typeZone", mJudgeEntity.typeZone);
                 params.put("typeSpnf", mJudgeEntity.typeSpnf);
                 params.put("typeSpcx", mJudgeEntity.typeSpcx);
-                params.put("typeBookType", mJudgeEntity.typeBookType);
+                params.put("bookType", mJudgeEntity.typeBookType);
             }
+            params.put("auditStatus", "1");
+            params.put("platform", "app");
             params.put("size", "20");
             params.put("page", (pageNo - 1) + "");
             JSONObject jsonObject = new JSONObject(params);

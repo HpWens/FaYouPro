@@ -246,7 +246,7 @@ public class LoginActivity extends BaseActivity implements SocialLoginCallback {
 
         EasyHttp.get(ApiUrl.SEND_VERIFY_CODE)
                 .params("phoneNumber", "" + etMobile.getText().toString())
-                .params("type", "1")
+                .params("type", "2")
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

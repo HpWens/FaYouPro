@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,6 +94,8 @@ public class ArticleDetailActivity extends BaseActivity {
     RelativeLayout rlVideoNavigation;
     @BindView(R.id.recycler)
     RecyclerView recycler;
+    @BindView(R.id.loading_layout)
+    LinearLayout loadingLayout;
     @BindView(R.id.tv_publish)
     TextView tvPublish;
     @BindView(R.id.tv_message)
@@ -227,10 +230,12 @@ public class ArticleDetailActivity extends BaseActivity {
                     @Override
                     public void onError(ApiException e) {
                         handlerApiError(e);
+                        loadingLayout.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onSuccess(String s) {
+                        loadingLayout.setVisibility(View.GONE);
                         if (!TextUtils.isEmpty(s)) {
                             // 初始化数据源
                             mDataList = new ArrayList<>();
@@ -320,6 +325,7 @@ public class ArticleDetailActivity extends BaseActivity {
                     @Override
                     public void onNext(List<Object> objects) {
                         mAdapter.setNewData(objects);
+                        loadingLayout.setVisibility(View.GONE);
                         if (objects.isEmpty()) {
                             Toast.makeText(mContext, type == 1 ? "该视频已被删除" : "该文章已被删除", Toast.LENGTH_SHORT).show();
                             finish();
@@ -329,6 +335,7 @@ public class ArticleDetailActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         handlerApiError(e);
+                        loadingLayout.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -603,6 +610,7 @@ public class ArticleDetailActivity extends BaseActivity {
                     public void onSuccess(String s) {
                         isCollect = !isCollect;
                         ivCollect.setSelected(isCollect);
+                        Toast.makeText(mContext, isCollect ? "收藏成功" : "取消收藏成功", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -166,7 +166,7 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
                 });
                 break;
             case TYPE_ITEM_NEWS:
-                helper.setText(R.id.tv_name, getNonEmpty(item.content))
+                helper.setText(R.id.tv_name, getNonEmpty(item.title))
                         .setText(R.id.tv_origin, getNonEmpty(item.source))
                         .setText(R.id.tv_time, ParseUtils.getTime(item.createTime));
 

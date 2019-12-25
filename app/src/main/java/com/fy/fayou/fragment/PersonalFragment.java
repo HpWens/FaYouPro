@@ -80,6 +80,11 @@ public class PersonalFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
         if (UserService.getInstance().isLogin()) {
             // Accept: application/json
             EasyHttp.get(ApiUrl.USER_DETAIL).execute(new SimpleCallBack<String>() {

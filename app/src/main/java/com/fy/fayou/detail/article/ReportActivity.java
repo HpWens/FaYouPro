@@ -19,6 +19,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
+import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UploadService;
 import com.fy.fayou.event.ReportSuccessEvent;
 import com.fy.fayou.person.suggest.FullyGridLayoutManager;
@@ -93,6 +94,8 @@ public class ReportActivity extends BaseActivity {
 
     private static final int MAX_CHAR_LIMIT = 2000;
 
+    private long currentTime;
+
     @Override
     protected void initView() {
         ButterKnife.bind(this);
@@ -100,7 +103,8 @@ public class ReportActivity extends BaseActivity {
         Eyes.setStatusBarColor(this, getResources().getColor(R.color.color_ffffff), true);
         setToolBarCenterTitle("举报");
         setLeftBackListener(v -> finish()).setRightTextListener(v -> {
-            if (checkContent()) {
+            if (checkContent() && System.currentTimeMillis() - currentTime >= Constant.Param.AGAIN_CLICK_DURATION) {
+                currentTime = System.currentTimeMillis();
                 // 提交图片
                 final RxDialogShapeLoading dialog = new RxDialogShapeLoading(this);
                 dialog.show();

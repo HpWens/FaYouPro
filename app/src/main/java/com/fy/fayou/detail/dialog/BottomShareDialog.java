@@ -237,7 +237,9 @@ public class BottomShareDialog extends BaseDialog implements SocialShareCallback
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
-
+                        ParseUtils.handlerApiError(e, error -> {
+                            Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                        });
                     }
 
                     @Override
@@ -247,6 +249,7 @@ public class BottomShareDialog extends BaseDialog implements SocialShareCallback
                         if (mListener != null) {
                             mListener.onCollect(isCollect);
                         }
+                        Toast.makeText(getActivity(), isCollect ? "收藏成功" : "取消收藏成功", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

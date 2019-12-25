@@ -254,5 +254,7 @@ public class Constant {
         int ARTICLE_TYPE = 0;
 
         int FORUM_TYPE = 2;
+
+        long AGAIN_CLICK_DURATION = 1000;
     }
 }

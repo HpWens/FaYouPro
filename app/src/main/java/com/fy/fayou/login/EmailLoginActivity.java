@@ -250,7 +250,7 @@ public class EmailLoginActivity extends BaseActivity implements SocialLoginCallb
     private void requestVerifyCode() {
         EasyHttp.get(ApiUrl.SEND_VERIFY_CODE)
                 .params("phoneNumber", "" + etEmail.getText().toString())
-                .params("type", "1")
+                .params("type", "2")
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {

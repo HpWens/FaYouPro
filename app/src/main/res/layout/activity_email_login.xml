@@ -244,6 +244,7 @@
                 android:id="@+id/iv_wechat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:scaleType="centerInside"
                 android:src="@mipmap/login_wechat"></ImageView>
 
@@ -253,7 +254,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:scaleType="centerInside"
-                android:src="@mipmap/login_qq"></ImageView>
+                android:src="@mipmap/login_qq"
+                android:visibility="gone"></ImageView>
 
             <ImageView
                 android:id="@+id/iv_weibo"
@@ -261,7 +263,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:scaleType="centerInside"
-                android:src="@mipmap/login_weibo"></ImageView>
+                android:src="@mipmap/login_weibo"
+                android:visibility="gone"></ImageView>
 
         </RelativeLayout>
 

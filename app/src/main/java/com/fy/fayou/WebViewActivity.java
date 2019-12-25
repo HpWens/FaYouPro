@@ -258,22 +258,12 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
                 super.onReceivedHttpError(view, request, errorResponse);
-                if (type == ARoute.TEMPLATE_TYPE && !url.contains(",")) {
-                    EasyHttp.get(ApiUrl.GET_CONTRACT_EXIST)
-                            .params("contractTemplateId", id)
-                            .execute(new SimpleCallBack<String>() {
-                                @Override
-                                public void onError(ApiException e) {
-                                }
-
-                                @Override
-                                public void onSuccess(String s) {
-                                    if (TextUtils.isEmpty(s)) handlerHttpError();
-                                }
-                            });
-                } else {
-                    handlerHttpError();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (errorResponse != null && errorResponse.getStatusCode() == 500) {
+                        handlerHttpError();
+                    }
                 }
+
             }
         });
         webBase.setDownloadListener((paramAnonymousString1, paramAnonymousString2, paramAnonymousString3, paramAnonymousString4, paramAnonymousLong) -> {
@@ -317,7 +307,7 @@ public class WebViewActivity extends BaseActivity {
      * 处理网页错误
      */
     private void handlerHttpError() {
-        Toast.makeText(mContext, "改内容已下架", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "该内容已下架", Toast.LENGTH_SHORT).show();
         finish();
     }
 

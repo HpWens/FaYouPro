@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.text.TextUtils;
 
 import com.fy.fayou.contract.TemplateFragment;
 import com.fy.fayou.home.fragment.WantedFragment;
@@ -90,10 +89,8 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (mType == LEGAL || mType == TEMPLATE || mType == JUDICIAL || mType == GUIDE) {
+        if (mType == LEGAL || mType == TEMPLATE || mType == JUDICIAL || mType == GUIDE || mType == JUDGE) {
             return mColumns.get(position).name + "(" + mColumns.get(position).number + ")";
-        } else if (mType == JUDGE) {
-            return mColumns.get(position).name + "(" + (TextUtils.isEmpty(mColumns.get(position).count) ? "0" : mColumns.get(position).count) + ")";
         }
         return mColumns.get(position).type + "(" + mColumns.get(position).numberOfPeople + ")";
     }

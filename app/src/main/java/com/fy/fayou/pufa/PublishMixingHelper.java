@@ -161,7 +161,7 @@ public class PublishMixingHelper {
             Object obj = mAdapter.getData().get(i);
             if (obj instanceof TextEntity) {
                 TextEntity textEntity = (TextEntity) obj;
-                if (!TextUtils.isEmpty(textEntity.content)) {
+                if (!TextUtils.isEmpty(textEntity.content.trim())) {
                     isEmpty = false;
                     break;
                 }

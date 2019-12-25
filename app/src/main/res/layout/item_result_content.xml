@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <View
+        android:id="@+id/view_top"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/color_e5e5e5"></View>
@@ -53,5 +54,13 @@
         android:textColor="@color/color_666666"
         android:textSize="11sp"
         tools:text="嘉奖、两次荣立三等功，并被省公安厅评为优秀人民警察。 那是1994年的5月，时任新篁派出所副所长的陈建祥在一次缉捕杀人犯的...动中主动请战，面对穷凶极恶的罪犯，" />
+
+    <View
+        android:id="@+id/view_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_e5e5e5"
+        android:visibility="gone"></View>
+
 
 </com.fy.fayou.view.radius.RadiusLinearLayout>

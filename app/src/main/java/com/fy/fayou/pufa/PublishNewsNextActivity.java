@@ -177,7 +177,7 @@ public class PublishNewsNextActivity extends BaseActivity {
 //            Toast.makeText(mContext, "请选中封面", Toast.LENGTH_SHORT).show();
 //            return true;
 //        }
-        String source = etOrigin.getText().toString();
+        String source = etOrigin.getText().toString().trim();
         if (TextUtils.isEmpty(source)) {
             if (hint) {
                 Toast.makeText(mContext, "请输入文章来源", Toast.LENGTH_SHORT).show();
@@ -260,6 +260,8 @@ public class PublishNewsNextActivity extends BaseActivity {
             return;
         }
 
+        tvRight.setEnabled(false);
+
         UploadService.getInstance().uploadPublishImages(dataList, new UploadService.OnPublishUploadListener() {
             @Override
             public void onSuccess(final List<Object> list) {
@@ -292,6 +294,7 @@ public class PublishNewsNextActivity extends BaseActivity {
     private void failureHint(RxDialog dialog) {
         Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
         dismissUploadDialog(dialog);
+        tvRight.setEnabled(true);
     }
 
     private void dismissUploadDialog(RxDialog dialog) {

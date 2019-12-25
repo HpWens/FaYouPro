@@ -52,7 +52,9 @@ public class MoreResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
             case TYPE_ITEM:
                 String title = getNonEmpty(TextUtils.isEmpty(item.title) ? item.name : item.title);
                 helper.setText(R.id.tv_title, getForeSpan(mKeyword, title))
-                        .setText(R.id.tv_content, getForeSpan(mKeyword, getNonEmpty(item.content)));
+                        .setText(R.id.tv_content, getForeSpan(mKeyword, getNonEmpty(item.content)))
+                        .setGone(R.id.view_top, false)
+                        .setGone(R.id.view_bottom, true);
 
                 helper.itemView.setOnClickListener(v -> {
                     if (!TextUtils.isEmpty(item.toUrl)) {

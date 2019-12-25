@@ -104,6 +104,7 @@ public class BottomCommentDialog extends BaseDialog {
         });
 
         mTvPublish.setOnClickListener(v -> {
+            mTvPublish.setEnabled(false);
             requestPublishComment();
         });
     }
@@ -128,6 +129,7 @@ public class BottomCommentDialog extends BaseDialog {
                         ParseUtils.handlerApiError(e, error -> {
                             RxToast.error(error);
                         });
+                        mTvPublish.setEnabled(true);
                     }
 
                     @Override
@@ -139,6 +141,7 @@ public class BottomCommentDialog extends BaseDialog {
                                 mListener.onPublish(TextUtils.isEmpty(parentId), position, entity);
                             }
                         }
+                        mTvPublish.setEnabled(true);
                         dismiss();
                     }
                 });
