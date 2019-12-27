@@ -31,10 +31,11 @@ public class LegalAdapter extends MeiBaseAdapter<LegalEntity> {
         if (collectType == ARoute.GUIDE_TYPE || collectType == ARoute.JUDGE_TYPE) {
             helper.setText(R.id.tv_name, item.title)
                     .setText(R.id.tv_source, helper.itemView.getResources().getString(R.string.module_source, getNonEmpty(item.source)))
-                    .setText(R.id.tv_time, TextUtils.isEmpty(item.publicDate) ? "" : helper.itemView.getResources().getString(R.string.module_publish_time, item.publicDate));
+                    .setText(R.id.tv_time, TextUtils.isEmpty(item.publicDate) ? "" : helper.itemView.getResources().getString(R.string.module_publish_time, item.publicDate))
+                    .setVisible(R.id.tv_source, !TextUtils.isEmpty(item.source));
 
             helper.itemView.setOnClickListener(v -> {
-                ARoute.jumpH5(getNonEmpty(item.url), true, item.id, collectType, getNonEmpty(item.title));
+                ARoute.jumpH5(getNonEmpty(item.toUrl), true, item.id, collectType, getNonEmpty(item.title));
             });
         } else {
             String time = (type == 3 ? item.publishTime : item.pubTime);
@@ -42,7 +43,8 @@ public class LegalAdapter extends MeiBaseAdapter<LegalEntity> {
             String title = getNonEmpty(TextUtils.isEmpty(item.title) ? item.name : item.title);
             helper.setText(R.id.tv_name, title)
                     .setText(R.id.tv_source, helper.itemView.getResources().getString(R.string.module_source, getNonEmpty(item.source)))
-                    .setText(R.id.tv_time, TextUtils.isEmpty(time) ? "" : helper.itemView.getResources().getString(R.string.module_publish_time, KtTimeUtils.INSTANCE.getYMDTime(time)));
+                    .setText(R.id.tv_time, TextUtils.isEmpty(time) ? "" : helper.itemView.getResources().getString(R.string.module_publish_time, KtTimeUtils.INSTANCE.getYMDTime(time)))
+                    .setVisible(R.id.tv_source, !TextUtils.isEmpty(item.source));
 
             helper.itemView.setOnClickListener(v -> {
                 ARoute.jumpH5(getNonEmpty(item.toUrl), true, item.id, collectType, title);

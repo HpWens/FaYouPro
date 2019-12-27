@@ -400,7 +400,7 @@ public class ARoute {
 
 
     // 历史记录 我的收藏 跳转到详情界面
-    public static void jumpDetail(String browseRecordType, String id, String h5Url, String title) {
+    public static void jumpDetail(String browseRecordType, String id, String h5Url, String title, String subType) {
         if (TextUtils.isEmpty(browseRecordType)) return;
         switch (browseRecordType) {
             case "CASE":
@@ -416,6 +416,10 @@ public class ARoute {
                 jumpH5(h5Url, true, id, ARoute.JUDGE_TYPE, title);
                 break;
             case "CONTRACT":
+                if (!subType.equals("1")) {
+                    ARoute.jumpFilter(id, title, h5Url);
+                    return;
+                }
                 jumpH5(h5Url, true, id, ARoute.TEMPLATE_TYPE, title);
                 break;
             case "CRIMINAL":
@@ -429,6 +433,8 @@ public class ARoute {
                 jumpForumDetail(id);
                 break;
         }
+
+
     }
 
     /**

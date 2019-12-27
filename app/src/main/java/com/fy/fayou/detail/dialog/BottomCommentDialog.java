@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.fy.fayou.R;
 import com.fy.fayou.common.ApiUrl;
-import com.fy.fayou.common.UserService;
 import com.fy.fayou.detail.bean.CommentBean;
 import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.base.BaseDialog;
@@ -42,6 +41,7 @@ public class BottomCommentDialog extends BaseDialog {
 
     private boolean isForum;
     private String reUserId;
+    private String author;
 
     private OnPublishListener mListener;
 
@@ -61,6 +61,11 @@ public class BottomCommentDialog extends BaseDialog {
 
     public BottomCommentDialog setReUserId(String reUserId) {
         this.reUserId = reUserId;
+        return this;
+    }
+
+    public BottomCommentDialog setAuthor(String author) {
+        this.author = author;
         return this;
     }
 
@@ -87,7 +92,7 @@ public class BottomCommentDialog extends BaseDialog {
 
     @Override
     protected void initData() {
-        mTvObj.setText(TextUtils.isEmpty(userName) ? ("正在评论 " + UserService.getInstance().getNickName()) : ("正在回复 " + userName));
+        mTvObj.setText(TextUtils.isEmpty(userName) ? ("正在评论 " + author) : ("正在回复 " + userName));
         mEtHint.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

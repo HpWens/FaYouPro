@@ -14,6 +14,7 @@ import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.detail.adapter.ReviewAdapter;
 import com.fy.fayou.detail.bean.CommentBean;
+import com.fy.fayou.event.RefreshDetailPraiseEvent;
 import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.adapter.BaseMultiAdapter;
 import com.meis.base.mei.base.BaseMultiListFragment;
@@ -25,6 +26,7 @@ import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -270,22 +272,25 @@ public class ReviewListFragment extends BaseMultiListFragment<CommentBean> {
 
                     @Override
                     public void onSuccess(String s) {
+                        boolean isPraise;
                         if (isForum) {
                             if (item.given) {
                                 item.gives -= 1;
                             } else {
                                 item.gives += 1;
                             }
-                            item.given = !item.given;
+                            isPraise = item.given = !item.given;
                         } else {
                             if (item.give) {
                                 item.gives -= 1;
                             } else {
                                 item.gives += 1;
                             }
-                            item.give = !item.give;
+                            isPraise = item.give = !item.give;
                         }
                         mAdapter.notifyItemChanged(position);
+
+                        EventBus.getDefault().post(new RefreshDetailPraiseEvent(articleId, id, isForum, isPraise));
                     }
                 });
     }

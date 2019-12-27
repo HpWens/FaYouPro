@@ -210,7 +210,9 @@ public class LoginActivity extends BaseActivity implements SocialLoginCallback {
                 RxKeyboardTool.hideSoftInput(mContext);
                 if (checkMobile() && checkVerifyCode()) {
                     // 请求接口
-                    requestLogin(etMobile.getText().toString(), etCode.getText().toString());
+                    etMobile.postDelayed(() -> {
+                        requestLogin(etMobile.getText().toString(), etCode.getText().toString());
+                    }, 300);
                 }
                 break;
             case R.id.again_send:
@@ -230,7 +232,7 @@ public class LoginActivity extends BaseActivity implements SocialLoginCallback {
             case R.id.iv_weibo:
                 break;
             case R.id.tv_protocol:
-                ARoute.jumpH5(((FYApplication) getApplication()).isTestEnvironment() ? "http://t-fayou-h5.zhdfxm.com/privacy" : "http://fayou-h5.zhdfxm.com/privacy");
+                ARoute.jumpH5(((FYApplication) getApplication()).isTestEnvironment() ? "http://t-fayou-h5.75law.com/privacy" : "http://fayou-h5.75law.com/privacy");
                 break;
             case R.id.tv_email_login:
                 ARoute.jumpEmailLogin();

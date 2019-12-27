@@ -33,7 +33,7 @@ public class HeaderPresenter extends ItemPresenter<HeaderBean> {
                 .setText(R.id.tv_name, getNonEmpty(item.auditName))
                 .setText(R.id.tv_follow, item.follow ? "已关注" : "+关注")
                 .setText(R.id.tv_time, "发布于" + KtTimeUtils.INSTANCE.getYMDHMTime(item.createTime))
-                .setGone(R.id.tv_follow, !UserService.getInstance().getUserId().equals(item.auditId));
+                .setVisible(R.id.tv_follow, !item.auditId.equals(UserService.getInstance().getUserId()));
 
         holder.getView(R.id.tv_follow).setSelected(item.follow);
 

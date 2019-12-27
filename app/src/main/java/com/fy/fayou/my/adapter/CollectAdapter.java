@@ -40,7 +40,7 @@ public class CollectAdapter extends MeiBaseAdapter<CollectEntity> {
                 .setText(R.id.tv_time, KtTimeUtils.INSTANCE.getYMDTime(isCollect ? item.createTime : item.businessTime));
 
         holder.itemView.setOnClickListener(v -> {
-            ARoute.jumpDetail(TextUtils.isEmpty(item.browseRecordType) ? item.collectType : item.browseRecordType, item.businessId, item.h5Url, getNonEmpty(item.title));
+            ARoute.jumpDetail(TextUtils.isEmpty(item.browseRecordType) ? item.collectType : item.browseRecordType, item.businessId, item.h5Url, getNonEmpty(item.title), item.subType);
         });
     }
 }

@@ -103,7 +103,7 @@ public class ParseUtils {
             if (apiException.getCode() == 401) {
                 ARouter.getInstance().build(Constant.LOGIN)
                         .navigation();
-                RxToast.normal("登陆验证失效，请重新登陆");
+                RxToast.normal("登录验证失效，请重新登录");
             }
         }
     }
@@ -150,7 +150,7 @@ public class ParseUtils {
         } else if (apiException.getCode() == 401) {
             ARouter.getInstance().build(Constant.LOGIN)
                     .navigation();
-            RxToast.normal("登陆验证失效，请重新登陆");
+            RxToast.normal("登录验证失效，请重新登录");
         } else {
             if (!TextUtils.isEmpty(apiException.getMessage())) {
                 listener.onError(apiException.getMessage());

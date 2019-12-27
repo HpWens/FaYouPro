@@ -16,7 +16,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.fy.fayou"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -155,11 +155,14 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // 视频
-    implementation 'cn.jzvd:jiaozivideoplayer:7.0.5'
+    // implementation 'cn.jzvd:jiaozivideoplayer:7.0.5'
 
     implementation 'cn.jiguang.sdk:jpush:3.3.9'  // 此处以JPush 3.3.9 版本为例。
     implementation 'cn.jiguang.sdk:jcore:2.1.6'  // 此处以JCore 2.1.6 版本为例。
 
     implementation 'com.qiniu:qiniu-android-sdk:7.4.2'
+
+    // 完整版引入
+    implementation 'com.shuyu:GSYVideoPlayer:6.0.3'
 
 }

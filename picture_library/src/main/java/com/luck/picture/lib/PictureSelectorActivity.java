@@ -939,12 +939,12 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         }
     }
 
+
     /**
      * 拍照后处理结果
      *
      * @param data
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void requestCamera(Intent data) {
         List<LocalMedia> medias = new ArrayList<>();
         if (config.mimeType == PictureMimeType.ofAudio()) {
@@ -969,10 +969,12 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         LocalMedia media = new LocalMedia();
         media.setPath(cameraPath);
         boolean eqVideo = toType.startsWith(PictureConfig.VIDEO);
-        int duration;
+        int duration = 0;
         if (eqVideo && androidQ) {
-            duration = MediaUtils
-                    .getLocalVideoDurationToAndroidQ(getApplicationContext(), cameraPath);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                duration = MediaUtils
+                        .getLocalVideoDurationToAndroidQ(getApplicationContext(), cameraPath);
+            }
         } else {
             duration = eqVideo ? MediaUtils.getLocalVideoDuration(cameraPath) : 0;
         }

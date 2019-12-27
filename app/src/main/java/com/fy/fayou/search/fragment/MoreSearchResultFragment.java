@@ -1,11 +1,9 @@
 package com.fy.fayou.search.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.fy.fayou.FYApplication;
 import com.fy.fayou.R;
@@ -17,6 +15,7 @@ import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.adapter.BaseMultiAdapter;
 import com.meis.base.mei.base.BaseMultiListFragment;
 import com.meis.base.mei.entity.Result;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.zhouyou.http.EasyHttp;
 
 import org.json.JSONObject;
@@ -24,11 +23,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.jzvd.Jzvd;
 import io.reactivex.Observable;
 
 public class MoreSearchResultFragment extends BaseMultiListFragment<SearchResultEntity> {
 
+    private LinearLayoutManager mLinearLayoutManager;
     private RecyclerView mRecyclerView;
     private MoreResultAdapter mAdapter;
 
@@ -56,25 +55,41 @@ public class MoreSearchResultFragment extends BaseMultiListFragment<SearchResult
     @Override
     protected RecyclerView getRecyclerView() {
         mRecyclerView = findViewById(R.id.recycler);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+        mRecyclerView.setLayoutManager(mLinearLayoutManager = new LinearLayoutManager(getActivity()));
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            int firstVisibleItem, lastVisibleItem;
+
             @Override
-            public void onChildViewAttachedToWindow(@NonNull View view) {
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
             }
 
             @Override
-            public void onChildViewDetachedFromWindow(@NonNull View view) {
-                if (view.getTag() != null && view.getTag().toString().equals("video")) {
-                    Jzvd jzvd = view.findViewById(R.id.video_player);
-                    if (jzvd != null && Jzvd.CURRENT_JZVD != null &&
-                            jzvd.jzDataSource.containsTheUrl(Jzvd.CURRENT_JZVD.jzDataSource.getCurrentUrl())) {
-                        if (Jzvd.CURRENT_JZVD != null && Jzvd.CURRENT_JZVD.screen != Jzvd.SCREEN_FULLSCREEN) {
-                            Jzvd.releaseAllVideos();
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+                lastVisibleItem = mLinearLayoutManager.findLastVisibleItemPosition();
+                //大于0说明有播放
+                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+                    //当前播放的位置
+                    int position = GSYVideoManager.instance().getPlayPosition();
+                    //对应的播放列表TAG
+                    if (GSYVideoManager.instance().getPlayTag().equals("video")
+                            && (position < firstVisibleItem || position > lastVisibleItem)) {
+
+                        //如果滑出去了上面和下面就是否，和今日头条一样
+                        //是否全屏
+                        if (!GSYVideoManager.isFullState(getActivity())) {
+                            GSYVideoManager.releaseAllVideos();
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
                 }
             }
         });
+
         return mRecyclerView;
     }
 
@@ -171,12 +186,24 @@ public class MoreSearchResultFragment extends BaseMultiListFragment<SearchResult
     @Override
     public void onPause() {
         super.onPause();
-        Jzvd.releaseAllVideos();
+        GSYVideoManager.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        GSYVideoManager.onResume(false);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        GSYVideoManager.releaseAllVideos();
     }
 
     @Override
     public boolean onBackPressedSupport() {
-        if (Jzvd.backPress()) {
+        if (GSYVideoManager.backFromWindowFull(getActivity())) {
             return true;
         }
         return super.onBackPressedSupport();

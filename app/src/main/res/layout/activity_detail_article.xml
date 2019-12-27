@@ -47,8 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="236dp">
 
-            <cn.jzvd.JzvdStd
-                android:id="@+id/jzvdstd_player"
+            <com.fy.fayou.view.LandLayoutVideo
+                android:id="@+id/detail_player"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

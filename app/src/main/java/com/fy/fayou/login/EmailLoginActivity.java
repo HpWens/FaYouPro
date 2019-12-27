@@ -227,7 +227,9 @@ public class EmailLoginActivity extends BaseActivity implements SocialLoginCallb
                 RxKeyboardTool.hideSoftInput(mContext);
                 if (checkMobile() && checkVerifyCode()) {
                     // 请求接口
-                    requestLogin(etEmail.getText().toString(), etPassword.getText().toString());
+                    etEmail.postDelayed(() -> {
+                        requestLogin(etEmail.getText().toString(), etPassword.getText().toString());
+                    }, 300);
                 }
                 break;
             case R.id.iv_wechat:

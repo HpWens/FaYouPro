@@ -41,7 +41,9 @@ public class FooterPresenter extends ItemPresenter<FooterBean> {
                 .setGone(R.id.flow_tag, item.type != Constant.Param.FORUM_TYPE)
                 .setGone(R.id.tv_origin, !TextUtils.isEmpty(item.source))
                 .setGone(R.id.source_layout, item.type == Constant.Param.FORUM_TYPE ? false : !TextUtils.isEmpty(item.source + item.author))
-                .setGone(R.id.tv_author, !TextUtils.isEmpty(item.author));
+                .setGone(R.id.tv_author, !TextUtils.isEmpty(item.author))
+                .setGone(R.id.tv_affirm, !TextUtils.isEmpty(item.disclaimer))
+                .setText(R.id.tv_affirm, item.disclaimer);
 
 
         LinearLayout priseLayout = holder.getView(R.id.praise_layout);
@@ -51,7 +53,9 @@ public class FooterPresenter extends ItemPresenter<FooterBean> {
             CircleImageView firstIv = holder.getView(R.id.iv_avatar_first);
             CircleImageView secondIv = holder.getView(R.id.iv_avatar_second);
             CircleImageView threeIv = holder.getView(R.id.iv_avatar_three);
-
+            holder.setGone(R.id.iv_avatar_first, true)
+                    .setGone(R.id.iv_avatar_second, true)
+                    .setGone(R.id.iv_avatar_three, true);
             int size = item.giveRecords.size();
 
             for (int i = 0; i < (size > 3 ? 3 : size); i++) {

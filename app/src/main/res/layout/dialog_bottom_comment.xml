@@ -28,6 +28,7 @@
         android:hint="请输入"
         android:maxLines="4"
         android:paddingLeft="15dp"
+        android:maxLength="500"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:textColor="@color/color_333333"

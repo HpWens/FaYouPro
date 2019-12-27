@@ -1,5 +1,6 @@
 package com.fy.fayou.detail.adapter;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,9 +11,11 @@ import com.fy.fayou.R;
 import com.fy.fayou.detail.bean.RecommendBean;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.ParseUtils;
+import com.fy.fayou.view.SampleCoverVideo;
 import com.meis.base.mei.adapter.MultiItemPresenter;
-
-import cn.jzvd.JzvdStd;
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 public class RecommendPresenter extends MultiItemPresenter<RecommendBean> {
 
@@ -21,8 +24,12 @@ public class RecommendPresenter extends MultiItemPresenter<RecommendBean> {
     private int ARTICLE_TYPE = 1;
     private int VIDEO_TYPE = 2;
 
+    // 视频相关
+    GSYVideoOptionBuilder gsyVideoOptionBuilder;
+
     public RecommendPresenter(OnItemListener listener) {
         mListener = listener;
+        gsyVideoOptionBuilder = new GSYVideoOptionBuilder();
     }
 
     @Override
@@ -58,15 +65,55 @@ public class RecommendPresenter extends MultiItemPresenter<RecommendBean> {
                         .setText(R.id.tv_origin, getNonEmpty(item.source))
                         .setText(R.id.tv_time, ParseUtils.getTime(item.createTime));
 
-                JzvdStd jzvdStd = helper.getView(R.id.video_player);
-                jzvdStd.titleTextView.setVisibility(View.INVISIBLE);
+                SampleCoverVideo gsyVideoPlayer = helper.getView(R.id.video_item_player);
+                gsyVideoPlayer.loadCoverImage(getNonEmpty(item.cover), R.mipmap.base_net_error);
+                gsyVideoOptionBuilder
+                        .setIsTouchWiget(false)
+                        .setUrl(getNonEmpty(item.videoUrl))
+                        .setVideoTitle(getNonEmpty(item.fullTitle))
+                        .setCacheWithPlay(false)
+                        .setRotateViewAuto(true)
+                        .setLockLand(true)
+                        .setPlayTag("video")
+                        .setShowFullAnimation(true)
+                        .setAutoFullWithSize(true)
+                        .setNeedLockFull(true)
+                        .setPlayPosition(helper.getAdapterPosition())
+                        .setVideoAllCallBack(new GSYSampleCallBack() {
+                            @Override
+                            public void onPrepared(String url, Object... objects) {
+                                super.onPrepared(url, objects);
+                                if (!gsyVideoPlayer.isIfCurrentIsFullscreen()) {
+                                    //静音
+                                    //GSYVideoManager.instance().setNeedMute(true);
+                                }
 
-                jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                jzvdStd.setUp(getNonEmpty(item.videoUrl), getNonEmpty(item.fullTitle));
-                Glide.with(helper.itemView.getContext())
-                        .load(getNonEmpty(item.cover))
-                        .apply(GlideOption.getFullScreenWOption(helper.itemView.getContext()))
-                        .into(jzvdStd.thumbImageView);
+                            }
+
+                            @Override
+                            public void onQuitFullscreen(String url, Object... objects) {
+                                super.onQuitFullscreen(url, objects);
+                                //全屏不静音
+                                //GSYVideoManager.instance().setNeedMute(true);
+                            }
+
+                            @Override
+                            public void onEnterFullscreen(String url, Object... objects) {
+                                super.onEnterFullscreen(url, objects);
+                                //GSYVideoManager.instance().setNeedMute(false);
+                                gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String) objects[0]);
+                            }
+                        }).build(gsyVideoPlayer);
+
+
+                //增加title
+                gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
+
+                //设置返回键
+                gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
+
+                //设置全屏按键功能
+                gsyVideoPlayer.getFullscreenButton().setOnClickListener(v -> resolveFullBtn(helper.itemView.getContext(), gsyVideoPlayer));
 
                 // 跳转到视频详情页
                 helper.itemView.setOnClickListener(v -> {
@@ -112,5 +159,12 @@ public class RecommendPresenter extends MultiItemPresenter<RecommendBean> {
 
     public interface OnItemListener {
         void onClick(View v, RecommendBean item);
+    }
+
+    /**
+     * 全屏幕按键处理
+     */
+    private void resolveFullBtn(Context context, final StandardGSYVideoPlayer standardGSYVideoPlayer) {
+        standardGSYVideoPlayer.startWindowFullscreen(context, true, true);
     }
 }

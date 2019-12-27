@@ -15,11 +15,13 @@ import com.fy.fayou.common.Constant;
 import com.fy.fayou.common.UserService;
 import com.fy.fayou.detail.bean.CommentBean;
 import com.fy.fayou.detail.dialog.BottomCommentDialog;
+import com.fy.fayou.event.RefreshDetailCommentEvent;
 import com.meis.base.mei.base.BaseFragment;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,6 +52,9 @@ public class ReviewFragment extends BaseFragment {
 
     private int totalComment = 0;
 
+    // 作者
+    private String author;
+
     // 是否论坛
     private boolean isForum;
 
@@ -67,9 +72,10 @@ public class ReviewFragment extends BaseFragment {
      */
     private SecondReviewFragment mSecondReviewFragment;
 
-    public static ReviewFragment newInstance(String articleId, int type) {
+    public static ReviewFragment newInstance(String articleId, int type, String author) {
         Bundle args = new Bundle();
         args.putString(ARTICLE_ID, articleId);
+        args.putString(Constant.Param.AUROT, author);
         args.putInt(Constant.Param.TYPE, type);
         ReviewFragment fragment = new ReviewFragment();
         fragment.setArguments(args);
@@ -80,7 +86,8 @@ public class ReviewFragment extends BaseFragment {
     protected void initView() {
         if (getArguments() != null) {
             articleId = getArguments().getString(ARTICLE_ID, "");
-            isForum = (getArguments().getInt(Constant.Param.TYPE) == 2);
+            isForum = getArguments().getInt(Constant.Param.TYPE) == 2;
+            author = getArguments().getString(Constant.Param.AUROT, "");
         }
         unbinder = ButterKnife.bind(this, getView());
 
@@ -227,6 +234,7 @@ public class ReviewFragment extends BaseFragment {
     private void showBottomCommentDialog(String userName, String articleId, String parentId, int position, String reUserId) {
         showDialog(new BottomCommentDialog().setParams(userName, articleId, parentId, position)
                 .setForum(isForum)
+                .setAuthor(author)
                 .setReUserId(reUserId)
                 .setOnPublishListener((isParent, pos, entity) -> {
                     // 更新列表评论
@@ -235,6 +243,9 @@ public class ReviewFragment extends BaseFragment {
                     }
                     totalComment += 1;
                     tvTotal.setText(getResources().getString(R.string.comment_count, totalComment));
+
+                    // 更新详情页评论区
+                    EventBus.getDefault().post(new RefreshDetailCommentEvent(entity, articleId, isParent));
                 }));
     }
 

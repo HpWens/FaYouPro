@@ -195,6 +195,8 @@ public class Constant {
 
         String NAME = "name";
 
+        String AUROT = "autor";
+
         String URL = "url";
 
         String DETAIL = "detail";

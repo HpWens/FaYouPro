@@ -1,6 +1,6 @@
 package com.fy.fayou.detail.article;
 
-import android.support.annotation.NonNull;
+import android.content.res.Configuration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -43,15 +43,23 @@ import com.fy.fayou.detail.bean.TextBean;
 import com.fy.fayou.detail.dialog.BottomShareDialog;
 import com.fy.fayou.event.ListPraiseEvent;
 import com.fy.fayou.event.LoginSuccessOrExitEvent;
+import com.fy.fayou.event.RefreshDetailCommentEvent;
+import com.fy.fayou.event.RefreshDetailPraiseEvent;
 import com.fy.fayou.event.ReportSuccessEvent;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.MarkDownParser;
 import com.fy.fayou.utils.ParseUtils;
+import com.fy.fayou.view.LandLayoutVideo;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.meis.base.mei.adapter.MeiBaseMixAdapter;
 import com.meis.base.mei.base.BaseActivity;
 import com.meis.base.mei.utils.Eyes;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
@@ -68,11 +76,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.jzvd.Jzvd;
-import cn.jzvd.JzvdStd;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 
 @Route(path = "/detail/article")
 public class ArticleDetailActivity extends BaseActivity {
@@ -106,21 +113,28 @@ public class ArticleDetailActivity extends BaseActivity {
     ImageView tvShare;
     @BindView(R.id.line)
     View transMask;
-    @BindView(R.id.jzvdstd_player)
-    JzvdStd jzvdStd;
+    @BindView(R.id.detail_player)
+    LandLayoutVideo detailPlayer;
 
     private boolean isCollect = false;
     private String articleId;
 
+    private LinearLayoutManager linearLayoutManager;
     MeiBaseMixAdapter mAdapter;
     List<Object> mDataList = new ArrayList<>();
 
     private BottomShareDialog mShareDialog;
     private String mShareUrl;
     private String mShareContent;
+    private String mPublishName;
     private ReviewFragment mReviewFragment;
     private List<LocalMedia> mPicMedia = new ArrayList<>();
     private int mPicIndex = 0;
+
+    // 视频相关
+    private OrientationUtils orientationUtils;
+    private boolean isPlay;
+    private boolean isPause;
 
     @Override
     protected void initView() {
@@ -172,21 +186,36 @@ public class ArticleDetailActivity extends BaseActivity {
         }));
         mAdapter.addItemPresenter(new TextPresenter());
         mAdapter.addItemPresenter(new KtEmptyCommentPresenter());
-        recycler.setLayoutManager(new LinearLayoutManager(this));
+        recycler.setLayoutManager(linearLayoutManager = new LinearLayoutManager(this));
         recycler.setAdapter(mAdapter);
-        recycler.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+
+        recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            int firstVisibleItem, lastVisibleItem;
+
             @Override
-            public void onChildViewAttachedToWindow(@NonNull View view) {
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
             }
 
             @Override
-            public void onChildViewDetachedFromWindow(@NonNull View view) {
-                if (view.getTag() != null && view.getTag().toString().equals("video")) {
-                    Jzvd jzvd = view.findViewById(R.id.video_player);
-                    if (jzvd != null && Jzvd.CURRENT_JZVD != null &&
-                            jzvd.jzDataSource.containsTheUrl(Jzvd.CURRENT_JZVD.jzDataSource.getCurrentUrl())) {
-                        if (Jzvd.CURRENT_JZVD != null && Jzvd.CURRENT_JZVD.screen != Jzvd.SCREEN_FULLSCREEN) {
-                            Jzvd.releaseAllVideos();
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                //大于0说明有播放
+                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+                    //当前播放的位置
+                    int position = GSYVideoManager.instance().getPlayPosition();
+                    //对应的播放列表TAG
+                    if (GSYVideoManager.instance().getPlayTag().equals("video")
+                            && (position < firstVisibleItem || position > lastVisibleItem)) {
+
+                        //如果滑出去了上面和下面就是否，和今日头条一样
+                        //是否全屏
+                        if (!GSYVideoManager.isFullState(mContext)) {
+                            GSYVideoManager.releaseAllVideos();
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
                 }
@@ -251,6 +280,12 @@ public class ArticleDetailActivity extends BaseActivity {
                 });
     }
 
+    private void resolveNormalVideoUI() {
+        //增加title
+        detailPlayer.getTitleTextView().setVisibility(View.GONE);
+        detailPlayer.getBackButton().setVisibility(View.GONE);
+    }
+
     /**
      * @param articleEntity
      * @param commentList
@@ -262,12 +297,71 @@ public class ArticleDetailActivity extends BaseActivity {
 
         // 填充视频
         if (articleEntity.articleType != null && articleEntity.articleType.equals(Constant.Param.VIDEO)) {
-            jzvdStd.setUp(getNonEmpty(articleEntity.videoUrl), "");
-            jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            //增加封面
+            ImageView imageView = new ImageView(this);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Glide.with(mContext)
                     .load(getNonEmpty(articleEntity.cover))
                     .apply(GlideOption.getFullScreenWOption(mContext))
-                    .into(jzvdStd.thumbImageView);
+                    .into(imageView);
+
+            resolveNormalVideoUI();
+
+            //外部辅助的旋转，帮助全屏
+            orientationUtils = new OrientationUtils(this, detailPlayer);
+            //初始化不打开外部的旋转
+            orientationUtils.setEnable(false);
+
+            GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
+            gsyVideoOption.setThumbImageView(imageView)
+                    .setIsTouchWiget(true)
+                    .setRotateViewAuto(false)
+                    .setLockLand(false)
+                    .setAutoFullWithSize(true)
+                    .setShowFullAnimation(false)
+                    .setNeedLockFull(true)
+                    .setUrl(getNonEmpty(articleEntity.videoUrl))
+                    .setCacheWithPlay(false)
+                    .setVideoTitle(getNonEmpty(articleEntity.fullTitle))
+                    .setVideoAllCallBack(new GSYSampleCallBack() {
+                        @Override
+                        public void onPrepared(String url, Object... objects) {
+                            super.onPrepared(url, objects);
+                            //开始播放了才能旋转和全屏
+                            orientationUtils.setEnable(true);
+                            isPlay = true;
+
+                            //设置 seek 的临近帧。
+                            if (detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
+                            }
+                        }
+
+                        @Override
+                        public void onQuitFullscreen(String url, Object... objects) {
+                            super.onQuitFullscreen(url, objects);
+                            if (orientationUtils != null) {
+                                orientationUtils.backToProtVideo();
+                            }
+                        }
+                    })
+                    .setLockClickListener((view, lock) -> {
+                        if (orientationUtils != null) {
+                            //配合下方的onConfigurationChanged
+                            orientationUtils.setEnable(!lock);
+                        }
+                    })
+                    .setGSYVideoProgressListener((progress, secProgress, currentPosition, duration) -> {
+                    })
+                    .build(detailPlayer);
+
+            detailPlayer.getFullscreenButton().setOnClickListener(v -> {
+                //直接横屏
+                orientationUtils.resolveByClick();
+
+                //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
+                detailPlayer.startWindowFullscreen(mContext, true, true);
+            });
         }
 
         fillHeaderData(articleEntity);
@@ -364,6 +458,7 @@ public class ArticleDetailActivity extends BaseActivity {
         footerBean.give = articleEntity.give;
         footerBean.id = articleEntity.id;
         footerBean.type = type;
+        footerBean.disclaimer = getNonEmpty(articleEntity.disclaimer);
         footerBean.giveRecords = articleEntity.giveRecords;
         mDataList.add(footerBean);
     }
@@ -403,12 +498,26 @@ public class ArticleDetailActivity extends BaseActivity {
     private void fillHeaderData(ArticleEntity articleEntity) {
         HeaderBean header = new HeaderBean();
         mShareContent = header.fullTitle = type == Constant.Param.FORUM_TYPE ? articleEntity.title : articleEntity.fullTitle;
-        header.auditName = getNonEmpty(TextUtils.isEmpty(articleEntity.auditName) ? articleEntity.author : articleEntity.auditName);
+        header.auditName = mPublishName = getAuditName(articleEntity);
         header.createTime = articleEntity.createTime;
         header.follow = articleEntity.follow;
-        header.auditId = type == Constant.Param.FORUM_TYPE ? articleEntity.userId : articleEntity.auditId;
-        header.auditAvatar = TextUtils.isEmpty(articleEntity.auditAvatar) ? articleEntity.authorAvatar : articleEntity.auditAvatar;
+        header.auditId = type == Constant.Param.FORUM_TYPE ? articleEntity.userId : articleEntity.creatorId;
+        header.auditAvatar = getAuditAvatar(articleEntity);
         mDataList.add(header);
+    }
+
+    private String getAuditAvatar(ArticleEntity articleEntity) {
+        if (type != Constant.Param.FORUM_TYPE && !TextUtils.isEmpty(articleEntity.creatorAvatar)) {
+            return articleEntity.creatorAvatar;
+        }
+        return TextUtils.isEmpty(articleEntity.auditAvatar) ? articleEntity.authorAvatar : articleEntity.auditAvatar;
+    }
+
+    private String getAuditName(ArticleEntity articleEntity) {
+        if (type != Constant.Param.FORUM_TYPE && !TextUtils.isEmpty(articleEntity.creatorName)) {
+            return articleEntity.creatorName;
+        }
+        return getNonEmpty(TextUtils.isEmpty(articleEntity.auditName) ? articleEntity.author : articleEntity.auditName);
     }
 
     private Observable<String> requestDetail() {
@@ -571,7 +680,7 @@ public class ArticleDetailActivity extends BaseActivity {
 
     private void showBottomDialog() {
         if (mReviewFragment == null) {
-            loadRootFragment(R.id.fl_comment, mReviewFragment = ReviewFragment.newInstance(id, type));
+            loadRootFragment(R.id.fl_comment, mReviewFragment = ReviewFragment.newInstance(id, type, mPublishName));
             mReviewFragment.setOnReviewListener(new ReviewFragment.OnReviewListener() {
                 @Override
                 public void onDismiss() {
@@ -678,8 +787,30 @@ public class ArticleDetailActivity extends BaseActivity {
 
     @Override
     public void onPause() {
+        getCurPlay().onVideoPause();
         super.onPause();
-        Jzvd.releaseAllVideos();
+        GSYVideoManager.onPause();
+        isPause = true;
+    }
+
+    @Override
+    protected void onResume() {
+        getCurPlay().onVideoResume(false);
+        super.onResume();
+        GSYVideoManager.onResume(false);
+        isPause = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isPlay) {
+            getCurPlay().release();
+        }
+        if (orientationUtils != null) {
+            orientationUtils.releaseListener();
+        }
+        GSYVideoManager.releaseAllVideos();
     }
 
     @Override
@@ -688,10 +819,30 @@ public class ArticleDetailActivity extends BaseActivity {
             mReviewFragment.hideBehavior();
             return;
         }
-        if (Jzvd.backPress()) {
+
+        if (orientationUtils != null) {
+            orientationUtils.backToProtVideo();
+        }
+        if (GSYVideoManager.backFromWindowFull(this)) {
             return;
         }
         super.onBackPressedSupport();
+    }
+
+    private GSYVideoPlayer getCurPlay() {
+        if (detailPlayer.getFullWindowPlayer() != null) {
+            return detailPlayer.getFullWindowPlayer();
+        }
+        return detailPlayer;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //如果旋转了就全屏
+        if (isPlay && !isPause) {
+            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+        }
     }
 
     @Override
@@ -710,4 +861,79 @@ public class ArticleDetailActivity extends BaseActivity {
             mShareDialog.dismiss();
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefreshDetailCommentEvent(RefreshDetailCommentEvent event) {
+        if (event != null && event.detailId.equals(articleId) && event.entity != null && event.isParent) {
+            int addPosition = 0;
+            int commentSize = 0;
+            boolean isEmptyComment = false;
+            for (int i = 0; i < mAdapter.getData().size(); i++) {
+                Object obj = mAdapter.getData().get(i);
+                if (obj instanceof EmptyCommentBean) {
+                    addPosition = i;
+                    isEmptyComment = true;
+                    break;
+                } else if (obj instanceof CommentBean) {
+                    addPosition = i;
+                    commentSize++;
+                } else if (obj instanceof RecommendHeaderBean) {
+                    break;
+                }
+            }
+
+            if (isEmptyComment) {
+                mAdapter.notifyItemRemoved(addPosition);
+                mAdapter.getData().remove(addPosition);
+
+                event.entity.lastIndex = true;
+                mAdapter.getData().add(addPosition, event.entity);
+                mAdapter.notifyItemInserted(addPosition);
+            } else {
+                if (commentSize < 3) {
+                    int pos = addPosition + 1 - commentSize;
+                    mAdapter.getData().add(pos, event.entity);
+                    mAdapter.notifyItemInserted(pos);
+                }
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefreshDetailPraiseEvent(RefreshDetailPraiseEvent event) {
+        if (event != null && event.articleId.equals(articleId)) {
+            int updatePosition = -1;
+            for (int i = 0; i < mAdapter.getData().size(); i++) {
+                Object obj = mAdapter.getData().get(i);
+                if (obj instanceof EmptyCommentBean) {
+                    break;
+                } else if (obj instanceof CommentBean) {
+                    CommentBean bean = (CommentBean) obj;
+                    if (bean.id.equals(event.commentId)) {
+                        updatePosition = i;
+                        if (event.isForum) {
+                            bean.given = event.isPraise;
+                            if (bean.given) {
+                                bean.gives += 1;
+                            } else {
+                                bean.gives -= 1;
+                            }
+                        } else {
+                            bean.give = event.isPraise;
+                            if (bean.give) {
+                                bean.gives += 1;
+                            } else {
+                                bean.gives -= 1;
+                            }
+                        }
+                        break;
+                    }
+                } else if (obj instanceof RecommendHeaderBean) {
+                    break;
+                }
+            }
+            if (updatePosition != -1) mAdapter.notifyItemChanged(updatePosition);
+        }
+    }
+
 }

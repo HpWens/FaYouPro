@@ -7,14 +7,18 @@
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
-        android:layout_height="24dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/white_12_round"
         android:gravity="center"
         android:paddingLeft="12.5dp"
+        android:paddingTop="4dp"
         android:paddingRight="12.5dp"
+        android:paddingBottom="4dp"
+        android:lines="1"
         android:text="婚姻法"
+        android:ellipsize="end"
         android:textColor="@color/color_333333"
         android:textSize="12sp"></TextView>
 

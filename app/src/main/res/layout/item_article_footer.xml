@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -28,14 +29,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
+            android:maxLength="13"
             android:lines="1"
-            android:maxLength="14"
             android:text="原作者：大钢铁"
             android:textColor="@color/color_b2b2b2"
             android:textSize="12sp"></TextView>
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_affirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="18dp"
+        android:textColor="@color/color_b2b2b2"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="本图文来自网络，如涉及侵权，请联系删除。" />
 
     <com.fy.fayou.view.flow.FlowLayout
         android:id="@+id/flow_tag"

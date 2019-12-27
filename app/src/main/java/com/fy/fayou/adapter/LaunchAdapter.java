@@ -14,6 +14,8 @@ public class LaunchAdapter extends BaseMultiAdapter<LaunchEntity> {
 
     View.OnClickListener mListener;
 
+    long mAgainClickDuration = 0;
+
     int[] mPicRes = {
             R.mipmap.launch2_0_ic,
             R.mipmap.launch2_1_ic,
@@ -51,7 +53,8 @@ public class LaunchAdapter extends BaseMultiAdapter<LaunchEntity> {
         int pos = helper.getAdapterPosition();
         helper.setImageResource(R.id.iv_launch, pos < mPicRes.length ? mPicRes[pos] : mPicRes[mPicRes.length - 1]);
         helper.itemView.setOnClickListener(v -> {
-            if (pos == mPicRes.length - 1) {
+            if (pos == mPicRes.length - 1 && System.currentTimeMillis() - mAgainClickDuration > 2000) {
+                mAgainClickDuration = System.currentTimeMillis();
                 mListener.onClick(v);
             }
         });

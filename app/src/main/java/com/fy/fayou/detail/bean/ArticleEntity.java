@@ -35,6 +35,11 @@ public class ArticleEntity implements Serializable {
     public List<String> tagNames;
     public String shareUrl;
 
+    public String creatorName;
+    public String creatorAvatar;
+    public String disclaimer;
+    public String creatorId;
+
     public static class UserBean {
         public String userId;
         public String userAvatar;

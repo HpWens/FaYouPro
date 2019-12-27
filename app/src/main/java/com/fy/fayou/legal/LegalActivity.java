@@ -101,6 +101,8 @@ public class LegalActivity extends BaseActivity {
             // requestJudgeCategory();
 
             requestFilterCategory(new HashMap<>(), null);
+
+            requestJudgeCategory();
         } else {
             requestColumn(moduleType);
         }
@@ -333,9 +335,9 @@ public class LegalActivity extends BaseActivity {
                                 }
                             }
 
-                            if (!TextUtils.isEmpty(id)) {
-                                requestJudgeCategory(id);
-                            }
+//                            if (!TextUtils.isEmpty(id)) {
+//                                requestJudgeCategory(id);
+//                            }
 
                         }
                     }

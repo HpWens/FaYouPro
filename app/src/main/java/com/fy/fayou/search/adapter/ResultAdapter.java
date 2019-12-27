@@ -20,12 +20,14 @@ import com.fy.fayou.search.bean.SearchResultEntity;
 import com.fy.fayou.utils.GlideOption;
 import com.fy.fayou.utils.KtTimeUtils;
 import com.fy.fayou.utils.ParseUtils;
+import com.fy.fayou.view.SampleCoverVideo;
 import com.meis.base.mei.adapter.BaseMultiAdapter;
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.vondear.rxtool.RxImageTool;
 
 import java.util.List;
-
-import cn.jzvd.JzvdStd;
 
 public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
 
@@ -42,6 +44,9 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
 
 
     private String keyword;
+
+    // 视频相关
+    GSYVideoOptionBuilder gsyVideoOptionBuilder;
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -60,6 +65,8 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
         addItemType(TYPE_ITEM_BOARD, R.layout.item_search_board);
         addItemType(TYPE_ITEM_POST, R.layout.forum_item_follow);
         addItemType(TYPE_ITEM_PF_VIDEO, R.layout.item_home_video);
+
+        gsyVideoOptionBuilder = new GSYVideoOptionBuilder();
     }
 
     private int getCollectType(int columnType) {
@@ -168,7 +175,8 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
             case TYPE_ITEM_NEWS:
                 helper.setText(R.id.tv_name, getNonEmpty(item.title))
                         .setText(R.id.tv_origin, getNonEmpty(item.source))
-                        .setText(R.id.tv_time, ParseUtils.getTime(item.createTime));
+                        .setText(R.id.tv_time, ParseUtils.getTime(item.createTime))
+                        .setGone(R.id.tv_origin, !TextUtils.isEmpty(item.source));
 
                 ImageView ivThumb = helper.getView(R.id.iv_thumb);
                 if (TextUtils.isEmpty(item.cover)) {
@@ -259,15 +267,55 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
                         .setText(R.id.tv_time, ParseUtils.getTime(item.createTime))
                         .setGone(R.id.iv_praise, false);
 
-                JzvdStd jzvdStd = helper.getView(R.id.video_player);
-                jzvdStd.titleTextView.setVisibility(View.INVISIBLE);
+                SampleCoverVideo gsyVideoPlayer = helper.getView(R.id.video_item_player);
+                gsyVideoPlayer.loadCoverImage(getNonEmpty(item.cover), R.mipmap.base_net_error);
+                gsyVideoOptionBuilder
+                        .setIsTouchWiget(false)
+                        .setUrl(getNonEmpty(item.videoUrl))
+                        .setVideoTitle(getNonEmpty(item.title))
+                        .setCacheWithPlay(false)
+                        .setRotateViewAuto(true)
+                        .setLockLand(true)
+                        .setPlayTag("video")
+                        .setShowFullAnimation(true)
+                        .setAutoFullWithSize(true)
+                        .setNeedLockFull(true)
+                        .setPlayPosition(helper.getAdapterPosition())
+                        .setVideoAllCallBack(new GSYSampleCallBack() {
+                            @Override
+                            public void onPrepared(String url, Object... objects) {
+                                super.onPrepared(url, objects);
+                                if (!gsyVideoPlayer.isIfCurrentIsFullscreen()) {
+                                    //静音
+                                    //GSYVideoManager.instance().setNeedMute(true);
+                                }
 
-                jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                jzvdStd.setUp(getNonEmpty(item.videoUrl), getNonEmpty(item.title));
-                Glide.with(mContext)
-                        .load(getNonEmpty(item.cover))
-                        .apply(GlideOption.getFullScreenWOption(mContext))
-                        .into(jzvdStd.thumbImageView);
+                            }
+
+                            @Override
+                            public void onQuitFullscreen(String url, Object... objects) {
+                                super.onQuitFullscreen(url, objects);
+                                //全屏不静音
+                                //GSYVideoManager.instance().setNeedMute(true);
+                            }
+
+                            @Override
+                            public void onEnterFullscreen(String url, Object... objects) {
+                                super.onEnterFullscreen(url, objects);
+                                //GSYVideoManager.instance().setNeedMute(false);
+                                gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String) objects[0]);
+                            }
+                        }).build(gsyVideoPlayer);
+
+
+                //增加title
+                gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
+
+                //设置返回键
+                gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
+
+                //设置全屏按键功能
+                gsyVideoPlayer.getFullscreenButton().setOnClickListener(v -> resolveFullBtn(gsyVideoPlayer));
 
                 // 跳转到视频详情页
                 helper.itemView.setOnClickListener(v -> {
@@ -275,6 +323,14 @@ public class ResultAdapter extends BaseMultiAdapter<SearchResultEntity> {
                 });
                 break;
         }
+    }
+
+
+    /**
+     * 全屏幕按键处理
+     */
+    private void resolveFullBtn(final StandardGSYVideoPlayer standardGSYVideoPlayer) {
+        standardGSYVideoPlayer.startWindowFullscreen(mContext, true, true);
     }
 
     /**

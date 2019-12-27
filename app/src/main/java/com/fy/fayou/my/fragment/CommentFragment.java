@@ -13,6 +13,7 @@ import com.fy.fayou.utils.ParseUtils;
 import com.meis.base.mei.adapter.MeiBaseAdapter;
 import com.meis.base.mei.base.BaseListFragment;
 import com.meis.base.mei.entity.Result;
+import com.meis.base.mei.status.ViewState;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
@@ -62,6 +63,10 @@ public class CommentFragment extends BaseListFragment<CommentEntity> {
                     public void onSuccess(String s) {
                         mAdapter.notifyItemRemoved(position);
                         mAdapter.getData().remove(position);
+
+                        if (mAdapter.getData().isEmpty()) {
+                            setState(ViewState.EMPTY);
+                        }
                     }
                 });
     }

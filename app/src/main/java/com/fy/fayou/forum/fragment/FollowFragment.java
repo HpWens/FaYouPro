@@ -90,7 +90,9 @@ public class FollowFragment extends BaseListFragment<ForumEntity> {
     @Override
     protected void onDataLoaded(int pageNo, Result<List<ForumEntity>> result) {
         super.onDataLoaded(pageNo, result);
-        setState(ViewState.COMPLETED);
+        if (!mIsRecommendColumn) {
+            setState(ViewState.COMPLETED);
+        }
     }
 
     @Override
@@ -153,6 +155,11 @@ public class FollowFragment extends BaseListFragment<ForumEntity> {
     @Override
     public boolean isRegisterEventBus() {
         return true;
+    }
+
+    @Override
+    protected boolean loadOnShow() {
+        return false;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

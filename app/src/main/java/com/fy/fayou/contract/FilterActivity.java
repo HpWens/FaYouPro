@@ -146,7 +146,7 @@ public class FilterActivity extends BaseActivity {
                 break;
             case R.id.tv_down:
                 List<Level1Item> data = adapter.getSelectedArray();
-                if (data.isEmpty()) {
+                if (data.isEmpty() || data.size() == 1) {
                     Toast.makeText(mContext, "至少选择一项条款", Toast.LENGTH_SHORT).show();
                     return;
                 }

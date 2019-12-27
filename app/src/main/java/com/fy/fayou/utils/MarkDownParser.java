@@ -164,7 +164,7 @@ public class MarkDownParser {
             }
         }
 
-        if (!TextUtils.isEmpty(line.trim())) {
+        if (!TextUtils.isEmpty(line.trim()) && !" ".equals(line)) {
             if (mListener != null) {
                 mListener.onText(line.trim());
             }

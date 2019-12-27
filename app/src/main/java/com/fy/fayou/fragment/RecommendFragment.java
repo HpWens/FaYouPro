@@ -2,7 +2,6 @@ package com.fy.fayou.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -24,6 +23,7 @@ import com.meis.base.mei.adapter.BaseMultiAdapter;
 import com.meis.base.mei.base.BaseMultiListFragment;
 import com.meis.base.mei.constant.DataConstants;
 import com.meis.base.mei.entity.Result;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
@@ -35,13 +35,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 
-import cn.jzvd.Jzvd;
 import io.reactivex.Observable;
 
 public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
 
     private HomeClashRecyclerView mRecyclerView;
     private RecommendAdapter mAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
 
     private OnScrollClashListener mListener;
 
@@ -88,7 +88,7 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
     public void onAttach(Activity activity) {
         if (getArguments() != null) {
             categoryId = getArguments().getString(Constant.Param.CATEGORY_ID, "");
-            // fixedColumn = getArguments().getBoolean(Constant.Param.FIXED_COLUMN, false);
+            fixedColumn = getArguments().getBoolean(Constant.Param.FIXED_COLUMN, false);
             isUserCenter = getArguments().getBoolean(Constant.Param.USER_CENTER, false);
             userId = getArguments().getString(Constant.Param.USER_ID, "0");
         }
@@ -108,26 +108,42 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
     @Override
     protected RecyclerView getRecyclerView() {
         mRecyclerView = findViewById(R.id.recycler);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(mLinearLayoutManager = new LinearLayoutManager(getActivity()));
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        mRecyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            int firstVisibleItem, lastVisibleItem;
+
             @Override
-            public void onChildViewAttachedToWindow(@NonNull View view) {
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
             }
 
             @Override
-            public void onChildViewDetachedFromWindow(@NonNull View view) {
-                if (view.getTag() != null && view.getTag().toString().equals("video")) {
-                    Jzvd jzvd = view.findViewById(R.id.video_player);
-                    if (jzvd != null && Jzvd.CURRENT_JZVD != null &&
-                            jzvd.jzDataSource.containsTheUrl(Jzvd.CURRENT_JZVD.jzDataSource.getCurrentUrl())) {
-                        if (Jzvd.CURRENT_JZVD != null && Jzvd.CURRENT_JZVD.screen != Jzvd.SCREEN_FULLSCREEN) {
-                            Jzvd.releaseAllVideos();
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+                lastVisibleItem = mLinearLayoutManager.findLastVisibleItemPosition();
+                //大于0说明有播放
+                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+                    //当前播放的位置
+                    int position = GSYVideoManager.instance().getPlayPosition();
+                    //对应的播放列表TAG
+                    if (GSYVideoManager.instance().getPlayTag().equals("video")
+                            && (position < firstVisibleItem || position > lastVisibleItem)) {
+
+                        //如果滑出去了上面和下面就是否，和今日头条一样
+                        //是否全屏
+                        if (!GSYVideoManager.isFullState(getActivity())) {
+                            GSYVideoManager.releaseAllVideos();
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
                 }
             }
         });
+
         return mRecyclerView;
     }
 
@@ -214,23 +230,23 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
         super.onDataLoaded(pageNo, result);
 
         // 新增全网通缉
-        if (fixedColumn && pageNo == 1) {
-            RecommendEntity entity = new RecommendEntity();
-            entity.showIndex = true;
-            entity.fullTitle = "#全国网上追逃#";
-            entity.source = "法友";
-            entity.id = "";
-            entity.fixedMode = 1;
-            mAdapter.getData().add(0, entity);
-
-            entity = new RecommendEntity();
-            entity.showIndex = true;
-            entity.fullTitle = "#我和我的祖国#";
-            entity.source = "法友";
-            entity.id = "";
-            entity.fixedMode = 2;
-            mAdapter.getData().add(0, entity);
-        }
+//        if (fixedColumn && pageNo == 1) {
+//            RecommendEntity entity = new RecommendEntity();
+//            entity.showIndex = true;
+//            entity.fullTitle = "#全国网上追逃#";
+//            entity.source = "法友";
+//            entity.id = "";
+//            entity.fixedMode = 1;
+//            mAdapter.getData().add(0, entity);
+//
+//            entity = new RecommendEntity();
+//            entity.showIndex = true;
+//            entity.fullTitle = "#我和我的祖国#";
+//            entity.source = "法友";
+//            entity.id = "";
+//            entity.fixedMode = 2;
+//            mAdapter.getData().add(0, entity);
+//        }
     }
 
     @Override
@@ -255,7 +271,7 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
 
     @Override
     public boolean onBackPressedSupport() {
-        if (Jzvd.backPress()) {
+        if (GSYVideoManager.backFromWindowFull(getActivity())) {
             return true;
         }
         return super.onBackPressedSupport();
@@ -264,7 +280,19 @@ public class RecommendFragment extends BaseMultiListFragment<RecommendEntity> {
     @Override
     public void onPause() {
         super.onPause();
-        Jzvd.releaseAllVideos();
+        GSYVideoManager.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        GSYVideoManager.onResume(false);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        GSYVideoManager.releaseAllVideos();
     }
 
     @Override
