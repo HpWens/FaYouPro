@@ -6,7 +6,7 @@
         <item name="meiColorTextGray">@color/mei_color_30a6d5</item>
         <item name="meiTextEmpty">@string/mei_hint_empty</item>
         <item name="meiTextLoading">@string/mei_hint_loading</item>
-        <item name="meiIconError">@mipmap/base_net_error</item>
+        <item name="meiIconError">@mipmap/base_network_error</item>
         <item name="meiTextError">@string/mei_hint_error</item>
     </style>
 
