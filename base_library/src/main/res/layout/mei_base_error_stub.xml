@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mei_color_ffffff"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_error"
@@ -12,6 +13,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="62dp" />
 
+
+    <TextView
+        android:id="@+id/tv_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/mei_error_click_refresh_shade"
+        android:paddingLeft="46dp"
+        android:paddingTop="14dp"
+        android:paddingRight="46dp"
+        android:paddingBottom="14dp"
+        android:text="点击刷新"
+        android:textColor="#ed4040"
+        android:textSize="14sp"></TextView>
 
 
 </LinearLayout>

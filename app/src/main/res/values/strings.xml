@@ -16,6 +16,7 @@
     <string name="expand_comment" translatable="false">展开其他%1$d条评论</string>
     <string name="judge_category_sign" translatable="false">手机端标签</string>
     <string name="forum_star_plate_comment_num" translatable="false">发帖%1$d · 评论%2$d</string>
+    <string name="check_network_connection" translatable="false">请检查网络连接</string>
 
     <string-array name="array_menu">
         <item>法律法规</item>

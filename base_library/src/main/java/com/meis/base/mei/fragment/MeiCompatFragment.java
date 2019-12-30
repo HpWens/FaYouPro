@@ -27,6 +27,9 @@ public class MeiCompatFragment extends RxFragment implements IMeiCompatFragment,
 
     final MeiCompatFragmentDelegate mDelegate = new MeiCompatFragmentDelegate(this);
 
+    // 扩展 state
+    private int mPageState = ViewState.COMPLETED;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
@@ -176,6 +179,7 @@ public class MeiCompatFragment extends RxFragment implements IMeiCompatFragment,
      * @see # setState(viewState,args)
      */
     public void setState(@ViewState.Val int viewState, Object... args) {
+        mPageState = viewState;
         mDelegate.setState(viewState, args);
     }
 
@@ -185,7 +189,12 @@ public class MeiCompatFragment extends RxFragment implements IMeiCompatFragment,
      * @param args
      */
     public void showState(@ViewState.Val int viewState, Object... args) {
+        mPageState = viewState;
         mDelegate.showState(viewState, args);
+    }
+
+    public int getPageState() {
+        return mPageState;
     }
 
     /**

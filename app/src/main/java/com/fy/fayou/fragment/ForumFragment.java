@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
@@ -14,6 +15,8 @@ import com.fy.fayou.event.LoginSuccessOrExitEvent;
 import com.fy.fayou.forum.bean.PlateEntity;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseFragment;
+import com.meis.base.mei.status.ViewState;
+import com.vondear.rxtool.RxNetTool;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -54,6 +57,14 @@ public class ForumFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        if (!RxNetTool.isAvailable(getActivity())) {
+            setState(ViewState.ERROR);
+            return;
+        }
+        loadForumData();
+    }
+
+    private void loadForumData() {
         PlateEntity entity = new PlateEntity();
         entity.name = "关注";
         mCategoryEntities.add(entity);
@@ -90,6 +101,29 @@ public class ForumFragment extends BaseFragment {
     @Override
     protected int getLayoutId() {
         return R.layout.forum_fragment;
+    }
+
+    @Override
+    public void onErrorRetry() {
+        super.onErrorRetry();
+        if (!RxNetTool.isAvailable(getActivity())) {
+            Toast.makeText(getActivity(), R.string.check_network_connection, Toast.LENGTH_SHORT).show();
+        } else {
+            retryData();
+        }
+    }
+
+    private void retryData() {
+        setState(ViewState.COMPLETED);
+        loadForumData();
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (getPageState() == ViewState.ERROR && RxNetTool.isAvailable(getActivity())) {
+            retryData();
+        }
     }
 
     @Override

@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 
 import com.luck.picture.lib.R;
 import com.luck.picture.lib.config.PictureConfig;
@@ -135,7 +134,6 @@ public class LocalMediaLoader {
 
     public void loadAllMedia(final LocalMediaLoadListener imageLoadListener) {
         RxUtils.io(new RxUtils.RxSimpleTask<List<LocalMediaFolder>>() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @NonNull
             @Override
             public List<LocalMediaFolder> doSth(Object... objects) {
@@ -196,7 +194,9 @@ public class LocalMediaLoader {
 
                                 if (type == PictureConfig.TYPE_VIDEO) {
                                     if (duration == 0) {
-                                        duration = MediaUtils.extractVideoDuration(mContext, isAndroidQ, path);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            duration = MediaUtils.extractVideoDuration(mContext, isAndroidQ, path);
+                                        }
                                     }
                                     if (videoMinS > 0 && duration < videoMinS) {
                                         // 如果设置了最小显示多少秒的视频

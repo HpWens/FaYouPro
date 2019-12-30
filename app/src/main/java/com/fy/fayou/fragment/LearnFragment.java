@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fy.fayou.R;
@@ -16,6 +17,8 @@ import com.fy.fayou.common.UserService;
 import com.fy.fayou.utils.ParseUtils;
 import com.fy.fayou.view.HomeViewpager;
 import com.meis.base.mei.base.BaseFragment;
+import com.meis.base.mei.status.ViewState;
+import com.vondear.rxtool.RxNetTool;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
@@ -51,6 +54,10 @@ public class LearnFragment extends BaseFragment {
     protected void initView() {
         unbinder = ButterKnife.bind(this, getView());
 
+        if (!RxNetTool.isAvailable(getActivity())) {
+            setState(ViewState.ERROR);
+            return;
+        }
         // 请求栏目分类
         requestCategoryTag();
     }
@@ -60,7 +67,8 @@ public class LearnFragment extends BaseFragment {
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
-
+                        if (e.getCode() == ApiException.ERROR.NETWORD_ERROR) {
+                        }
                     }
 
                     @Override
@@ -95,7 +103,6 @@ public class LearnFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-
     }
 
     public void switchTab(int pos) {
@@ -113,6 +120,29 @@ public class LearnFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onErrorRetry() {
+        super.onErrorRetry();
+        if (!RxNetTool.isAvailable(getActivity())) {
+            Toast.makeText(getActivity(), R.string.check_network_connection, Toast.LENGTH_SHORT).show();
+        } else {
+            retryData();
+        }
+    }
+
+    private void retryData() {
+        setState(ViewState.COMPLETED);
+        requestCategoryTag();
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (getPageState() == ViewState.ERROR && RxNetTool.isAvailable(getActivity())) {
+            retryData();
+        }
     }
 
     @OnClick({R.id.iv_publish, R.id.iv_search})

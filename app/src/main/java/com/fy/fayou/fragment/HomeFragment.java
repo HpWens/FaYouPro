@@ -105,6 +105,8 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
         if (hintList.isEmpty()) return;
         switcher.setFactory(() -> {
             TextView tv = new TextView(getActivity());
+            tv.setLines(1);
+            tv.setEllipsize(TextUtils.TruncateAt.END);
             tv.setTextColor(getActivity().getResources().getColor(R.color.color_a0a0a0));
             tv.setTextSize(16);
             tv.post(() -> {

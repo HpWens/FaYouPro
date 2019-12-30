@@ -96,6 +96,11 @@ public class FollowFragment extends BaseListFragment<ForumEntity> {
     }
 
     @Override
+    public void onErrorRetry() {
+        super.onErrorRetry();
+    }
+
+    @Override
     public boolean canLoadMore() {
         return true;
     }

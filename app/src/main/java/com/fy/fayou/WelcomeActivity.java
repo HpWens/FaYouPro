@@ -1,7 +1,9 @@
 package com.fy.fayou;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.fy.fayou.common.Constant;
+import com.fy.fayou.common.UserService;
 import com.meis.base.mei.base.BaseActivity;
-import com.meis.base.mei.status.ViewState;
 
 public class WelcomeActivity extends BaseActivity {
     @Override
@@ -10,14 +12,11 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        ARouter.getInstance().build(UserService.getInstance().isFirstLaunch() ?
+                Constant.MAIN : Constant.FIRST_LAUNCH).navigation();
 
-        setState(ViewState.ERROR);
-
-//        ARouter.getInstance().build(UserService.getInstance().isFirstLaunch() ?
-//                Constant.MAIN : Constant.FIRST_LAUNCH).navigation();
-//
-//        overridePendingTransition(0, 0);
-//        finish();
+        overridePendingTransition(0, 0);
+        finish();
     }
 
     @Override
