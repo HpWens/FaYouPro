@@ -1,15 +1,20 @@
 package com.fy.fayou.utils;
 
 import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.telephony.TelephonyManager;
 
+import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -154,4 +159,24 @@ public class AppUtils {
         m_szUniqueID = m_szUniqueID.toUpperCase();
         return m_szUniqueID;
     }
+
+    //调用系统的安装方法
+    public static void installAPK(Activity activity, File savedFile) {
+        //调用系统的安装方法
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri data;
+        // 判断版本大于等于7.0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            // "net.csdn.blog.ruancoder.fileprovider"即是在清单文件中配置的authorities
+            data = FileProvider.getUriForFile(activity, "com.fy.fayou.fileprovider", savedFile);
+            // 给目标应用一个临时授权
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            data = Uri.fromFile(savedFile);
+        }
+        intent.setDataAndType(data, "application/vnd.android.package-archive");
+        activity.startActivity(intent);
+        activity.finish();
+    }
+
 }

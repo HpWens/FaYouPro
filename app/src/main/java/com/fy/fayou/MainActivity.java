@@ -119,8 +119,51 @@ public class MainActivity extends BaseActivity {
 //                .build(Constant.EMAIL_LOGIN)
 //                .withString(Constant.Param.ARTICLE_ID, "110328945139777536")
 //                .navigation();
-    }
 
+
+
+//        new ForceUpdateDialog(mContext).setOnItemClickListener(new ForceUpdateDialog.OnItemClickListener() {
+//            @Override
+//            public void onCancel(ForceUpdateDialog dialog) {
+//                dialog.dismiss();
+//                finish();
+//            }
+//
+//            @Override
+//            public void onSure(ForceUpdateDialog dialog) {
+//                dialog.dismiss();
+//
+//                String code = "2.0.1";
+//                String url = "http://qny.zhdfxm.com/zhihe.apk";
+//
+//                EasyHttp.downLoad(url)
+//                        .savePath(RxFileTool.getSDCardPath() + "/apk")
+//                        .saveName(code.hashCode() + ".apk")
+//                        .execute(new DownloadProgressCallBack<String>() {
+//                            @Override
+//                            public void update(long bytesRead, long contentLength, boolean done) {
+//                                int progress = (int) (bytesRead * 100 / contentLength);
+//                            }
+//
+//                            @Override
+//                            public void onComplete(String path) {
+//                                AppUtils.installAPK(mContext, new File(path));
+//                            }
+//
+//                            @Override
+//                            public void onStart() {
+//
+//                            }
+//
+//                            @Override
+//                            public void onError(ApiException e) {
+//
+//                            }
+//                        });
+//
+//            }
+//        }).show();
+    }
 
     @Override
     protected int layoutResId() {

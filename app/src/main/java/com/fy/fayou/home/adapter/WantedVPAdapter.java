@@ -54,7 +54,7 @@ public class WantedVPAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(final int i) {
         if (mType == WANTED) {
-            return WantedFragment.newInstance(mColumns.get(i).type, mColumns.get(i).name, mColumns.get(i).position);
+            return WantedFragment.newInstance(mColumns.get(i).id, mColumns.get(i).name, mColumns.get(i).position);
         } else if (mType == TEMPLATE) {
             return TemplateFragment.newInstance(mColumns.get(i).type, mColumns.get(i).tags, mCollectType);
         } else if (mType == LEGAL || mType == JUDICIAL || mType == GUIDE || mType == JUDGE) {

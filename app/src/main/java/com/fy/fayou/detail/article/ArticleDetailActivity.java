@@ -787,6 +787,9 @@ public class ArticleDetailActivity extends BaseActivity {
 
     @Override
     public void onPause() {
+        if (detailPlayer != null && null != detailPlayer.getGSYVideoManager()) {
+            detailPlayer.getGSYVideoManager().stop();
+        }
         getCurPlay().onVideoPause();
         super.onPause();
         GSYVideoManager.onPause();

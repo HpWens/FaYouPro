@@ -20,7 +20,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <com.fy.fayou.view.SquareLinearLayout16_9
         android:id="@+id/video_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -29,7 +29,6 @@
         android:layout_marginRight="15dp"
         android:orientation="horizontal"
         android:visibility="visible"
-        app:layout_constraintDimensionRatio="H,16:9"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_name">
@@ -39,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </LinearLayout>
+    </com.fy.fayou.view.SquareLinearLayout16_9>
 
 
     <com.fy.fayou.view.CornersView

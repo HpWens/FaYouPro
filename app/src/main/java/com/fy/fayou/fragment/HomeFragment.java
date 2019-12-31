@@ -79,6 +79,7 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
     @Override
     protected void initView() {
         unbinder = ButterKnife.bind(this, getView());
+
         viewpager.setAdapter(mAdapter = new HomeRecommendVPAdapter(getChildFragmentManager(), mTitles));
         tab.setViewPager(viewpager);
 
