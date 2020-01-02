@@ -367,4 +367,8 @@ public class ApiUrl {
     // 典型模板
     public static final String GET_CONTRACT_EXIST = "/api-contract/public/contract/findById";
 
+    // 闪屏停留时间
+    public static final String GET_SPLASH_DURATION = "/api-collect/public/appSetting/getEnterDuration";
+
+
 }
